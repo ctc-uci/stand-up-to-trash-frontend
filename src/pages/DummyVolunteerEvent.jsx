@@ -45,7 +45,6 @@ const DummyVolunteerEvent = () => {
     try{
       const response = await Backend.get(`/data/volunteer/${volunteerId}/event/${eventId}`);
       var stringList = ['volunteer or event id not found'];
-      console.log(response.data.rows);
       if(response.data.rows[0] != null){
         stringList = Object.keys(response.data.rows[0]).map(key => `${key}: ${response.data.rows[0][key]}`);
       }
