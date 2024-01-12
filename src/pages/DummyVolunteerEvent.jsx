@@ -9,12 +9,14 @@ const DummyVolunteerEvent = () => {
   const [eventId, setEventId] = useState('');
   const [eventResult, setEventResult] = useState(null);
 
+  const [VolunteerEventIdOne, setVolunteerEventIdOne] = useState('')
+  const [VolunteerEventIdTwo, setVolunteerEventIdTwo] = useState('')
   const [volunteerEventResult, setVolunteerEventResult] = useState(null);
 
-  async function getVolunteerId(id){
+  const getVolunteerId = async (id) => {
     try{
       const response = await Backend.get(`/data/volunteer/${id}`);
-      var stringList = ['volunteer id not found'];
+      let stringList = ['volunteer id not found'];
       if(response.data.rows[0] != null){
         stringList = Object.keys(response.data.rows[0]).map(key => `${key}: ${response.data.rows[0][key]}`);
       }
@@ -26,10 +28,10 @@ const DummyVolunteerEvent = () => {
     }
   }
 
-  async function getEventId(id){
+  const getEventId = async (id) => {
     try{
       const response = await Backend.get(`/data/event/${id}`);
-      var stringList = ['event id not found'];
+      let stringList = ['event id not found'];
       if(response.data.rows[0] != null){
         stringList = Object.keys(response.data.rows[0]).map(key => `${key}: ${response.data.rows[0][key]}`);
       }
@@ -41,10 +43,10 @@ const DummyVolunteerEvent = () => {
     }
   }
 
-  async function getVolunteerEventId(volunteerId, eventId){
+  const getVolunteerEventId = async (VolunteerEventIdOne, VolunteerEventIdTwo) => {
     try{
-      const response = await Backend.get(`/data/volunteer/${volunteerId}/event/${eventId}`);
-      var stringList = ['volunteer or event id not found'];
+      const response = await Backend.get(`/data/volunteer/${VolunteerEventIdOne}/event/${VolunteerEventIdTwo}`);
+      let stringList = ['volunteer or event id not found'];
       if(response.data.rows[0] != null){
         stringList = Object.keys(response.data.rows[0]).map(key => `${key}: ${response.data.rows[0][key]}`);
       }
@@ -55,7 +57,6 @@ const DummyVolunteerEvent = () => {
       console.log(err);
     }
   }
-
 
   const handleVolunteerSubmit = () => {
     setVolunteerResult(null); // Reset the result state
@@ -69,13 +70,13 @@ const DummyVolunteerEvent = () => {
 
   const handleVolunteerEventSubmit = () => {
     setVolunteerEventResult(null); // Reset the result state
-    getVolunteerEventId(volunteerId, eventId)
+    getVolunteerEventId(VolunteerEventIdOne, VolunteerEventIdTwo)
   };
 
   return(
     <>
       <VStack align="center" spacing={4}>
-        <p>Placeholder for the volunteer event page</p>
+        <Text>Placeholder for the volunteer event page</Text>
         <Input placeholder='Input Volunteer Id' value={volunteerId} onChange={(event) => {
           setVolunteerId(event.target.value);
         }}/>
@@ -108,11 +109,11 @@ const DummyVolunteerEvent = () => {
       </VStack>
 
       <VStack align="center" spacing={4}>
-        <Input placeholder='Input Volunteeer Id' value={volunteerId} onChange={(event) => {
-          setVolunteerId(event.target.value);
+        <Input placeholder='Input Volunteeer Id' value={VolunteerEventIdOne} onChange={(event) => {
+          setVolunteerEventIdOne(event.target.value);
         }}/>
-        <Input placeholder='Input Event Id' value={eventId} onChange={(event) => {
-          setEventId(event.target.value);
+        <Input placeholder='Input Event Id' value={VolunteerEventIdTwo} onChange={(event) => {
+          setVolunteerEventIdTwo(event.target.value);
         }}/>
         <Button onClick={handleVolunteerEventSubmit}>Submit</Button>
 
