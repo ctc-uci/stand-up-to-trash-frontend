@@ -43,30 +43,7 @@ const DummyEvents = () => {
       console.log('Error posting', e);
     }
   };
-
-  // const getEventCards = () => {
-  //   console.log('EVENTS');
-  //   console.log(events);
-  //   if (showEvents) {
-  //     return (
-  //       // console.log(element.id);
-  //       <Stack divider={<StackDivider />} spacing="4">
-  //         {events.map(element => (
-  //           <Card key={element.id}>
-  //             <CardBody>
-  //               <Stack direction={'row'} spacing={100}>
-  //                 <Text>ID: {element.id}</Text>
-  //                 <Button colorScheme="red">Delete</Button>
-  //               </Stack>
-  //             </CardBody>
-  //           </Card>
-  //         ))}
-  //       </Stack>
-  //       // console.log(element);
-  //     );
-  //   }
-  //   return [];
-  // };
+  
   const showEvent = () => {
     setShowEvents(true);
   };
