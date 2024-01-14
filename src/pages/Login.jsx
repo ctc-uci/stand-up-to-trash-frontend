@@ -1,14 +1,17 @@
 import {
     Button,
-    FormControl, FormLabel, FormErrorMessage, Input,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
+    Input,
     Modal, ModalBody,
     ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast
 } from '@chakra-ui/react';
-import { useNavigate } from "react-router-dom";
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from "react-router-dom";
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { createUserInFirebase, logInWithEmailAndPassWord, sendResetPasswordPrompt } from '../../utils/firebaseAuthUtils';
   
 const Login = () => {
@@ -23,9 +26,15 @@ const Login = () => {
 
 // :D
 
-const accountSchema = yup.object({
+const signinSchema = yup.object({
     email: yup.string().email().required("Please enter your email address"),
     password: yup.string().required("Please enter your password"),
+});
+
+const signupSchema = yup.object({
+    email: yup.string().email().required("Please enter your email address"),
+    password: yup.string().required("Please enter your password").matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Password requires at least 8 characters consisting of at least 1 lowercase letter, 1 uppercase letter, 1 symbol, and 1 number"),
+    confirmPassword: yup.string().required("Please re-enter your password").oneOf([yup.ref('password'), null], "Passwords don't match")
 });
 
 const resetSchema = yup.object({
@@ -44,7 +53,7 @@ const LoginForm = () => {
         handleSubmit,
         formState: {errors},
     } = useForm({
-        resolver: yupResolver(accountSchema),
+        resolver: yupResolver(signinSchema),
         delayError: 750,
     })
 
@@ -102,7 +111,7 @@ const CreateAccount = () => {
         handleSubmit,
         formState: { errors },
       } = useForm({
-        resolver: yupResolver(accountSchema),
+        resolver: yupResolver(signupSchema),
         delayError: 750,
       });
     
@@ -163,6 +172,11 @@ const CreateAccount = () => {
                             <FormLabel>Password</FormLabel>
                             <Input type="password" {...register("password")} />
                             {errors.password && <FormErrorMessage>{errors.password?.message}</FormErrorMessage>}
+                        </FormControl>
+                        <FormControl isInvalid={errors.confirmPassword}>
+                            <FormLabel>Confirm Password</FormLabel>
+                            <Input type="password" {...register("confirmPassword")} />
+                            {errors.confirmPassword && <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>}
                         </FormControl>
                     </form>
                 </ModalBody>
