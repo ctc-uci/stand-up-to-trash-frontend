@@ -1,11 +1,12 @@
-import './App.css';
 import { ChakraProvider } from '@chakra-ui/react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import DummyVolunteerData from './pages/DummyVolunteerData';
-import DummyVolunteerEvent from './pages/DummyVolunteerEvent';
-import DummySearchVolunteerEvents from './pages/DummySearchVolunteerEvents';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import './App.css';
 import DummyEvents from './pages/DummyEvents';
 import DummyProfiles from './pages/DummyProfiles';
+import DummySearchVolunteerEvents from './pages/DummySearchVolunteerEvents';
+import DummySuccessfulLogin from './pages/DummySuccessfulLogin';
+import DummyVolunteerData from './pages/DummyVolunteerData';
+import DummyVolunteerEvent from './pages/DummyVolunteerEvent';
 import Login from './pages/Login';
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Routes>
           {/* Kevin + Phillip */}
           <Route path="/login" element={<Login />} />
+          <Route path="/successful-login" element={<DummySuccessfulLogin/>} />
 
           {/* Emmy + Nate */}
           <Route path="/event-data" element={<DummyVolunteerData />} />
