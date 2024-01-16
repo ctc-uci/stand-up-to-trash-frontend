@@ -138,42 +138,55 @@ const DummyEvents = () => {
   return (
     <ChakraProvider>
       <form onSubmit={handleSubmit}>
-        <FormControl isRequired>
-          <FormLabel htmlFor="name">Name</FormLabel>
-          <Input id="name" name="name" onChange={handleInputChange} value={formData.name} />
+        <FormControl isRequired marginTop={10}>
+          <FormLabel marginLeft={10} htmlFor="name">
+            Name
+          </FormLabel>
+          <Input
+            marginLeft={10}
+            id="name"
+            name="name"
+            onChange={handleInputChange}
+            value={formData.name}
+          />
         </FormControl>
         <FormControl isRequired>
-          <FormLabel htmlFor="description">Description</FormLabel>
+          <FormLabel marginLeft={10} htmlFor="description">
+            Description
+          </FormLabel>
           <Textarea
             id="description"
             name="description"
             onChange={handleInputChange}
             value={formData.description}
+            marginLeft={10}
           />
         </FormControl>
         <FormControl isRequired>
-          <FormLabel htmlFor="location">Location</FormLabel>
+          <FormLabel marginLeft={10} htmlFor="location">
+            Location
+          </FormLabel>
           <Input
+            marginLeft={10}
             id="location"
             name="location"
             onChange={handleInputChange}
             value={formData.location}
           />
         </FormControl>
-        <Button type="submit" colorScheme="blue" marginTop={4}>
+        <Button marginLeft={10} type="submit" colorScheme="blue" marginTop={4}>
           Submit
         </Button>
       </form>
       <Stack align="center" marginTop={10} marginBottom={10} flexDirection={'row'} spacing={4}>
-        <FormControl>
-          <Input
-            width={'auto'}
-            id="eventid"
-            name="eventid"
-            onChange={handleInputChange}
-            // value={eventId}
-          />
-        </FormControl>
+        <Input
+          width={'auto'}
+          marginLeft={10}
+          id="eventid"
+          name="eventid"
+          onChange={handleInputChange}
+          // value={eventId}
+        />
         <Button size="md" colorScheme="linkedin" onClick={showEvent}>
           Show Events
         </Button>
