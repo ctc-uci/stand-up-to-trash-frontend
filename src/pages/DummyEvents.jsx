@@ -59,8 +59,10 @@ const DummyEvents = () => {
     if (name == 'eventid') {
       // console.log(name);
       // console.log(value);
+      if (value == '') {
+        setSelectEvent(null);
+      }
       setEventId(value);
-      getEvents();
     }
   };
 
@@ -174,6 +176,9 @@ const DummyEvents = () => {
         </FormControl>
         <Button size="md" colorScheme="linkedin" onClick={showEvent}>
           Show Events
+        </Button>
+        <Button size="md" colorSchem="yellow" onClick={() => setShowEvents(false)}>
+          Unshow Events
         </Button>
       </Stack>
       {showEvents ? eventCards : null}
