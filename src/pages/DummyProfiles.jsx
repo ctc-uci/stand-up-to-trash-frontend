@@ -1,7 +1,7 @@
 import { Button, VStack, StackDivider } from '@chakra-ui/react';
 import ProfileCard from '../components/DummyProfiles/ProfileCard';
 import ProfileForm from '../components/DummyProfiles/ProfileForm';
-import { getProfile } from '../../utils/profileUtils';
+import { getProfile } from '../utils/profileUtils';
 import { useState } from 'react';
 import GetByIdForm from '../components/DummyProfiles/GetByIdForm';
 

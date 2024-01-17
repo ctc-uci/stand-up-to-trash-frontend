@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Stack, Input, Button, Text } from '@chakra-ui/react';
-import { postProfile } from '../../../utils/profileUtils';
+import { postProfile } from '../../utils/profileUtils';
 
 const ProfileForm = () => {
   const [profile, setProfile] = useState({

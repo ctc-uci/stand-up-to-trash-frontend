@@ -1,5 +1,5 @@
 import { Flex, Input, Button, Text, VStack } from '@chakra-ui/react';
-import { getProfileById } from '../../../utils/profileUtils';
+import { getProfileById } from '../../utils/profileUtils';
 import ProfileCard from './ProfileCard';
 import { useState } from 'react';
 

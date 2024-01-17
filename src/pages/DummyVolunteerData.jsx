@@ -1,19 +1,33 @@
 /* eslint-disable  no-unused-vars */
-import Backend from '../../utils/utils';
+import Backend from '../utils/utils';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Heading, Text, SimpleGrid, Button, Card, CardHeader, CardBody, CardFooter, FormControl, Input, FormLabel } from '@chakra-ui/react'
-
+import {
+  Heading,
+  Text,
+  SimpleGrid,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  FormControl,
+  Input,
+  FormLabel,
+} from '@chakra-ui/react';
 
 const VolunteerCard = ({ volunteer, onDelete }) => (
   <Card key={volunteer.id}>
     <CardHeader>
-      <Heading size='md'>{volunteer.id}</Heading>
+      <Heading size="md">{volunteer.id}</Heading>
     </CardHeader>
     <CardBody>
       <Text> Volunteer ID: {volunteer.volunteer_id}</Text>
       <Text> Number of People in Party: {volunteer.number_in_party}</Text>
-      <Text> Collected: {volunteer.pounds} lbs | {volunteer.ounces} oz</Text>
+      <Text>
+        {' '}
+        Collected: {volunteer.pounds} lbs | {volunteer.ounces} oz
+      </Text>
       <Text> Unusual Items: {volunteer.unusual_items}</Text>
       <Text> Event: {volunteer.event_id}</Text>
       <Text> Checked In: {volunteer.is_checked_in ? 'Yes' : 'No'}</Text>
@@ -39,7 +53,6 @@ VolunteerCard.propTypes = {
 };
 
 const DummyVolunteerData = () => {
-
   const [volunteers, setVolunteers] = useState([]);
   const [showCards, setShowCards] = useState(false);
   const [volunteer_id, setVolunteerId] = useState([]);
@@ -58,8 +71,14 @@ const DummyVolunteerData = () => {
     }
   };
 
-  const postVolunteerData = async (volunteer_id, number_in_party, pounds,
-                                     ounces, unusual_items, event_id) => {
+  const postVolunteerData = async (
+    volunteer_id,
+    number_in_party,
+    pounds,
+    ounces,
+    unusual_items,
+    event_id,
+  ) => {
     try {
       const postData = {
         volunteer_id: volunteer_id,
@@ -68,17 +87,17 @@ const DummyVolunteerData = () => {
         ounces: ounces,
         unusual_items: unusual_items,
         event_id: event_id,
-        is_checked_in: false
+        is_checked_in: false,
       };
 
-      const{ postStatus } = await Backend.post('/data', postData);
+      const { postStatus } = await Backend.post('/data', postData);
       getVolunteerData();
     } catch (error) {
       console.error('Error creating new volunteer:', error.message);
     }
   };
 
-  const deleteVolunteerData = async (id) => {
+  const deleteVolunteerData = async id => {
     try {
       await Backend.delete(`/data/${id}`);
       // After deletion, refresh the volunteer data
@@ -90,16 +109,9 @@ const DummyVolunteerData = () => {
 
   const renderVolunteerCards = () => {
     return (
-      <SimpleGrid
-        spacing={4}
-        templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
-      >
-        {volunteers.map((volunteer) => (
-          <VolunteerCard
-            key={volunteer.id}
-            volunteer={volunteer}
-            onDelete={deleteVolunteerData}
-          />
+      <SimpleGrid spacing={4} templateColumns="repeat(auto-fill, minmax(200px, 1fr))">
+        {volunteers.map(volunteer => (
+          <VolunteerCard key={volunteer.id} volunteer={volunteer} onDelete={deleteVolunteerData} />
         ))}
       </SimpleGrid>
     );
@@ -116,52 +128,55 @@ const DummyVolunteerData = () => {
       </Button>
       {showCards && renderVolunteerCards()}
 
-      <form onSubmit={() => postVolunteerData(volunteer_id, number_in_party, pounds, ounces, unusual_items, event_id)}>
+      <form
+        onSubmit={() =>
+          postVolunteerData(volunteer_id, number_in_party, pounds, ounces, unusual_items, event_id)
+        }
+      >
         <FormControl>
           <FormLabel>Add New Volunteer</FormLabel>
           <Input
-            type='string'
+            type="string"
             value={volunteer_id}
-            placeholder = 'Volunteer ID'
-            onChange={(e) => setVolunteerId(e.target.value)}
+            placeholder="Volunteer ID"
+            onChange={e => setVolunteerId(e.target.value)}
           />
           <Input
-            type='number'
-            value= {number_in_party}
-            placeholder = "Number of People in Party"
-            onChange={(e) => setNumberInParty(e.target.value)}
+            type="number"
+            value={number_in_party}
+            placeholder="Number of People in Party"
+            onChange={e => setNumberInParty(e.target.value)}
           />
           <Input
-            type='number'
+            type="number"
             value={pounds}
-            placeholder = 'Pounds Collected'
-            onChange={(e) => setPounds(e.target.value)}
+            placeholder="Pounds Collected"
+            onChange={e => setPounds(e.target.value)}
           />
           <Input
-            type='number'
-            placeholder = "Ounces Collected"
-            onChange={(e) => setOunces(e.target.value)}
+            type="number"
+            placeholder="Ounces Collected"
+            onChange={e => setOunces(e.target.value)}
           />
           <Input
-            type='string'
+            type="string"
             value={unusual_items}
-            placeholder = 'Unusual Items'
-            onChange={(e) => setUnusualItems(e.target.value)}
+            placeholder="Unusual Items"
+            onChange={e => setUnusualItems(e.target.value)}
           />
           <Input
-            type='string'
+            type="string"
             value={event_id}
-            placeholder = 'Event ID'
-            onChange={(e) => setEventId(e.target.value)}
+            placeholder="Event ID"
+            onChange={e => setEventId(e.target.value)}
           />
         </FormControl>
-        <Button type='submit' mt={4}>
+        <Button type="submit" mt={4}>
           Submit
         </Button>
       </form>
     </>
   );
-
 };
 
 export default DummyVolunteerData;
