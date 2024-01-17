@@ -57,8 +57,6 @@ const DummyEvents = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     if (name == 'eventid') {
-      // console.log(name);
-      // console.log(value);
       if (value == '') {
         setSelectEvent(null);
       }
