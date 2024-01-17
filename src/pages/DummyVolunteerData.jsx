@@ -1,5 +1,5 @@
 /* eslint-disable  no-unused-vars */
-import Backend from '../../utils/utils';
+import Backend from '../utils/utils';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {

@@ -1,5 +1,5 @@
 import { Card, CardBody, Text, Flex, Button } from '@chakra-ui/react';
-import { deleteProfile } from '../../../utils/profileUtils';
+import { deleteProfile } from '../../utils/profileUtils';
 import PropTypes from 'prop-types';
 
 const ProfileCard = ({ profile }) => {
