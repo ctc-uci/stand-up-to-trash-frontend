@@ -16,7 +16,7 @@ const App = () => {
         <Routes>
           {/* Kevin + Phillip */}
           <Route path="/login" element={<Login />} />
-          <Route path="/successful-login" element={<DummySuccessfulLogin/>} />
+          <Route path="/successful-login" element={<DummySuccessfulLogin />} />
 
           {/* Emmy + Nate */}
           <Route path="/event-data" element={<DummyVolunteerData />} />
