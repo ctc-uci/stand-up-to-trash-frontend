@@ -1,5 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+
+
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
@@ -16,19 +18,39 @@ const auth = getAuth(app);
 
 /**
  *
+ * @param {string} email Email for creating account
+ * @param {string} password Password for creating account
+ * @param {string} redirect Link to redirect to after successful login
+ * @param {hook} navigate useNavigate hook
+ */
+export const createUserInFirebase = async (email, password, redirect, navigate) => {
+  console.log(email, password)
+  try {
+    const user = await createUserWithEmailAndPassword(auth, email, password)
+    navigate(redirect);
+
+    return user.user
+  } catch (error) {
+    console.log(`${error.code}: ${error.message}`);
+    throw error
+  } 
+};
+
+/**
+ *
  * @param {string} email Email for login
  * @param {string} password Password for login
  * @param {string} redirect Link to redirect to after successful login
  * @param {hook} navigate useNavigate hook
  */
 export const logInWithEmailAndPassWord = async (email, password, redirect, navigate) => {
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      navigate(redirect);
-    })
-    .catch(error => {
-      console.log(`${error.code}: ${error.message}`);
-    });
+  try {
+    await signInWithEmailAndPassword(auth, email, password)
+  } catch (error) {
+    console.log(`${error.code}: ${error.message}`);
+    throw error
+  }
+  navigate(redirect);
 };
 
 /**
@@ -65,3 +87,9 @@ export const logout = async (redirect, navigate) => {
       console.log(`${error.code}: ${error.message}`);
     });
 };
+
+export const sendResetPasswordPrompt = async (email) => {
+  // Success will return null, and falure will raise an error that should
+  // be caught by UI layer.
+  await sendPasswordResetEmail(auth, email);
+}
