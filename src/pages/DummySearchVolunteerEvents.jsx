@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Select, Input } from '@chakra-ui/react';
-import { fetchEvents, fetchJoinedEvents } from '../../utils/fuseUtils';
+import { fetchEvents, fetchJoinedEvents } from '../utils/fuseUtils';
 import Fuse from 'fuse.js';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
 

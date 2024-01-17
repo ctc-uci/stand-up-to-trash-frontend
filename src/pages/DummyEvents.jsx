@@ -12,7 +12,7 @@ import {
   Input,
   Textarea,
 } from '@chakra-ui/react';
-import Backend from '../../utils/utils';
+import Backend from '../utils/utils';
 
 const DummyEvents = () => {
   const [events, setEvents] = useState([]);

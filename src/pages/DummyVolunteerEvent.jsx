@@ -1,4 +1,4 @@
-import Backend from '../../utils/utils';
+import Backend from '../utils/utils';
 import { useState } from 'react';
 import { Box, Button, Input, Text, VStack } from '@chakra-ui/react';
 
