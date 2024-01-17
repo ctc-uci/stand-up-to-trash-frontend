@@ -8,6 +8,9 @@ import DummySuccessfulLogin from './pages/DummySuccessfulLogin';
 import DummyVolunteerData from './pages/DummyVolunteerData';
 import DummyVolunteerEvent from './pages/DummyVolunteerEvent';
 import DummyStatsPage from './pages/DummyStatsPage';
+import DummyVolunteerRegistrationForm from './pages/DummyVolunteerRegistrationForm';
+import DummyCheckin from './pages/DummyCheckin';
+import DummyEventCreation from './pages/DummyEventCreation';
 import Login from './pages/Login';
 import Playground from './components/Playground/Playground';
 import EventCardTest from './pages/EventCardTest';
@@ -24,6 +27,17 @@ const App = () => {
           <Route path="/events" element={<DummyEvents />} />
           <Route path="/search-volunteer-events" element={<DummySearchVolunteerEvents />} />
           <Route path="/profiles" element={<DummyProfiles />} />
+
+          {/* SPRINT 2 */}
+
+          {/* Gayathri and Jasmine */}
+          <Route path="/event-creation" element={<DummyEventCreation />} />
+
+          {/* Jessie and Brendan */}
+          <Route path="/volunteer-registration" element={<DummyVolunteerRegistrationForm />} />
+
+          {/* Rayan and Emmy */}
+          <Route path="/checkin" element={<DummyCheckin />} />
 
           {/* Phillip and Katy */}
           <Route path="/stats" element={<DummyStatsPage />} />
