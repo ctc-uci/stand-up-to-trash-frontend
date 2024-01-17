@@ -18,6 +18,8 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/successful-login" element={<DummySuccessfulLogin />} />
+
+          {/* Emmy + Nate */}
           <Route path="/event-data" element={<DummyVolunteerData />} />
           <Route path="/volunteer-event" element={<DummyVolunteerEvent />} />
           <Route path="/events" element={<DummyEvents />} />
