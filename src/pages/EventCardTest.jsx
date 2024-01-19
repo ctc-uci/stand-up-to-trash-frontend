@@ -1,6 +1,7 @@
 import EventCard from '../components/EventCardTest/EventCard';
 import { useEffect, useState } from 'react';
 import { getEvents } from '../utils/eventsUtils';
+import { SimpleGrid } from '@chakra-ui/react';
 
 const EventCardTest = () => {
     const [events, setEvents] = useState([]);
@@ -20,7 +21,9 @@ const EventCardTest = () => {
 
     return (
         <>
-            {events.map(event => <EventCard event={event} key={event.id}/>)}
+            <SimpleGrid spacing={4} templateColumns="repeat(auto-fill, minmax(300px, 1fr))">
+                {events.map(event => <EventCard event={event} key={event.id}/>)}    
+            </SimpleGrid>
         </>
     );
 }
