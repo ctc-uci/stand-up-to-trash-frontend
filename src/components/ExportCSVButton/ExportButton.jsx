@@ -14,7 +14,7 @@ function ExportButton({ eventId }) {
     { key: 'ounces', label: 'OUNCES' },
     { key: 'pounds', label: 'POUNDS' },
     { key: 'unusual_items', label: 'UNUSUAL_ITEMS' },
-    { key: 'vounteer_id', label: 'VOLUNTEER_ID' },
+    { key: 'volunteer_id', label: 'VOLUNTEER_ID' },
   ];
 
   const [eventIdData, setEventIdData] = useState([]);
