@@ -1,7 +1,11 @@
 import { initializeApp } from 'firebase/app';
-import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-
-
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
@@ -24,16 +28,16 @@ const auth = getAuth(app);
  * @param {hook} navigate useNavigate hook
  */
 export const createUserInFirebase = async (email, password, redirect, navigate) => {
-  console.log(email, password)
+  console.log(email, password);
   try {
-    const user = await createUserWithEmailAndPassword(auth, email, password)
+    const user = await createUserWithEmailAndPassword(auth, email, password);
     navigate(redirect);
 
-    return user.user
+    return user.user;
   } catch (error) {
     console.log(`${error.code}: ${error.message}`);
-    throw error
-  } 
+    throw error;
+  }
 };
 
 /**
@@ -45,10 +49,10 @@ export const createUserInFirebase = async (email, password, redirect, navigate) 
  */
 export const logInWithEmailAndPassWord = async (email, password, redirect, navigate) => {
   try {
-    await signInWithEmailAndPassword(auth, email, password)
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.log(`${error.code}: ${error.message}`);
-    throw error
+    throw error;
   }
   navigate(redirect);
 };
@@ -88,8 +92,8 @@ export const logout = async (redirect, navigate) => {
     });
 };
 
-export const sendResetPasswordPrompt = async (email) => {
+export const sendResetPasswordPrompt = async email => {
   // Success will return null, and falure will raise an error that should
   // be caught by UI layer.
   await sendPasswordResetEmail(auth, email);
-}
+};

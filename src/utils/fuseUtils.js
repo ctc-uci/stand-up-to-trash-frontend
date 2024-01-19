@@ -8,7 +8,6 @@ const fetchEvents = async () => {
   return data.data;
 };
 
-
 /*
     fetches joined data from all tables
 */
