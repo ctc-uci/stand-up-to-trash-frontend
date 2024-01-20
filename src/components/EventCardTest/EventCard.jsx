@@ -12,12 +12,62 @@ import {
     Divider
   } from '@chakra-ui/react';
 
-const EventCard = ( { event }) => {
+const adminFooter = ({ handleRegister, handleDelete, handleEdit }) => {
+    /*
+    Admin footer gets called upon when isAdmin returns true
+    and displays all the necessary functions(buttons) to Register,
+    Edit and Delete.
+    */
+    return (
+    <CardFooter>
+        <ButtonGroup spacing='2'>
+            <Button onClick={handleRegister} variant='ghost' colorScheme='blue'>
+                Register
+            </Button>
+            <Button onClick={handleEdit}variant='ghost' colorScheme='blue'>
+                Edit
+            </Button>
+            <Button onClick={handleDelete} variant='ghost' colorScheme='red'>
+                Delete
+            </Button>
+        </ButtonGroup>
+    </CardFooter>
+    )
+}
+
+const volunteerFooter = ({ handleRegister }) => {
+    /*
+    Volunteer footer gets called upon when isAdmin returns false
+    and displays the necessry function (button) to Register
+    */
+    return (
+    <CardFooter>
+        <Button onClick={handleRegister} variant='ghost' colorScheme='blue'>
+            Register
+        </Button>
+    </CardFooter>
+    );
+}
+
+
+const EventCard = ( { event, isAdmin }) => {
+    /*
+    EventCard function gets the arguments for its parameters
+    which are event and isAdmin and also calls upon the functions
+    such as handleEdit, handleDelete and handleRegister. It contains
+    the skeleton of the event card with properties such as image, name
+    description and location.
+    */
     const handleEdit = () => {};
 
     const handleDelete = () => {};
 
     const handleRegister = () => {};
+
+    let footer = volunteerFooter(handleRegister);
+    if (isAdmin) {
+        footer = adminFooter(handleRegister, handleDelete, handleEdit);
+    }
 
     return (
         <Card maxW='sm'>
@@ -36,19 +86,7 @@ const EventCard = ( { event }) => {
                 </Stack>
             </CardBody>
             <Divider />
-            <CardFooter>
-                <ButtonGroup spacing='2'>
-                <Button onClick={handleRegister} variant='ghost' colorScheme='blue'>
-                    Register
-                </Button>
-                <Button onClick={handleEdit}variant='ghost' colorScheme='blue'>
-                    Edit
-                </Button>
-                <Button onClick={handleDelete} variant='ghost' colorScheme='red'>
-                    Delete
-                </Button>
-                </ButtonGroup>
-            </CardFooter>
+            {footer}
     </Card>
     );
 }
@@ -60,6 +98,7 @@ EventCard.propTypes = {
       location: PropTypes.string.isRequired,
       imageURL: PropTypes.string.isRequired,
     }).isRequired,
+    isAdmin: PropTypes.bool.isRequired
   };
 
 export default EventCard;

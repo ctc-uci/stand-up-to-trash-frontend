@@ -5,28 +5,26 @@ import { SimpleGrid } from '@chakra-ui/react';
 
 const EventCardTest = () => {
     const [events, setEvents] = useState([]);
-    // const [isAdmin, setAdminStatus] = useState([]);
+    // Array of all events from DB
+    const [isAdmin, setAdminStatus] = useState([]);
+    // Bool, if user is admin or not
 
-    const loadEvents = async () => {
+    const loadData = async () => {
         await getEvents().then(data => setEvents(data));
+        setAdminStatus(true);
     };
 
-    // const adminStatus = () => {
-
-    // };
-
     useEffect(() => {
-        loadEvents();
+        loadData();
     }, []);
 
     return (
         <>
             <SimpleGrid spacing={4} templateColumns="repeat(auto-fill, minmax(300px, 1fr))">
-                {events.map(event => <EventCard event={event} key={event.id}/>)}    
+                {events.map(event => <EventCard event={event} isAdmin={isAdmin} key={event.id}/>)}    
             </SimpleGrid>
         </>
     );
 }
 
 export default EventCardTest;
-// event-card-page
