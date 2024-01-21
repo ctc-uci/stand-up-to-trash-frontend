@@ -20,7 +20,7 @@ const DummyCheckin = () => {
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
 
-  const EventCard = ({ data }) => (
+  const EventCard = (data) => (
     <Card key={data.id}>
       <CardHeader>
         <Heading size="md">{data.id}</Heading>
@@ -43,12 +43,12 @@ const DummyCheckin = () => {
 
 // debug
 useEffect(() => {
-  console.log(`volunres!!!${volunteerResults}`);
+  console.log(`volunteer results!!!${volunteerResults} with ${volunteerResults.length} entries`);
 }, [volunteerResults]);
 
-useEffect(() => {
-  console.log(`searchres!!!${searchResults}`);
-}, [searchResults]);
+// useEffect(() => {
+//   console.log(`searchres!!!${searchResults}`);
+// }, [searchResults]);
 
   /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
@@ -108,10 +108,12 @@ useEffect(() => {
         </option>
         {eventOptions}
       </Select>
-      {volunteerResults.length != 0 && <EventCard eventData={volunteerResults[0]} />}
+      {/* {volunteerResults.length != 0 && <EventCard eventData={volunteerResults[0]} />} */}
 
       <Input value={input} onChange={event => setInput(event.target.value)} />
-      {volunteerResults.length != 0 ? volunteerResults : <p>debug</p>}
+      {volunteerResults.length != 0 ? volunteerResults.map(volunteer =>
+        <EventCard eventData={volunteer} key={volunteer.id}/>
+    ) : searchResults}
     </>
   );
 };
