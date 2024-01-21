@@ -73,7 +73,7 @@ const EventCard = ( { event, isAdmin }) => {
         <Card maxW='sm'>
             <CardBody>
                 <Image
-                src={event.imageURL}
+                src={event.image_url}
                 borderRadius='lg'
                 />
                 <Stack mt='6' spacing='3'>
@@ -96,7 +96,7 @@ EventCard.propTypes = {
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       location: PropTypes.string.isRequired,
-      imageURL: PropTypes.string.isRequired,
+      image_url: PropTypes.string.isRequired,
     }).isRequired,
     isAdmin: PropTypes.bool.isRequired
   };
