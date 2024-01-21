@@ -128,8 +128,8 @@ const VolunteerTrashCollectedCard = ({ title, amount }) => {
 };
 
 VolunteerTrashCollectedCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  amount: PropTypes.number.isRequired,
+  title: PropTypes.string,
+  amount: PropTypes.string,
 };
 
 const getStatsData = async dataId => {
