@@ -14,6 +14,7 @@ import DummyEventCreation from './pages/DummyEventCreation';
 import Login from './pages/Login';
 import Playground from './components/Playground/Playground';
 import EventCardTest from './pages/EventCardTest';
+import DataEntryModalTestPage from './pages/DataEntryModalTestPage';
 
 const App = () => {
   return (
@@ -27,14 +28,13 @@ const App = () => {
           <Route path="/events" element={<DummyEvents />} />
           <Route path="/search-volunteer-events" element={<DummySearchVolunteerEvents />} />
           <Route path="/profiles" element={<DummyProfiles />} />
-
-          {/* SPRINT 2 */}
-
-          {/* Gayathri and Jasmine */}
           <Route path="/event-creation" element={<DummyEventCreation />} />
+          <Route path="/data-entry-modal-test" element={<DummyVolunteerRegistrationForm />} />
+
+          {/* SPRINT 4 */}
 
           {/* Jessie and Brendan */}
-          <Route path="/volunteer-registration" element={<DummyVolunteerRegistrationForm />} />
+          <Route path="/data-entry-modal-test" element={<DataEntryModalTestPage />} />
 
           {/* Rayan and Emmy */}
           <Route path="/checkin/:eventId" element={<DummyCheckin />} />
