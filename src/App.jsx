@@ -37,7 +37,7 @@ const App = () => {
           <Route path="/volunteer-registration" element={<DummyVolunteerRegistrationForm />} />
 
           {/* Rayan and Emmy */}
-          <Route path="/checkin" element={<DummyCheckin />} />
+          <Route path="/checkin/:id" element={<DummyCheckin />} />
 
           {/* Phillip and Katy */}
           <Route path="/stats" element={<DummyStatsPage />} />
