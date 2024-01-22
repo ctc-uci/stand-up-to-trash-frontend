@@ -29,7 +29,7 @@ const App = () => {
           <Route path="/search-volunteer-events" element={<DummySearchVolunteerEvents />} />
           <Route path="/profiles" element={<DummyProfiles />} />
           <Route path="/event-creation" element={<DummyEventCreation />} />
-          <Route path="/data-entry-modal-test" element={<DummyVolunteerRegistrationForm />} />
+          <Route path="/volunteer-registration-form" element={<DummyVolunteerRegistrationForm />} />
 
           {/* SPRINT 4 */}
 
