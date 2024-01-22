@@ -25,6 +25,6 @@ const EventCardTest = () => {
             </SimpleGrid>
         </>
     );
-}
+};
 
 export default EventCardTest;
