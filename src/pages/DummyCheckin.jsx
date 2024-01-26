@@ -8,10 +8,13 @@ import {
   Card,
   CardHeader,
   CardBody,
+  Checkbox,
+  Flex,
 } from '@chakra-ui/react';
 // import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
+import Backend from '../utils/utils';
 
 const DummyCheckin = () => {
   const [eventsData, setEventsData] = useState([]);
@@ -20,35 +23,53 @@ const DummyCheckin = () => {
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
 
-  const EventCard = (data) => (
-    <Card key={data.id}>
+
+  const changeIsCheckedIn = async (v) => {
+    //console.log(`!!!!!${JSON.stringify(v)}`)
+    let id = v.eventData.id;
+    console.log(id)
+    try {
+      const response = await Backend.put(`/data/checkin/${id}`);
+      return response;
+    }
+   catch (err) {
+    console.log(err);
+  }
+  }
+
+  const EventCard = (volunteer) => (
+    <Card key={volunteer.id}>
       <CardHeader>
-        <Heading size="md">{data.id}</Heading>
+        <Heading size="md">{volunteer.id}</Heading>
       </CardHeader>
       <CardBody>
-        <Text> Checked In: {data.is_checked_in ? 'Yes' : 'No'}</Text>
+        <Flex>
+          <Text>id={volunteer.id}</Text>
+          <Text>{volunteer.first_name}</Text>
+          <Text> Checked In: {volunteer.is_checked_in ? 'Yes' : 'No'}</Text>
+          <Checkbox isChecked={volunteer.is_checked_in} onChange={() => changeIsCheckedIn(volunteer)} />
+        </Flex>
       </CardBody>
     </Card>
   );
 
-  // const renderVolunteerCards = () => {
-  //   return (
-  //     <SimpleGrid spacing={4} templateColumns="repeat(auto-fill, minmax(200px, 1fr))">
-  //       {volunteers.map(volunteer => (
-  //         <EventCard key={volunteer.id} volunteer={volunteer} />
-  //       ))}
-  //     </SimpleGrid>
-  //   );
-  // };
-
 // debug
 useEffect(() => {
+  //console.log(JSON.stringify(volunteerResults[0]))
+  //console.log(volunteerResults[0].props.data)
+  joinedData.map(r => console.log(r));
+  console.log(`JOINED DDATATA results!!!${joinedData.map(r => console.log(r))} with ${joinedData.length} entries`);
+}, [joinedData]);
+
+useEffect(() => {
+  //console.log(JSON.stringify(volunteerResults[0]))
+  //console.log(volunteerResults[0].props.data)
   console.log(`volunteer results!!!${volunteerResults} with ${volunteerResults.length} entries`);
 }, [volunteerResults]);
 
-// useEffect(() => {
-//   console.log(`searchres!!!${searchResults}`);
-// }, [searchResults]);
+useEffect(() => {
+  console.log(`searchres!!!${searchResults}`);
+}, [searchResults]);
 
   /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
@@ -112,7 +133,7 @@ useEffect(() => {
 
       <Input value={input} onChange={event => setInput(event.target.value)} />
       {volunteerResults.length != 0 ? volunteerResults.map(volunteer =>
-        <EventCard eventData={volunteer} key={volunteer.id}/>
+        <EventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id}/>
     ) : searchResults}
     </>
   );
