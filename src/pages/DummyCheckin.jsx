@@ -24,10 +24,11 @@ const DummyCheckin = () => {
   const [input, setInput] = useState('');
 
 
+  /*
+    This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
+  */
   const changeIsCheckedIn = async (v) => {
-    //console.log(`!!!!!${JSON.stringify(v)}`)
-    let id = v.eventData.id;
-    console.log(id)
+    let id = v.eventData.event_data_id;
     try {
       const response = await Backend.put(`/data/checkin/${id}`);
       return response;
@@ -38,38 +39,20 @@ const DummyCheckin = () => {
   }
 
   const EventCard = (volunteer) => (
-    <Card key={volunteer.id}>
+    <Card key={volunteer.event_data_id}>
       <CardHeader>
-        <Heading size="md">{volunteer.id}</Heading>
+        <Heading size="md">{volunteer.event_data_id}</Heading>
       </CardHeader>
       <CardBody>
-        <Flex>
-          <Text>id={volunteer.id}</Text>
-          <Text>{volunteer.first_name}</Text>
-          <Text> Checked In: {volunteer.is_checked_in ? 'Yes' : 'No'}</Text>
-          <Checkbox isChecked={volunteer.is_checked_in} onChange={() => changeIsCheckedIn(volunteer)} />
+        <Flex >
+          <Text m={3}>{volunteer.eventData.first_name}</Text>
+          <Text m={3}>{volunteer.eventData.name}</Text>
+          <Checkbox onChange={() => changeIsCheckedIn(volunteer)}> Checked In? </Checkbox>
         </Flex>
       </CardBody>
     </Card>
   );
 
-// debug
-useEffect(() => {
-  //console.log(JSON.stringify(volunteerResults[0]))
-  //console.log(volunteerResults[0].props.data)
-  joinedData.map(r => console.log(r));
-  console.log(`JOINED DDATATA results!!!${joinedData.map(r => console.log(r))} with ${joinedData.length} entries`);
-}, [joinedData]);
-
-useEffect(() => {
-  //console.log(JSON.stringify(volunteerResults[0]))
-  //console.log(volunteerResults[0].props.data)
-  console.log(`volunteer results!!!${volunteerResults} with ${volunteerResults.length} entries`);
-}, [volunteerResults]);
-
-useEffect(() => {
-  console.log(`searchres!!!${searchResults}`);
-}, [searchResults]);
 
   /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
@@ -129,7 +112,6 @@ useEffect(() => {
         </option>
         {eventOptions}
       </Select>
-      {/* {volunteerResults.length != 0 && <EventCard eventData={volunteerResults[0]} />} */}
 
       <Input value={input} onChange={event => setInput(event.target.value)} />
       {volunteerResults.length != 0 ? volunteerResults.map(volunteer =>
