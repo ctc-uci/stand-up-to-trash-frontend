@@ -50,9 +50,7 @@ const Register = () => {
 
   const postVolunteerData = async formData => {
     try {
-      //   await Backend.post('/data', formData);
-      console.log('Submitted ');
-      console.log(formData);
+      await Backend.post('/eventData', formData);
     } catch (e) {
       console.log('Error posting', e);
     }
