@@ -18,20 +18,19 @@ const schema = yup.object({
   firstName: yup.string().required('First Name Required'),
   lastName: yup.string().required('Last Name Required'),
   number_in_party: yup.string().required('Number of Party Required'),
-  checked: yup.boolean().required('Must agree to terms and conditions'),
+  checked: yup.bool().oneOf([true], 'Must agree to terms and conditions'),
 });
 
 const Register = () => {
   const { eventId } = useParams();
   const [waiverUrl, setWaiverUrl] = useState('');
-  const [checked, setChecked] = useState(false);
 
   const defaultValues = {
     volunteer_id: '',
     firstName: '',
     lastName: '',
     number_in_party: '',
-    checked: false,
+    checked: undefined,
   };
 
   const getWaiver = async () => {
@@ -54,7 +53,6 @@ const Register = () => {
       //   await Backend.post('/data', formData);
       console.log('Submitted ');
       console.log(formData);
-      console.log('CHECKED', checked);
     } catch (e) {
       console.log('Error posting', e);
     }
@@ -67,7 +65,11 @@ const Register = () => {
   return (
     <form onSubmit={handleSubmit(data => postVolunteerData(data))}>
       {/* VOLUNTEER ID */}
-      <FormControl isInvalid={errors && errors.id} width="47%">
+      <FormControl
+        isInvalid={!!errors?.volunteer_id}
+        errortext={errors?.volunteer_id?.message}
+        width="47%"
+      >
         <FormLabel marginLeft={10} marginTop={10}>
           Volunteer Id
         </FormLabel>
@@ -76,34 +78,48 @@ const Register = () => {
           width={'auto'}
           {...register('volunteer_id')} //id showing
         />
-        <FormErrorMessage>{errors}</FormErrorMessage>
+        <FormErrorMessage>{errors?.volunteer_id?.message}</FormErrorMessage>
       </FormControl>
 
       {/* FIRST NAME */}
-      <FormControl isInvalid={errors && errors.id} width="47%">
+      <FormControl
+        isInvalid={!!errors?.firstName}
+        errortext={errors?.firstName?.message}
+        width="47%"
+      >
         <FormLabel marginLeft={10} marginTop={10}>
           First Name
         </FormLabel>
         <Input marginLeft={10} width={'auto'} {...register('firstName')} />
+        <FormErrorMessage>{errors?.firstName?.message}</FormErrorMessage>
       </FormControl>
 
       {/* LAST NAME */}
-      <FormControl isInvalid={errors && errors.id} width="47%">
+      <FormControl isInvalid={!!errors?.lastName} errortext={errors?.lastName?.message} width="47%">
         <FormLabel marginLeft={10} marginTop={10}>
           Last Name
         </FormLabel>
         <Input marginLeft={10} width={'auto'} {...register('lastName')} />
+        <FormErrorMessage>{errors?.lastName?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={errors && errors.id} width="47%">
+      <FormControl
+        isInvalid={!!errors?.number_in_party}
+        errortext={errors?.number_in_party?.message}
+        width="47%"
+      >
         <FormLabel marginLeft={10} marginTop={10}>
           Number of party members
         </FormLabel>
         <Input marginLeft={10} width={'auto'} {...register('number_in_party')} />
+        <FormErrorMessage>{errors?.number_in_party?.message}</FormErrorMessage>
       </FormControl>
 
       <img src={waiverUrl} />
-      <Checkbox onChange={() => setChecked(!checked)}>I agree to the terms & conditions</Checkbox>
+      <FormControl isInvalid={!!errors?.checked} errortext={errors?.checked?.message} width="47%">
+        <Checkbox {...register('checked')}>I agree to the terms & conditions</Checkbox>
+        <FormErrorMessage>{errors?.checked?.message}</FormErrorMessage>
+      </FormControl>
 
       <Button marginTop={10} marginLeft={10} colorScheme="blue" type="submit">
         Submit
