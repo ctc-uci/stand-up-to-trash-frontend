@@ -2,15 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Select, Input } from '@chakra-ui/react';
 import { fetchEvents, fetchJoinedEvents } from '../utils/fuseUtils';
-import {
-  Heading,
-  Text,
-  Card,
-  CardHeader,
-  CardBody,
-  Checkbox,
-  Flex,
-} from '@chakra-ui/react';
+import { Heading, Text, Card, CardHeader, CardBody, Checkbox, Flex } from '@chakra-ui/react';
 // import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
@@ -23,36 +15,47 @@ const DummyCheckin = () => {
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
 
-
   /*
     This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
   */
-  const changeIsCheckedIn = async (v) => {
-    let id = v.eventData.event_data_id;
+  const changeIsCheckedIn = async eventData => {
+    const { event_data_id } = eventData;
     try {
-      const response = await Backend.put(`/data/checkin/${id}`);
+      const response = await Backend.put(`/data/checkin/${event_data_id}`);
+      setEventsData(prevEventsData =>
+        prevEventsData.map(event =>
+          event.event_data_id === event_data_id
+            ? { ...event, is_checked_in: !event.is_checked_in }
+            : event,
+        ),
+      );
       return response;
+    } catch (err) {
+      console.log(err);
     }
-   catch (err) {
-    console.log(err);
-  }
-  }
+  };
 
-  const EventCard = (volunteer) => (
-    <Card key={volunteer.event_data_id}>
-      <CardHeader>
-        <Heading size="md">{volunteer.event_data_id}</Heading>
-      </CardHeader>
-      <CardBody>
-        <Flex >
-          <Text m={3}>{volunteer.eventData.first_name}</Text>
-          <Text m={3}>{volunteer.eventData.name}</Text>
-          <Checkbox onChange={() => changeIsCheckedIn(volunteer)}> Checked In? </Checkbox>
-        </Flex>
-      </CardBody>
-    </Card>
-  );
-
+  const EventCard = ({ eventData }) => {
+    return (
+      <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`}>
+        <CardHeader>
+          <Heading size="md">{eventData.event_data_id}</Heading>
+        </CardHeader>
+        <CardBody>
+          <Flex>
+            <Text m={3}>{eventData.first_name}</Text>
+            <Text m={3}>{eventData.name}</Text>
+            <Checkbox
+              onChange={() => changeIsCheckedIn(eventData)}
+              isChecked={eventData.is_checked_in}
+            >
+              Checked In?
+            </Checkbox>
+          </Flex>
+        </CardBody>
+      </Card>
+    );
+  };
 
   /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
@@ -114,9 +117,11 @@ const DummyCheckin = () => {
       </Select>
 
       <Input value={input} onChange={event => setInput(event.target.value)} />
-      {volunteerResults.length != 0 ? volunteerResults.map(volunteer =>
-        <EventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id}/>
-    ) : searchResults}
+      {volunteerResults.length != 0
+        ? volunteerResults.map(volunteer => (
+            <EventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id} />
+          ))
+        : searchResults}
     </>
   );
 };
