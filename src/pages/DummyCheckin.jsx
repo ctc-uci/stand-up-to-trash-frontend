@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Select, Input } from '@chakra-ui/react';
 import { fetchEvents, fetchJoinedEvents } from '../utils/fuseUtils';
-import { Heading, Text, Card, CardHeader, CardBody, Checkbox, Flex } from '@chakra-ui/react';
+import { Heading, Text, Card, CardHeader, CardBody, Checkbox, Flex, Button, Box } from '@chakra-ui/react';
 // import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
@@ -14,11 +15,32 @@ const DummyCheckin = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
+  const {eventId} = useParams();
+  const [showCheckedIn, setShowCheckedIn] = useState(false);
+
+
+  /*
+  Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
+  */
+  useEffect(() => {
+    filterHandler();
+  }, [joinedData]);
+
+  useEffect(() => {
+    console.log(`IsCheckedIn = ${showCheckedIn}`);
+  }, [showCheckedIn]);
+
+  useEffect(() => {
+    // if (volunteerResults.length != 0) {
+    //   console.log(`volunteerResults = ${JSON.stringify(volunteerResults[0].props.data.is_checked_in)}`);
+    // }
+  }, [volunteerResults]);
 
   /*
     This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
   */
   const changeIsCheckedIn = async eventData => {
+    console.log("went thru")
     const { event_data_id } = eventData;
     try {
       const response = await Backend.put(`/data/checkin/${event_data_id}`);
@@ -38,24 +60,35 @@ const DummyCheckin = () => {
   const EventCard = ({ eventData }) => {
     return (
       <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`}>
-        <CardHeader>
-          <Heading size="md">{eventData.event_data_id}</Heading>
-        </CardHeader>
         <CardBody>
           <Flex>
-            <Text m={3}>{eventData.first_name}</Text>
-            <Text m={3}>{eventData.name}</Text>
-            <Checkbox
-              onChange={() => changeIsCheckedIn(eventData)}
-              isChecked={eventData.is_checked_in}
+            <Text m={3} justifyContent='center'>{eventData.first_name}</Text>
+            <Button
+              onClick={() => changeIsCheckedIn(eventData)}
+              style={{backgroundColor: '#95D497'}}
+              borderRadius='0px'
             >
-              Checked In?
-            </Checkbox>
+              Check-in
+            </Button>
           </Flex>
         </CardBody>
       </Card>
     );
   };
+
+  /*
+    This is the filtered data based on the user's selection
+  */
+    const filterHandler = () => {
+      console.log(joinedData)
+      const filterdData = joinedData.filter(item => {
+        if (item.props.data.event_id == eventId || eventId == -1) {
+          return true;
+        }
+      });
+      setSearchResults(filterdData);
+    };
+
 
   /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
@@ -69,8 +102,10 @@ const DummyCheckin = () => {
         });
         setJoinedData(joinedContainers);
       });
+
     };
     setData();
+
   }, []);
 
   /*
@@ -86,42 +121,28 @@ const DummyCheckin = () => {
     setVolunteerResults(reduceResult);
   }, [input]);
 
-  /*
-    This is all the options for the dropdown, it's the name of all the events
-  */
-  const eventOptions = eventsData.map(event => (
-    <option key={event.id} value={event.id}>
-      {event.name}
-    </option>
-  ));
-
-  /*
-    This is the filtered data based on the user's selection
-  */
-  const filterHandler = event => {
-    const filterdData = joinedData.filter(item => {
-      if (item.props.data.event_id == event.target.value || event.target.value == -1) {
-        return true;
-      }
-    });
-    setSearchResults(filterdData);
+  const buttonBackgroundColor = showCheckedIn ? 'grey' : 'defaultColor';
+  const handleButtonClick = () => {
+    setShowCheckedIn(!showCheckedIn);
   };
 
   return (
     <>
-      <Select placeholder="Select Event" onChange={event => filterHandler(event)}>
-        <option key={-1} value={-1}>
-          All Events
-        </option>
-        {eventOptions}
-      </Select>
-
+      <Box w="100%" h={10} bg="white" style={{boxShadow: ".1 .1 .1 .1"}} mb="1rem"></Box>
+      <Button style={{ borderRadius: '60px', backgroundColor: `${showCheckedIn ?  '#EFEFEF' : '#696969'}`}} onClick={() => handleButtonClick()}>not checked-in</Button>
+      <Button style={{ borderRadius: '60px', backgroundColor: `${showCheckedIn ?  '#696969' : '#EFEFEF'}`}} onClick={() => handleButtonClick()}>checked-in</Button>
       <Input value={input} onChange={event => setInput(event.target.value)} />
-      {volunteerResults.length != 0
-        ? volunteerResults.map(volunteer => (
+
+      {showCheckedIn && (volunteerResults.length != 0
+        ? volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == true).map(volunteer => (
             <EventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id} />
           ))
-        : searchResults}
+        : searchResults)}
+      {!showCheckedIn && (volunteerResults.length != 0
+      ? volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == false).map(volunteer => (
+          <EventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id} />
+        ))
+      : searchResults)}
     </>
   );
 };
