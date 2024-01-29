@@ -3,17 +3,35 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Select, Input } from '@chakra-ui/react';
 import { fetchEvents, fetchJoinedEvents } from '../utils/fuseUtils';
-import { Heading, Text, Card, CardHeader, CardBody, Checkbox, Flex, Button, Box } from '@chakra-ui/react';
+import { Container,
+  Text,
+  Card,
+  CardBody,
+  Flex,
+  Button,
+  Box,
+  Spacer,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton, } from '@chakra-ui/react';
 // import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
 import Backend from '../utils/utils';
+import { useDisclosure } from '@chakra-ui/react'
 
 const DummyCheckin = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [eventsData, setEventsData] = useState([]);
   const [joinedData, setJoinedData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
+  const [checkedInVolunteers, setCheckedInVolunteers] = useState([]); // to update when a volunteer checks in without refresh
+  const [notCheckedInVolunteers, setNotCheckedInVolunteers] = useState([]);
   const [input, setInput] = useState('');
   const {eventId} = useParams();
   const [showCheckedIn, setShowCheckedIn] = useState(false);
@@ -30,17 +48,11 @@ const DummyCheckin = () => {
     console.log(`IsCheckedIn = ${showCheckedIn}`);
   }, [showCheckedIn]);
 
-  useEffect(() => {
-    // if (volunteerResults.length != 0) {
-    //   console.log(`volunteerResults = ${JSON.stringify(volunteerResults[0].props.data.is_checked_in)}`);
-    // }
-  }, [volunteerResults]);
-
   /*
     This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
   */
+
   const changeIsCheckedIn = async eventData => {
-    console.log("went thru")
     const { event_data_id } = eventData;
     try {
       const response = await Backend.put(`/data/checkin/${event_data_id}`);
@@ -57,16 +69,66 @@ const DummyCheckin = () => {
     }
   };
 
-  const EventCard = ({ eventData }) => {
+  const CheckedInEventCard = ({ eventData }) => {
     return (
-      <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`}>
-        <CardBody>
-          <Flex>
-            <Text m={3} justifyContent='center'>{eventData.first_name}</Text>
+      <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`} marginTop='5vh'>
+        <CardBody bg="gray" style={{boxShadow: ".1 .1 .1 .1"}}>
+          <Flex justifyContent="left">
+            <Flex direction="column" justifyContent="left" ml="2rem">
+            <Text justifyContent='center' fontSize="2xl" fontWeight="bold">{eventData.first_name}</Text>
+            <Text >Check-In</Text>
+            </Flex>
+
+            <Spacer />
+            <>
+            <Button
+              onClick={onOpen}
+              style={{color: 'black', backgroundColor: 'white'}}
+              borderRadius='0px'
+              size="lg"
+              mt={1}
+            >
+              Input Data
+            </Button>
+            <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Modal Title</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text>LOL</Text>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme='blue' mr={3} onClick={onClose}>
+                  Close
+                </Button>
+                <Button variant='ghost'>Secondary Action</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+            </>
+          </Flex>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  const NotCheckedInEventCard = ({ eventData }) => {
+    return (
+      <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`} marginTop='5vh'>
+        <CardBody bg="white" style={{boxShadow: ".1 .1 .1 .1"}}>
+          <Flex justifyContent='center'>
+            <Text ml="38rem" mt={1}  fontSize="2xl" fontWeight="bold" style={{boxShadow: '0 0 0 1px var(--chakra-colors-dark-background)',}}>
+              {eventData.first_name}
+            </Text>
+            <Spacer />
             <Button
               onClick={() => changeIsCheckedIn(eventData)}
-              style={{backgroundColor: '#95D497'}}
+              style={{color: 'black', backgroundColor: '#95D497'}}
               borderRadius='0px'
+              size="lg"
             >
               Check-in
             </Button>
@@ -126,23 +188,43 @@ const DummyCheckin = () => {
     setShowCheckedIn(!showCheckedIn);
   };
 
+
+  const sortEventCardsByCheckIn = () => {
+    if (volunteerResults.length != 0) {
+      setCheckedInVolunteers(volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == true));
+      setNotCheckedInVolunteers(volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == false));
+    }
+  }
+
+  useEffect(() => {
+    console.log(`Number total is ${volunteerResults.length}`);
+    sortEventCardsByCheckIn();
+    console.log(`Number checked in is ${checkedInVolunteers.length}`);
+    console.log(`Number checked out is ${notCheckedInVolunteers.length}`);
+  }, [checkedInVolunteers, notCheckedInVolunteers, volunteerResults]);
+
   return (
     <>
-      <Box w="100%" h={10} bg="white" style={{boxShadow: ".1 .1 .1 .1"}} mb="1rem"></Box>
-      <Button style={{ borderRadius: '60px', backgroundColor: `${showCheckedIn ?  '#EFEFEF' : '#696969'}`}} onClick={() => handleButtonClick()}>not checked-in</Button>
-      <Button style={{ borderRadius: '60px', backgroundColor: `${showCheckedIn ?  '#696969' : '#EFEFEF'}`}} onClick={() => handleButtonClick()}>checked-in</Button>
-      <Input value={input} onChange={event => setInput(event.target.value)} />
+      <Flex justifyContent='center'>
+        <Box w="88%" h="15rem" bg="white"  style={{boxShadow: ' 0px 4px 4px 0px rgba(0, 0, 0, 0.25)'}} mt={1} ></Box>
+      </Flex>
+      <Container maxW="90%">
+        <Input value={input} onChange={event => setInput(event.target.value)} borderRadius='0px' marginTop='5vh' placeholder='Search' />
 
-      {showCheckedIn && (volunteerResults.length != 0
-        ? volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == true).map(volunteer => (
-            <EventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id} />
+        <Button style={{ borderRadius: '60px', backgroundColor: `${showCheckedIn ?  '#EFEFEF' : '#696969'}`}} marginLeft='1vw' marginTop='3vh' onClick={() => handleButtonClick()}>not checked-in</Button>
+        <Button style={{ borderRadius: '60px', backgroundColor: `${showCheckedIn ?  '#696969' : '#EFEFEF'}`}} marginLeft='1vw' marginTop='3vh' onClick={() => handleButtonClick()}>checked-in</Button>
+
+        {showCheckedIn && (checkedInVolunteers.length != 0
+        ? checkedInVolunteers.map(volunteer => (
+            <CheckedInEventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id} />
           ))
-        : searchResults)}
-      {!showCheckedIn && (volunteerResults.length != 0
-      ? volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == false).map(volunteer => (
-          <EventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id} />
+        : '')}
+      {!showCheckedIn && (notCheckedInVolunteers.length != 0
+      ? notCheckedInVolunteers.map(volunteer => (
+          <NotCheckedInEventCard eventData={volunteer.props.data} key={volunteer.props.data.volunteer_id} />
         ))
-      : searchResults)}
+      : '')}
+      </Container>
     </>
   );
 };
