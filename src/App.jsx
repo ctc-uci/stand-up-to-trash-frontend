@@ -16,6 +16,8 @@ import Playground from './components/Playground/Playground';
 import EventCardTest from './pages/EventCardTest';
 import DataEntryModalTestPage from './pages/DataEntryModalTestPage';
 import Register from './pages/Register';
+import DummyVolunteerQR from './pages/DummyVolunteerQR';
+import DummyAdminQR from './pages/DummyAdminQR';
 
 const App = () => {
   return (
@@ -36,21 +38,21 @@ const App = () => {
 
           {/* Jessie and Brendan */}
           <Route path="/data-entry-modal-test" element={<DataEntryModalTestPage />} />
-
           {/* Rayan and Emmy */}
           <Route path="/checkin/:eventId" element={<DummyCheckin />} />
-
           {/* Phillip and Katy */}
           <Route path="/stats" element={<DummyStatsPage />} />
-
           {/* Nate and Farhnaz */}
           <Route path="/event-card-page" element={<EventCardTest />} />
-
           {/* Matthew and Bobby */}
           <Route path="/register/:eventId" element={<Register />} />
-
           {/* If your Sprint 3 task requires you to create a new component, you can use this route to test the look of your component */}
           <Route path="/playground" element={<Playground />} />
+
+          {/* SPRINT 5 */}
+          {/* Kevin and Jasmine */}
+          <Route path="/volunteer-qr/:eventId/:volunteerId" element={<DummyVolunteerQR />} />
+          <Route path="/admin-qr/" element={<DummyAdminQR />} />
         </Routes>
       </Router>
     </ChakraProvider>
