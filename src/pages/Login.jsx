@@ -3,6 +3,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -24,6 +25,7 @@ import {
   logInWithEmailAndPassWord,
   sendResetPasswordPrompt,
 } from '../utils/firebaseAuthUtils';
+import Backend from '../utils/utils';
 
 const Login = () => {
   return (
@@ -43,6 +45,8 @@ const signinSchema = yup.object({
 });
 
 const signupSchema = yup.object({
+  firstName: yup.string().required("Please enter your first name"),
+  lastName: yup.string().required("Please enter your last name"),
   email: yup.string().email().required('Please enter your email address'),
   password: yup
     .string()
@@ -146,10 +150,11 @@ const CreateAccount = () => {
   const navigate = useNavigate();
 
   const onSubmit = async event => {
-    const { email, password } = event;
+    const { email, password, firstName, lastName } = event;
 
     try {
       await createUserInFirebase(email, password, '/successful-login', navigate);
+      await createVolunteerRow({id: email, email, firstName, lastName});
 
       toast.closeAll();
 
@@ -188,6 +193,18 @@ const CreateAccount = () => {
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={handleSubmit(onSubmit)}>
+              <HStack>
+              <FormControl isInvalid={errors.firstName}>
+                <FormLabel>First Name</FormLabel>
+                <Input type="text" {...register('firstName')} />
+                {errors.firstName && <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>}
+              </FormControl>
+              <FormControl isInvalid={errors.lastName}>
+                <FormLabel>Last Name</FormLabel>
+                <Input type="text" {...register('lastName')} />
+                {errors.lastName && <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>}
+              </FormControl>
+              </HStack>
               <FormControl isInvalid={errors.email}>
                 <FormLabel>Email address</FormLabel>
                 <Input type="email" {...register('email')} />
@@ -220,6 +237,16 @@ const CreateAccount = () => {
       </Modal>
     </>
   );
+};
+
+const createVolunteerRow = async ({ id, email, firstName, lastName }) => {
+  const response = await Backend.post("/profiles", {
+    id: id,
+    email: email,
+    first_name: firstName,
+    last_name: lastName,
+  });
+  return response;
 };
 
 const ForgotPasswordButton = () => {
