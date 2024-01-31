@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Select, Input } from '@chakra-ui/react';
-import { fetchEvents, fetchJoinedEvents } from '../utils/fuseUtils';
+import { Input } from '@chakra-ui/react';
+import { fetchJoinedEvents } from '../utils/fuseUtils';
 import { Container,
   Text,
   Card,
@@ -26,7 +26,7 @@ import { useDisclosure } from '@chakra-ui/react'
 
 const DummyCheckin = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [eventsData, setEventsData] = useState([]);
+  // const [eventsData, setEventsData] = useState([]);
   const [joinedData, setJoinedData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
@@ -48,6 +48,17 @@ const DummyCheckin = () => {
     console.log(`IsCheckedIn = ${showCheckedIn}`);
   }, [showCheckedIn]);
 
+
+  /*
+  Dynamically re-renders volunteer entries when a user checks them in
+  */
+  useEffect(() => {
+    console.log(`Number total is ${volunteerResults.length}`);
+    sortEventCardsByCheckIn();
+    console.log(`Number checked in is ${checkedInVolunteers.length}`);
+    console.log(`Number checked out is ${notCheckedInVolunteers.length}`);
+  }, [volunteerResults]);
+
   /*
     This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
   */
@@ -56,13 +67,14 @@ const DummyCheckin = () => {
     const { event_data_id } = eventData;
     try {
       const response = await Backend.put(`/data/checkin/${event_data_id}`);
-      setEventsData(prevEventsData =>
-        prevEventsData.map(event =>
-          event.event_data_id === event_data_id
-            ? { ...event, is_checked_in: !event.is_checked_in }
-            : event,
-        ),
-      );
+      // setEventsData(prevEventsData =>
+      //   prevEventsData.map(event =>
+      //     event.event_data_id === event_data_id
+      //       ? { ...event, is_checked_in: !event.is_checked_in }
+      //       : event,
+      //   ),
+      // );
+      sortEventCardsByCheckIn(); // rerender event cards so checked in volunteers show up in the correct category
       return response;
     } catch (err) {
       console.log(err);
@@ -80,7 +92,6 @@ const DummyCheckin = () => {
             </Flex>
 
             <Spacer />
-            <>
             <Button
               onClick={onOpen}
               style={{color: 'black', backgroundColor: 'white'}}
@@ -98,7 +109,6 @@ const DummyCheckin = () => {
               <ModalBody>
                 <Text>LOL</Text>
               </ModalBody>
-
               <ModalFooter>
                 <Button colorScheme='blue' mr={3} onClick={onClose}>
                   Close
@@ -107,8 +117,6 @@ const DummyCheckin = () => {
               </ModalFooter>
             </ModalContent>
           </Modal>
-
-            </>
           </Flex>
         </CardBody>
       </Card>
@@ -139,7 +147,7 @@ const DummyCheckin = () => {
   };
 
   /*
-    This is the filtered data based on the user's selection
+    This is the filtered data based on the event chosen in event-card-page
   */
     const filterHandler = () => {
       console.log(joinedData)
@@ -157,7 +165,7 @@ const DummyCheckin = () => {
   */
   useEffect(() => {
     const setData = async () => {
-      await fetchEvents().then(data => setEventsData(data));
+      // await fetchEvents().then(data => setEventsData(data));
       await fetchJoinedEvents().then(data => {
         const joinedContainers = data.map(event => {
           return <JoinedDataContainer data={event} key={event.volunteer_id} />;
@@ -183,25 +191,24 @@ const DummyCheckin = () => {
     setVolunteerResults(reduceResult);
   }, [input]);
 
-  const buttonBackgroundColor = showCheckedIn ? 'grey' : 'defaultColor';
+  // const buttonBackgroundColor = showCheckedIn ? 'grey' : 'defaultColor';
   const handleButtonClick = () => {
     setShowCheckedIn(!showCheckedIn);
   };
 
 
+  // places volunteer results into their respective categories
   const sortEventCardsByCheckIn = () => {
     if (volunteerResults.length != 0) {
       setCheckedInVolunteers(volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == true));
       setNotCheckedInVolunteers(volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == false));
     }
+    else {
+      setCheckedInVolunteers([]);
+      setNotCheckedInVolunteers([]);
+    }
   }
 
-  useEffect(() => {
-    console.log(`Number total is ${volunteerResults.length}`);
-    sortEventCardsByCheckIn();
-    console.log(`Number checked in is ${checkedInVolunteers.length}`);
-    console.log(`Number checked out is ${notCheckedInVolunteers.length}`);
-  }, [checkedInVolunteers, notCheckedInVolunteers, volunteerResults]);
 
   return (
     <>
