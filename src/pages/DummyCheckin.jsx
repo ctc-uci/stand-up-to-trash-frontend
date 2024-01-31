@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Input } from '@chakra-ui/react';
 import { fetchJoinedEvents } from '../utils/fuseUtils';
-import { Container,
+import {
+  Container,
+  Center,
   Text,
   Card,
   CardBody,
@@ -17,8 +19,8 @@ import { Container,
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton, } from '@chakra-ui/react';
-// import Backend from '../utils/utils';
+  ModalCloseButton,
+} from '@chakra-ui/react';
 import Fuse from 'fuse.js';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
 import Backend from '../utils/utils';
@@ -26,11 +28,10 @@ import { useDisclosure } from '@chakra-ui/react'
 
 const DummyCheckin = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  // const [eventsData, setEventsData] = useState([]);
   const [joinedData, setJoinedData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
-  const [checkedInVolunteers, setCheckedInVolunteers] = useState([]); // to update when a volunteer checks in without refresh
+  const [checkedInVolunteers, setCheckedInVolunteers] = useState([]);
   const [notCheckedInVolunteers, setNotCheckedInVolunteers] = useState([]);
   const [input, setInput] = useState('');
   const {eventId} = useParams();
@@ -38,19 +39,14 @@ const DummyCheckin = () => {
 
 
   /*
-  Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
+    Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
   */
   useEffect(() => {
     filterHandler();
   }, [joinedData]);
 
-  useEffect(() => {
-    console.log(`IsCheckedIn = ${showCheckedIn}`);
-  }, [showCheckedIn]);
-
-
   /*
-  Dynamically re-renders volunteer entries when a user checks them in
+    Dynamically re-renders volunteer entries when a user checks them in
   */
   useEffect(() => {
     console.log(`Number total is ${volunteerResults.length}`);
@@ -62,18 +58,10 @@ const DummyCheckin = () => {
   /*
     This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
   */
-
   const changeIsCheckedIn = async eventData => {
     const { event_data_id } = eventData;
     try {
       const response = await Backend.put(`/data/checkin/${event_data_id}`);
-      // setEventsData(prevEventsData =>
-      //   prevEventsData.map(event =>
-      //     event.event_data_id === event_data_id
-      //       ? { ...event, is_checked_in: !event.is_checked_in }
-      //       : event,
-      //   ),
-      // );
       sortEventCardsByCheckIn(); // rerender event cards so checked in volunteers show up in the correct category
       return response;
     } catch (err) {
@@ -81,16 +69,18 @@ const DummyCheckin = () => {
     }
   };
 
+  /*
+  Card components that display the volunteer information for the current event
+  */
   const CheckedInEventCard = ({ eventData }) => {
     return (
       <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`} marginTop='5vh'>
         <CardBody bg="gray" style={{boxShadow: ".1 .1 .1 .1"}}>
           <Flex justifyContent="left">
             <Flex direction="column" justifyContent="left" ml="2rem">
-            <Text justifyContent='center' fontSize="2xl" fontWeight="bold">{eventData.first_name}</Text>
-            <Text >Check-In</Text>
+              <Text justifyContent='center' fontSize="2xl" fontWeight="bold">{eventData.first_name}</Text>
+              <Text >Check-In</Text>
             </Flex>
-
             <Spacer />
             <Button
               onClick={onOpen}
@@ -128,9 +118,11 @@ const DummyCheckin = () => {
       <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`} marginTop='5vh'>
         <CardBody bg="white" style={{boxShadow: ".1 .1 .1 .1"}}>
           <Flex justifyContent='center'>
-            <Text ml="38rem" mt={1}  fontSize="2xl" fontWeight="bold" style={{boxShadow: '0 0 0 1px var(--chakra-colors-dark-background)',}}>
-              {eventData.first_name}
-            </Text>
+            <Center w="100%">
+              <Text mt={1}  fontSize="2xl" fontWeight="bold" style={{boxShadow: '0 0 0 1px var(--chakra-colors-dark-background)',}}>
+                {eventData.first_name}
+              </Text>
+            </Center>
             <Spacer />
             <Button
               onClick={() => changeIsCheckedIn(eventData)}
@@ -158,7 +150,6 @@ const DummyCheckin = () => {
       });
       setSearchResults(filterdData);
     };
-
 
   /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
@@ -191,24 +182,20 @@ const DummyCheckin = () => {
     setVolunteerResults(reduceResult);
   }, [input]);
 
-  // const buttonBackgroundColor = showCheckedIn ? 'grey' : 'defaultColor';
   const handleButtonClick = () => {
     setShowCheckedIn(!showCheckedIn);
   };
 
-
-  // places volunteer results into their respective categories
   const sortEventCardsByCheckIn = () => {
     if (volunteerResults.length != 0) {
       setCheckedInVolunteers(volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == true));
       setNotCheckedInVolunteers(volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == false));
     }
     else {
-      setCheckedInVolunteers([]);
+      setCheckedInVolunteers([]); // for refreshing when the user deletes the searched entry
       setNotCheckedInVolunteers([]);
     }
   }
-
 
   return (
     <>
