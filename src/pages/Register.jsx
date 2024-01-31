@@ -8,22 +8,23 @@ import {
   Button,
   FormErrorMessage,
   Checkbox,
+  Heading
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useParams } from 'react-router-dom';
 
 const schema = yup.object({
-  volunteer_id: yup.string().required('ID required').max(10, 'ID exceeds 10 character limit'),
+  volunteer_id: yup.string().required('ID required'),
   firstName: yup.string().required('First Name Required'),
   lastName: yup.string().required('Last Name Required'),
-  number_in_party: yup.string().required('Number of Party Required'),
+  number_in_party: yup.number().typeError('Input must be numeric').min(1).required('Number of Party Required'),
   checked: yup.bool().oneOf([true], 'Must agree to terms and conditions'),
 });
 
 const Register = () => {
   const { eventId } = useParams();
-  const [waiverUrl, setWaiverUrl] = useState('');
+  const [waiverText, setWaiverText] = useState('');
 
   const defaultValues = {
     volunteer_id: '',
@@ -36,7 +37,7 @@ const Register = () => {
   const getWaiver = async () => {
     try {
       const response = await Backend.get(`/events/${eventId}`);
-      setWaiverUrl(response.data.image_url);
+      setWaiverText(response.data.waiver);
     } catch (err) {
       console.log(err);
     }
@@ -49,8 +50,19 @@ const Register = () => {
   } = useForm({ resolver: yupResolver(schema), defaultValues });
 
   const postVolunteerData = async formData => {
+    console.log(formData);
+
+    const submitData = {
+      volunteer_id: formData.volunteer_id,
+      number_in_party: formData.number_in_party,
+      event_id: eventId,
+      is_checked_in: false,
+      pounds: 0,
+      ounces: 0,
+    };
+
     try {
-      await Backend.post('/eventData', formData);
+      await Backend.post('/data', submitData);
     } catch (e) {
       console.log('Error posting', e);
     }
@@ -113,7 +125,8 @@ const Register = () => {
         <FormErrorMessage>{errors?.number_in_party?.message}</FormErrorMessage>
       </FormControl>
 
-      <img src={waiverUrl} />
+      <Heading mt={5}>Waiver</Heading>
+      <p>{waiverText}</p>
       <FormControl isInvalid={!!errors?.checked} errortext={errors?.checked?.message} width="47%">
         <Checkbox {...register('checked')}>I agree to the terms & conditions</Checkbox>
         <FormErrorMessage>{errors?.checked?.message}</FormErrorMessage>
