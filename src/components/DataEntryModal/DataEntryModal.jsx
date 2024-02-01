@@ -1,6 +1,6 @@
 import Backend from '../../utils/utils';
 import PropTypes from 'prop-types';
-import React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Modal,
@@ -20,28 +20,23 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 
-
-
 const DataEntryModal = ({ isOpen, onClose }) => {
-  const [volunteerData, setVolunteerData] = React.useState({
-    volunteer_id: 0,
+  const [volunteerData, setVolunteerData] = useState({
+    volunteer_id: 0, // should be changed when connected with CHECKIN
     number_in_party: 0,
     pounds: 0,
     ounces: 0,
     unusual_items: [],
-    event_id: 0,
+    event_id: 0, // Should be changed when connected with CHECKIN
     is_checked_in: false,
   });
-  const [other, setOther] = React.useState('');
+  const [other, setOther] = useState('');
 
-  const {
-    register,
-    handleSubmit,
-  } = useForm(volunteerData);
+  const { register, handleSubmit } = useForm(volunteerData);
 
   const postVolunteerData = async formData => {
     try {
-      setVolunteerData((prevData) => ({
+      setVolunteerData(prevData => ({
         ...prevData,
         pounds: formData.pounds,
         ounces: formData.ounces,
@@ -59,17 +54,18 @@ const DataEntryModal = ({ isOpen, onClose }) => {
 
   const addUnusualItem = (isChecked, newItem) => {
     if (isChecked && newItem.trim() !== '') {
-      setVolunteerData((prevData) => ({
+      setVolunteerData(prevData => ({
         ...prevData,
         unusual_items: [...new Set([...prevData.unusual_items, newItem, other])].filter(Boolean), //FILTERS EMPTY STRING
       }));
     } else {
-      setVolunteerData((prevData) => ({
+      setVolunteerData(prevData => ({
         ...prevData,
-        unusual_items: [...new Set(prevData.unusual_items.filter((item) => item !== newItem))].filter(Boolean) //FILTERS EMPTY STRING
+        unusual_items: [...new Set(prevData.unusual_items.filter(item => item !== newItem))].filter(
+          Boolean,
+        ), //FILTERS EMPTY STRING
       }));
     }
-
   };
 
   return (
@@ -104,24 +100,33 @@ const DataEntryModal = ({ isOpen, onClose }) => {
                   <FormLabel paddingTop={'20px'}>Enter Unusual Items</FormLabel>{' '}
                 </Center>
                 <Stack padding={'10px'}>
-                <Checkbox {...register('unusual_item_A')} onChange={(e) => addUnusualItem(e.target.checked, e.target.name)}>
+                  <Checkbox
+                    {...register('unusual_item_A')}
+                    onChange={e => addUnusualItem(e.target.checked, e.target.name)}
+                  >
                     Unusual Item A{' '}
                   </Checkbox>
-                  <Checkbox {...register('unusal_item_B')} onChange={(e) => addUnusualItem(e.target.checked, e.target.name)}>
+                  <Checkbox
+                    {...register('unusal_item_B')}
+                    onChange={e => addUnusualItem(e.target.checked, e.target.name)}
+                  >
                     Unusual Item B{' '}
                   </Checkbox>
-                  <Checkbox {...register('unusal_item_C')} onChange={(e) => addUnusualItem(e.target.checked, e.target.name)}>
+                  <Checkbox
+                    {...register('unusal_item_C')}
+                    onChange={e => addUnusualItem(e.target.checked, e.target.name)}
+                  >
                     Unusual Item C
                   </Checkbox>
-                  <Checkbox {...register('unusal_item_D')} onChange={(e) => addUnusualItem(e.target.checked, e.target.name)}>
+                  <Checkbox
+                    {...register('unusal_item_D')}
+                    onChange={e => addUnusualItem(e.target.checked, e.target.name)}
+                  >
                     Unusual Item D
                   </Checkbox>
                   <Stack flexDirection={''}>
                     <Checkbox isRequired>Other: </Checkbox>
-                    <Input
-                      onChange={e => setOther(e.target.value)}
-                      value={other}
-                    />
+                    <Input onChange={e => setOther(e.target.value)} value={other} />
                   </Stack>
                   <Textarea height={200} resize="vertical" />
                 </Stack>
@@ -129,10 +134,15 @@ const DataEntryModal = ({ isOpen, onClose }) => {
             </ModalBody>
 
             <ModalFooter alignSelf={'center'}>
-              <Button colorScheme="green" mr={3} type="submit" onClick={() => {
-                onClose;
-                addUnusualItem(true, other);
-              }}>
+              <Button
+                colorScheme="green"
+                mr={3}
+                type="submit"
+                onClick={() => {
+                  onClose;
+                  addUnusualItem(true, other);
+                }}
+              >
                 Save
               </Button>
             </ModalFooter>
