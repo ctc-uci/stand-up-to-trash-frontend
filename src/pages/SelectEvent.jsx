@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Backend from '../utils/utils';
-import {
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  Select,
-  FormErrorMessage,
-} from '@chakra-ui/react';
+import { FormControl, FormLabel, Button, Select, FormErrorMessage } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object({
   volunteer_id: yup.string().required('ID required').max(10, 'ID exceeds 10 character limit'),
@@ -18,22 +12,20 @@ const schema = yup.object({
   event_id: yup.string().required('Event required'),
 });
 
-const DummyVolunteerRegistrationForm = () => {
+const SelectEvent = () => {
   const [eventsData, setEventsData] = useState([]);
 
+  const [currEvent, setCurrEvent] = useState('');
+  const navigate = useNavigate();
+
   const defaultValues = {
-    volunteer_id: '',
-    number_in_party: '',
-    pounds: 0, 
-    ounces: 0, 
-    unusual_items: '',
-    event_id: '',
-    is_checked_in: false,
+    firstName: '',
+    lastName: '',
+    email: '',
   };
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema), defaultValues });
 
@@ -47,14 +39,8 @@ const DummyVolunteerRegistrationForm = () => {
     }
   };
 
-  const postVolunteerData = async formData => {
-    try {
-      await Backend.post('/data', formData);
-      console.log('Submitted ');
-      console.log(formData);
-    } catch (e) {
-      console.log('Error posting', e);
-    }
+  const handleNewRoute = () => {
+    navigate(`/register/${currEvent}`);
   };
 
   useEffect(() => {
@@ -62,21 +48,7 @@ const DummyVolunteerRegistrationForm = () => {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(data => postVolunteerData(data))}>
-      {/* VOLUNTEER ID */}
-      <FormControl isInvalid={errors && errors.id} width="47%">
-        <FormLabel marginLeft={10} marginTop={10}>
-          Volunteer Id
-        </FormLabel>
-        <Input
-          marginLeft={10}
-          width={'auto'}
-          {...register('volunteer_id')} //id showing
-        />
-        <FormErrorMessage>{errors.id && errors.id.message}</FormErrorMessage>
-      </FormControl>
-
-      {/* EVENT NAME */}
+    <div>
       <FormControl isInvalid={errors && errors.id} width="47%">
         <FormLabel marginLeft={10} marginTop={10}>
           Event
@@ -85,6 +57,10 @@ const DummyVolunteerRegistrationForm = () => {
           marginLeft={10}
           placeholder="Select event"
           {...register('event_id')}
+          onChange={event => {
+            console.log(event.target.value);
+            setCurrEvent(event.target.value);
+          }}
         >
           {eventsData.map(element => (
             <option key={element.id} value={element.id}>
@@ -95,19 +71,11 @@ const DummyVolunteerRegistrationForm = () => {
         <FormErrorMessage>{errors.id && errors.id.message}</FormErrorMessage>
       </FormControl>
 
-      {/* PARTY NUMBER */}
-      <FormControl isInvalid={errors && errors.id} width="47%">
-        <FormLabel marginLeft={10} marginTop={10}>
-          Number of Party
-        </FormLabel>
-        <Input marginLeft={10} width={'auto'} {...register('number_in_party')} type="number" />
-      </FormControl>
-
-      <Button marginTop={10} marginLeft={10} colorScheme="blue" type="submit">
-        Submit
+      <Button marginTop={10} marginLeft={10} colorScheme="blue" onClick={handleNewRoute}>
+        Continue
       </Button>
-    </form>
+    </div>
   );
 };
 
-export default DummyVolunteerRegistrationForm;
+export default SelectEvent;
