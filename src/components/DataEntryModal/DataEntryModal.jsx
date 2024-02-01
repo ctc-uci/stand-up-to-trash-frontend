@@ -1,6 +1,7 @@
+import Backend from '../../utils/utils';
 import PropTypes from 'prop-types';
-// import React from 'react';
-//import { useForm } from 'react-hook-form';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Modal,
   ModalOverlay,
@@ -19,35 +20,57 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 
-const DataEntryModal = ({ isOpen, onClose }) => {
-  //const [trash_weight, setTrashWeight] = React.useState(0);
-  //const [volunteerData, setVolunteerData] = React.useState({"volunteer_id" : 0, "number_in_party": 0, "pounds": 0, "ounces": 0, "unusual_items": [], "event_id": 0})
-0
-//   const postVolunteerData = async (
-//     volunteer_id,
-//     number_in_party,
-//     pounds,
-//     ounces,
-//     unusual_items,
-//     event_id,
-//   ) => {
-//     try {
-//       const postData = {
-//         volunteer_id: volunteer_id,
-//         number_in_party: number_in_party,
-//         pounds: pounds,
-//         ounces: ounces,
-//         unusual_items: unusual_items,
-//         event_id: event_id,
-//         is_checked_in: false,
-//       };
 
-//       const { postStatus } = await Backend.post('/data', postData);
-//       getVolunteerData();
-//     } catch (error) {
-//       console.error('Error with posting:', error.message);
-//     }
-//   };
+
+const DataEntryModal = ({ isOpen, onClose }) => {
+  const [volunteerData, setVolunteerData] = React.useState({
+    volunteer_id: 0,
+    number_in_party: 0,
+    pounds: 0,
+    ounces: 0,
+    unusual_items: [],
+    event_id: 0,
+    is_checked_in: false,
+  });
+  const [other, setOther] = React.useState('');
+
+  const {
+    register,
+    handleSubmit,
+  } = useForm(volunteerData);
+
+  const postVolunteerData = async formData => {
+    try {
+      setVolunteerData((prevData) => ({
+        ...prevData,
+        pounds: formData.pounds,
+        ounces: formData.ounces,
+      }));
+      await Backend.post('/data', volunteerData);
+    } catch (error) {
+      console.error('Error creating new volunteer:', error.message);
+    }
+  };
+
+  const noReload = (data, event) => {
+    event.preventDefault();
+    postVolunteerData(data);
+  };
+
+  const addUnusualItem = (isChecked, newItem) => {
+    if (isChecked && newItem.trim() !== '') {
+      setVolunteerData((prevData) => ({
+        ...prevData,
+        unusual_items: [...new Set([...prevData.unusual_items, newItem, other])].filter(Boolean), //FILTERS EMPTY STRING
+      }));
+    } else {
+      setVolunteerData((prevData) => ({
+        ...prevData,
+        unusual_items: [...new Set(prevData.unusual_items.filter((item) => item !== newItem))].filter(Boolean) //FILTERS EMPTY STRING
+      }));
+    }
+
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -55,7 +78,7 @@ const DataEntryModal = ({ isOpen, onClose }) => {
       <ModalContent>
         <ModalHeader alignSelf={'center'}>name</ModalHeader>
         {/* postVolunteerData(10, 5, 5, 5, 10, 10) */}
-        <form onSubmit={() => console.log("poop")}>
+        <form onSubmit={handleSubmit(noReload)}>
           <FormControl>
             <ModalCloseButton />
             <ModalBody>
@@ -63,19 +86,42 @@ const DataEntryModal = ({ isOpen, onClose }) => {
                 <Button>Go to Profile</Button>
               </Center>
               <FormControl>
-                <Input marginTop={5} placeholder="Enter trash weight (lbs)" alignItems={'center'} />
-                <Input marginTop={5} placeholder="Enter trash weight (oz)" alignItems={'center'} />
+                <Input
+                  marginTop={5}
+                  placeholder="Enter trash weight (lbs)"
+                  alignItems={'center'}
+                  {...register('pounds')}
+                  type="number"
+                />
+                <Input
+                  marginTop={5}
+                  placeholder="Enter trash weight (oz)"
+                  alignItems={'center'}
+                  {...register('ounces')}
+                  type="number"
+                />
                 <Center>
                   <FormLabel paddingTop={'20px'}>Enter Unusual Items</FormLabel>{' '}
                 </Center>
                 <Stack padding={'10px'}>
-                  <Checkbox>Unusual Item A </Checkbox>
-                  <Checkbox>Unusual Item B </Checkbox>
-                  <Checkbox></Checkbox>
-                  <Checkbox></Checkbox>
+                <Checkbox {...register('unusual_item_A')} onChange={(e) => addUnusualItem(e.target.checked, e.target.name)}>
+                    Unusual Item A{' '}
+                  </Checkbox>
+                  <Checkbox {...register('unusal_item_B')} onChange={(e) => addUnusualItem(e.target.checked, e.target.name)}>
+                    Unusual Item B{' '}
+                  </Checkbox>
+                  <Checkbox {...register('unusal_item_C')} onChange={(e) => addUnusualItem(e.target.checked, e.target.name)}>
+                    Unusual Item C
+                  </Checkbox>
+                  <Checkbox {...register('unusal_item_D')} onChange={(e) => addUnusualItem(e.target.checked, e.target.name)}>
+                    Unusual Item D
+                  </Checkbox>
                   <Stack flexDirection={''}>
-                    <Checkbox>Other: </Checkbox>
-                    <Input />
+                    <Checkbox isRequired>Other: </Checkbox>
+                    <Input
+                      onChange={e => setOther(e.target.value)}
+                      value={other}
+                    />
                   </Stack>
                   <Textarea height={200} resize="vertical" />
                 </Stack>
@@ -83,7 +129,10 @@ const DataEntryModal = ({ isOpen, onClose }) => {
             </ModalBody>
 
             <ModalFooter alignSelf={'center'}>
-              <Button colorScheme="green" mr={3} type="submit" onClick={onClose}>
+              <Button colorScheme="green" mr={3} type="submit" onClick={() => {
+                onClose;
+                addUnusualItem(true, other);
+              }}>
                 Save
               </Button>
             </ModalFooter>
