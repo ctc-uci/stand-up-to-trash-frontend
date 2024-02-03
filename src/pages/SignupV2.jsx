@@ -64,7 +64,7 @@ const CreateAccount = () => {
   return (
     <SimpleGrid columns={2} spacing={0} height={'100vh'}>
       <Box backgroundColor={'lightgray'}>
-        <Center>
+        <Center marginTop={20}>
           <VStack>
             <Heading marginTop="30%">Stand Up To Trash</Heading>
             <Box
@@ -79,7 +79,7 @@ const CreateAccount = () => {
           </VStack>
         </Center>
       </Box>
-      <Box>
+      <Box marginTop={40}>
         <Center>
           <VStack spacing={4} padding={10}>
             <Heading>Sign Up</Heading>
