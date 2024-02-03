@@ -130,7 +130,7 @@ const LoginForm = () => {
   return (
     <SimpleGrid columns={2} spacing={0} height={'100vh'}>
       <Box backgroundColor={'lightgray'}>
-        <Center>
+        <Center marginTop={20}>
           <VStack>
             <Heading marginTop="30%">Stand Up to Trash</Heading>
             <Image
