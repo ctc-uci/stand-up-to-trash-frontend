@@ -7,7 +7,6 @@ import {
   Heading,
   HStack,
   Input,
-  // useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -48,7 +47,6 @@ const CreateAccount = () => {
     delayError: 750,
   });
 
-  // const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -93,7 +91,6 @@ const CreateAccount = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <HStack spacing={4} justifyContent={'center'}>
           <FormControl isInvalid={errors.firstName}>
-            {/* <Center> */}{' '}
             <Input
               placeholder="First name"
               width={'30%'}
@@ -105,11 +102,9 @@ const CreateAccount = () => {
               type="text"
               {...register('firstName')}
             />
-            {/* </Center> */}
             {errors.firstName && <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>}
           </FormControl>
           <FormControl isInvalid={errors.lastName}>
-            {/* <Center> */}
             <Input
               width={'30%'}
               marginTop={30}
@@ -120,7 +115,6 @@ const CreateAccount = () => {
               type="text"
               {...register('lastName')}
             />
-            {/* </Center> */}
             {errors.lastName && <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>}
           </FormControl>
         </HStack>

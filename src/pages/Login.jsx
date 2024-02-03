@@ -19,8 +19,6 @@ const Login = () => {
   return <LoginForm />;
 };
 
-// :D
-
 const signinSchema = yup.object({
   email: yup.string().email().required('Please enter your email address'),
   password: yup.string().required('Please enter your password'),
@@ -94,7 +92,6 @@ const LoginForm = () => {
             <Heading>Log In</Heading>
           </Center>
           <FormControl isInvalid={errors.email}>
-            {/* <FormLabel>Email address</FormLabel> */}
             <Center>
               <Input
                 width={'60%'}
@@ -111,7 +108,6 @@ const LoginForm = () => {
             {errors.email && <FormErrorMessage>{errors.email?.message}</FormErrorMessage>}
           </FormControl>
           <FormControl isInvalid={errors.password}>
-            {/* <FormLabel>Password</FormLabel> */}
             <Center>
               <Input
                 width={'60%'}
