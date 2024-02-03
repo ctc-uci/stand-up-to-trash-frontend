@@ -143,16 +143,16 @@ const LoginForm = () => {
           </VStack>
         </Center>
       </Box>
-      <Box>
+      <Box marginTop={40}>
         <form onSubmit={handleSubmit(handleLogin)}>
           <Center>
-            <Heading>Log In</Heading>
+            <Heading marginTop={10}>Log In</Heading>
           </Center>
           <FormControl isInvalid={errors.email}>
             {/* <FormLabel>Email address</FormLabel> */}
             <Center>
               <Input
-                width={'60%'}
+                width={'40%'}
                 marginTop={30}
                 borderRadius={8}
                 placeholder="Email"
@@ -169,7 +169,7 @@ const LoginForm = () => {
             {/* <FormLabel>Password</FormLabel> */}
             <Center>
               <Input
-                width={'60%'}
+                width={'40%'}
                 marginTop={30}
                 borderRadius={8}
                 placeholder="Password"
@@ -184,10 +184,10 @@ const LoginForm = () => {
           </FormControl>
           <Center>
             <VStack>
-              <Button type="submit" marginTop={10} fontWeight={500} backgroundColor={'#3182CE'} textColor={'white'} size={'lg'} borderRadius={'10'}>
-                Login Now
+              <Button type="submit" marginTop={4} fontWeight={500} backgroundColor={'#3182CE'} textColor={'white'} size={'lg'} borderRadius={'10'} width={'80%'}>
+                Login
               </Button>
-              <Text marginTop={5} fontWeight={500}>Other ways to login</Text>
+              <Text marginTop={5} fontWeight="bold">Other ways to login</Text>
               <Button
                 leftIcon={<Image src={ggicon} alt="Google Icon"/>}
                 size="md"
