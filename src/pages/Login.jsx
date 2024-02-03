@@ -130,13 +130,13 @@ const LoginForm = () => {
           <Center>
             <Button
               type="submit"
-              // fontFamily={"Optima"}
               fontWeight={500}
               backgroundColor={'lightgray'}
               size={'lg'}
               width={'25%'}
               borderRadius={10}
-              marginTop={50}
+              marginTop={'20'}
+              boxShadow={'0 4px 2px -2px gray'}
             >
               Login Now
             </Button>

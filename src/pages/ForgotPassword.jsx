@@ -1,5 +1,5 @@
 import {
-  // Box,
+  Box,
   Button,
   // Center,
   FormControl,
@@ -8,13 +8,6 @@ import {
   // Heading,
   // HStack,
   Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
@@ -72,32 +65,23 @@ const ForgotPasswordButton = () => {
   };
 
   return (
-    <>
+    <Box>
       <Button onClick={onOpen}>Forgot Password?</Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Forgot Password?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl>
-                <FormLabel>Email address</FormLabel>
-                <Input value={email} onChange={e => setEmail(e.target.value)} type="email" />
-              </FormControl>
-            </form>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} type="submit" onClick={onSubmit}>
-              Reset Account
-            </Button>
-            <Button variant="outline" onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormControl>
+          <FormLabel>Email address</FormLabel>
+          <Input value={email} onChange={e => setEmail(e.target.value)} type="email" />
+        </FormControl>
+      </form>
+
+      <Button colorScheme="blue" mr={3} type="submit" onClick={onSubmit}>
+        Reset Account
+      </Button>
+      <Button variant="outline" onClick={onClose}>
+        Close
+      </Button>
+    </Box>
   );
 };
 

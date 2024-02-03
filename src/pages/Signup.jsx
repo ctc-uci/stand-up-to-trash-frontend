@@ -91,14 +91,14 @@ const CreateAccount = () => {
         <Heading>Sign up</Heading>
       </Center>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <HStack spacing={0}>
+        <HStack spacing={4} justifyContent={'center'}>
           <FormControl isInvalid={errors.firstName}>
             {/* <Center> */}{' '}
             <Input
               placeholder="First name"
               width={'30%'}
               marginTop={30}
-              marginRight={0}
+              marginLeft={"70%"}
               size={'lg'}
               borderRadius={8}
               boxShadow={'0 4px 2px -2px gray'}
@@ -137,7 +137,11 @@ const CreateAccount = () => {
               {...register('email')}
             />
           </Center>
-          {errors.email && <FormErrorMessage>{errors.email?.message}</FormErrorMessage>}
+          {errors.email && (
+            <Center>
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+            </Center>
+          )}
         </FormControl>
         <FormControl isInvalid={errors.password}>
           <Center>
@@ -152,7 +156,11 @@ const CreateAccount = () => {
               {...register('password')}
             />
           </Center>
-          {errors.password && <FormErrorMessage>{errors.password?.message}</FormErrorMessage>}
+          {errors.password && (
+            <Center>
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            </Center>
+          )}
         </FormControl>
         <FormControl isInvalid={errors.confirmPassword}>
           <Center>
@@ -168,7 +176,9 @@ const CreateAccount = () => {
             />
           </Center>
           {errors.confirmPassword && (
-            <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
+            <Center>
+              <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
+            </Center>
           )}
         </FormControl>
         <Center>
@@ -179,7 +189,8 @@ const CreateAccount = () => {
             size={'lg'}
             width={'25%'}
             borderRadius={10}
-            marginTop={50}
+            marginTop={"20"}
+            boxShadow={'0 4px 2px -2px gray'}
             onClick={handleSubmit(onSubmit)}
           >
             Sign Up Now
