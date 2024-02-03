@@ -27,6 +27,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import logo from '../Assets/Logo.png';
+import ggicon from '../Assets/google.png'
+import fbicon from '../Assets/fb.png'
 import {
   createUserInFirebase,
   logInWithEmailAndPassWord,
@@ -69,6 +72,7 @@ const signupSchema = yup.object({
 const resetSchema = yup.object({
   email: yup.string().email().required('Please enter your email address'),
 });
+
 
 const LoginForm = () => {
   // Form authentication code roughly reproduced from:
@@ -133,8 +137,8 @@ const LoginForm = () => {
               marginTop="10%"
               borderRadius="full"
               boxSize="300px"
-              src="../Assets/Logo.png"
-              alt="Dan Abramov"
+              src={logo}
+              alt="Logo"
             />
           </VStack>
         </Center>
@@ -150,9 +154,11 @@ const LoginForm = () => {
               <Input
                 width={'60%'}
                 marginTop={30}
-                borderRadius={10}
+                borderRadius={8}
                 placeholder="Email"
+                boxShadow={'0 4px 2px -2px gray'}
                 type="email"
+                size={'lg'}
                 {...register('email')}
                 isRequired
               />
@@ -165,9 +171,11 @@ const LoginForm = () => {
               <Input
                 width={'60%'}
                 marginTop={30}
-                borderRadius={10}
+                borderRadius={8}
                 placeholder="Password"
                 type="password"
+                boxShadow={'0 4px 2px -2px gray'}
+                size={'lg'}
                 {...register('password')}
                 isRequired
               />
@@ -176,23 +184,25 @@ const LoginForm = () => {
           </FormControl>
           <Center>
             <VStack>
-              <Button type="submit" marginTop={50} color={'blue'}>
+              <Button type="submit" marginTop={10} fontWeight={500} backgroundColor={'#3182CE'} textColor={'white'} size={'lg'} borderRadius={'10'}>
                 Login Now
               </Button>
-              <Text marginTop={5}>Other ways to login</Text>
+              <Text marginTop={5} fontWeight={500}>Other ways to login</Text>
               <Button
-                leftIcon={<Image src="/path/to/google-icon.png" />}
+                leftIcon={<Image src={ggicon} alt="Google Icon"/>}
                 size="md"
                 width="140%"
                 marginTop={5}
+                border='1px solid black'
               >
                 Login with Google
               </Button>
               <Button
-                leftIcon={<Image src="/path/to/facebook-icon.png" />}
+                leftIcon={<Image src={fbicon} alt="Facebook Icon" />}
                 size="md"
                 width="140%"
                 marginTop={3}
+                border='1px solid black'
               >
                 Login with Facebook
               </Button>
