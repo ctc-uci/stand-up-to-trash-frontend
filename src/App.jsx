@@ -11,6 +11,9 @@ import DummyStatsPage from './pages/DummyStatsPage';
 import DummyCheckin from './pages/DummyCheckin';
 import DummyEventCreation from './pages/DummyEventCreation';
 import Login from './pages/Login';
+import LoginV2 from './pages/LoginV2';
+import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
 import Playground from './components/Playground/Playground';
 import EventCardTest from './pages/EventCardTest';
 import DataEntryModalTestPage from './pages/DataEntryModalTestPage';
@@ -25,6 +28,9 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/loginv2" element={<LoginV2 />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/successful-login" element={<DummySuccessfulLogin />} />
           <Route path="/event-data" element={<DummyVolunteerData />} />
           <Route path="/volunteer-event" element={<DummyVolunteerEvent />} />
