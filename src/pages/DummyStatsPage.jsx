@@ -139,8 +139,8 @@ const VolunteerTrashCollectedCard = ({ title, amount }) => {
 };
 
 const AllData = () => {
-  const [allInformation, setAllInformation] = useState(0);
-  const [isWeekToggled, setIsWeekToggled] = useState(false);
+  const [allInformation, setAllInformation] = useState("");
+  const [isWeekToggled, setIsWeekToggled] = useState(true);
   const [isMonthToggled, setIsMonthToggled] = useState(false);
   const [isYearToggled, setIsYearToggled] = useState(false);
 
@@ -172,13 +172,20 @@ const AllData = () => {
     setIsYearToggled(!isYearToggled);
   }
 
+  useEffect(() => {
+    // Load week data when the component mounts
+    weeklyData().then((data) => {
+      setAllInformation(data ? data : 0);
+    });
+  }, []);
+
   return (
     <Card m="8"> 
       <CardBody>
         <VStack align="start" spacing={4}>
           <Heading>all data</Heading>
           <HStack>
-            <Button borderRadius="full" width="100%" onClick={(e) => weekButton(e)} colorScheme={isWeekToggled ? 'teal' : 'gray'}>
+            <Button borderRadius="full" width="100%" onClick={(e) => weekButton(e)} colorScheme={isWeekToggled ? 'teal' : 'gray'} >
               weekly
             </Button>
             <Button borderRadius="full" width="100%" onClick={monthButton} colorScheme={isMonthToggled ? 'teal' : 'gray'}>
