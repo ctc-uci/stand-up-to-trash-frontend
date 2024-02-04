@@ -2,8 +2,14 @@ import axios from 'axios';
 import React, { useMemo } from 'react';
 import Backend from '../utils/utils';
 import { useDropzone } from 'react-dropzone';
+import { Flex, IconButton } from '@chakra-ui/react';
+import { AttachmentIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { FileUploadIcon } from './Icons/EventsModalIcons';
+import { useEffect } from 'react';
 
-const Dropzone = () => {
+// import {FileUploadIcon} from "./Icons/EventsModalIcons.jsx"
+
+const Dropzone = ({ setEventData, eventData }) => {
   const { getRootProps, getInputProps, isDragAccept, isDragReject, acceptedFiles } = useDropzone({
     noKeyboard: true,
     accept: { 'image/jpeg': ['.jpeg', '.jpg'], 'image/png': ['.png'] },
@@ -30,7 +36,7 @@ const Dropzone = () => {
     });
 
     const imageUrl = uploadUrl.split('?')[0];
-    console.log(imageUrl);
+    setEventData({ ...eventData, imageUrl: imageUrl });
 
     return imageUrl;
   };
@@ -42,24 +48,36 @@ const Dropzone = () => {
     return base;
   }, [isDragReject, isDragAccept]);
 
-  console.log(acceptedFiles);
+  useEffect(() => {
+    if (acceptedFiles.length > 0) {
+      uploadImage(acceptedFiles[0]);
+    }
+  }, [acceptedFiles]);
 
   return (
-    <section className="container">
-      <div className={dropzoneBox} {...getRootProps()}>
+    <Flex className="container">
+      <Flex
+        className={dropzoneBox}
+        {...getRootProps()}
+        backgroundColor="grey"
+        width={'80vw'}
+        height={'30vh'}
+        justify={'center'}
+        align={'center'}
+      >
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-      </div>
+        <IconButton icon={<FileUploadIcon />} borderRadius={100} size={'lg'} />
+      </Flex>
 
-      <aside>
+      {/* <aside>
         <h4>Files</h4>
         {acceptedFiles.map((file, index) => (
           <li key={file.name + index}>
             {file.name} - {file.size} bytes
           </li>
-        ))}
+        ))} */}
 
-        <button
+      {/* <button
           onClick={() => {
             uploadImage(acceptedFiles[0]);
           }}
@@ -73,9 +91,9 @@ const Dropzone = () => {
           }}
         >
           UPLOAD BUTTON
-        </button>
-      </aside>
-    </section>
+        </button> */}
+      {/* </aside> */}
+    </Flex>
   );
 };
 
