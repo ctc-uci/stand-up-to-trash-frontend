@@ -18,6 +18,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ForgotPasswordV2 from './pages/ForgotpasswordV2';
 import Playground from './components/Playground/Playground';
 import EventCardTest from './pages/EventCardTest';
+import FilteredEvents from './pages/FilteredEvent';
 import DataEntryModalTestPage from './pages/DataEntryModalTestPage';
 import Register from './pages/Register';
 import SelectEvent from './pages/SelectEvent';
@@ -54,6 +55,7 @@ const App = () => {
           <Route path="/stats" element={<DummyStatsPage />} />
           {/* Nate and Farhnaz */}
           <Route path="/event-card-page" element={<EventCardTest />} />
+          <Route path="/filtered-event-page" element={<FilteredEvents />} />
           {/* Matthew and Bobby */}
           <Route path="/register/:eventId" element={<Register />} />
           {/* If your Sprint 3 task requires you to create a new component, you can use this route to test the look of your component */}
