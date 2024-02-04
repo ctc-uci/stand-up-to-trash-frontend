@@ -42,10 +42,7 @@ const DummyCheckin = () => {
     Dynamically re-renders volunteer entries when a user checks them in
   */
   useEffect(() => {
-    console.log(`Number total is ${volunteerResults.length}`);
     sortEventCardsByCheckIn();
-    console.log(`Number checked in is ${checkedInVolunteers.length}`);
-    console.log(`Number checked out is ${notCheckedInVolunteers.length}`);
   }, [volunteerResults]);
 
   /*
@@ -66,8 +63,6 @@ const DummyCheckin = () => {
   Card components that display the volunteer information for the current event
   */
   const CheckedInEventCard = ({ eventData }) => {
-    console.log(JSON.stringify(eventData));
-
     return (
       <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`} marginTop="5vh">
         <CardBody bg="gray" style={{ boxShadow: '.1 .1 .1 .1' }}>
@@ -136,7 +131,6 @@ const DummyCheckin = () => {
     This is the filtered data based on the event chosen in event-card-page
   */
   const filterHandler = () => {
-    console.log(joinedData);
     const filterdData = joinedData.filter(item => {
       if (item.props.data.event_id == eventId || eventId == -1) {
         return true;
