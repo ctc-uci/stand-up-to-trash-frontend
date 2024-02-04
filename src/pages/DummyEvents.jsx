@@ -6,11 +6,9 @@ import {
   Spacer,
   Grid,
   GridItem,
-  Card,
   Checkbox,
   Icon,
   Heading,
-  CardBody,
   Text,
   FormControl,
   FormLabel,
@@ -34,17 +32,113 @@ import { BsArrowUpRight, BsArrowDownRight } from "react-icons/bs";
 import Backend from '../utils/utils';
 import PropTypes from 'prop-types';
 
+const CreateButton = ({ getEvents }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [formData, setFormData] = useState({ name: '', description: '', location: '' });
+  // const [selectEvent, setSelectEvent] = useState(null);
+
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (name == 'eventid') {
+      // if (value == '') {
+      //   setSelectEvent(null);
+      // }
+      // setEventId(value);
+    }
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    console.log('FORM DATA: ', formData);
+    try {
+      await Backend.post('/events', formData);
+      console.log('Submitted');
+      setFormData({ name: '', description: '', location: '' });
+      getEvents();
+    } catch (e) {
+      console.log('Error posting', e);
+    }
+  };
+
+
+  return (
+    <>
+      <Button style={{ backgroundColor: "#95D497", borderRadius: '0px' }} onClick={onOpen}>+ Create New Event</Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Create new event</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+        <form onSubmit={handleSubmit}>
+          <FormControl isRequired marginTop={10}>
+            <FormLabel marginLeft={10} htmlFor="name">
+              Name
+            </FormLabel>
+            <Input
+              marginLeft={10}
+              id="name"
+              name="name"
+              onChange={handleInputChange}
+              value={formData.name}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel marginLeft={10} htmlFor="description">
+              Description
+            </FormLabel>
+            <Textarea
+              id="description"
+              name="description"
+              onChange={handleInputChange}
+              value={formData.description}
+              marginLeft={10}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel marginLeft={10} htmlFor="location">
+              Location
+            </FormLabel>
+            <Input
+              marginLeft={10}
+              id="location"
+              name="location"
+              onChange={handleInputChange}
+              value={formData.location}
+            />
+          </FormControl>
+          <Button marginLeft={10} type="submit" colorScheme="blue" marginTop={4}>
+            Submit
+          </Button>
+        </form>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3}>
+            Save
+          </Button>
+          <Button onClick={onClose}>Cancel</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+    </>
+  )
+};
+
+CreateButton.propTypes = {
+  getEvents: PropTypes.func.isRequired
+};
 
 const DummyEvents = () => {
   const [events, setEvents] = useState([]);
-  const [selectEvent, setSelectEvent] = useState(null);
   // const [eventId, setEventId] = useState('');
   // const [showEvents, setShowEvents] = useState(true);
   const [showSelect, setShowSelect] = useState(false);
   const [isSelectButton, setIsSelectButton] = useState(true);
   const [isCreateButton, setIsCreateButton] = useState(true); // toggle between create event button and deselect button
   const [selectedEvents, setSelectedEvents] = useState([]);
-  const [formData, setFormData] = useState({ name: '', description: '', location: '' });
 
   const getEvents = async () => {
     try {
@@ -79,30 +173,6 @@ const DummyEvents = () => {
     }
   };
 
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    if (name == 'eventid') {
-      if (value == '') {
-        setSelectEvent(null);
-      }
-      // setEventId(value);
-    }
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-    console.log('FORM DATA: ', formData);
-    try {
-      await Backend.post('/events', formData);
-      console.log('Submitted');
-      setFormData({ name: '', description: '', location: '' });
-      getEvents();
-    } catch (e) {
-      console.log('Error posting', e);
-    }
-  };
-
   // const showEvent = () => {
   //   setShowEvents(true);
   //   if (eventId) {
@@ -130,7 +200,7 @@ const DummyEvents = () => {
     return (
     <>
       <Box width="293px" height="250px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)" display="flex" alignItems="center" justifyItems="center" as="a" href="#" onClick={onOpen}>
-        {showSelect ? <Checkbox id={id} marginLeft="10px" marginBottom="30vh" style={{ borderRadius: "100px" }} isChecked={selectedEvents.includes(id)} onChange={() => handleCheckboxChange(id)}/> : null}
+        {showSelect ? <Checkbox id={id} marginLeft="10px" marginBottom="200px" style={{ borderRadius: "100px" }} isChecked={selectedEvents.includes(id)} onChange={() => handleCheckboxChange(id)}/> : null}
         <Spacer/>
         <Text fontSize={18} fontWeight={"bold"} textAlign={"center"} m="4">{name}</Text>
         <Spacer/>
@@ -195,7 +265,7 @@ const DummyEvents = () => {
 
   
   EventCard.propTypes = {
-    id: PropTypes.integer,
+    id: PropTypes.number,
     name: PropTypes.string,
     description: PropTypes.string,
     location: PropTypes.string
@@ -203,31 +273,33 @@ const DummyEvents = () => {
 
   const eventCards = (
     <Grid templateColumns='repeat(3, 1fr)' gap={6}>
-      {selectEvent ? (
-        <Card key={selectEvent.id}>
-          <CardBody>
-            <Stack spacing={4}>
-              <Text>Event ID: {selectEvent.id}</Text>
-              <Text>Name: {selectEvent.name}</Text>
-              <Text>Description: {selectEvent.description}</Text>
-              <Text>Location: {selectEvent.location}</Text>
-              <Button
-                marginRight={'auto'}
-                colorScheme="red"
-                onClick={() => deleteEvents(selectEvent.id)}
-              >
-                Delete
-              </Button>
-            </Stack>
-          </CardBody>
-        </Card>
-      ) : (
+       {
+      //   selectEvent ? (
+      //    <Card key={selectEvent.id}>
+      //      <CardBody>
+      //        <Stack spacing={4}>
+      //          <Text>Event ID: {selectEvent.id}</Text>
+      //          <Text>Name: {selectEvent.name}</Text>
+      //          <Text>Description: {selectEvent.description}</Text>
+      //          <Text>Location: {selectEvent.location}</Text>
+      //          <Button
+      //            marginRight={'auto'}
+      //            colorScheme="red"
+      //            onClick={() => deleteEvents(selectEvent.id)}
+      //          >
+      //            Delete
+      //          </Button>
+      //        </Stack>
+      //      </CardBody>
+      //    </Card>
+      //  ) : (
         events.map(element => (
           <GridItem key={element.id} >
             <EventCard {...element}/>
           </GridItem>
         ))
-      )}
+      //  )
+    }
     </Grid>
   );
 
@@ -277,7 +349,7 @@ const DummyEvents = () => {
 
   const RecentEventsCard = () => {
     return (
-      <Box backgroundColor="#F3F3F3" maxWidth="434px" width="100%" maxHeight="260px" height="260px">
+      <Box backgroundColor="#F3F3F3" maxWidth="434px" width="100%" height="280px">
         <Box my="13px" mx="25px">
           <Heading>recent event</Heading>
           
@@ -330,8 +402,8 @@ const DummyEvents = () => {
   };
   
   TotalParticipantsCard.propTypes = {
-    totalParticipants: PropTypes.integer,
-    totalTrash: PropTypes.integer,
+    totalParticipants: PropTypes.number,
+    totalTrash: PropTypes.number,
   };
 
   const AllData = () => {
@@ -380,7 +452,7 @@ const DummyEvents = () => {
   const SelectButton = () => {
     return (
       <>
-        <Button style={{ backgroundColor: "white" }} onClick={() => handleSelectButton()} marginRight="13vw">Select</Button>
+        <Button style={{ backgroundColor: "white" }} onClick={() => handleSelectButton()}>Select</Button>
       </>
     )
   };
@@ -388,82 +460,14 @@ const DummyEvents = () => {
   const DeleteButton = ( {id} ) => {
     return (
       <>
-        <Button style={{ backgroundColor: "#FF6666", borderRadius: "0px" }} onClick={() => deleteEvents(id)} marginRight="13vw">Delete Event(s)</Button>
+        <Button style={{ backgroundColor: "#FF6666", borderRadius: "0px" }} onClick={() => deleteEvents(id)}>Delete Event(s)</Button>
       </>
     )
   };
 
   DeleteButton.propTypes = {
-    id: PropTypes.integer,
+    id: PropTypes.number,
   }
-
-
-  const CreateButton = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-
-    return (
-      <>
-        <Button style={{ backgroundColor: "#95D497", borderRadius: '0px' }} onClick={onOpen}>+ Create New Event</Button>
-        <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create new event</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-          <form onSubmit={handleSubmit}>
-            <FormControl isRequired marginTop={10}>
-              <FormLabel marginLeft={10} htmlFor="name">
-                Name
-              </FormLabel>
-              <Input
-                marginLeft={10}
-                id="name"
-                name="name"
-                onChange={handleInputChange}
-                value={formData.name}
-              />
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel marginLeft={10} htmlFor="description">
-                Description
-              </FormLabel>
-              <Textarea
-                id="description"
-                name="description"
-                onChange={handleInputChange}
-                value={formData.description}
-                marginLeft={10}
-              />
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel marginLeft={10} htmlFor="location">
-                Location
-              </FormLabel>
-              <Input
-                marginLeft={10}
-                id="location"
-                name="location"
-                onChange={handleInputChange}
-                value={formData.location}
-              />
-            </FormControl>
-            <Button marginLeft={10} type="submit" colorScheme="blue" marginTop={4}>
-              Submit
-            </Button>
-          </form>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3}>
-              Save
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      </>
-    )
-  };
 
   const DeselectButton = () => {
     return (
@@ -475,8 +479,8 @@ const DummyEvents = () => {
 
   return (
     <Sidebar>
-    <Box mx="156px" pt="30px" justifyContent="flex-start">
-      <Box height="45vh" display="flex" flexDirection="row" gap="83px" justifyContent="flex-start" alignItems={"left"}>
+    <Box mx="156px" pt="30px" justifyContent="flex-start" display="flex" flexDirection="column">
+      <Box mb="60px" display="flex" flexDirection="row" gap="83px" justifyContent="center" alignItems={"left"}>
         <RecentEventsCard/>
         <AllData/>
       </Box>
@@ -523,17 +527,20 @@ const DummyEvents = () => {
         </Button>
       </form> */}
       <Spacer/>
-      <Box justifyContent="space-between">
+      <Box display="flex" justifyContent={"center"}>
+      <Box justifyContent="space-between" width="930px">
           <Box height="129px" display="flex" flex-direction="row" justifyContent="space-between">
-            {isCreateButton ? <CreateButton /> : <DeselectButton />}
+            {isCreateButton ? <CreateButton getEvents={getEvents} /> : <DeselectButton />}
             {isSelectButton ? <SelectButton /> : <DeleteButton id={32} />}
           </Box>
           <Spacer />
-          <Box display="flex" flex-direction="space-between">
+          <Box display="flex" flex-direction="space-between" justifyContent={"center"}>
               <Box marginTop="3vh">
                 { eventCards }
               </Box>
           </Box>
+      </Box>
+
       </Box>
       {/* <Stack align="center" marginTop={10} marginBottom={10} flexDirection={'row'} spacing={4}>
         <Input
