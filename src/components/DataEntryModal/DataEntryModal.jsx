@@ -35,7 +35,7 @@ const DataEntryModal = ({ isOpen, onClose, profileImage, firstName, lastName, un
   // parses unusual items input - single entries come as strings, multiple entries come as strings of the form {item1, item2... itemn}
   useEffect(() => {
     formatUnusualItems();
-  }, []);
+  });
 
   const formatUnusualItems = () => {
     if (unusualItems.length != 0 && unusualItems[0] === '{') {
