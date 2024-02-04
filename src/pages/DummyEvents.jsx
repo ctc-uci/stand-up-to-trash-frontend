@@ -196,7 +196,7 @@ const DummyEvents = () => {
 
   
   EventCard.propTypes = {
-    id: PropTypes.integer.required,
+    id: PropTypes.integer,
     name: PropTypes.string,
     description: PropTypes.string,
     location: PropTypes.string
@@ -395,7 +395,7 @@ const DummyEvents = () => {
   };
 
   DeleteButton.propTypes = {
-    id: PropTypes.integer.required,
+    id: PropTypes.integer,
   }
 
 
@@ -477,7 +477,7 @@ const DummyEvents = () => {
   return (
     <Sidebar>
     <Box mx="156px" pt="30px" justifyContent="flex-start">
-      <Box height="45vh" display="flex" flexDirection="row" gap="83px" justifyContent="center" alignItems={"left"}>
+      <Box height="45vh" display="flex" flexDirection="row" gap="83px" justifyContent="flex-start" alignItems={"left"}>
         <RecentEventsCard/>
         <AllData/>
       </Box>
