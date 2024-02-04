@@ -127,14 +127,13 @@ const DummyEvents = () => {
   const EventCard = ({id, name, description, location}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    return (<>
+    return (
+    <>
       <Box width="293px" height="250px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)" display="flex" alignItems="center" justifyItems="center" as="a" href="#" onClick={onOpen}>
-        {showSelect ? <Checkbox id={id} isChecked={selectedEvents.includes(id)} onChange={() => handleCheckboxChange(id)}/> : null}
-        <Box>
-          <Spacer/>
-          <Text fontSize={18} fontWeight={"bold"} textAlign={"center"} m="4">{name}</Text>
-          <Spacer/>
-        </Box>
+        {showSelect ? <Checkbox id={id} marginLeft="10px" marginBottom="30vh" style={{ borderRadius: "100px" }} isChecked={selectedEvents.includes(id)} onChange={() => handleCheckboxChange(id)}/> : null}
+        <Spacer/>
+        <Text fontSize={18} fontWeight={"bold"} textAlign={"center"} m="4">{name}</Text>
+        <Spacer/>
       </Box>
 
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -381,7 +380,7 @@ const DummyEvents = () => {
   const SelectButton = () => {
     return (
       <>
-        <Button style={{ backgroundColor: "white" }} onClick={() => handleSelectButton()}>Select</Button>
+        <Button style={{ backgroundColor: "white" }} onClick={() => handleSelectButton()} marginRight="13vw">Select</Button>
       </>
     )
   };
@@ -389,7 +388,7 @@ const DummyEvents = () => {
   const DeleteButton = ( {id} ) => {
     return (
       <>
-        <Button style={{ backgroundColor: "#FF6666", borderRadius: "0px" }} onClick={() => deleteEvents(id)}>Delete Event(s)</Button>
+        <Button style={{ backgroundColor: "#FF6666", borderRadius: "0px" }} onClick={() => deleteEvents(id)} marginRight="13vw">Delete Event(s)</Button>
       </>
     )
   };
