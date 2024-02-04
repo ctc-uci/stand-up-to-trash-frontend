@@ -10,64 +10,75 @@ const FilteredEvents = () => {
   const [futureEvents, setFutureEvents] = useState([]);
   const [currentEvents, setCurrentEvents] = useState([]);
 
-const loadData = async () => {
-    await getEvents().then(data => setEvents(data));
+  const loadData = async () => {
+    const data = await getEvents();
+    setEvents(data);
     setAdminStatus(false);
-};
-
-
-  const setData = () => {
-    const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0, 200));
-    let options = {
-        timeZone: "PST"
-    };
-    const dateTime = new Intl.DateTimeFormat(options).format(date);
-
-    const past = [];
-    const future = [];
-    const current = [];
-
-    events.forEach(event => {
-    const eventDate = new Intl.DateTimeFormat(options).format(new Date(event.date));
-    if (eventDate < dateTime) {
-        past.push(event);
-    } else if (eventDate > dateTime) {
-        future.push(event);
-    } else {
-        current.push(event);
-    }
-    });
-
-    setPastEvents(past);
-    setFutureEvents(future);
-    setCurrentEvents(current);
   };
- 
 
   useEffect(() => {
     loadData();
+  }, []);
+
+  useEffect(() => {
+    const setData = async () => {
+      const currentDate = new Date();
+      const options = { month: '2-digit', day: '2-digit', year: 'numeric' };
+      const todayDate = new Intl.DateTimeFormat('en-US', options).format(currentDate);
+
+      const past = [];
+      const future = [];
+      const current = [];
+
+      events.forEach(event => {
+        const eventDate = new Intl.DateTimeFormat('en-US', options).format(new Date(event.date));
+
+        // Parse date strings to actual Date objects for proper comparison
+        const today = new Date(todayDate);
+        const eventDateTime = new Date(eventDate);
+
+        if (eventDateTime < today) {
+          past.push(event);
+        } else if (eventDateTime > today) {
+          future.push(event);
+        } else {
+          current.push(event);
+        }
+      });
+
+      setPastEvents(past);
+      setFutureEvents(future);
+      setCurrentEvents(current);
+    };
+
     setData();
-  }, [setData]);
+  }, [events]);
 
   return (
     <>
       <Box position="relative" padding="10">
         <Divider />
-        <Center bg="white" px="4">Past Events</Center>
+        <Center bg="white" px="4">
+          Past Events
+        </Center>
         <SimpleGrid spacing={4} templateColumns="repeat(auto-fill, minmax(300px, 1fr))">
           {pastEvents.map(event => (
             <EventCard event={event} isAdmin={isAdmin} key={event.id} />
           ))}
         </SimpleGrid>
         <Divider />
-        <Center bg="white" px="4">Current Events</Center>
+        <Center bg="white" px="4">
+          Current Events
+        </Center>
         <SimpleGrid spacing={4} templateColumns="repeat(auto-fill, minmax(300px, 1fr))">
           {currentEvents.map(event => (
             <EventCard event={event} isAdmin={isAdmin} key={event.id} />
           ))}
         </SimpleGrid>
         <Divider />
-        <Center bg="white" px="4">Future Events</Center>
+        <Center bg="white" px="4">
+          Future Events
+        </Center>
         <SimpleGrid spacing={4} templateColumns="repeat(auto-fill, minmax(300px, 1fr))">
           {futureEvents.map(event => (
             <EventCard event={event} isAdmin={isAdmin} key={event.id} />
