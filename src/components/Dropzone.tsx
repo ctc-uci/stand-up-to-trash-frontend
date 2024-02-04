@@ -2,14 +2,14 @@ import axios from 'axios';
 import React, { useMemo } from 'react';
 import Backend from '../utils/utils';
 import { useDropzone } from 'react-dropzone';
-import {Flex, IconButton} from '@chakra-ui/react';
-import {AttachmentIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons'
+import { Flex, IconButton } from '@chakra-ui/react';
+import { AttachmentIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { FileUploadIcon } from './Icons/EventsModalIcons';
 import { useEffect } from 'react';
 
 // import {FileUploadIcon} from "./Icons/EventsModalIcons.jsx"
 
-const Dropzone = ({setEventData, eventData}) => {
+const Dropzone = ({ setEventData, eventData }) => {
   const { getRootProps, getInputProps, isDragAccept, isDragReject, acceptedFiles } = useDropzone({
     noKeyboard: true,
     accept: { 'image/jpeg': ['.jpeg', '.jpg'], 'image/png': ['.png'] },
@@ -36,8 +36,7 @@ const Dropzone = ({setEventData, eventData}) => {
     });
 
     const imageUrl = uploadUrl.split('?')[0];
-    console.log(imageUrl);
-    setEventData({...eventData, imageUrl: imageUrl})
+    setEventData({ ...eventData, imageUrl: imageUrl });
 
     return imageUrl;
   };
@@ -50,18 +49,24 @@ const Dropzone = ({setEventData, eventData}) => {
   }, [isDragReject, isDragAccept]);
 
   useEffect(() => {
-    if (acceptedFiles.length > 0){
+    if (acceptedFiles.length > 0) {
       uploadImage(acceptedFiles[0]);
     }
-  }, [acceptedFiles])
-
-  console.log(acceptedFiles);
+  }, [acceptedFiles]);
 
   return (
-    <Flex className="container" >
-      <Flex className={dropzoneBox} {...getRootProps()} backgroundColor="grey" width={"80vw"} height={"30vh"} justify={"center"} align={"center"} >
+    <Flex className="container">
+      <Flex
+        className={dropzoneBox}
+        {...getRootProps()}
+        backgroundColor="grey"
+        width={'80vw'}
+        height={'30vh'}
+        justify={'center'}
+        align={'center'}
+      >
         <input {...getInputProps()} />
-        <IconButton icon={<FileUploadIcon/>} borderRadius={100} />
+        <IconButton icon={<FileUploadIcon />} borderRadius={100} />
       </Flex>
 
       {/* <aside>
@@ -72,7 +77,7 @@ const Dropzone = ({setEventData, eventData}) => {
           </li>
         ))} */}
 
-        {/* <button
+      {/* <button
           onClick={() => {
             uploadImage(acceptedFiles[0]);
           }}
