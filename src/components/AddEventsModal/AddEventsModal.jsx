@@ -70,8 +70,10 @@ const AddEventsModal = () => {
             })
         }
     }
+
+    const isSubmittable = eventData.date === "" || eventData.description === "" || eventData.imageUrl === "" || eventData.location === "" || eventData.name === "" || eventData.time === "";
     
-    
+
 
     return (<ChakraProvider theme={extendTheme(theme)}>
     <Button onClick={onOpen} backgroundColor={"#95D497"}>Create Event</Button>
@@ -111,7 +113,7 @@ const AddEventsModal = () => {
 
             <ModalFooter justifyContent={'center'}>
                 <Button leftIcon={<CancelIcon/>} onClick={onClose} backgroundColor={'#D495954D'} marginRight={'10px'}>Cancel</Button>
-                <Button leftIcon={<CreateEventIcon/>} backgroundColor={'#95D497'} marginLeft={'10px'} onClick={handleSubmit}>Create Event</Button>
+                <Button leftIcon={<CreateEventIcon/>} backgroundColor={'#95D497'} marginLeft={'10px'} onClick={handleSubmit} isDisabled={isSubmittable}>Create Event</Button>
             </ModalFooter>
         </ModalContent>
     </Modal>

@@ -66,7 +66,7 @@ const Dropzone = ({ setEventData, eventData }) => {
         align={'center'}
       >
         <input {...getInputProps()} />
-        <IconButton icon={<FileUploadIcon />} borderRadius={100} />
+        <IconButton icon={<FileUploadIcon />} borderRadius={100} size={'lg'} />
       </Flex>
 
       {/* <aside>
