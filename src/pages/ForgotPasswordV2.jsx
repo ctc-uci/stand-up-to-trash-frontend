@@ -3,7 +3,6 @@ import {
     Button,
     Center,
     FormControl,
-    FormLabel,
     Heading,
     Input,
     Link,
@@ -50,6 +49,7 @@ import {
   });
   
   const ForgotPasswordForm = () => {
+    // eslint-disable-next-line no-unused-vars
     const [email, setEmail] = useState('');
     const toast = useToast();
     const navigate = useNavigate();

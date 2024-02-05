@@ -4,7 +4,6 @@ import {
   Center,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   Heading,
   HStack,
   Input,
@@ -16,8 +15,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { createUserInFirebase } from '../utils/firebaseAuthUtils';
 import logo from '../Assets/Logo.png'; // Ensure you have this asset
+import { createUserInFirebase } from '../utils/firebaseAuthUtils';
+import Backend from '../utils/utils';
 
 const SignupV2 = () => {
   return (
@@ -54,11 +54,50 @@ const CreateAccount = () => {
     delayError: 750,
   });
 
+  const createVolunteerRow = async ({ id, email, firstName, lastName }) => {
+    const response = await Backend.post('/profiles', {
+      id: id,
+      email: email,
+      first_name: firstName,
+      last_name: lastName,
+    });
+    return response;
+  };
+
   const toast = useToast();
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
-    // Implementation for creating an account
+  const onSubmit = async event => {
+    const { email, password, firstName, lastName } = event;
+
+    try {
+      await createUserInFirebase(email, password, '/successful-login', navigate);
+      await createVolunteerRow({ id: email, email, firstName, lastName });
+
+      toast.closeAll();
+
+      toast({
+        title: 'Account Successfully Created',
+        status: 'success',
+        variant: 'subtle',
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (e) {
+      const errorCode = e.code;
+      const firebaseErrorMsg = e.message;
+
+      toast({
+        title: 'An Error Occurred...',
+        description: `${errorCode}: ${firebaseErrorMsg}`,
+        status: 'error',
+        variant: 'subtle',
+        duration: 9000,
+        isClosable: true,
+      });
+
+      console.error(e);
+    }
   };
 
   return (
