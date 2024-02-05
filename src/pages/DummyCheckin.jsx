@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Input } from '@chakra-ui/react';
 import { fetchJoinedEvents } from '../utils/fuseUtils';
@@ -35,15 +35,20 @@ const DummyCheckin = () => {
     Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
   */
   useEffect(() => {
+    const filterHandler = () => {
+      const filterdData = joinedData.filter(item => {
+        if (item.props.data.event_id == eventId || eventId == -1) {
+          return true;
+        }
+      });
+      setSearchResults(filterdData);
+    };
     filterHandler();
-  }, [joinedData]);
+  }, [joinedData, eventId]);
 
   /*
     Dynamically re-renders volunteer entries when a user checks them in
   */
-  useEffect(() => {
-    sortEventCardsByCheckIn();
-  }, [volunteerResults]);
 
   /*
     This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
@@ -90,6 +95,8 @@ const DummyCheckin = () => {
               firstName={eventData.first_name}
               lastName={eventData.last_name}
               unusualItems={eventData.unusual_items}
+              eventId={eventData.event_id}
+              volunteerId={eventData.volunteer_id}
             />
           </Flex>
         </CardBody>
@@ -130,14 +137,6 @@ const DummyCheckin = () => {
   /*
     This is the filtered data based on the event chosen in event-card-page
   */
-  const filterHandler = () => {
-    const filterdData = joinedData.filter(item => {
-      if (item.props.data.event_id == eventId || eventId == -1) {
-        return true;
-      }
-    });
-    setSearchResults(filterdData);
-  };
 
   /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
@@ -166,25 +165,29 @@ const DummyCheckin = () => {
     const searchResult = fuse.search(input);
     const reduceResult = searchResult.map(result => result.item);
     setVolunteerResults(reduceResult);
-  }, [input]);
+  }, [input, searchResults]);
 
   const handleButtonClick = () => {
     setShowCheckedIn(!showCheckedIn);
   };
 
-  const sortEventCardsByCheckIn = () => {
-    if (volunteerResults.length != 0) {
+  const sortEventCardsByCheckIn = useCallback(() => {
+    if (volunteerResults.length !== 0) {
       setCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == true),
+        volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in === true),
       );
       setNotCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in == false),
+        volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in === false),
       );
     } else {
       setCheckedInVolunteers([]); // for refreshing when the user deletes the searched entry
       setNotCheckedInVolunteers([]);
     }
-  };
+  }, [volunteerResults]);
+
+  useEffect(() => {
+    sortEventCardsByCheckIn();
+  }, [volunteerResults, sortEventCardsByCheckIn]);
 
   return (
     <>

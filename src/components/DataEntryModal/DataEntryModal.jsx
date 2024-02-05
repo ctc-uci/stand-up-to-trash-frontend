@@ -1,6 +1,6 @@
 import Backend from '../../utils/utils';
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Modal,
@@ -15,49 +15,60 @@ import {
   FormLabel,
   Center,
   Image,
-  Flex,
 } from '@chakra-ui/react';
 
-const DataEntryModal = ({ isOpen, onClose, profileImage, firstName, lastName, unusualItems }) => {
+const DataEntryModal = ({
+  isOpen,
+  onClose,
+  profileImage,
+  firstName,
+  lastName,
+  volunteerId,
+  eventId,
+}) => {
   const [volunteerData, setVolunteerData] = useState({
-    volunteer_id: 0, // should be changed when connected with CHECKIN
+    volunteer_id: volunteerId,
     number_in_party: 0,
     pounds: 0,
     ounces: 0,
     unusual_items: [],
-    event_id: 0, // Should be changed when connected with CHECKIN
+    event_id: eventId,
     is_checked_in: false,
   });
   // const [other, setOther] = useState('');
   const other = '';
-  let [unusualItemsArray, setUnusualItemsArray] = useState([]);
+  // let [unusualItemsArray, setUnusualItemsArray] = useState([]);
+
+  // COMMENTED OUT BECAUSE DESIGN FLAW
 
   // parses unusual items input - single entries come as strings, multiple entries come as strings of the form {item1, item2... itemn}
-  useEffect(() => {
-    formatUnusualItems();
-  });
+  // useEffect(() => {
+  //   formatUnusualItems();
+  // }, []);
 
-  const formatUnusualItems = () => {
-    if (unusualItems.length != 0 && unusualItems[0] === '{') {
-      let trimmed = unusualItems.replace(/{|}/g, '').trim();
-      let unusualItemsList = trimmed.split(',');
-      unusualItemsList = unusualItemsList.map(item => item.replace(/"/g, ''));
-      setUnusualItemsArray(unusualItemsList);
-    } else {
-      setUnusualItemsArray([unusualItems]);
-    }
-  };
+  // const formatUnusualItems = () => {
+  //   if (unusualItems.length != 0 && unusualItems[0] === '{') {
+  //     let trimmed = unusualItems.replace(/{|}/g, '').trim();
+  //     let unusualItemsList = trimmed.split(',');
+  //     unusualItemsList = unusualItemsList.map(item => item.replace(/"/g, ''));
+  //     setUnusualItemsArray(unusualItemsList);
+  //   } else {
+  //     setUnusualItemsArray([unusualItems]);
+  //   }
+  // };
 
   const { register, handleSubmit } = useForm(volunteerData);
 
   const postVolunteerData = async formData => {
     try {
-      setVolunteerData(prevData => ({
-        ...prevData,
+      const dataToSend = {
+        ...volunteerData,
         pounds: formData.pounds,
         ounces: formData.ounces,
-      }));
-      await Backend.post('/data', volunteerData);
+        unusual_items: formData.other,
+      };
+      await Backend.post('/data', dataToSend);
+      onClose();
     } catch (error) {
       console.error('Error creating new volunteer:', error.message);
     }
@@ -65,6 +76,7 @@ const DataEntryModal = ({ isOpen, onClose, profileImage, firstName, lastName, un
 
   const noReload = (data, event) => {
     event.preventDefault();
+    addUnusualItem(true, other);
     postVolunteerData(data);
   };
 
@@ -120,7 +132,7 @@ const DataEntryModal = ({ isOpen, onClose, profileImage, firstName, lastName, un
                 <Center>
                   <FormLabel paddingTop={'20px'}>Enter Unusual Items</FormLabel>{' '}
                 </Center>
-                <Center>
+                {/* <Center>
                   {unusualItemsArray.length === 0 ? (
                     <div>No Unusual Items</div>
                   ) : (
@@ -140,7 +152,7 @@ const DataEntryModal = ({ isOpen, onClose, profileImage, firstName, lastName, un
                       })}
                     </Flex>
                   )}
-                </Center>
+                </Center> */}
 
                 <Center paddingTop={'20px'}>
                   <Input
@@ -148,23 +160,14 @@ const DataEntryModal = ({ isOpen, onClose, profileImage, firstName, lastName, un
                     placeholder="Other"
                     alignItems={'center'}
                     {...register('other')}
-                    type="number"
+                    type="text"
                   />
                 </Center>
               </FormControl>
             </ModalBody>
 
             <Center p={8}>
-              <Button
-                type="submit"
-                color="black"
-                bg="#95D497"
-                w="70%"
-                onClick={() => {
-                  onClose;
-                  addUnusualItem(true, other);
-                }}
-              >
+              <Button type="submit" color="black" bg="#95D497" w="70%">
                 Save
               </Button>
             </Center>
@@ -176,6 +179,8 @@ const DataEntryModal = ({ isOpen, onClose, profileImage, firstName, lastName, un
 };
 
 DataEntryModal.propTypes = {
+  volunteerId: PropTypes.number.isRequired,
+  eventId: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   profileImage: PropTypes.string.isRequired,
