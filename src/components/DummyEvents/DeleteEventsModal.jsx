@@ -29,10 +29,10 @@ const DeleteEventsModal = ({ isOpen, onClose, events, confirmDelete }) => {
             </UnorderedList>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={confirmDelete}>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button colorScheme="red" ml={3} onClick={confirmDelete}>
               Permanently Delete
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
