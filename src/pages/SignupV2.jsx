@@ -71,8 +71,8 @@ const CreateAccount = () => {
     const { email, password, firstName, lastName } = event;
 
     try {
-      await createUserInFirebase(email, password, '/successful-login', navigate);
-      await createVolunteerRow({ id: email, email, firstName, lastName });
+      const newUser = await createUserInFirebase(email, password, '/successful-login', navigate);
+      await createVolunteerRow({ id: newUser.uid, email, firstName, lastName });
 
       toast.closeAll();
 
