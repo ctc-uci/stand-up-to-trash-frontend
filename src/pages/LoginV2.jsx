@@ -7,15 +7,21 @@ import {
   Heading,
   Input,
   SimpleGrid,
+  Text,
   useToast,
+  Image,
+  VStack,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import logo from '../Assets/Logo.png';
+import ggicon from '../Assets/google.png';
+import fbicon from '../Assets/fb.png';
 import { logInWithEmailAndPassWord } from '../utils/firebaseAuthUtils';
 
-const Login = () => {
+const LoginV2 = () => {
   return <LoginForm />;
 };
 
@@ -80,27 +86,29 @@ const LoginForm = () => {
   return (
     <SimpleGrid columns={2} spacing={0} height={'100vh'}>
       <Box backgroundColor={'lightgray'}>
-        <Center>
-          <Heading marginTop={'30%'} fontWeight={400}>
-            Stand Up to Trash
-          </Heading>
+        <Center marginTop={20}>
+          <VStack>
+            <Heading marginTop="30%">Stand Up to Trash</Heading>
+            <Image marginTop="10%" borderRadius="full" boxSize="300px" src={logo} alt="Logo" />
+          </VStack>
         </Center>
       </Box>
-      <Box>
+      <Box marginTop={40}>
         <form onSubmit={handleSubmit(handleLogin)}>
-          <Center marginTop={'30%'}>
-            <Heading>Log In</Heading>
+          <Center>
+            <Heading marginTop={10}>Log In</Heading>
           </Center>
           <FormControl isInvalid={errors.email}>
+            {/* <FormLabel>Email address</FormLabel> */}
             <Center>
               <Input
-                width={'60%'}
+                width={'40%'}
                 marginTop={30}
                 borderRadius={8}
-                boxShadow={'0 4px 2px -2px gray'}
                 placeholder="Email"
-                size={'lg'}
+                boxShadow={'0 4px 2px -2px gray'}
                 type="email"
+                size={'lg'}
                 {...register('email')}
                 isRequired
               />
@@ -108,15 +116,16 @@ const LoginForm = () => {
             {errors.email && <FormErrorMessage>{errors.email?.message}</FormErrorMessage>}
           </FormControl>
           <FormControl isInvalid={errors.password}>
+            {/* <FormLabel>Password</FormLabel> */}
             <Center>
               <Input
-                width={'60%'}
+                width={'40%'}
                 marginTop={30}
-                size={'lg'}
                 borderRadius={8}
-                boxShadow={'0 4px 2px -2px gray'}
                 placeholder="Password"
                 type="password"
+                boxShadow={'0 4px 2px -2px gray'}
+                size={'lg'}
                 {...register('password')}
                 isRequired
               />
@@ -124,18 +133,41 @@ const LoginForm = () => {
             {errors.password && <FormErrorMessage>{errors.password?.message}</FormErrorMessage>}
           </FormControl>
           <Center>
-            <Button
-              type="submit"
-              fontWeight={500}
-              backgroundColor={'lightgray'}
-              size={'lg'}
-              width={'25%'}
-              borderRadius={10}
-              marginTop={'20'}
-              boxShadow={'0 4px 2px -2px gray'}
-            >
-              Login Now
-            </Button>
+            <VStack>
+              <Button
+                type="submit"
+                marginTop={4}
+                fontWeight={500}
+                backgroundColor={'#3182CE'}
+                textColor={'white'}
+                size={'lg'}
+                borderRadius={'10'}
+                width={'80%'}
+              >
+                Login
+              </Button>
+              <Text marginTop={5} fontWeight="bold">
+                Other ways to login
+              </Text>
+              <Button
+                leftIcon={<Image src={ggicon} alt="Google Icon" />}
+                size="md"
+                width="140%"
+                marginTop={5}
+                border="1px solid black"
+              >
+                Login with Google
+              </Button>
+              <Button
+                leftIcon={<Image src={fbicon} alt="Facebook Icon" />}
+                size="md"
+                width="140%"
+                marginTop={3}
+                border="1px solid black"
+              >
+                Login with Facebook
+              </Button>
+            </VStack>
           </Center>
         </form>
       </Box>
@@ -143,4 +175,4 @@ const LoginForm = () => {
   );
 };
 
-export default Login;
+export default LoginV2;
