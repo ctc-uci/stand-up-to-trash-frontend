@@ -1,26 +1,24 @@
+import { Box, Button, Grid, GridItem, Spacer, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
-import {
-  Button,
-  Stack,
-  StackDivider,
-  Card,
-  CardBody,
-  Text,
-  FormControl,
-  FormLabel,
-  Input,
-  Textarea,
-} from '@chakra-ui/react';
+
+import PropTypes from 'prop-types';
+import AllData from '../components/DummyEvents/AllData';
+import CreateEventButton from '../components/DummyEvents/CreateEventButton';
+import DeleteEventsModal from '../components/DummyEvents/DeleteEventsModal';
+import EventCard from '../components/DummyEvents/EventCard';
+import RecentEventsCard from '../components/DummyEvents/RecentEventsCard';
+import Sidebar from '../components/DummyEvents/Sidebar';
 import Backend from '../utils/utils';
 
 const DummyEvents = () => {
+  const toast = useToast();
   const [events, setEvents] = useState([]);
-  const [selectEvent, setSelectEvent] = useState(null);
-  const [eventId, setEventId] = useState('');
-  const [showEvents, setShowEvents] = useState(false);
-
-  const [formData, setFormData] = useState({ name: '', description: '', location: '' });
+  // const [eventId, setEventId] = useState('');
+  // const [showEvents, setShowEvents] = useState(true);
+  const [showSelect, setShowSelect] = useState(false);
+  const [isSelectButton, setIsSelectButton] = useState(true);
+  const [isCreateButton, setIsCreateButton] = useState(true); // toggle between create event button and deselect button
+  const [selectedEvents, setSelectedEvents] = useState([]);
 
   const getEvents = async () => {
     try {
@@ -33,99 +31,80 @@ const DummyEvents = () => {
     }
   };
 
-  const getEventId = async () => {
-    try {
-      const eventIdData = await Backend.get(`/events/${eventId}`);
-      console.log(eventIdData);
-      setSelectEvent(eventIdData.data);
-      console.log(events);
-    } catch (err) {
-      console.log(`Error getting event ${eventId}: `, err.message);
-    }
-  };
+  // const getEventId = async () => {
+  //   try {
+  //     const eventIdData = await Backend.get(`/events/${eventId}`);
+  //     console.log(eventIdData);
+  //     setSelectEvent(eventIdData.data);
+  //     console.log(events);
+  //   } catch (err) {
+  //     console.log(`Error getting event ${eventId}: `, err.message);
+  //   }
+  // };
 
-  const deleteEvents = async id => {
-    try {
-      await Backend.delete(`/events/${id}`);
-      getEvents();
-    } catch (err) {
-      console.log(`Error deleting event: ${id}`, err.message);
-    }
-  };
-
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    if (name == 'eventid') {
-      if (value == '') {
-        setSelectEvent(null);
+  const {
+    isOpen: isDeleteEventModalOpen,
+    onOpen: onDeleteEventModalOpen,
+    onClose: onDeleteEventModalClose,
+  } = useDisclosure();
+  const confirmDelete = async () => {
+    for (const id of selectedEvents) {
+      try {
+        await Backend.delete(`/events/${id}`);
+        getEvents();
+      } catch (error) {
+        console.log(`Error deleting event: ${id}`, error.message);
       }
-      setEventId(value);
     }
+    onDeleteEventModalClose();
+    handleGoBackButton();
+    toast({
+      title: `Successfully deleted ${selectedEvents.length} event(s)`,
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    console.log('FORM DATA: ', formData);
-    try {
-      await Backend.post('/events', formData);
-      console.log('Submitted');
-      setFormData({ name: '', description: '', location: '' });
-      getEvents();
-    } catch (e) {
-      console.log('Error posting', e);
-    }
+  const deleteEvents = () => {
+    if (selectedEvents.length === 0) handleGoBackButton();
+    else onDeleteEventModalOpen();
   };
 
-  const showEvent = () => {
-    setShowEvents(true);
-    if (eventId) {
-      getEventId();
+  // const showEvent = () => {
+  //   setShowEvents(true);
+  //   if (eventId) {
+  //     getEventId();
+  //   }
+  // };
+
+  const handleCheckboxChange = id => {
+    const newCheckedItems = [...selectedEvents];
+    const index = newCheckedItems.indexOf(id);
+
+    if (index === -1) {
+      newCheckedItems.push(id);
+    } else {
+      newCheckedItems.splice(index, 1);
     }
+
+    setSelectedEvents(newCheckedItems);
+    console.log(selectedEvents);
   };
 
   const eventCards = (
-    <Stack divider={<StackDivider />} spacing="4">
-      {selectEvent ? (
-        <Card key={selectEvent.id}>
-          <CardBody>
-            <Stack spacing={4}>
-              <Text>Event ID: {selectEvent.id}</Text>
-              <Text>Name: {selectEvent.name}</Text>
-              <Text>Description: {selectEvent.description}</Text>
-              <Text>Location: {selectEvent.location}</Text>
-              <Button
-                marginRight={'auto'}
-                colorScheme="red"
-                onClick={() => deleteEvents(selectEvent.id)}
-              >
-                Delete
-              </Button>
-            </Stack>
-          </CardBody>
-        </Card>
-      ) : (
-        events.map(element => (
-          <Card key={element.id}>
-            <CardBody>
-              <Stack spacing={4}>
-                <Text>Event ID: {element.id}</Text>
-                <Text>Name: {element.name}</Text>
-                <Text>Description: {element.description}</Text>
-                <Text>Location: {element.location}</Text>
-                <Button
-                  marginRight={'auto'}
-                  colorScheme="red"
-                  onClick={() => deleteEvents(element.id)}
-                >
-                  Delete
-                </Button>
-              </Stack>
-            </CardBody>
-          </Card>
-        ))
-      )}
-    </Stack>
+    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      {events.map(element => (
+        <GridItem key={element.id}>
+          <EventCard
+            {...element}
+            isSelected={selectedEvents.includes(element.id)}
+            showSelect={showSelect}
+            handleCheckboxChange={handleCheckboxChange}
+          />
+        </GridItem>
+      ))}
+    </Grid>
   );
 
   useEffect(() => {
@@ -133,67 +112,94 @@ const DummyEvents = () => {
     // getEventId(eventId);
   }, []);
 
+  const handleSelectButton = () => {
+    setShowSelect(true);
+    setIsSelectButton(false);
+    setIsCreateButton(false);
+  };
+
+  const handleGoBackButton = () => {
+    setShowSelect(false);
+    setIsCreateButton(true);
+    setIsSelectButton(true);
+    setSelectedEvents([]);
+  };
+
+  const SelectButton = () => {
+    return (
+      <>
+        <Button style={{ backgroundColor: 'white' }} onClick={() => handleSelectButton()}>
+          Select
+        </Button>
+      </>
+    );
+  };
+
+  const DeleteButton = ({ id }) => {
+    return (
+      <>
+        <Button
+          style={{ backgroundColor: '#FF6666', borderRadius: '0px' }}
+          onClick={() => deleteEvents(id)}
+        >
+          Delete Event(s)
+        </Button>
+      </>
+    );
+  };
+
+  DeleteButton.propTypes = {
+    id: PropTypes.number,
+  };
+
+  const DeselectButton = () => {
+    return (
+      <>
+        <Button
+          style={{ backgroundColor: 'white', borderRadius: '0px' }}
+          onClick={() => handleGoBackButton()}
+        >
+          Deselect All
+        </Button>
+      </>
+    );
+  };
+
   return (
-    <ChakraProvider>
-      <form onSubmit={handleSubmit}>
-        <FormControl isRequired marginTop={10}>
-          <FormLabel marginLeft={10} htmlFor="name">
-            Name
-          </FormLabel>
-          <Input
-            marginLeft={10}
-            id="name"
-            name="name"
-            onChange={handleInputChange}
-            value={formData.name}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel marginLeft={10} htmlFor="description">
-            Description
-          </FormLabel>
-          <Textarea
-            id="description"
-            name="description"
-            onChange={handleInputChange}
-            value={formData.description}
-            marginLeft={10}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel marginLeft={10} htmlFor="location">
-            Location
-          </FormLabel>
-          <Input
-            marginLeft={10}
-            id="location"
-            name="location"
-            onChange={handleInputChange}
-            value={formData.location}
-          />
-        </FormControl>
-        <Button marginLeft={10} type="submit" colorScheme="blue" marginTop={4}>
-          Submit
-        </Button>
-      </form>
-      <Stack align="center" marginTop={10} marginBottom={10} flexDirection={'row'} spacing={4}>
-        <Input
-          width={'auto'}
-          marginLeft={10}
-          id="eventid"
-          name="eventid"
-          onChange={handleInputChange}
-          // value={eventId}
-        />
-        <Button size="md" colorScheme="linkedin" onClick={showEvent}>
-          Show Events
-        </Button>
-        <Button size="md" colorSchem="yellow" onClick={() => setShowEvents(false)}>
-          Unshow Events
-        </Button>
-      </Stack>
-      {showEvents ? eventCards : null}
-    </ChakraProvider>
+    <Sidebar>
+      <Box mx="156px" py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
+        <Box
+          mb="60px"
+          display="flex"
+          flexDirection="row"
+          gap="83px"
+          justifyContent="center"
+          alignItems={'left'}
+        >
+          <RecentEventsCard />
+          <AllData />
+        </Box>
+        <Spacer />
+        <Box display="flex" justifyContent={'center'}>
+          <Box justifyContent="space-between" width="930px">
+            <Box height="129px" display="flex" flex-direction="row" justifyContent="space-between">
+              {isCreateButton ? <CreateEventButton getEvents={getEvents} /> : <DeselectButton />}
+              {isSelectButton ? <SelectButton /> : <DeleteButton id={32} />}
+              <DeleteEventsModal
+                isOpen={isDeleteEventModalOpen}
+                onClose={onDeleteEventModalClose}
+                confirmDelete={confirmDelete}
+                events={events.filter(event => selectedEvents.includes(event.id))}
+              />
+            </Box>
+            <Spacer />
+            <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
+              <Box marginTop="3vh">{eventCards}</Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Sidebar>
   );
 };
 
