@@ -49,7 +49,6 @@ import {
   });
   
   const ForgotPasswordForm = () => {
-    // eslint-disable-next-line no-unused-vars
     const [email, setEmail] = useState('');
     const toast = useToast();
     const navigate = useNavigate();
@@ -107,6 +106,7 @@ import {
                 type="email"
                 size={'lg'}
                 {...register('email')}
+                onChange={e => setEmail(e.target.value)}
                 isRequired
               />
             </Center>
