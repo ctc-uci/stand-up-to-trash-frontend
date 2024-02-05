@@ -7,41 +7,68 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   Button,
   FormControl,
   Input,
-  Checkbox,
-  Stack,
   FormLabel,
   Center,
-  Textarea,
+  Image,
 } from '@chakra-ui/react';
 
-const DataEntryModal = ({ isOpen, onClose }) => {
+const DataEntryModal = ({
+  isOpen,
+  onClose,
+  profileImage,
+  firstName,
+  lastName,
+  volunteerId,
+  eventId,
+}) => {
   const [volunteerData, setVolunteerData] = useState({
-    volunteer_id: 0, // should be changed when connected with CHECKIN
+    volunteer_id: volunteerId,
     number_in_party: 0,
     pounds: 0,
     ounces: 0,
     unusual_items: [],
-    event_id: 0, // Should be changed when connected with CHECKIN
+    event_id: eventId,
     is_checked_in: false,
   });
-  const [other, setOther] = useState('');
+  // const [other, setOther] = useState('');
+  const other = '';
+  // let [unusualItemsArray, setUnusualItemsArray] = useState([]);
+
+  // COMMENTED OUT BECAUSE DESIGN FLAW
+
+  // parses unusual items input - single entries come as strings, multiple entries come as strings of the form {item1, item2... itemn}
+  // useEffect(() => {
+  //   formatUnusualItems();
+  // }, []);
+
+  // const formatUnusualItems = () => {
+  //   if (unusualItems.length != 0 && unusualItems[0] === '{') {
+  //     let trimmed = unusualItems.replace(/{|}/g, '').trim();
+  //     let unusualItemsList = trimmed.split(',');
+  //     unusualItemsList = unusualItemsList.map(item => item.replace(/"/g, ''));
+  //     setUnusualItemsArray(unusualItemsList);
+  //   } else {
+  //     setUnusualItemsArray([unusualItems]);
+  //   }
+  // };
 
   const { register, handleSubmit } = useForm(volunteerData);
 
   const postVolunteerData = async formData => {
     try {
-      setVolunteerData(prevData => ({
-        ...prevData,
+      const dataToSend = {
+        ...volunteerData,
         pounds: formData.pounds,
         ounces: formData.ounces,
-      }));
-      await Backend.post('/data', volunteerData);
+        unusual_items: formData.other,
+      };
+      await Backend.post('/data', dataToSend);
+      onClose();
     } catch (error) {
       console.error('Error creating new volunteer:', error.message);
     }
@@ -49,6 +76,7 @@ const DataEntryModal = ({ isOpen, onClose }) => {
 
   const noReload = (data, event) => {
     event.preventDefault();
+    addUnusualItem(true, other);
     postVolunteerData(data);
   };
 
@@ -72,7 +100,12 @@ const DataEntryModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader alignSelf={'center'}>name</ModalHeader>
+        <Center mt={2}>
+          <Image src={profileImage} w="8rem" h="8rem" borderRadius="100%"></Image>
+        </Center>
+        <ModalHeader alignSelf={'center'}>
+          {firstName} {lastName}
+        </ModalHeader>
         {/* postVolunteerData(10, 5, 5, 5, 10, 10) */}
         <form onSubmit={handleSubmit(noReload)}>
           <FormControl>
@@ -99,53 +132,45 @@ const DataEntryModal = ({ isOpen, onClose }) => {
                 <Center>
                   <FormLabel paddingTop={'20px'}>Enter Unusual Items</FormLabel>{' '}
                 </Center>
-                <Stack padding={'10px'}>
-                  <Checkbox
-                    {...register('unusual_item_A')}
-                    onChange={e => addUnusualItem(e.target.checked, e.target.name)}
-                  >
-                    Unusual Item A{' '}
-                  </Checkbox>
-                  <Checkbox
-                    {...register('unusal_item_B')}
-                    onChange={e => addUnusualItem(e.target.checked, e.target.name)}
-                  >
-                    Unusual Item B{' '}
-                  </Checkbox>
-                  <Checkbox
-                    {...register('unusal_item_C')}
-                    onChange={e => addUnusualItem(e.target.checked, e.target.name)}
-                  >
-                    Unusual Item C
-                  </Checkbox>
-                  <Checkbox
-                    {...register('unusal_item_D')}
-                    onChange={e => addUnusualItem(e.target.checked, e.target.name)}
-                  >
-                    Unusual Item D
-                  </Checkbox>
-                  <Stack flexDirection={''}>
-                    <Checkbox isRequired>Other: </Checkbox>
-                    <Input onChange={e => setOther(e.target.value)} value={other} />
-                  </Stack>
-                  <Textarea height={200} resize="vertical" />
-                </Stack>
+                {/* <Center>
+                  {unusualItemsArray.length === 0 ? (
+                    <div>No Unusual Items</div>
+                  ) : (
+                    <Flex gap={3}>
+                      {unusualItemsArray.map((item, index) => {
+                        return (
+                          <Button
+                            {...register(item)}
+                            onChange={e => addUnusualItem(e.target.checked, e.target.name)}
+                            key={index}
+                            colorScheme="gray"
+                            size="md"
+                          >
+                            {item}
+                          </Button>
+                        );
+                      })}
+                    </Flex>
+                  )}
+                </Center> */}
+
+                <Center paddingTop={'20px'}>
+                  <Input
+                    marginTop={5}
+                    placeholder="Other"
+                    alignItems={'center'}
+                    {...register('other')}
+                    type="text"
+                  />
+                </Center>
               </FormControl>
             </ModalBody>
 
-            <ModalFooter alignSelf={'center'}>
-              <Button
-                colorScheme="green"
-                mr={3}
-                type="submit"
-                onClick={() => {
-                  onClose;
-                  addUnusualItem(true, other);
-                }}
-              >
+            <Center p={8}>
+              <Button type="submit" color="black" bg="#95D497" w="70%">
                 Save
               </Button>
-            </ModalFooter>
+            </Center>
           </FormControl>
         </form>
       </ModalContent>
@@ -154,8 +179,14 @@ const DataEntryModal = ({ isOpen, onClose }) => {
 };
 
 DataEntryModal.propTypes = {
+  volunteerId: PropTypes.number.isRequired,
+  eventId: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  profileImage: PropTypes.string.isRequired,
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
+  unusualItems: PropTypes.string.isRequired,
 };
 
 export default DataEntryModal;
