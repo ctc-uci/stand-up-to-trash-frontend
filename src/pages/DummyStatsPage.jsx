@@ -139,59 +139,74 @@ const VolunteerTrashCollectedCard = ({ title, amount }) => {
 };
 
 const AllData = () => {
-  const [allInformation, setAllInformation] = useState("");
+  const [allInformation, setAllInformation] = useState('');
   const [isWeekToggled, setIsWeekToggled] = useState(true);
   const [isMonthToggled, setIsMonthToggled] = useState(false);
   const [isYearToggled, setIsYearToggled] = useState(false);
 
   const weekButton = () => {
-    if(isMonthToggled) setIsMonthToggled(!isMonthToggled);
-    if(isYearToggled) setIsYearToggled(!isYearToggled);
+    if (isMonthToggled) setIsMonthToggled(!isMonthToggled);
+    if (isYearToggled) setIsYearToggled(!isYearToggled);
 
-    weeklyData().then((data) => {
+    weeklyData().then(data => {
       setAllInformation(data ? data : 0);
     });
     setIsWeekToggled(!isWeekToggled);
-  }
+  };
 
   const monthButton = () => {
-    if(isWeekToggled) setIsWeekToggled(!isWeekToggled);
-    if(isYearToggled) setIsYearToggled(!isYearToggled);
-    monthlyData().then((data) => {
+    if (isWeekToggled) setIsWeekToggled(!isWeekToggled);
+    if (isYearToggled) setIsYearToggled(!isYearToggled);
+    monthlyData().then(data => {
       setAllInformation(data ? data : 0);
     });
     setIsMonthToggled(!isMonthToggled);
-  }
+  };
 
   const yearButton = () => {
-    if(isWeekToggled) setIsWeekToggled(!isWeekToggled);
-    if(isMonthToggled) setIsMonthToggled(!isMonthToggled);
-    yearlyData().then((data) => {
+    if (isWeekToggled) setIsWeekToggled(!isWeekToggled);
+    if (isMonthToggled) setIsMonthToggled(!isMonthToggled);
+    yearlyData().then(data => {
       setAllInformation(data ? data : 0);
     });
     setIsYearToggled(!isYearToggled);
-  }
+  };
 
   useEffect(() => {
     // Load week data when the component mounts
-    weeklyData().then((data) => {
+    weeklyData().then(data => {
       setAllInformation(data ? data : 0);
     });
   }, []);
 
   return (
-    <Card m="8"> 
+    <Card m="8">
       <CardBody>
         <VStack align="start" spacing={4}>
           <Heading>all data</Heading>
           <HStack>
-            <Button borderRadius="full" width="100%" onClick={(e) => weekButton(e)} colorScheme={isWeekToggled ? 'teal' : 'gray'} >
+            <Button
+              borderRadius="full"
+              width="100%"
+              onClick={e => weekButton(e)}
+              colorScheme={isWeekToggled ? 'teal' : 'gray'}
+            >
               weekly
             </Button>
-            <Button borderRadius="full" width="100%" onClick={monthButton} colorScheme={isMonthToggled ? 'teal' : 'gray'}>
+            <Button
+              borderRadius="full"
+              width="100%"
+              onClick={monthButton}
+              colorScheme={isMonthToggled ? 'teal' : 'gray'}
+            >
               monthly
             </Button>
-            <Button borderRadius="full" width="100%" onClick={yearButton} colorScheme={isYearToggled ? 'teal' : 'gray'}>
+            <Button
+              borderRadius="full"
+              width="100%"
+              onClick={yearButton}
+              colorScheme={isYearToggled ? 'teal' : 'gray'}
+            >
               yearly
             </Button>
           </HStack>
@@ -206,7 +221,7 @@ const AllData = () => {
             flexDirection="column"
           >
             <Text as="b" fontSize="sm">
-              total trash: 
+              total trash:
             </Text>
             <Text as="b" fontSize="sm">
               {allInformation}
@@ -260,7 +275,6 @@ const monthlyData = async () => {
   // console.log(resp);
   return resp.data;
 };
-
 
 const yearlyData = async () => {
   const resp = await Backend.get('/stats/year');
