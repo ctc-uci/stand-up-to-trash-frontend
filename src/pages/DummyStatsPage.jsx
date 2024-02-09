@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  HStack,
-  VStack,
-  Heading,
-  Select,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, HStack, Heading, Select, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import Backend from '../utils/utils';
@@ -16,7 +6,6 @@ import Backend from '../utils/utils';
 const DummyStatsPage = () => {
   return (
     <>
-      <AllData />
       <AllStats />
       <StatsByEvent />
       <StatsByProfile />
@@ -138,86 +127,6 @@ const VolunteerTrashCollectedCard = ({ title, amount }) => {
   );
 };
 
-const AllData = () => {
-  const [allInformation, setAllInformation] = useState("");
-  const [isWeekToggled, setIsWeekToggled] = useState(true);
-  const [isMonthToggled, setIsMonthToggled] = useState(false);
-  const [isYearToggled, setIsYearToggled] = useState(false);
-
-  const weekButton = () => {
-    if(isMonthToggled) setIsMonthToggled(!isMonthToggled);
-    if(isYearToggled) setIsYearToggled(!isYearToggled);
-
-    weeklyData().then((data) => {
-      setAllInformation(data ? data : 0);
-    });
-    setIsWeekToggled(!isWeekToggled);
-  }
-
-  const monthButton = () => {
-    if(isWeekToggled) setIsWeekToggled(!isWeekToggled);
-    if(isYearToggled) setIsYearToggled(!isYearToggled);
-    monthlyData().then((data) => {
-      setAllInformation(data ? data : 0);
-    });
-    setIsMonthToggled(!isMonthToggled);
-  }
-
-  const yearButton = () => {
-    if(isWeekToggled) setIsWeekToggled(!isWeekToggled);
-    if(isMonthToggled) setIsMonthToggled(!isMonthToggled);
-    yearlyData().then((data) => {
-      setAllInformation(data ? data : 0);
-    });
-    setIsYearToggled(!isYearToggled);
-  }
-
-  useEffect(() => {
-    // Load week data when the component mounts
-    weeklyData().then((data) => {
-      setAllInformation(data ? data : 0);
-    });
-  }, []);
-
-  return (
-    <Card m="8"> 
-      <CardBody>
-        <VStack align="start" spacing={4}>
-          <Heading>all data</Heading>
-          <HStack>
-            <Button borderRadius="full" width="100%" onClick={(e) => weekButton(e)} colorScheme={isWeekToggled ? 'teal' : 'gray'} >
-              weekly
-            </Button>
-            <Button borderRadius="full" width="100%" onClick={monthButton} colorScheme={isMonthToggled ? 'teal' : 'gray'}>
-              monthly
-            </Button>
-            <Button borderRadius="full" width="100%" onClick={yearButton} colorScheme={isYearToggled ? 'teal' : 'gray'}>
-              yearly
-            </Button>
-          </HStack>
-
-          <Box
-            width="100px"
-            height="100px"
-            backgroundColor="gray.200"
-            justifyContent="center"
-            alignItems="center"
-            display="flex"
-            flexDirection="column"
-          >
-            <Text as="b" fontSize="sm">
-              total trash: 
-            </Text>
-            <Text as="b" fontSize="sm">
-              {allInformation}
-            </Text>
-          </Box>
-        </VStack>
-      </CardBody>
-    </Card>
-  );
-};
-
 VolunteerTrashCollectedCard.propTypes = {
   title: PropTypes.string,
   amount: PropTypes.string,
@@ -240,31 +149,12 @@ const getVolunteerStats = async dataId => {
 
 const getEvents = async () => {
   const resp = await Backend.get('/events');
-  // console.log(resp.data);
+  console.log(resp.data);
   return resp.data;
 };
 
 const getProfiles = async () => {
   const resp = await Backend.get('/profiles');
-  return resp.data;
-};
-
-const weeklyData = async () => {
-  const resp = await Backend.get('/stats/week');
-  console.log(resp);
-  return resp.data;
-};
-
-const monthlyData = async () => {
-  const resp = await Backend.get('/stats/month');
-  // console.log(resp);
-  return resp.data;
-};
-
-
-const yearlyData = async () => {
-  const resp = await Backend.get('/stats/year');
-  // console.log(resp);
   return resp.data;
 };
 

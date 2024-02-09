@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { createUserInFirebase } from '../utils/firebaseAuthUtils';
 import Backend from '../utils/utils';
@@ -19,10 +19,11 @@ import Backend from '../utils/utils';
 const Signup = () => {
   return <CreateAccount />;
 };
-
+// firstName, lastName, role, email, firebase_uid, image_url
 const signupSchema = yup.object({
   firstName: yup.string().required('Please enter your first name'),
   lastName: yup.string().required('Please enter your last name'),
+  role: yup.string().required('Please enter your role'),
   email: yup.string().email().required('Please enter your email address'),
   password: yup
     .string()
@@ -50,12 +51,25 @@ const CreateAccount = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
+  // firstName, lastName, role, email, firebase_uid, image_url
   const onSubmit = async event => {
-    const { email, password, firstName, lastName } = event;
+    console.log('in submit');
+    const { firstName, lastName, email, password } = event;
+    const role = 'volunteer';
 
     try {
       const newUser = await createUserInFirebase(email, password, '/successful-login', navigate);
-      await createVolunteerRow({ id: newUser.uid, email, firstName, lastName });
+      console.log('new user ');
+      console.log(newUser);
+      // add role, firebase_uid
+      await createVolunteerRow({
+        firstName,
+        lastName,
+        role,
+        email,
+        password,
+        firebase_uid: newUser.uid,
+      });
 
       toast.closeAll();
 
@@ -95,7 +109,7 @@ const CreateAccount = () => {
               placeholder="First name"
               width={'30%'}
               marginTop={30}
-              marginLeft={"70%"}
+              marginLeft={'70%'}
               size={'lg'}
               borderRadius={8}
               boxShadow={'0 4px 2px -2px gray'}
@@ -183,7 +197,7 @@ const CreateAccount = () => {
             size={'lg'}
             width={'25%'}
             borderRadius={10}
-            marginTop={"20"}
+            marginTop={'20'}
             boxShadow={'0 4px 2px -2px gray'}
             onClick={handleSubmit(onSubmit)}
           >
@@ -195,13 +209,19 @@ const CreateAccount = () => {
   );
 };
 
-const createVolunteerRow = async ({ id, email, firstName, lastName }) => {
+// firstName, lastName, role, email, firebase_uid, image_url
+console.log('creatin row');
+const createVolunteerRow = async ({ firstName, lastName, role, email, firebase_uid }) => {
   const response = await Backend.post('/profiles', {
-    id: id,
+    // id: id,
     email: email,
     first_name: firstName,
     last_name: lastName,
+    role: role,
+    firebase_uid: firebase_uid
   });
+  console.log('response');
+  console.log(response);
   return response;
 };
 

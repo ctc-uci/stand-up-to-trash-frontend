@@ -72,6 +72,7 @@ const CreateAccount = () => {
 
     try {
       const newUser = await createUserInFirebase(email, password, '/successful-login', navigate);
+      // add role, firebase_uid
       await createVolunteerRow({ id: newUser.uid, email, firstName, lastName });
 
       toast.closeAll();
