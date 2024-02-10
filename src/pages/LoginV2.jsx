@@ -11,12 +11,13 @@ import {
   useToast,
   Image,
   VStack,
+  AbsoluteCenter,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import logo from '../Assets/Logo.png';
+import S2T_Logo from '../Assets/S2T_Logo.png';
 import ggicon from '../Assets/google.png';
 import fbicon from '../Assets/fb.png';
 import { logInWithEmailAndPassWord } from '../utils/firebaseAuthUtils';
@@ -85,13 +86,10 @@ const LoginForm = () => {
 
   return (
     <SimpleGrid columns={2} spacing={0} height={'100vh'}>
-      <Box backgroundColor={'lightgray'}>
-        <Center marginTop={20}>
-          <VStack>
-            <Heading marginTop="30%">Stand Up to Trash</Heading>
-            <Image marginTop="10%" borderRadius="full" boxSize="300px" src={logo} alt="Logo" />
-          </VStack>
-        </Center>
+      <Box backgroundColor="#9DDAEF" position="relative">
+        <AbsoluteCenter>
+          <Image borderRadius="full" width={350} height={430} src={S2T_Logo} alt="Logo" />
+        </AbsoluteCenter>
       </Box>
       <Box marginTop={40}>
         <form onSubmit={handleSubmit(handleLogin)}>
@@ -155,6 +153,7 @@ const LoginForm = () => {
                 width="140%"
                 marginTop={5}
                 border="1px solid black"
+                backgroundColor={'transparent'}
               >
                 Login with Google
               </Button>
@@ -164,6 +163,7 @@ const LoginForm = () => {
                 width="140%"
                 marginTop={3}
                 border="1px solid black"
+                backgroundColor={'transparent'}
               >
                 Login with Facebook
               </Button>
