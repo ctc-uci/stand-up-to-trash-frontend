@@ -14,7 +14,7 @@ export function createFacebookUserInFirebase(redirect, navigate) {
 
   getRedirectResult(auth)
     .then(result => {
-      const credential = FacebookAuthProvider.credentialFromResult(result);
+      const credential = provider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
 
