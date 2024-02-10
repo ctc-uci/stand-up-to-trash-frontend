@@ -17,6 +17,7 @@ import {
 import Fuse from 'fuse.js';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
 import DataEntryModal from '../components/DataEntryModal/DataEntryModal';
+import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
 import Backend from '../utils/utils';
 import { useDisclosure } from '@chakra-ui/react';
 
@@ -250,6 +251,7 @@ const DummyCheckin = () => {
                 />
               ))
             : '')}
+            <VolunteerEventsTable eventData={checkedInVolunteers}/>
       </Container>
     </>
   );
