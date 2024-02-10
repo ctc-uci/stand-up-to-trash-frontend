@@ -15,10 +15,11 @@ export function createGoogleUserInFirebase(redirect, navigate) {
 
   getRedirectResult(auth)
     .then(result => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const credential = provider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
 
+      navigate(redirect);
       return { token: token, user: user };
     })
     .catch(error => {
@@ -27,8 +28,6 @@ export function createGoogleUserInFirebase(redirect, navigate) {
 
       console.error('An error occurred', errorCode, errorMessage);
     });
-
-  navigate(redirect);
 }
 
 /**

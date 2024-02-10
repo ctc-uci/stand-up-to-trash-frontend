@@ -17,6 +17,8 @@ export function createFacebookUserInFirebase(redirect, navigate) {
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
+
+      navigate(redirect);
       return { token: token, user: user };
     })
     .catch(error => {
@@ -24,7 +26,6 @@ export function createFacebookUserInFirebase(redirect, navigate) {
       const errorMessage = error.message;
       console.error('An error occurred', errorCode, errorMessage);
     });
-  navigate(redirect);
 }
 
 /**

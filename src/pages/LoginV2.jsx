@@ -21,6 +21,8 @@ import S2T_Logo from '../Assets/S2T_Logo.png';
 import ggicon from '../Assets/google.png';
 import fbicon from '../Assets/fb.png';
 import { logInWithEmailAndPassWord } from '../utils/firebaseAuthUtils';
+import { createGoogleUserInFirebase } from '../utils/googleAuthUtils';
+import { createFacebookUserInFirebase } from '../utils/facebookAuthUtils';
 
 const LoginV2 = () => {
   return <LoginForm />;
@@ -82,6 +84,14 @@ const LoginForm = () => {
         showSigninError(firebaseErrorMsg);
       }
     }
+  };
+
+  const handleGoogleLogin = () => {
+    createGoogleUserInFirebase('/successful-login', navigate);
+  };
+
+  const handleFacebookLogin = () => {
+    createFacebookUserInFirebase('/successful-login', navigate);
   };
 
   return (
@@ -154,6 +164,7 @@ const LoginForm = () => {
                 marginTop={5}
                 border="1px solid black"
                 backgroundColor={'transparent'}
+                onClick={handleGoogleLogin}
               >
                 Login with Google
               </Button>
@@ -164,6 +175,7 @@ const LoginForm = () => {
                 marginTop={3}
                 border="1px solid black"
                 backgroundColor={'transparent'}
+                onClick={handleFacebookLogin}
               >
                 Login with Facebook
               </Button>
