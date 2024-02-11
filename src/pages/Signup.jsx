@@ -95,7 +95,7 @@ const CreateAccount = () => {
               placeholder="First name"
               width={'30%'}
               marginTop={30}
-              marginLeft={"70%"}
+              marginLeft={'70%'}
               size={'lg'}
               borderRadius={8}
               boxShadow={'0 4px 2px -2px gray'}
@@ -183,7 +183,7 @@ const CreateAccount = () => {
             size={'lg'}
             width={'25%'}
             borderRadius={10}
-            marginTop={"20"}
+            marginTop={'20'}
             boxShadow={'0 4px 2px -2px gray'}
             onClick={handleSubmit(onSubmit)}
           >

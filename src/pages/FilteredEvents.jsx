@@ -16,24 +16,24 @@ const FilteredEvents = () => {
     await getEvents().then(data => setEvents(data));
     const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0, 200));
     let options = {
-        timeZone: "PST"
+      timeZone: 'PST',
     };
     const dateTime = new Intl.DateTimeFormat(options).format(date);
 
     for (let eventIndex = 0; eventIndex < events.length; eventIndex++) {
-        const event = events[eventIndex];
+      const event = events[eventIndex];
 
-        //2024-02-18T08:00:00.000Z
-        if (event.date < dateTime) {
-            // Past event
-            setPastEvents(pastEvents + event);
-        } else if (event.date > dateTime) {
-            // Future Event
-            setFutureEvents(futureEvents + event);
-        } else {
-            // Current
-            setCurrentEvents(currentEvents + event);
-        }
+      //2024-02-18T08:00:00.000Z
+      if (event.date < dateTime) {
+        // Past event
+        setPastEvents(pastEvents + event);
+      } else if (event.date > dateTime) {
+        // Future Event
+        setFutureEvents(futureEvents + event);
+      } else {
+        // Current
+        setCurrentEvents(currentEvents + event);
+      }
     }
 
     setAdminStatus(true);
