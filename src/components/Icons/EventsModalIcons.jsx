@@ -1,4 +1,4 @@
-import { createIcon, extendTheme } from '@chakra-ui/react';
+import { createIcon } from '@chakra-ui/react';
 
 const CancelIcon = createIcon({
   displayName: 'CancelIcon',
@@ -38,12 +38,4 @@ const FileUploadIcon = createIcon({
   ),
 });
 
-const theme = extendTheme({
-  icons: {
-    FileUploadIcon,
-    CreateEventIcon,
-    CancelIcon,
-  },
-});
-
-export { theme, FileUploadIcon, CreateEventIcon, CancelIcon };
+export { FileUploadIcon, CreateEventIcon, CancelIcon };

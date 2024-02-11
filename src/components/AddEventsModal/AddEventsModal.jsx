@@ -20,7 +20,8 @@ import {
 import { useState } from 'react';
 import { AttachmentIcon } from '@chakra-ui/icons';
 import Dropzone from '../Dropzone.tsx';
-import { theme, CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
+import { CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
+import theme from '../../theme/theme.jsx';
 import { postEvent } from '../../utils/eventsUtils.js';
 import React from 'react';
 
