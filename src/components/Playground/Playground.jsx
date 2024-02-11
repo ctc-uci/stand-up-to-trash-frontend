@@ -9,8 +9,8 @@ const Playground = () => {
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
 
-      <AddEventsModal/>
-      <Dropzone/>
+      <AddEventsModal />
+      <Dropzone />
     </div>
   );
 };
