@@ -54,13 +54,15 @@ const CreateAccount = () => {
     delayError: 750,
   });
 
-  const createVolunteerRow = async ({ id, email, firstName, lastName }) => {
+  const createVolunteerRow = async ({ firstName, lastName, role, email, firebase_uid }) => {
     const response = await Backend.post('/profiles', {
-      id: id,
-      email: email,
       first_name: firstName,
       last_name: lastName,
+      role: role,
+      email: email,
+      firebase_uid: firebase_uid,
     });
+    // console.log(response);
     return response;
   };
 
@@ -68,12 +70,20 @@ const CreateAccount = () => {
   const navigate = useNavigate();
 
   const onSubmit = async event => {
-    const { email, password, firstName, lastName } = event;
+    const { firstName, lastName, email, password } = event;
+    const role = 'volunteer';
 
     try {
       const newUser = await createUserInFirebase(email, password, '/successful-login', navigate);
       // add role, firebase_uid
-      await createVolunteerRow({ id: newUser.uid, email, firstName, lastName });
+      await createVolunteerRow({
+        firstName,
+        lastName,
+        role,
+        email,
+        password,
+        firebase_uid: newUser.uid,
+      });
 
       toast.closeAll();
 
@@ -124,105 +134,109 @@ const CreateAccount = () => {
           <VStack spacing={4} padding={10}>
             <Heading>Sign Up</Heading>
             <form onSubmit={handleSubmit(onSubmit)}>
-            <HStack spacing={4} justifyContent={'center'}>
-              <FormControl isInvalid={errors.firstName}>
-                <Input
-                  placeholder="First name"
-                  width={'100%'}
-                  marginTop={30}
-                  marginRight={"70%"}
-                  size={'lg'}
-                  borderRadius={8}
-                  boxShadow={'0 4px 2px -2px gray'}
-                  type="text"
-                  {...register('firstName')}
-                />
-                {errors.firstName && <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>}
+              <HStack spacing={4} justifyContent={'center'}>
+                <FormControl isInvalid={errors.firstName}>
+                  <Input
+                    placeholder="First name"
+                    width={'100%'}
+                    marginTop={30}
+                    marginRight={'70%'}
+                    size={'lg'}
+                    borderRadius={8}
+                    boxShadow={'0 4px 2px -2px gray'}
+                    type="text"
+                    {...register('firstName')}
+                  />
+                  {errors.firstName && (
+                    <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
+                  )}
+                </FormControl>
+                <FormControl isInvalid={errors.lastName}>
+                  <Input
+                    width={'100%'}
+                    marginTop={30}
+                    size={'lg'}
+                    borderRadius={8}
+                    boxShadow={'0 4px 2px -2px gray'}
+                    placeholder="Last name"
+                    type="text"
+                    {...register('lastName')}
+                  />
+                  {errors.lastName && (
+                    <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
+                  )}
+                </FormControl>
+              </HStack>
+              <FormControl isInvalid={errors.email}>
+                <Center>
+                  <Input
+                    marginTop={30}
+                    size={'lg'}
+                    borderRadius={8}
+                    boxShadow={'0 4px 2px -2px gray'}
+                    placeholder={'Email address'}
+                    type="email"
+                    {...register('email')}
+                  />
+                </Center>
+                {errors.email && (
+                  <Center>
+                    <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+                  </Center>
+                )}
               </FormControl>
-              <FormControl isInvalid={errors.lastName}>
-                <Input
-                  width={'100%'}
-                  marginTop={30}
-                  size={'lg'}
-                  borderRadius={8}
-                  boxShadow={'0 4px 2px -2px gray'}
-                  placeholder="Last name"
-                  type="text"
-                  {...register('lastName')}
-                />
-                {errors.lastName && <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>}
+              <FormControl isInvalid={errors.password}>
+                <Center>
+                  <Input
+                    marginTop={30}
+                    size={'lg'}
+                    borderRadius={8}
+                    boxShadow={'0 4px 2px -2px gray'}
+                    placeholder={'Password'}
+                    type="password"
+                    {...register('password')}
+                  />
+                </Center>
+                {errors.password && (
+                  <Center>
+                    <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+                  </Center>
+                )}
               </FormControl>
-            </HStack>
-            <FormControl isInvalid={errors.email}>
-              <Center>
-                <Input
-                  marginTop={30}
-                  size={'lg'}
-                  borderRadius={8}
-                  boxShadow={'0 4px 2px -2px gray'}
-                  placeholder={'Email address'}
-                  type="email"
-                  {...register('email')}
-                />
-              </Center>
-              {errors.email && (
+              <FormControl isInvalid={errors.confirmPassword}>
                 <Center>
-                  <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+                  <Input
+                    marginTop={30}
+                    size={'lg'}
+                    borderRadius={8}
+                    boxShadow={'0 4px 2px -2px gray'}
+                    placeholder={'Confirm Password'}
+                    type="password"
+                    {...register('confirmPassword')}
+                  />
                 </Center>
-              )}
-            </FormControl>
-            <FormControl isInvalid={errors.password}>
+                {errors.confirmPassword && (
+                  <Center>
+                    <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
+                  </Center>
+                )}
+              </FormControl>
               <Center>
-                <Input
-                  marginTop={30}
+                <Button
+                  type="submit"
+                  fontWeight={500}
                   size={'lg'}
-                  borderRadius={8}
+                  borderRadius={10}
+                  marginTop={'5'}
                   boxShadow={'0 4px 2px -2px gray'}
-                  placeholder={'Password'}
-                  type="password"
-                  {...register('password')}
-                />
+                  onClick={handleSubmit(onSubmit)}
+                  backgroundColor={'#3182CE'}
+                  textColor={'white'}
+                >
+                  Sign Up Now
+                </Button>
               </Center>
-              {errors.password && (
-                <Center>
-                  <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-                </Center>
-              )}
-            </FormControl>
-            <FormControl isInvalid={errors.confirmPassword}>
-              <Center>
-                <Input
-                  marginTop={30}
-                  size={'lg'}
-                  borderRadius={8}
-                  boxShadow={'0 4px 2px -2px gray'}
-                  placeholder={'Confirm Password'}
-                  type="password"
-                  {...register('confirmPassword')}
-                />
-              </Center>
-              {errors.confirmPassword && (
-                <Center>
-                  <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
-                </Center>
-              )}
-            </FormControl>
-            <Center>
-              <Button
-                type="submit"
-                fontWeight={500}
-                size={'lg'}
-                borderRadius={10}
-                marginTop={"5"}
-                boxShadow={'0 4px 2px -2px gray'}
-                onClick={handleSubmit(onSubmit)}
-                backgroundColor={'#3182CE'}
-                textColor={'white'}
-              >
-                Sign Up Now
-              </Button>
-            </Center>
-          </form>
+            </form>
           </VStack>
         </Center>
       </Box>
