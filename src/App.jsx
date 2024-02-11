@@ -25,9 +25,11 @@ import SelectEvent from './pages/SelectEvent';
 import DummyVolunteerQR from './pages/DummyVolunteerQR';
 import DummyAdminQR from './pages/DummyAdminQR';
 
+import { theme } from "./utils/chakraTheme";
+
 const App = () => {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />

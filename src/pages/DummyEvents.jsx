@@ -128,7 +128,7 @@ const DummyEvents = () => {
   const SelectButton = () => {
     return (
       <>
-        <Button style={{ backgroundColor: 'white' }} onClick={() => handleSelectButton()}>
+        <Button style={{ backgroundColor: 'white' }} onClick={() => handleSelectButton()} fontSize="20px" height={"50px"}>
           Select
         </Button>
       </>
@@ -139,10 +139,13 @@ const DummyEvents = () => {
     return (
       <>
         <Button
-          style={{ backgroundColor: '#FF6666', borderRadius: '0px' }}
+          style={{ backgroundColor: '#FFABAB', borderRadius: '30px' }}
+          h="50px"
           onClick={() => deleteEvents(id)}
         >
-          Delete Event(s)
+          <Box padding="13px 13px" fontSize="20px" display="inline-flex" gap="10px">
+            Delete Event(s)
+          </Box>
         </Button>
       </>
     );
@@ -157,6 +160,8 @@ const DummyEvents = () => {
       <>
         <Button
           style={{ backgroundColor: 'white', borderRadius: '0px' }}
+          fontSize="20px"
+          height={"50px"}
           onClick={() => handleGoBackButton()}
         >
           Deselect All
@@ -176,13 +181,13 @@ const DummyEvents = () => {
           justifyContent="center"
           alignItems={'left'}
         >
-          <RecentEventsCard />
+          <RecentEventsCard events={events} />
           <AllData />
         </Box>
         <Spacer />
         <Box display="flex" justifyContent={'center'}>
           <Box justifyContent="space-between" width="930px">
-            <Box height="129px" display="flex" flex-direction="row" justifyContent="space-between">
+            <Box display="flex" flex-direction="row" justifyContent="space-between">
               {isCreateButton ? <CreateEventButton getEvents={getEvents} /> : <DeselectButton />}
               {isSelectButton ? <SelectButton /> : <DeleteButton id={32} />}
               <DeleteEventsModal
