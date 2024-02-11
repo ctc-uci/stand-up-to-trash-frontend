@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import DummyEvents from './pages/DummyEvents';
 import DummyProfiles from './pages/DummyProfiles';
@@ -24,12 +24,27 @@ import Register from './pages/Register';
 import SelectEvent from './pages/SelectEvent';
 import DummyVolunteerQR from './pages/DummyVolunteerQR';
 import DummyAdminQR from './pages/DummyAdminQR';
+import Navbar from './components/Navbar/Navbar';
+
+const Layout = () => {
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+    </>
+  );
+};
 
 const App = () => {
   return (
     <ChakraProvider>
       <Router>
         <Routes>
+          <Route element={<Layout />}>
+            <Route path="/playground" element={<Playground />} />
+            <Route path="/dummyevents" element={<DummyEvents />} />
+          </Route>
+
           <Route path="/login" element={<Login />} />
           <Route path="/loginv2" element={<LoginV2 />} />
           <Route path="/signup" element={<Signup />} />
