@@ -9,6 +9,8 @@ import {
   Select,
   Text,
 } from '@chakra-ui/react';
+
+import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import Backend from '../utils/utils';
@@ -143,13 +145,17 @@ const AllData = () => {
   const [isWeekToggled, setIsWeekToggled] = useState(true);
   const [isMonthToggled, setIsMonthToggled] = useState(false);
   const [isYearToggled, setIsYearToggled] = useState(false);
+  const [participantInformation, setParticipantInformation] = useState('');
 
   const weekButton = () => {
     if (isMonthToggled) setIsMonthToggled(!isMonthToggled);
     if (isYearToggled) setIsYearToggled(!isYearToggled);
 
-    weeklyData().then(data => {
+    weeklyTrashData().then(data => {
       setAllInformation(data ? data : 0);
+    });
+    weeklyParticipantsData().then(data => {
+      setParticipantInformation(data ? data : 0);
     });
     setIsWeekToggled(!isWeekToggled);
   };
@@ -157,25 +163,34 @@ const AllData = () => {
   const monthButton = () => {
     if (isWeekToggled) setIsWeekToggled(!isWeekToggled);
     if (isYearToggled) setIsYearToggled(!isYearToggled);
-    monthlyData().then(data => {
+    monthlyTrashData().then(data => {
       setAllInformation(data ? data : 0);
+    });
+    monthlyParticipantsData().then(data => {
+      setParticipantInformation(data ? data : 0);
     });
     setIsMonthToggled(!isMonthToggled);
   };
-
   const yearButton = () => {
     if (isWeekToggled) setIsWeekToggled(!isWeekToggled);
     if (isMonthToggled) setIsMonthToggled(!isMonthToggled);
-    yearlyData().then(data => {
+    yearlyTrashData().then(data => {
       setAllInformation(data ? data : 0);
+    });
+    yearlyParticipantsData().then(data => {
+      setParticipantInformation(data ? data : 0);
     });
     setIsYearToggled(!isYearToggled);
   };
 
   useEffect(() => {
     // Load week data when the component mounts
-    weeklyData().then(data => {
+    weeklyTrashData().then(data => {
       setAllInformation(data ? data : 0);
+    });
+
+    weeklyParticipantsData().then(data => {
+      setParticipantInformation(data ? data : 0);
     });
   }, []);
 
@@ -210,27 +225,53 @@ const AllData = () => {
               yearly
             </Button>
           </HStack>
+          <HStack>
+            <Box
+              width="100px"
+              height="100px"
+              backgroundColor="gray.200"
+              justifyContent="center"
+              alignItems="center"
+              display="flex"
+              flexDirection="column"
+            >
+              <Text as="b" fontSize="sm">
+                total trash:
+              </Text>
+              <Text as="b" fontSize="sm">
+                {arrowUpOrDown(allInformation)} + {allInformation}
+              </Text>
+            </Box>
 
-          <Box
-            width="100px"
-            height="100px"
-            backgroundColor="gray.200"
-            justifyContent="center"
-            alignItems="center"
-            display="flex"
-            flexDirection="column"
-          >
-            <Text as="b" fontSize="sm">
-              total trash:
-            </Text>
-            <Text as="b" fontSize="sm">
-              {allInformation}
-            </Text>
-          </Box>
+            <Box
+              width="100px"
+              height="100px"
+              backgroundColor="gray.200"
+              justifyContent="center"
+              alignItems="center"
+              display="flex"
+              flexDirection="column"
+            >
+              <Text as="b" fontSize="sm">
+                participants:
+              </Text>
+              <Text as="b" fontSize="sm">
+                {arrowUpOrDown(participantInformation)} + {participantInformation}
+              </Text>
+            </Box>
+          </HStack>
         </VStack>
       </CardBody>
     </Card>
   );
+};
+
+const arrowUpOrDown = num => {
+  if (num[0] == '-') {
+    return <ArrowDownIcon></ArrowDownIcon>;
+  } else {
+    return <ArrowUpIcon></ArrowUpIcon>;
+  }
 };
 
 VolunteerTrashCollectedCard.propTypes = {
@@ -264,20 +305,37 @@ const getProfiles = async () => {
   return resp.data;
 };
 
-const weeklyData = async () => {
+const weeklyTrashData = async () => {
   const resp = await Backend.get('/stats/week');
-  console.log(resp);
+  // console.log(resp);
   return resp.data;
 };
 
-const monthlyData = async () => {
+const monthlyTrashData = async () => {
   const resp = await Backend.get('/stats/month');
   // console.log(resp);
   return resp.data;
 };
 
-const yearlyData = async () => {
+const yearlyTrashData = async () => {
   const resp = await Backend.get('/stats/year');
+  // console.log(resp);
+  return resp.data;
+};
+
+const weeklyParticipantsData = async () => {
+  const resp = await Backend.get('/stats/participants/week');
+  return resp.data;
+};
+
+const monthlyParticipantsData = async () => {
+  const resp = await Backend.get('/stats/participants/week');
+  // console.log(resp);
+  return resp.data;
+};
+
+const yearlyParticipantsData = async () => {
+  const resp = await Backend.get('/stats/participants/year');
   // console.log(resp);
   return resp.data;
 };
