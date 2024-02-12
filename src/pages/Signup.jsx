@@ -51,11 +51,22 @@ const CreateAccount = () => {
   const navigate = useNavigate();
 
   const onSubmit = async event => {
-    const { email, password, firstName, lastName } = event;
+    const { firstName, lastName, email, password } = event;
+    const role = 'volunteer';
 
     try {
       const newUser = await createUserInFirebase(email, password, '/successful-login', navigate);
-      await createVolunteerRow({ id: newUser.uid, email, firstName, lastName });
+      console.log('new user ');
+      console.log(newUser);
+
+      await createVolunteerRow({
+        firstName,
+        lastName,
+        role,
+        email,
+        password,
+        firebase_uid: newUser.uid,
+      });
 
       toast.closeAll();
 
@@ -185,7 +196,7 @@ const CreateAccount = () => {
             borderRadius={10}
             marginTop={'20'}
             boxShadow={'0 4px 2px -2px gray'}
-            onClick={handleSubmit(onSubmit)}
+            // onClick={handleSubmit(onSubmit)}
           >
             Sign Up Now
           </Button>
@@ -195,13 +206,15 @@ const CreateAccount = () => {
   );
 };
 
-const createVolunteerRow = async ({ id, email, firstName, lastName }) => {
+const createVolunteerRow = async ({ firstName, lastName, role, email, firebase_uid }) => {
   const response = await Backend.post('/profiles', {
-    id: id,
-    email: email,
     first_name: firstName,
     last_name: lastName,
+    role: role,
+    email: email,
+    firebase_uid: firebase_uid,
   });
+  // console.log(response);
   return response;
 };
 

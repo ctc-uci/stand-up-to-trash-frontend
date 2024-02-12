@@ -18,7 +18,6 @@ import Backend from '../utils/utils';
 const DummyStatsPage = () => {
   return (
     <>
-      <AllData />
       <AllStats />
       <StatsByEvent />
       <StatsByProfile />
@@ -140,6 +139,7 @@ const VolunteerTrashCollectedCard = ({ title, amount }) => {
   );
 };
 
+// eslint-disable-next-line no-unused-vars
 const AllData = () => {
   const [allInformation, setAllInformation] = useState('');
   const [isWeekToggled, setIsWeekToggled] = useState(true);
@@ -296,7 +296,7 @@ const getVolunteerStats = async dataId => {
 
 const getEvents = async () => {
   const resp = await Backend.get('/events');
-  // console.log(resp.data);
+  console.log(resp.data);
   return resp.data;
 };
 
