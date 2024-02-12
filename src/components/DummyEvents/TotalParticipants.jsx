@@ -4,8 +4,8 @@ import { BsArrowDownRight, BsArrowUpRight } from 'react-icons/bs';
 const TotalParticipantsCard = ({ totalParticipants, totalTrash }) => {
   return (
     <>
-      <Box mt="12px" mx="11px" display="flex" flexDir="row" gap="38px" alignContent="left">
-        <Box backgroundColor="#E7E7E7" w="200px" h="173px">
+      <Box mt="12px" mx="11px" display="flex" flexDir="row" gap="38px" alignContent="center">
+        <Box w="200px" h="173px" alignContent='center' justifyContent='center'>
           <Box
             mx="13px"
             display="flex"
@@ -15,13 +15,13 @@ const TotalParticipantsCard = ({ totalParticipants, totalTrash }) => {
             gap="25px"
             h="100%"
           >
-            <Text>total participants</Text>
             <span>
               <Icon as={BsArrowUpRight} /> + {totalParticipants}%
             </span>
+            <Text fontWeight='bold'>total participants</Text>
           </Box>
         </Box>
-        <Box backgroundColor="#E7E7E7" w="200px" h="170px">
+        <Box w="200px" h="170px" alignContent>
           <Box
             mx="13px"
             display="flex"
@@ -31,10 +31,10 @@ const TotalParticipantsCard = ({ totalParticipants, totalTrash }) => {
             gap="25px"
             h="100%"
           >
-            <Text>total trash</Text>
             <span>
               <Icon as={BsArrowDownRight} /> - {totalTrash}%
             </span>
+            <Text fontWeight='bold'>total trash</Text>
           </Box>
         </Box>
       </Box>

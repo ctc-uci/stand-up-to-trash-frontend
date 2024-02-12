@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import AllData from '../components/DummyEvents/AllData';
-import CreateEventButton from '../components/DummyEvents/CreateEventButton';
 import DeleteEventsModal from '../components/DummyEvents/DeleteEventsModal';
 import EventCard from '../components/DummyEvents/EventCard';
 import RecentEventsCard from '../components/DummyEvents/RecentEventsCard';
+import Sidebar from '../components/DummyEvents/Sidebar';
+import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
 import Backend from '../utils/utils';
 
 const DummyEvents = () => {
@@ -127,7 +128,12 @@ const DummyEvents = () => {
   const SelectButton = () => {
     return (
       <>
-        <Button style={{ backgroundColor: 'white' }} onClick={() => handleSelectButton()}>
+        <Button
+          style={{ backgroundColor: 'white' }}
+          onClick={() => handleSelectButton()}
+          fontSize="20px"
+          height={'50px'}
+        >
           Select
         </Button>
       </>
@@ -138,10 +144,13 @@ const DummyEvents = () => {
     return (
       <>
         <Button
-          style={{ backgroundColor: '#FF6666', borderRadius: '0px' }}
+          style={{ backgroundColor: '#FFABAB', borderRadius: '30px' }}
+          h="50px"
           onClick={() => deleteEvents(id)}
         >
-          Delete Event(s)
+          <Box padding="13px 13px" fontSize="20px" display="inline-flex" gap="10px">
+            Delete Event(s)
+          </Box>
         </Button>
       </>
     );
@@ -156,6 +165,8 @@ const DummyEvents = () => {
       <>
         <Button
           style={{ backgroundColor: 'white', borderRadius: '0px' }}
+          fontSize="20px"
+          height={'50px'}
           onClick={() => handleGoBackButton()}
         >
           Deselect All
@@ -165,7 +176,7 @@ const DummyEvents = () => {
   };
 
   return (
-    <>
+    <Sidebar>
       <Box mx="156px" py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
         <Box
           mb="60px"
@@ -175,14 +186,14 @@ const DummyEvents = () => {
           justifyContent="center"
           alignItems={'left'}
         >
-          <RecentEventsCard />
+          <RecentEventsCard events={events} />
           <AllData />
         </Box>
         <Spacer />
         <Box display="flex" justifyContent={'center'}>
           <Box justifyContent="space-between" width="930px">
-            <Box height="129px" display="flex" flex-direction="row" justifyContent="space-between">
-              {isCreateButton ? <CreateEventButton getEvents={getEvents} /> : <DeselectButton />}
+            <Box display="flex" flex-direction="row" justifyContent="space-between">
+              {isCreateButton ? <AddEventsModal getEvents={getEvents} /> : <DeselectButton />}
               {isSelectButton ? <SelectButton /> : <DeleteButton id={32} />}
               <DeleteEventsModal
                 isOpen={isDeleteEventModalOpen}
@@ -198,7 +209,7 @@ const DummyEvents = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </Sidebar>
   );
 };
 
