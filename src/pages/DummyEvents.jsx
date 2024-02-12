@@ -7,7 +7,6 @@ import CreateEventButton from '../components/DummyEvents/CreateEventButton';
 import DeleteEventsModal from '../components/DummyEvents/DeleteEventsModal';
 import EventCard from '../components/DummyEvents/EventCard';
 import RecentEventsCard from '../components/DummyEvents/RecentEventsCard';
-import Sidebar from '../components/DummyEvents/Sidebar';
 import Backend from '../utils/utils';
 
 const DummyEvents = () => {
@@ -166,7 +165,7 @@ const DummyEvents = () => {
   };
 
   return (
-    <Sidebar>
+    <>
       <Box mx="156px" py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
         <Box
           mb="60px"
@@ -199,7 +198,7 @@ const DummyEvents = () => {
           </Box>
         </Box>
       </Box>
-    </Sidebar>
+    </>
   );
 };
 

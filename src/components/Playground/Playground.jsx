@@ -5,13 +5,19 @@ import { Flex } from '@chakra-ui/react';
 
 const Playground = () => {
   return (
-    <Flex backgroundColor={"pink"} h={"100vh"} w={"100vw"} flexDir={"column"}>
+    <Flex
+      display={'flex'}
+      flexDirection={'column'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      backgroundColor={'pink'}
+    >
       <p>Use this page to test out the look of any of your components!</p>
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
 
-      <AddEventsModal/>
-      <Dropzone/>
+      <AddEventsModal />
+      <Dropzone />
     </Flex>
   );
 };
