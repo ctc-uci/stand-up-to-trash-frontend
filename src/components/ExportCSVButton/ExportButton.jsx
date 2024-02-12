@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Flex } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import Backend from '../../utils/utils';
 import { CSVLink } from 'react-csv';
 import { useState, useEffect } from 'react';
@@ -35,13 +36,14 @@ function ExportButton({ eventId }) {
     };
 
     getEventId();
-  }, []);
+  }, [eventId]);
 
   return (
     <Flex>
-      <Button>
+      <Button background="#EC8BAE" color="white" style={{ borderRadius: '30px' }}>
+        <ExternalLinkIcon marginRight="5px" />
         <CSVLink data={eventIdData} filename="./data.csv" headers={header}>
-          Export
+          export overall data
         </CSVLink>
       </Button>
     </Flex>

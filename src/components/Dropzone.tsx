@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 // import {FileUploadIcon} from "./Icons/EventsModalIcons.jsx"
 
-const Dropzone = ({ setEventData, eventData }) => {
+const Dropzone = ({ setEventData, eventData, setIsLoading }) => {
   const { getRootProps, getInputProps, isDragAccept, isDragReject, acceptedFiles } = useDropzone({
     noKeyboard: true,
     accept: { 'image/jpeg': ['.jpeg', '.jpg'], 'image/png': ['.png'] },
@@ -25,6 +25,8 @@ const Dropzone = ({ setEventData, eventData }) => {
   // }, [acceptedFiles]);
 
   const uploadImage = async (file: File) => {
+    setIsLoading(true);
+
     // get S3 upload url from server
     const { data: uploadUrl } = await Backend.get('/s3Upload');
 
@@ -37,6 +39,7 @@ const Dropzone = ({ setEventData, eventData }) => {
 
     const imageUrl = uploadUrl.split('?')[0];
     setEventData({ ...eventData, imageUrl: imageUrl });
+    setIsLoading(false);
 
     return imageUrl;
   };
@@ -59,14 +62,16 @@ const Dropzone = ({ setEventData, eventData }) => {
       <Flex
         className={dropzoneBox}
         {...getRootProps()}
-        backgroundColor="grey"
-        width={'80vw'}
+        backgroundColor="#D9D9D9"
+        minW={"37vw"}
         height={'30vh'}
         justify={'center'}
         align={'center'}
+        borderRadius={'30px'}
+        backgroundImage={eventData?.imageUrl}
       >
         <input {...getInputProps()} />
-        <IconButton icon={<FileUploadIcon />} borderRadius={100} size={'lg'} />
+        <IconButton icon={<FileUploadIcon height={'37px'} width={'37px'}/>} height={'62px'} width={'62px'} borderRadius={100} size={'lg'} aria-label={''} opacity={0.9}/>
       </Flex>
 
       {/* <aside>

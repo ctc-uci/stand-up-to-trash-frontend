@@ -1,4 +1,5 @@
 import {
+  AbsoluteCenter,
   Box,
   Button,
   Center,
@@ -7,10 +8,9 @@ import {
   Input,
   Link,
   SimpleGrid,
+  Image,
   Text,
   useToast,
-  Image,
-  VStack,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -18,18 +18,16 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import * as yup from 'yup';
 import { sendResetPasswordPrompt } from '../utils/firebaseAuthUtils';
-import logo from '../Assets/Logo.png'; // Make sure you have this logo or replace it with your own
+// import logo from '../Assets/Logo.png'; // Make sure you have this logo or replace it with your own
+import S2T_Logo from '../Assets/S2T_Logo.png';
 
 const ForgotPasswordV2 = () => {
   return (
     <SimpleGrid columns={2} spacing={0} height={'100vh'}>
-      <Box backgroundColor={'lightgray'}>
-        <Center marginTop={20}>
-          <VStack>
-            <Heading marginTop="30%">Stand Up To Trash</Heading>
-            <Image marginTop="10%" borderRadius="full" boxSize="300px" src={logo} alt="Logo" />
-          </VStack>
-        </Center>
+      <Box backgroundColor="#9DDAEF" position="relative">
+        <AbsoluteCenter>
+          <Image borderRadius="full" width={350} height={430} src={S2T_Logo} alt="Logo" />
+        </AbsoluteCenter>
       </Box>
       <Box marginTop={40}>
         <ForgotPasswordForm />
