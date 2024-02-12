@@ -20,13 +20,18 @@ import {
 import { FaUser, FaClock, FaArrowUp, FaTag } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
 import DataEntryModal from '../DataEntryModal/DataEntryModal';
-// import DataEntryModal from '../DataEntryModal/DataEntryModal';
 
 const VolunteerEventsTable = ({ volunteers }) => {
+  console.log(volunteers);
+
+  const handleCheckIn = event_data_id => {
+    console.log('Check in button clicked', event_data_id);
+  };
+
   const RenderVolunteerRow = volunteer => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { first_name, last_name, email, image_url, is_checked_in } = volunteer;
-    console.log(volunteer);
+
     // lofi says no checkboxes, so names and the name column title has a margin left of 5rem, feel free to remove if checkboxes added
     return (
       <Tr>
@@ -53,10 +58,24 @@ const VolunteerEventsTable = ({ volunteers }) => {
                 <Tag cursor={'pointer'} onClick={onOpen} bg="#D53F8C" color="white">
                   Input Data
                 </Tag>
-                <DataEntryModal isOpen={isOpen} onClose={onClose} />
+                <DataEntryModal
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  profileImage={image_url}
+                  firstName={first_name}
+                  lastName={last_name}
+                  volunteerId={volunteer.volunteer_id}
+                  eventId={volunteer.event_id}
+                />
               </>
             ) : (
-              <Tag bg="#95D497">Check-In</Tag>
+              <Tag
+                onClick={() => handleCheckIn(volunteer.event_data_id)}
+                cursor={'pointer'}
+                bg="#95D497"
+              >
+                Check-In
+              </Tag>
             )}
             <Spacer />
             <Menu>
