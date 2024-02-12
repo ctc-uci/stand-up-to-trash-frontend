@@ -156,11 +156,7 @@ const AddEventsModal = () => {
                 )}
               </Flex>
 
-              <FormLabel
-                paddingTop={'10px'}
-                fontWeight={'700'}
-                fontSize={'12px'}
-              >
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
                 Event Name
               </FormLabel>
               <Input
@@ -172,11 +168,7 @@ const AddEventsModal = () => {
               />
               <Flex flexDirection={'row'}>
                 <Flex flexDirection={'column'} width={'100%'} paddingRight={'10px'}>
-                  <FormLabel
-                    paddingTop={'10px'}
-                    fontWeight={'700'}
-                    fontSize={'12px'}
-                  >
+                  <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
                     Date
                   </FormLabel>
                   <Input
@@ -187,11 +179,7 @@ const AddEventsModal = () => {
                   />
                 </Flex>
                 <Flex flexDirection={'column'} width={'100%'} paddingLeft={'10px'}>
-                  <FormLabel
-                    paddingTop={'10px'}
-                    fontWeight={'700'}
-                    fontSize={'12px'}
-                  >
+                  <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
                     Time
                   </FormLabel>
                   <Input
@@ -202,11 +190,7 @@ const AddEventsModal = () => {
                   />
                 </Flex>
               </Flex>
-              <FormLabel
-                paddingTop={'10px'}
-                fontWeight={'700'}
-                fontSize={'12px'}
-              >
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
                 Location
               </FormLabel>
               <Input
@@ -216,11 +200,7 @@ const AddEventsModal = () => {
                   setEventData({ ...eventData, location: e.target.value });
                 }}
               />
-              <FormLabel
-                paddingTop={'10px'}
-                fontWeight={'700'}
-                fontSize={'12px'}
-              >
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
                 Add Event Description
               </FormLabel>
               <Textarea
@@ -231,11 +211,7 @@ const AddEventsModal = () => {
                   setEventData({ ...eventData, description: e.target.value });
                 }}
               />
-              <FormLabel
-                paddingTop={'10px'}
-                fontWeight={'700'}
-                fontSize={'12px'}
-              >
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
                 Add Waivers
               </FormLabel>
               <IconButton icon={<AttachmentIcon />} borderRadius={'30px'} />
