@@ -1,4 +1,5 @@
 import {
+  AbsoluteCenter,
   Box,
   Button,
   Center,
@@ -7,6 +8,7 @@ import {
   Heading,
   HStack,
   Input,
+  Image,
   SimpleGrid,
   useToast,
   VStack,
@@ -15,7 +17,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import logo from '../Assets/Logo.png'; // Ensure you have this asset
+// import logo from '../Assets/Logo.png'; // Ensure you have this asset
+import S2T_Logo from '../Assets/S2T_Logo.png';
 import { createUserInFirebase } from '../utils/firebaseAuthUtils';
 import Backend from '../utils/utils';
 
@@ -102,21 +105,10 @@ const CreateAccount = () => {
 
   return (
     <SimpleGrid columns={2} spacing={0} height={'100vh'}>
-      <Box backgroundColor={'lightgray'}>
-        <Center marginTop={20}>
-          <VStack>
-            <Heading marginTop="30%">Stand Up To Trash</Heading>
-            <Box
-              marginTop="10%"
-              borderRadius="full"
-              boxSize="300px"
-              backgroundImage={`url(${logo})`}
-              backgroundPosition="center"
-              backgroundSize="cover"
-              alt="Community Logo"
-            />
-          </VStack>
-        </Center>
+      <Box backgroundColor="#9DDAEF" position="relative">
+        <AbsoluteCenter>
+          <Image borderRadius="full" width={350} height={430} src={S2T_Logo} alt="Logo" />
+        </AbsoluteCenter>
       </Box>
       <Box marginTop={40}>
         <Center>
