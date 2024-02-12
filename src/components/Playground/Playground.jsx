@@ -1,7 +1,7 @@
 import ExportButton from '../ExportCSVButton/ExportButton';
 import AddEventsModal from '../AddEventsModal/AddEventsModal';
 import Dropzone from '../Dropzone.tsx';
-import { Box, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
