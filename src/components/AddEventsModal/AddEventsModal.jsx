@@ -16,12 +16,13 @@ import {
   ChakraProvider,
   extendTheme,
   useToast,
+  Spinner,
+  Box,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { AttachmentIcon } from '@chakra-ui/icons';
 import Dropzone from '../Dropzone.tsx';
-import { CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
-import theme from '../../theme/theme.jsx';
+import { theme, CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
 import { postEvent } from '../../utils/eventsUtils.js';
 import React from 'react';
 
@@ -37,6 +38,7 @@ const AddEventsModal = () => {
     waiver:
       'Stand Up To Trash BEACH CLEANUP WAIVER OF LIABILITY AND EXPRESS ASSUMPTION OF RISK (PLEASE READ CAREFULLY) I agree as follows: 1. I am volunteering my services for the Stand Up To Trash Beach Cleanup; 2. I will perform assigned tasks that are within my physical capability, and I will not undertake tasks that are beyond my ability; 3. I will not participate if under the influence of alcohol or any drug that could impair my physical or mental abilities; 4. I have received appropriate instruction regarding this Event, including appropriate safety and emergency procedures, I fully understand those instructions, and I agree, after proper inspection, to use only the supplies, tools and equipment provided by Event organizers; 5. I will perform only those tasks assigned, observe all safety rules, and use care in the performance of my assignments; 6. Stand Up To Trash will not be held liable or responsible in any way for any injury, death or other damages to me or my family, heirs, or assigns that may occur as a result of my participation in the Event, or as a result of product liability or the negligence, whether passive or active, of any party, including Released Parties, in connection with the Event. I understand that cleaning up beaches or inland water areas involves certain inherent risks, including but not limited to, the risks of possible injury, infection or loss of life as a result of contact with needles, condoms, metal objects, burning embers or other hazardous materials, wild animals, poisonous plants, snakes, or from over-exertion or environmental conditions, including but not limited to flooding, rockslides, sun exposure, or dangerous terrain. No known physical or health limitation prevents me from safely participating in this Event. In Consideration for being allowed to participate, I personally assume all risks, whether foreseen or unforeseen, in connection with the Event of any harm, injury or damage that may befall me as a participant. If I am injured during the Event, I authorize any physician licensed in California to perform such emergency treatment as he or she believes, in his or her sole judgment, may be necessary. I am over the age of eighteen and legally competent to sign this liability release, or I have acquired the written consent of my parent or guardian. I understand that the terms herein are contractual and not a mere recital, this instrument is legally binding, and I have signed this document of my own free act. I agree to allow my image to be used in published materials and web sites that promote the programs of Stand Up To Trash. By including my email address below, I understand that Stand Up To Trash may contact me about future Stand Up To Trash events and other Public Education programs. I HEREBY RELEASE AND HOLD HARMLESS Stand Up To Trash FROM ANY CLAIM OR LAWSUIT FOR PERSONAL INJURY, PROPERTY DAMAGE, OR WRONGFUL DEATH, BY ME, MY FAMILY, ESTATE, HEIRS, OR ASSIGNS, ARISING OUT OF PARTICIPATION IN THE EVENT, INCLUDING BOTH CLAIMS ARISING DURING THE ACTIVITY AND AFTER I COMPLETE THE ACTIVITY, AND INCLUDING CLAIMS BASED ON NEGLIGENCE OF OTHER PARTICIPANTS OR THE RELEASED PARTIES, WHETHER PASSIVE OR ACTIVE. I HAVE FULLY INFORMED MYSELF OF THE CONTENTS OF THIS LIABILITY RELEASE AND ASSUMPTION OF RISK. Signature of Participant City, State, Zip E-mail IF PARTICIPANT IS UNDER 18, THE PARENT (OR GUARDIAN, IF ANY) MUST SIGN. I am the parent or legal guardian of the above participant and he/she has my permission to participate in the Stand Up To Trash Beach Cleanup. I have read and agree to the provisions stated above for myself and the participant. Further, I understand and agree that the sponsors and organizers of the Event are not responsible for supervision of minor participants and that if I allow the above minor to participate without my supervision, I assume all the risks from such participation.',
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
   const toastIdRef = React.useRef();
@@ -73,6 +75,20 @@ const AddEventsModal = () => {
     }
   };
 
+  const handleCancel = () => {
+    onClose();
+    setEventData({
+      name: '',
+      description: '',
+      location: '',
+      imageUrl: '',
+      date: '',
+      time: '',
+      waiver:
+        'Stand Up To Trash BEACH CLEANUP WAIVER OF LIABILITY AND EXPRESS ASSUMPTION OF RISK (PLEASE READ CAREFULLY) I agree as follows: 1. I am volunteering my services for the Stand Up To Trash Beach Cleanup; 2. I will perform assigned tasks that are within my physical capability, and I will not undertake tasks that are beyond my ability; 3. I will not participate if under the influence of alcohol or any drug that could impair my physical or mental abilities; 4. I have received appropriate instruction regarding this Event, including appropriate safety and emergency procedures, I fully understand those instructions, and I agree, after proper inspection, to use only the supplies, tools and equipment provided by Event organizers; 5. I will perform only those tasks assigned, observe all safety rules, and use care in the performance of my assignments; 6. Stand Up To Trash will not be held liable or responsible in any way for any injury, death or other damages to me or my family, heirs, or assigns that may occur as a result of my participation in the Event, or as a result of product liability or the negligence, whether passive or active, of any party, including Released Parties, in connection with the Event. I understand that cleaning up beaches or inland water areas involves certain inherent risks, including but not limited to, the risks of possible injury, infection or loss of life as a result of contact with needles, condoms, metal objects, burning embers or other hazardous materials, wild animals, poisonous plants, snakes, or from over-exertion or environmental conditions, including but not limited to flooding, rockslides, sun exposure, or dangerous terrain. No known physical or health limitation prevents me from safely participating in this Event. In Consideration for being allowed to participate, I personally assume all risks, whether foreseen or unforeseen, in connection with the Event of any harm, injury or damage that may befall me as a participant. If I am injured during the Event, I authorize any physician licensed in California to perform such emergency treatment as he or she believes, in his or her sole judgment, may be necessary. I am over the age of eighteen and legally competent to sign this liability release, or I have acquired the written consent of my parent or guardian. I understand that the terms herein are contractual and not a mere recital, this instrument is legally binding, and I have signed this document of my own free act. I agree to allow my image to be used in published materials and web sites that promote the programs of Stand Up To Trash. By including my email address below, I understand that Stand Up To Trash may contact me about future Stand Up To Trash events and other Public Education programs. I HEREBY RELEASE AND HOLD HARMLESS Stand Up To Trash FROM ANY CLAIM OR LAWSUIT FOR PERSONAL INJURY, PROPERTY DAMAGE, OR WRONGFUL DEATH, BY ME, MY FAMILY, ESTATE, HEIRS, OR ASSIGNS, ARISING OUT OF PARTICIPATION IN THE EVENT, INCLUDING BOTH CLAIMS ARISING DURING THE ACTIVITY AND AFTER I COMPLETE THE ACTIVITY, AND INCLUDING CLAIMS BASED ON NEGLIGENCE OF OTHER PARTICIPANTS OR THE RELEASED PARTIES, WHETHER PASSIVE OR ACTIVE. I HAVE FULLY INFORMED MYSELF OF THE CONTENTS OF THIS LIABILITY RELEASE AND ASSUMPTION OF RISK. Signature of Participant City, State, Zip E-mail IF PARTICIPANT IS UNDER 18, THE PARENT (OR GUARDIAN, IF ANY) MUST SIGN. I am the parent or legal guardian of the above participant and he/she has my permission to participate in the Stand Up To Trash Beach Cleanup. I have read and agree to the provisions stated above for myself and the participant. Further, I understand and agree that the sponsors and organizers of the Event are not responsible for supervision of minor participants and that if I allow the above minor to participate without my supervision, I assume all the risks from such participation.',
+    });
+  };
+
   const isSubmittable =
     eventData.date === '' ||
     eventData.description === '' ||
@@ -83,32 +99,86 @@ const AddEventsModal = () => {
 
   return (
     <ChakraProvider theme={extendTheme(theme)}>
-      <Button onClick={onOpen} backgroundColor={'#95D497'}>
-        Create Event
+      <Button
+        style={{ backgroundColor: '#95D497', borderRadius: '30px' }}
+        height="50px"
+        onClick={onOpen}
+      >
+        <Box padding="13px 13px" fontSize="20px" display="inline-flex" gap="10px">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.1429 12.8571H3V10.1429H11.1429V2H13.8571V10.1429H22V12.8571H13.8571V21H11.1429V12.8571Z"
+              fill="black"
+            />
+          </svg>
+          Create Event
+        </Box>
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleCancel}>
         <ModalOverlay />
-        <ModalContent minW={'40%'}>
+        <ModalContent
+          minW={'40%'}
+          borderRadius={'30px'}
+          boxShadow={'0px 6.9760003089904785px 6.9760003089904785px 0px #00000080'}
+        >
           <ModalHeader>
-            <ModalHeader fontSize={'24px'} justify={'center'} align={'center'}>
+            <ModalHeader
+              fontSize={'24px'}
+              justify={'center'}
+              align={'center'}
+              fontWeight={'700'}
+              lineHeight={'29.05px'}
+              marginBottom={'-25px'}
+            >
               Add Event
             </ModalHeader>
           </ModalHeader>
 
           <ModalBody>
             <FormControl>
-              <Dropzone setEventData={setEventData} eventData={eventData} />
-              <FormLabel paddingTop={'10px'}>Event Name</FormLabel>
+              <Flex flexDir={'column'} align={'center'} justify={'center'}>
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  <Dropzone
+                    setEventData={setEventData}
+                    eventData={eventData}
+                    height={'141px'}
+                    setIsLoading={setIsLoading}
+                  />
+                )}
+              </Flex>
+
+              <FormLabel
+                paddingTop={'10px'}
+                fontWeight={'700'}
+                fontSize={'12px'}
+              >
+                Event Name
+              </FormLabel>
               <Input
                 type="text"
+                placeholder="Beach Cleanup"
                 onChange={e => {
                   setEventData({ ...eventData, name: e.target.value });
                 }}
               />
               <Flex flexDirection={'row'}>
                 <Flex flexDirection={'column'} width={'100%'} paddingRight={'10px'}>
-                  <FormLabel paddingTop={'10px'}>Date</FormLabel>
+                  <FormLabel
+                    paddingTop={'10px'}
+                    fontWeight={'700'}
+                    fontSize={'12px'}
+                  >
+                    Date
+                  </FormLabel>
                   <Input
                     type="date"
                     onChange={e => {
@@ -117,7 +187,13 @@ const AddEventsModal = () => {
                   />
                 </Flex>
                 <Flex flexDirection={'column'} width={'100%'} paddingLeft={'10px'}>
-                  <FormLabel paddingTop={'10px'}>Time</FormLabel>
+                  <FormLabel
+                    paddingTop={'10px'}
+                    fontWeight={'700'}
+                    fontSize={'12px'}
+                  >
+                    Time
+                  </FormLabel>
                   <Input
                     type="time"
                     onChange={e => {
@@ -126,31 +202,52 @@ const AddEventsModal = () => {
                   />
                 </Flex>
               </Flex>
-              <FormLabel paddingTop={'10px'}>Location</FormLabel>
+              <FormLabel
+                paddingTop={'10px'}
+                fontWeight={'700'}
+                fontSize={'12px'}
+              >
+                Location
+              </FormLabel>
               <Input
                 type="text"
+                placeholder="Dana Point"
                 onChange={e => {
                   setEventData({ ...eventData, location: e.target.value });
                 }}
               />
-              <FormLabel paddingTop={'10px'}>Add Event Description</FormLabel>
+              <FormLabel
+                paddingTop={'10px'}
+                fontWeight={'700'}
+                fontSize={'12px'}
+              >
+                Add Event Description
+              </FormLabel>
               <Textarea
                 type="text"
-                height={'130px'}
+                placeholder="Event Description, etc..."
+                height={'109px'}
                 onChange={e => {
                   setEventData({ ...eventData, description: e.target.value });
                 }}
               />
-              <FormLabel paddingTop={'10px'}>Add Waivers</FormLabel>
-              <IconButton icon={<AttachmentIcon />} />
+              <FormLabel
+                paddingTop={'10px'}
+                fontWeight={'700'}
+                fontSize={'12px'}
+              >
+                Add Waivers
+              </FormLabel>
+              <IconButton icon={<AttachmentIcon />} borderRadius={'30px'} />
             </FormControl>
           </ModalBody>
 
           <ModalFooter justifyContent={'center'}>
             <Button
               leftIcon={<CancelIcon />}
-              onClick={onClose}
-              backgroundColor={'#D495954D'}
+              onClick={handleCancel}
+              backgroundColor={'#FFFFFF'}
+              borderRadius={'30px'}
               marginRight={'10px'}
             >
               Cancel
@@ -158,6 +255,7 @@ const AddEventsModal = () => {
             <Button
               leftIcon={<CreateEventIcon />}
               backgroundColor={'#95D497'}
+              borderRadius={'30px'}
               marginLeft={'10px'}
               onClick={handleSubmit}
               isDisabled={isSubmittable}

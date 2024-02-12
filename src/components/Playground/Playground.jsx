@@ -1,7 +1,7 @@
 import ExportButton from '../ExportCSVButton/ExportButton';
 import AddEventsModal from '../AddEventsModal/AddEventsModal';
 import Dropzone from '../Dropzone.tsx';
-import { Box } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
@@ -19,7 +19,13 @@ const Playground = () => {
   }, []);
 
   return (
-    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
+    <Flex
+      display={'flex'}
+      flexDirection={'column'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      backgroundColor={'pink'}
+    >
       <p>Use this page to test out the look of any of your components!</p>
       <p>{user?.email}</p>
 
@@ -28,7 +34,7 @@ const Playground = () => {
 
       <AddEventsModal />
       <Dropzone />
-    </Box>
+    </Flex>
   );
 };
 

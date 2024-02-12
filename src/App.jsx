@@ -35,9 +35,11 @@ const Layout = () => {
   );
 };
 
+import { theme } from "./utils/chakraTheme";
+
 const App = () => {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Router>
         <Routes>
           <Route element={<Layout />}>
