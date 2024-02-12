@@ -8,7 +8,7 @@ import {
   Button,
   FormErrorMessage,
   Checkbox,
-  Heading
+  Heading,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -18,7 +18,11 @@ const schema = yup.object({
   volunteer_id: yup.string().required('ID required'),
   firstName: yup.string().required('First Name Required'),
   lastName: yup.string().required('Last Name Required'),
-  number_in_party: yup.number().typeError('Input must be numeric').min(1).required('Number of Party Required'),
+  number_in_party: yup
+    .number()
+    .typeError('Input must be numeric')
+    .min(1)
+    .required('Number of Party Required'),
   checked: yup.bool().oneOf([true], 'Must agree to terms and conditions'),
 });
 
