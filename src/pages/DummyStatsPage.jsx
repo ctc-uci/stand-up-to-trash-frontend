@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, HStack, Heading, Select, Text } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, HStack, Heading, Select, Text, VStack } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import Backend from '../utils/utils';
@@ -127,6 +127,7 @@ const VolunteerTrashCollectedCard = ({ title, amount }) => {
   );
 };
 
+// eslint-disable-next-line no-unused-vars
 const AllData = () => {
   const [allInformation, setAllInformation] = useState('');
   const [isWeekToggled, setIsWeekToggled] = useState(true);

@@ -15,7 +15,7 @@ import LoginV2 from './pages/LoginV2';
 import Signup from './pages/Signup';
 import SignupV2 from './pages/SignupV2';
 import ForgotPassword from './pages/ForgotPassword';
-import ForgotPasswordV2 from './pages/ForgotpasswordV2';
+import ForgotPasswordV2 from './pages/ForgotPasswordV2';
 import Playground from './components/Playground/Playground';
 import EventCardTest from './pages/EventCardTest';
 import FilteredEvents from './pages/FilteredEvent';
