@@ -51,16 +51,16 @@ const DummyCheckin = () => {
   /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
   */
-  useEffect(() => {
-    const setData = async () => {
-      // await fetchEvents().then(data => setEventsData(data));
-      await fetchJoinedEvents().then(data => {
-        const joinedContainers = data.map(event => {
-          return <JoinedDataContainer data={event} key={event.volunteer_id} />;
-        });
-        setJoinedData(joinedContainers);
+  const setData = async () => {
+    // await fetchEvents().then(data => setEventsData(data));
+    await fetchJoinedEvents().then(data => {
+      const joinedContainers = data.map(event => {
+        return <JoinedDataContainer data={event} key={event.volunteer_id} />;
       });
-    };
+      setJoinedData(joinedContainers);
+    });
+  };
+  useEffect(() => {
     setData();
   }, []);
 
@@ -101,6 +101,7 @@ const DummyCheckin = () => {
   //   fetchData();
   // }, [eventId]);
 
+
   const sortEventCardsByCheckIn = useCallback(() => {
     if (volunteerResults.length !== 0) {
       setCheckedInVolunteers(
@@ -119,10 +120,16 @@ const DummyCheckin = () => {
     sortEventCardsByCheckIn();
   }, [volunteerResults, sortEventCardsByCheckIn]);
 
+  // dynamically update checkin status
   const changeIsCheckedIn = async event_data_id => {
     try {
-      const response = await Backend.put(`/data/checkin/${event_data_id}`);
-      sortEventCardsByCheckIn(); // rerender event cards so checked in volunteers show up in the correct category
+      const response = await Backend.put(`/data/checkin/${event_data_id}`).then(
+        async () => {
+          await setData().then(sortEventCardsByCheckIn)
+        }
+        );
+
+       // rerender event cards so checked in volunteers show up in the correct category
       return response;
     } catch (err) {
       console.log(err);
