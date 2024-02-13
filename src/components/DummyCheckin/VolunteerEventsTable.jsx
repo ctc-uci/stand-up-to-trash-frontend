@@ -21,15 +21,11 @@ import { FaUser, FaClock, FaArrowUp, FaTag } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
 import DataEntryModal from '../DataEntryModal/DataEntryModal';
 
-const VolunteerEventsTable = ({ volunteers }) => {
-  const handleCheckIn = event_data_id => {
-    console.log('Check in button clicked', event_data_id);
-  };
+const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
 
   const RenderVolunteerRow = volunteer => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { first_name, last_name, email, image_url, is_checked_in } = volunteer.props.data;
-
+    const { first_name, last_name, email, image_url, is_checked_in, event_data_id } = volunteer.props.data;
     return (
       <Tr>
         <Td>
@@ -67,7 +63,7 @@ const VolunteerEventsTable = ({ volunteers }) => {
               </>
             ) : (
               <Tag
-                onClick={() => handleCheckIn(volunteer.event_data_id)}
+                onClick={() => changeIsCheckedIn(event_data_id)}
                 cursor={'pointer'}
                 bg="#95D497"
               >

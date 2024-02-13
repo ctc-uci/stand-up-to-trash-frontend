@@ -5,10 +5,10 @@ import { fetchJoinedEvents } from '../utils/fuseUtils';
 import { Container, Flex, Button, Box } from '@chakra-ui/react';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
 import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
-import Backend from '../utils/utils';
 import { useParams } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { SearchIcon } from '@chakra-ui/icons';
+import Backend from '../utils/utils';
 
 const DummyCheckin = () => {
   const [joinedData, setJoinedData] = useState([]);
@@ -42,16 +42,7 @@ const DummyCheckin = () => {
   /*
     This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
   */
-  const changeIsCheckedIn = async eventData => {
-    const { event_data_id } = eventData;
-    try {
-      const response = await Backend.put(`/data/checkin/${event_data_id}`);
-      sortEventCardsByCheckIn(); // rerender event cards so checked in volunteers show up in the correct category
-      return response;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
 
   /*
     This is the filtered data based on the event chosen in event-card-page
@@ -128,6 +119,16 @@ const DummyCheckin = () => {
     sortEventCardsByCheckIn();
   }, [volunteerResults, sortEventCardsByCheckIn]);
 
+  const changeIsCheckedIn = async event_data_id => {
+    try {
+      const response = await Backend.put(`/data/checkin/${event_data_id}`);
+      sortEventCardsByCheckIn(); // rerender event cards so checked in volunteers show up in the correct category
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <Flex justifyContent="center">
@@ -187,21 +188,16 @@ const DummyCheckin = () => {
 
         {showCheckedIn &&
           (checkedInVolunteers.length != 0 ? (
-            <VolunteerEventsTable volunteers={checkedInVolunteers} />
+            <VolunteerEventsTable volunteers={checkedInVolunteers} changeIsCheckedIn={changeIsCheckedIn}/>
           ) : (
             ''
           ))}
         {!showCheckedIn &&
           (notCheckedInVolunteers.length != 0 ? (
-            <VolunteerEventsTable volunteers={notCheckedInVolunteers} />
+            <VolunteerEventsTable volunteers={notCheckedInVolunteers} changeIsCheckedIn={changeIsCheckedIn}/>
           ) : (
             ''
           ))}
-        {/* {showCheckedIn ? (
-          <VolunteerEventsTable volunteers={checkedInVolunteers} />
-        ) : (
-          <VolunteerEventsTable volunteers={notCheckedInVolunteers} />
-        )} */}
       </Container>
     </>
   );
