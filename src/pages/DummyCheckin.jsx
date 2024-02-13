@@ -1,14 +1,21 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useCallback } from 'react';
-import { Input } from '@chakra-ui/react';
 import { fetchJoinedEventsById } from '../utils/fuseUtils';
-import { Container, Flex, Button, Box, IconButton, FormControl } from '@chakra-ui/react';
+import Backend from '../utils/utils';
+import Fuse from 'fuse.js';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
 import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
 import { useParams } from 'react-router-dom';
-import Fuse from 'fuse.js';
+import {
+  Container,
+  Flex,
+  Button,
+  Box,
+  IconButton,
+  FormControl,
+  Input
+} from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-import Backend from '../utils/utils';
 
 const DummyCheckin = () => {
   const [joinedData, setJoinedData] = useState([]);
@@ -17,8 +24,8 @@ const DummyCheckin = () => {
   const [checkedInVolunteers, setCheckedInVolunteers] = useState([]);
   const [notCheckedInVolunteers, setNotCheckedInVolunteers] = useState([]);
   const [input, setInput] = useState('');
-  const { eventId } = useParams();
   const [showCheckedIn, setShowCheckedIn] = useState(false);
+  const { eventId } = useParams();
 
   /*
     Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
@@ -35,20 +42,9 @@ const DummyCheckin = () => {
     filterHandler();
   }, [joinedData, eventId]);
 
-  /*
-    Dynamically re-renders volunteer entries when a user checks them in
-  */
 
   /*
-    This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
-  */
-
-  /*
-    This is the filtered data based on the event chosen in event-card-page
-  */
-
-  /*
-    This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
+    Async function for grabbing all joined data for the specified event
   */
   const setData = async () => {
     // await fetchEvents().then(data => setEventsData(data));
@@ -59,11 +55,14 @@ const DummyCheckin = () => {
       });
       setJoinedData(joinedContainers);
     });
-  };
 
+  };
+  /*
+    useEffect for getting joined data on first render
+  */
   useEffect(() => {
     setData();
-  }, []);
+  });
 
   /*
     This useffect is used for updating the display volunteer data based on user input utilizing fuzzy search
@@ -74,34 +73,13 @@ const DummyCheckin = () => {
     };
     const fuse = new Fuse(searchResults, options);
     const searchResult = fuse.search(input);
-    // console.log('reduceResult', searchResult);
     const reduceResult = searchResult.map(result => result.item);
     setVolunteerResults(reduceResult);
   }, [input, searchResults]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await Backend.get(`events/joined/${eventId}`);
-  //     const volunteers = data.data;
-
-  //     const checkedIn = [];
-  //     const notCheckedIn = [];
-
-  //     volunteers.forEach(volunteer => {
-  //       if (volunteer.is_checked_in) {
-  //         checkedIn.push(volunteer);
-  //       } else {
-  //         notCheckedIn.push(volunteer);
-  //       }
-  //     });
-
-  //     // Update state with categorized volunteers
-  //     setCheckedInVolunteers(checkedIn);
-  //     setNotCheckedInVolunteers(notCheckedIn);
-  //   };
-  //   fetchData();
-  // }, [eventId]);
-
+  /*
+    Sort volunteer results into checked in and not checked in volunteers for rendering
+  */
   const sortEventCardsByCheckIn = useCallback(() => {
     if (volunteerResults.length !== 0) {
       setCheckedInVolunteers(
@@ -111,16 +89,22 @@ const DummyCheckin = () => {
         volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in === false),
       );
     } else {
-      setCheckedInVolunteers([]); // for refreshing when the user deletes the searched entry
+      setCheckedInVolunteers([]);
       setNotCheckedInVolunteers([]);
     }
   }, [volunteerResults]);
 
+  /*
+    update checked in and not checked in volunteers on change to volunteer results - when fuzzy search returns different results
+  */
   useEffect(() => {
     sortEventCardsByCheckIn();
   }, [volunteerResults, sortEventCardsByCheckIn]);
 
-  // dynamically update checkin status
+
+  /*
+    updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
+  */
   const changeIsCheckedIn = async event_data_id => {
     try {
       const response = await Backend.put(`/data/checkin/${event_data_id}`).then(

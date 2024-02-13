@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import 'react';
+import DataEntryModal from '../DataEntryModal/DataEntryModal';
 import {
   Text,
   Flex,
@@ -19,10 +20,8 @@ import {
 } from '@chakra-ui/react';
 import { FaUser, FaClock, FaArrowUp, FaTag } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
-import DataEntryModal from '../DataEntryModal/DataEntryModal';
 
 const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
-
   const RenderVolunteerRow = volunteer => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { first_name, last_name, email, image_url, is_checked_in, event_data_id } = volunteer.props.data;
@@ -45,7 +44,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
           </Text>
         </Td>
         <Td>
-          <Flex>
+          <Flex gap={2}>
             {is_checked_in ? (
               <>
                 <Tag cursor={'pointer'} onClick={onOpen} bg="#D53F8C" color="white">
