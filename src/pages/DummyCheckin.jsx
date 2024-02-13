@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useCallback } from 'react';
 import { Input } from '@chakra-ui/react';
-import { fetchJoinedEvents } from '../utils/fuseUtils';
-import { Container, Flex, Button, Box } from '@chakra-ui/react';
+import { fetchJoinedEventsById } from '../utils/fuseUtils';
+import { Container, Flex, Button, Box, IconButton, FormControl } from '@chakra-ui/react';
 import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
 import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
 import { useParams } from 'react-router-dom';
@@ -43,7 +43,6 @@ const DummyCheckin = () => {
     This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
   */
 
-
   /*
     This is the filtered data based on the event chosen in event-card-page
   */
@@ -53,13 +52,15 @@ const DummyCheckin = () => {
   */
   const setData = async () => {
     // await fetchEvents().then(data => setEventsData(data));
-    await fetchJoinedEvents().then(data => {
+    console.log(eventId)
+    await fetchJoinedEventsById(eventId).then(data => {
       const joinedContainers = data.map(event => {
         return <JoinedDataContainer data={event} key={event.volunteer_id} />;
       });
       setJoinedData(joinedContainers);
     });
   };
+
   useEffect(() => {
     setData();
   }, []);
@@ -100,7 +101,6 @@ const DummyCheckin = () => {
   //   };
   //   fetchData();
   // }, [eventId]);
-
 
   const sortEventCardsByCheckIn = useCallback(() => {
     if (volunteerResults.length !== 0) {
@@ -159,15 +159,17 @@ const DummyCheckin = () => {
             gap: '1vw',
           }}
         >
-          <Input
-            value={input}
-            onChange={event => setInput(event.target.value)}
-            borderRadius="0px"
-            placeholder='Search Volunteer Name (e.g. "John Doe")'
-          />
-          <Button>
-            <SearchIcon />
-          </Button>
+          <FormControl>
+            <Flex>
+              <Input
+                value={input}
+                onChange={event => setInput(event.target.value)}
+                borderRadius="0px"
+                placeholder='Search Volunteer Name (e.g. "John Doe")'
+              />
+              <IconButton icon={<SearchIcon />} ml={1}/>
+            </Flex>
+          </FormControl>
         </Container>
 
         <Button
