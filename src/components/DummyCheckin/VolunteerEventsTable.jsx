@@ -22,17 +22,14 @@ import { BsThreeDots } from 'react-icons/bs';
 import DataEntryModal from '../DataEntryModal/DataEntryModal';
 
 const VolunteerEventsTable = ({ volunteers }) => {
-  console.log(volunteers);
-
   const handleCheckIn = event_data_id => {
     console.log('Check in button clicked', event_data_id);
   };
 
   const RenderVolunteerRow = volunteer => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { first_name, last_name, email, image_url, is_checked_in } = volunteer;
+    const { first_name, last_name, email, image_url, is_checked_in } = volunteer.props.data;
 
-    // lofi says no checkboxes, so names and the name column title has a margin left of 5rem, feel free to remove if checkboxes added
     return (
       <Tr>
         <Td>
