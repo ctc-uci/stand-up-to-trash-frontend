@@ -318,7 +318,7 @@ const EditEvents = ({ id, name, description, location, image_url, date, time, pa
       toast.close(toastIdRef.current);
       toast({
         title: 'Event Updated.',
-        description: `${name} Event Created.`,
+        description: `${eventData.name} Event Created.`,
         status: 'success',
         position: 'bottom-right',
         duration: 9000,
