@@ -132,16 +132,6 @@ const EventCard = ({
 
   return (
     <>
-      <EditEvents
-        id={id}
-        name={name}
-        description={description}
-        location={location}
-        date={date}
-        time={time}
-        image_url={image_url}
-      />
-
       <Box
         width="293px"
         height="250px"
@@ -150,8 +140,6 @@ const EventCard = ({
         flexDir="column"
         justifyContent={'space-between'}
         borderRadius="30px"
-        // as="a"
-        // href="#"
         onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
         background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
         backgroundSize="cover"
@@ -172,7 +160,7 @@ const EventCard = ({
         </Text>
         <Spacer /> */}
 
-        <Box w={'100%'} display="flex" pointerEvents={'none'}>
+        <Box w={'100%'} display="flex" pointerEvents={'none'} position={'relative'} zIndex={-30}>
           {/* Top section, for things like select and edit icons */}
           {showSelect ? (
             <Checkbox
@@ -186,6 +174,19 @@ const EventCard = ({
             />
           ) : null}
         </Box>
+
+        <EditEvents
+          id={id}
+          name={name}
+          description={description}
+          location={location}
+          date={date}
+          time={time}
+          image_url={image_url}
+          parentClose={
+            onClose
+          } /* It's scuffed (opens EditModal AND EventModal due to being parent), but we close the Event modal when we open the EditEvent modal */
+        />
 
         <Box px="27px" py="20px" color="white">
           {/* Bottom section for text, date/time, etc. */}
@@ -269,7 +270,9 @@ EventCard.propTypes = {
 
 export default EventCard;
 
-const EditEvents = ({ id, name, description, location, image_url, date, time }) => {
+const EditEvents = ({ id, name, description, location, image_url, date, time, parentClose }) => {
+  parentClose();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [eventData, setEventData] = useState({
     id: id,
@@ -310,8 +313,7 @@ const EditEvents = ({ id, name, description, location, image_url, date, time }) 
         position: 'bottom-right',
         isClosable: true,
       });
-      const output = await putEvent(eventData);
-      console.log(output);
+      await putEvent(eventData);
 
       toast.close(toastIdRef.current);
       toast({
@@ -346,7 +348,15 @@ const EditEvents = ({ id, name, description, location, image_url, date, time }) 
 
   return (
     <>
-      <Button m="16px" justifySelf="end" ml="auto" border="transparent" onClick={onOpen}>
+      <Button
+        m="16px"
+        justifySelf="end"
+        ml="auto"
+        border="transparent"
+        onClick={onOpen}
+        background={'transparent'}
+        marginBottom={'auto'}
+      >
         <Image src={pencil_icon} width="26px" />
       </Button>
 
@@ -357,17 +367,15 @@ const EditEvents = ({ id, name, description, location, image_url, date, time }) 
           borderRadius={'30px'}
           boxShadow={'0px 6.9760003089904785px 6.9760003089904785px 0px #00000080'}
         >
-          <ModalHeader>
-            <ModalHeader
-              fontSize={'24px'}
-              justify={'center'}
-              align={'center'}
-              fontWeight={'700'}
-              lineHeight={'29.05px'}
-              marginBottom={'-25px'}
-            >
-              Edit Event
-            </ModalHeader>
+          <ModalHeader
+            fontSize={'24px'}
+            justify={'center'}
+            align={'center'}
+            fontWeight={'700'}
+            lineHeight={'29.05px'}
+            marginBottom={'-25px'}
+          >
+            Edit Event
           </ModalHeader>
 
           <ModalBody>
@@ -487,7 +495,5 @@ EditEvents.propTypes = {
   date: PropTypes.string,
   time: PropTypes.string,
   location: PropTypes.string,
-  showSelect: PropTypes.bool,
-  isSelected: PropTypes.bool,
-  handleCheckboxChange: PropTypes.func,
+  parentClose: PropTypes.func,
 };
