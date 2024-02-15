@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { fetchJoinedEventsById } from '../utils/fuseUtils';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
-import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
 import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
 import { useParams } from 'react-router-dom';
 import { Container, Flex, Button, Box, IconButton, FormControl, Input } from '@chakra-ui/react';
@@ -23,14 +22,12 @@ const DummyCheckin = () => {
     Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
   */
   useEffect(() => {
-    console.log('jd', joinedData);
     const filterHandler = () => {
       const filterdData = joinedData.filter(item => {
-        if (item.props.data.event_id == eventId || eventId == -1) {
+        if (item.event_id == eventId || eventId == -1) {
           return true;
         }
       });
-      console.log('fd', filterdData);
       setSearchResults(filterdData);
     };
     filterHandler();
@@ -43,15 +40,14 @@ const DummyCheckin = () => {
     try {
       // Fetching joined events data by ID
       const data = await fetchJoinedEventsById(eventId);
-      console.log('data', data);
 
       // Mapping the data to components
-      const joinedContainers = data.map(event => (
-        <JoinedDataContainer data={event} key={event.volunteer_id} />
-      ));
+      // const joinedContainers = data.map(event => (
+      //   <JoinedDataContainer data={event} key={event.volunteer_id} />
+      // ));
 
       // Setting the joined data
-      setJoinedData(joinedContainers);
+      setJoinedData(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -73,7 +69,7 @@ const DummyCheckin = () => {
       setVolunteerResults(joinedData);
     } else {
       const options = {
-        keys: ['props.data.first_name', 'props.data.last_name', 'props.data.email'],
+        keys: ['first_name', 'last_name', 'email'],
       };
       const fuse = new Fuse(searchResults, options);
       const searchResult = fuse.search(input);
@@ -88,10 +84,10 @@ const DummyCheckin = () => {
   const sortEventCardsByCheckIn = useCallback(() => {
     if (volunteerResults.length !== 0) {
       setCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in === true),
+        volunteerResults.filter(volunteer => volunteer.is_checked_in === true),
       );
       setNotCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in === false),
+        volunteerResults.filter(volunteer => volunteer.is_checked_in === false),
       );
     } else {
       setCheckedInVolunteers([]);

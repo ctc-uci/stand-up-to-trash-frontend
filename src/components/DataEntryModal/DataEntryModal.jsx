@@ -1,6 +1,6 @@
 import Backend from '../../utils/utils';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Modal,
@@ -25,6 +25,7 @@ const DataEntryModal = ({
   lastName,
   volunteerId,
   eventId,
+  unusualItems,
 }) => {
   const [volunteerData, setVolunteerData] = useState({
     volunteer_id: volunteerId,
@@ -45,6 +46,7 @@ const DataEntryModal = ({
   // useEffect(() => {
   //   formatUnusualItems();
   // }, []);
+  useEffect(() => {}), [unusualItems];
 
   // const formatUnusualItems = () => {
   //   if (unusualItems.length != 0 && unusualItems[0] === '{') {
@@ -179,7 +181,7 @@ const DataEntryModal = ({
 };
 
 DataEntryModal.propTypes = {
-  volunteerId: PropTypes.number.isRequired,
+  volunteerId: PropTypes.string.isRequired,
   eventId: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
