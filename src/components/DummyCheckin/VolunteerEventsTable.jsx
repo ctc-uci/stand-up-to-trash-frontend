@@ -24,9 +24,19 @@ import { BsThreeDots } from 'react-icons/bs';
 const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
   const RenderVolunteerRow = volunteer => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { first_name, last_name, email, image_url, is_checked_in, event_data_id } = volunteer.props.data;
+    const {
+      first_name,
+      last_name,
+      email,
+      image_url,
+      is_checked_in,
+      event_data_id,
+      volunteer_id,
+      event_id,
+      id,
+    } = volunteer.props.data;
     return (
-      <Tr>
+      <Tr key={id}>
         <Td>
           <Flex ml="5rem">
             <Image src={image_url} boxSize="4rem" borderRadius="full" />
@@ -56,16 +66,12 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
                   profileImage={image_url}
                   firstName={first_name}
                   lastName={last_name}
-                  volunteerId={volunteer.volunteer_id}
-                  eventId={volunteer.event_id}
+                  volunteerId={volunteer_id}
+                  eventId={event_id}
                 />
               </>
             ) : (
-              <Tag
-                onClick={() => changeIsCheckedIn(event_data_id)}
-                cursor={'pointer'}
-                bg="#95D497"
-              >
+              <Tag onClick={() => changeIsCheckedIn(event_data_id)} cursor={'pointer'} bg="#95D497">
                 Check-In
               </Tag>
             )}
