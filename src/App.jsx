@@ -35,7 +35,7 @@ const Layout = () => {
   );
 };
 
-import { theme } from "./utils/chakraTheme";
+import { theme } from './utils/chakraTheme';
 
 const App = () => {
   return (
