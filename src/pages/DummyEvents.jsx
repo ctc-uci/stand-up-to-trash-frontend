@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import AllData from '../components/DummyEvents/AllData';
-import DeleteEventsModal from '../components/DummyEvents/DeleteEventsModal';
+import ArchiveEventsModal from '../components/DummyEvents/ArchiveEventsModal';
 import EventCard from '../components/DummyEvents/EventCard';
 import RecentEventsCard from '../components/DummyEvents/RecentEventsCard';
 import Sidebar from '../components/DummyEvents/Sidebar';
@@ -43,32 +43,32 @@ const DummyEvents = () => {
   // };
 
   const {
-    isOpen: isDeleteEventModalOpen,
-    onOpen: onDeleteEventModalOpen,
-    onClose: onDeleteEventModalClose,
+    isOpen: isArchiveEventModalOpen,
+    onOpen: onArchiveEventModalOpen,
+    onClose: onArchiveEventModalClose,
   } = useDisclosure();
-  const confirmDelete = async () => {
+  const confirmArchive = async () => {
     for (const id of selectedEvents) {
       try {
-        await Backend.delete(`/events/${id}`);
+        await Backend.put(`/events/${id}/archive`);
         getEvents();
       } catch (error) {
-        console.log(`Error deleting event: ${id}`, error.message);
+        console.log(`Error archiving event: ${id}`, error.message);
       }
     }
-    onDeleteEventModalClose();
+    onArchiveEventModalClose();
     handleGoBackButton();
     toast({
-      title: `Successfully deleted ${selectedEvents.length} event(s)`,
+      title: `Successfully archived ${selectedEvents.length} event(s)`,
       status: 'success',
       duration: 3000,
       isClosable: true,
     });
   };
 
-  const deleteEvents = () => {
+  const archiveEvents = () => {
     if (selectedEvents.length === 0) handleGoBackButton();
-    else onDeleteEventModalOpen();
+    else onArchiveEventModalOpen();
   };
 
   // const showEvent = () => {
@@ -140,23 +140,23 @@ const DummyEvents = () => {
     );
   };
 
-  const DeleteButton = ({ id }) => {
+  const ArchiveButton = ({ id }) => {
     return (
       <>
         <Button
           style={{ backgroundColor: '#FFABAB', borderRadius: '30px' }}
           h="50px"
-          onClick={() => deleteEvents(id)}
+          onClick={() => archiveEvents(id)}
         >
           <Box padding="13px 13px" fontSize="20px" display="inline-flex" gap="10px">
-            Delete Event(s)
+            Archive Event(s)
           </Box>
         </Button>
       </>
     );
   };
 
-  DeleteButton.propTypes = {
+  ArchiveButton.propTypes = {
     id: PropTypes.number,
   };
 
@@ -194,11 +194,11 @@ const DummyEvents = () => {
           <Box justifyContent="space-between" width="930px">
             <Box display="flex" flex-direction="row" justifyContent="space-between">
               {isCreateButton ? <AddEventsModal getEvents={getEvents} /> : <DeselectButton />}
-              {isSelectButton ? <SelectButton /> : <DeleteButton id={32} />}
-              <DeleteEventsModal
-                isOpen={isDeleteEventModalOpen}
-                onClose={onDeleteEventModalClose}
-                confirmDelete={confirmDelete}
+              {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
+              <ArchiveEventsModal
+                isOpen={isArchiveEventModalOpen}
+                onClose={onArchiveEventModalClose}
+                confirmDelete={confirmArchive}
                 events={events.filter(event => selectedEvents.includes(event.id))}
               />
             </Box>
