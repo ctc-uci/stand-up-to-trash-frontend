@@ -99,6 +99,7 @@ const DummyEvents = () => {
             isSelected={selectedEvents.includes(element.id)}
             showSelect={showSelect}
             handleCheckboxChange={handleCheckboxChange}
+            getEvents={getEvents}
           />
         </GridItem>
       ))}

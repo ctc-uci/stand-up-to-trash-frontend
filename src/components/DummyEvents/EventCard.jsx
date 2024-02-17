@@ -116,6 +116,7 @@ const EventCard = ({
   image_url,
   isSelected,
   handleCheckboxChange,
+  getEvents,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -186,6 +187,7 @@ const EventCard = ({
           parentClose={
             onClose
           } /* It's scuffed (opens EditModal AND EventModal due to being parent), but we close the Event modal when we open the EditEvent modal */
+          getEvents={getEvents}
         />
 
         <Box px="27px" py="20px" color="white">
@@ -266,14 +268,23 @@ EventCard.propTypes = {
   showSelect: PropTypes.bool,
   isSelected: PropTypes.bool,
   handleCheckboxChange: PropTypes.func,
+  getEvents: PropTypes.func,
 };
 
 export default EventCard;
 
-const EditEvents = ({ id, name, description, location, image_url, date, time, parentClose }) => {
-  parentClose();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const EditEvents = ({
+  id,
+  name,
+  description,
+  location,
+  image_url,
+  date,
+  time,
+  parentClose,
+  getEvents,
+}) => {
+  const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
   const [eventData, setEventData] = useState({
     id: id,
     name: name,
@@ -290,8 +301,15 @@ const EditEvents = ({ id, name, description, location, image_url, date, time, pa
   const toast = useToast();
   const toastIdRef = useRef();
 
+  // This is so scuffed
+  const handleOpen = async () => {
+    await parentClose();
+    onOpenEdit();
+    await parentClose();
+  };
+
   const handleClose = () => {
-    onClose();
+    onCloseEdit();
     setEventData({
       name: name,
       description: description,
@@ -313,18 +331,20 @@ const EditEvents = ({ id, name, description, location, image_url, date, time, pa
         position: 'bottom-right',
         isClosable: true,
       });
+      console.log(eventData);
       await putEvent(eventData);
+      getEvents();
 
       toast.close(toastIdRef.current);
       toast({
-        title: 'Event Updated.',
-        description: `${eventData.name} Event Created.`,
+        title: 'Event Information Saved.',
+        description: `Your edits have been saved.`,
         status: 'success',
         position: 'bottom-right',
         duration: 9000,
         isClosable: true,
       });
-      onClose();
+      onCloseEdit();
     } catch (err) {
       console.log(err);
       toast({
@@ -353,14 +373,14 @@ const EditEvents = ({ id, name, description, location, image_url, date, time, pa
         justifySelf="end"
         ml="auto"
         border="transparent"
-        onClick={onOpen}
+        onClick={handleOpen}
         background={'transparent'}
         marginBottom={'auto'}
       >
         <Image src={pencil_icon} width="26px" />
       </Button>
 
-      <Modal isOpen={isOpen} onClose={handleClose}>
+      <Modal isOpen={isOpenEdit} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent
           minW={'40%'}
@@ -496,4 +516,5 @@ EditEvents.propTypes = {
   time: PropTypes.string,
   location: PropTypes.string,
   parentClose: PropTypes.func,
+  getEvents: PropTypes.func,
 };
