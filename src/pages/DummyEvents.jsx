@@ -23,8 +23,6 @@ const DummyEvents = () => {
   const getEvents = async () => {
     try {
       const eventsData = await Backend.get('/events');
-      // console.log('poop poop');
-      console.log(eventsData.data);
       setEvents(eventsData.data);
     } catch (err) {
       console.log(`Error getting events: `, err.message);
@@ -101,6 +99,7 @@ const DummyEvents = () => {
             isSelected={selectedEvents.includes(element.id)}
             showSelect={showSelect}
             handleCheckboxChange={handleCheckboxChange}
+            getEvents={getEvents}
           />
         </GridItem>
       ))}

@@ -10,4 +10,9 @@ const postEvent = async eventData => {
   return response.data;
 };
 
-export { getEvents, postEvent };
+const putEvent = async eventData => {
+  const response = await Backend.put(`/events/${eventData.id}`, eventData);
+  return response.data;
+};
+
+export { getEvents, postEvent, putEvent };
