@@ -1,22 +1,10 @@
-import { Flex, Text } from '@chakra-ui/react';
-import { Button } from '@chakra-ui/react';
+import { Flex, Text, Button } from '@chakra-ui/react';
 import { GoogleMapsIcon } from '../Icons/GoogleMapsIcon';
-// import { googleMapsSearch } from '../../utils/googleMapsUtils';
 import { getEventById } from "../../utils/eventsUtils";
-// import Backend from '../../utils/utils';
 
 
 // eslint-disable-next-line react/prop-types
 const GetMapDirectionsButton = ({ eventId }) => {
-    console.log(eventId);
-
-
-    const getDirection = async eventId => {
-      const { location } = await getEventById(eventId);
-      console.log(location);
-      window.open(`https://www.google.com/maps/search/?api=1&query=${location}`)
-    }
-
     return (
     <Flex>
         <Button
@@ -28,7 +16,10 @@ const GetMapDirectionsButton = ({ eventId }) => {
             height: 'Hug (50px)',
             borderRadius: '11px',
         }}
-        onClick={() => getDirection(eventId)}
+        onClick={async () => {
+          const { location } = await getEventById(eventId);
+          window.open(`https://www.google.com/maps/search/?api=1&query=${location}`)
+        }}
         >
             <GoogleMapsIcon marginRight="5px" />
             <Text
@@ -47,8 +38,5 @@ const GetMapDirectionsButton = ({ eventId }) => {
         </Button>
     </Flex>
     );
-
-
 }
-
 export default GetMapDirectionsButton;
