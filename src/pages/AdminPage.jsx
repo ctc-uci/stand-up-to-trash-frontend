@@ -31,13 +31,15 @@ export default function AdminPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
 
+  console.log(selectedAdmin);
+
   useEffect(() => {
     getAdminProfile()
       .then(data => setAdminData(data))
-      .catch(error => console.error("Failed to fetch admin profiles:", error));
+      .catch(error => console.error('Failed to fetch admin profiles:', error));
   }, []);
 
-  const openEditModal = (admin) => {
+  const openEditModal = admin => {
     setSelectedAdmin(admin);
     setIsEditModalOpen(true);
   };
@@ -55,7 +57,7 @@ export default function AdminPage() {
     setIsAddModalOpen(false);
   };
 
-  const adminDataList = adminData.map((admin) => (
+  const adminDataList = adminData.map(admin => (
     <Tr key={admin.id}>
       <Td padding={5}>
         <Flex gap={3} alignItems={'center'}>
@@ -161,12 +163,7 @@ export default function AdminPage() {
         />
       )}
 
-      {isAddModalOpen && (
-        <AddUserModal
-          isOpen={isAddModalOpen}
-          onClose={closeAddModal}
-        />
-      )}
+      {isAddModalOpen && <AddUserModal isOpen={isAddModalOpen} onClose={closeAddModal} />}
     </Flex>
   );
 }

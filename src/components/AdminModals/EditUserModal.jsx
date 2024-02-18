@@ -63,6 +63,10 @@ const EditUserModal = ({
     setValue('profile_image', selectedImage);
   }, [selectedImage, setValue]);
 
+  // const editUserData = async (formData) => {
+  
+  // }
+
 
   const postUserData = async (formData) => {
     // Add the role 'admin' to the formData before sending
@@ -77,7 +81,7 @@ const EditUserModal = ({
   
       // Log the response for debugging
       console.log('Response Status:', response.status);
-      console.log('Response Body:', await response.json());
+      console.log('Response Body:', response.statusText);
   
       // Check if the response status code is in the 2xx range
       if (!response.ok) {
