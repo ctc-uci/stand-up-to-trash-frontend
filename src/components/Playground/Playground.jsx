@@ -33,7 +33,7 @@ const Playground = () => {
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
 
-      <GetMapDirectionsButton eventId={19} />
+      <GetMapDirectionsButton eventId={36} />
 
       <AddEventsModal />
       <Dropzone />
