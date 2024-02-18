@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import {
@@ -14,107 +13,77 @@ import {
     Input,
     Select,
     Center,
-    Image,
     useToast,
     Flex,
-    IconButton,
-    Box,
 } from '@chakra-ui/react';
-import { FiUpload } from 'react-icons/fi'; // Import an upload icon from react-icons
 
-import Backend from '../../utils/utils'; // Ensure this utility is correctly implemented for API calls
+import Backend from '../../utils/utils'; 
+import Dropzone from '../Dropzone'; 
 
 const EditUserModal = ({
-  isOpen,
-  onClose,
-  profileImage,
-  firstName,
-  lastName,
-  email,
-  userId,
-}) => {
-  const [selectedImage, setSelectedImage] = useState(profileImage);
-  const toast = useToast();
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setSelectedImage(e.target.result); // Update the local state with the new image
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const { register, handleSubmit, setValue, formState: { isSubmitting }} = useForm({
-    defaultValues: {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      profile_image: profileImage,
-    },
-  });
-
-  useEffect(() => {
-    register('profile_image');
-  }, [register]);
-
-  useEffect(() => {
-    setValue('profile_image', selectedImage);
-  }, [selectedImage, setValue]);
-
-  // const editUserData = async (formData) => {
+    isOpen,
+    onClose,
+    profileImage,
+    firstName,
+    lastName,
+    email,
+    userId,
+  }) => {
+    const { register, handleSubmit, formState: { isSubmitting } } = useForm({
+      defaultValues: {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        profile_image: profileImage,
+      },
+    });
   
-  // }
-
-
-  const postUserData = async (formData) => {
-    // Add the role 'admin' to the formData before sending
-    const updatedFormData = {
-      ...formData,
-      role: 'admin', // Hardcoding the role as 'admin'
+    const toast = useToast();
+  
+    const setEventData = (data) => {
+      register('profile_image', { value: data.imageUrl });
     };
   
-    try {
-      const endpoint = `/profiles`;
-      const response = await Backend.post(endpoint, updatedFormData);
+    const updateUserData = async (formData) => {
+      const updatedFormData = {
+        ...formData,
+        role: 'admin',
+      };
   
-      // Log the response for debugging
-      console.log('Response Status:', response.status);
-      console.log('Response Body:', response.statusText);
+      try {
+        const endpoint = `/profiles/${userId}`;
+        const response = await Backend.put(endpoint, updatedFormData);
   
-      // Check if the response status code is in the 2xx range
-      if (!response.ok) {
-        throw new Error(`Failed to add new user. Status code: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Failed to update user. Status code: ${response.status}`);
+        }
+  
+        toast({
+          title: "User updated successfully.",
+          description: "The user's details have been updated.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        onClose();
+      } catch (error) {
+        console.error('Error updating user:', error);
+        toast({
+          title: "Error updating user.",
+          description: error.toString(),
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       }
+    };
   
-      toast({
-        title: "User added successfully.",
-        description: "A new user has been added to the database.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-      onClose();
-      // Optionally, refresh the list of users in the parent component
-    } catch (error) {
-      console.error('Error adding new user:', error);
-      toast({
-        title: "Error adding new user.",
-        description: error.toString(),
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
-  
+    const onSubmit = (data, event) => {
+      event.preventDefault();
+      updateUserData(data);
+    };
   
 
-  const onSubmit = (data, event) => {
-    event.preventDefault();
-    postUserData(data);
-  };
 
   const removeUser = async () => {
     try {
@@ -158,56 +127,13 @@ const EditUserModal = ({
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Center position="relative" mt={4} width="470px" height="140px" sx={{ overflow: 'hidden', margin: 'auto' }}>
-                <Image
-                    src={selectedImage || profileImage}
-                    borderRadius="22px"
-                    width="100%"
-                    height="100%"
-                    objectFit="cover"
-                    sx={{
-                    filter: 'blur(4px)', 
-                    }}
+            <Flex direction="column" align="center" justify="center" mb={4}>
+                <Dropzone
+                    setEventData={setEventData}
+                    eventData={{ imageUrl: profileImage }}
+                    setIsLoading={() => {}}
                 />
-
-                <Box
-                    position="absolute"
-                    top="0"
-                    left="0"
-                    right="0"
-                    bottom="0"
-                    bg="blackAlpha.600" 
-                    borderRadius="22px"
-                />
-
-                <IconButton
-                    aria-label="Upload image"
-                    icon={<FiUpload />}
-                    variant="solid"
-                    size="xl"
-                    boxSize="65px" 
-                    position="absolute"
-                    left="50%" 
-                    top="50%" 
-                    transform="translate(-50%, -50%)" 
-                    backgroundColor="white" 
-                    borderRadius="full"
-                    color="black" 
-                    _hover={{
-                    bg: 'white', 
-                    transform: 'translate(-50%, -50%) scale(1.1)', 
-                    }}
-                    onClick={() => document.getElementById('file-upload').click()}
-                />
-
-                <input
-                    type="file"
-                    id="file-upload"
-                    style={{ display: 'none' }}
-                    onChange={handleImageChange}
-                    accept="image/*"
-                />
-            </Center>
+            </Flex>
 
             <Flex justify="space-between" mt={4}>
               <FormControl pr={2} w="50%">
