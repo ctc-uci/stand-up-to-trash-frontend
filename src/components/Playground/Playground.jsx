@@ -4,6 +4,7 @@ import Dropzone from '../Dropzone.tsx';
 import { Flex } from '@chakra-ui/react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
+import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
 
 const auth = getAuth();
 
@@ -24,13 +25,15 @@ const Playground = () => {
       flexDirection={'column'}
       justifyContent={'center'}
       alignItems={'center'}
-      backgroundColor={'pink'}
+      backgroundColor={'#FFFFFF'}
     >
       <p>Use this page to test out the look of any of your components!</p>
       <p>{user?.email}</p>
 
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
+
+      <GetMapDirectionsButton eventId={88} />
 
       <AddEventsModal />
       <Dropzone />
