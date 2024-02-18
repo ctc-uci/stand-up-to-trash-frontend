@@ -1,4 +1,4 @@
-import { createIcon, extendTheme } from '@chakra-ui/react';
+import { createIcon } from '@chakra-ui/react';
 
 const GoogleMapsIcon = createIcon({
     displayName: 'GoogleMapsIcon',
@@ -19,10 +19,4 @@ const GoogleMapsIcon = createIcon({
     ),
 });
 
-const theme = extendTheme({
-  icons: {
-    GoogleMapsIcon
-  },
-});
-
-export { theme, GoogleMapsIcon };
+export { GoogleMapsIcon };
