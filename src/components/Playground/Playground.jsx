@@ -1,5 +1,6 @@
 import ExportButton from '../ExportCSVButton/ExportButton';
 import AddEventsModal from '../AddEventsModal/AddEventsModal';
+import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import Dropzone from '../Dropzone.tsx';
 import { Flex } from '@chakra-ui/react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -37,6 +38,7 @@ const Playground = () => {
 
       <AddEventsModal />
       <Dropzone />
+      <Leaderboard />
     </Flex>
   );
 };
