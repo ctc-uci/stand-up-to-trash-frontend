@@ -22,7 +22,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-const RegisterGuestModal = ({ isOpen, onClose }) => {
+const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
   const volunteerObject = yup.object().shape({
     first_name: yup.string().required('First name is required'),
     last_name: yup.string().required('Last name is required'),
@@ -55,27 +55,42 @@ const RegisterGuestModal = ({ isOpen, onClose }) => {
         last_name: formData.last_name,
         email: formData.email,
       };
-      await Backend.post('/profiles/guest', volunteer);
+      const res = await Backend.post('/profiles/guest', volunteer);
+      onClose();
+      return res.data;
+    } catch (error) {
+      console.error('Error registering new volunteer:', error.message);
+    }
+  };
+
+  const postEventData = async (vol_id, event_id) => {
+    try {
+      await Backend.post('/data/guestCheckin', {
+        volunteer_id: vol_id,
+        event_id: event_id,
+      });
       onClose();
     } catch (error) {
       console.error('Error registering new volunteer:', error.message);
     }
   };
 
-  const noReload = (data, event) => {
+  const noReload = async (data, event) => {
     event.preventDefault();
-    volunteerObject
-      .validate(data)
-      .then(function (value) {
-        console.log(value);
-        postVolunteerData(value);
-      })
-      .catch(function (err) {
-        alert(err);
-      });
-  };
+    try {
+      const validatedData = await volunteerObject.validate(data);
+      const res = await postVolunteerData(validatedData);
 
-  console.log(volunteerData);
+      if (res) {
+        await postEventData(res.id, eventId);
+      } else {
+        console.log('Error registering new volunteer:', res.message);
+      }
+    } catch (err) {
+      console.error(err);
+      console.log(err.message);
+    }
+  };
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -164,6 +179,7 @@ const RegisterGuestModal = ({ isOpen, onClose }) => {
 RegisterGuestModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  eventId: PropTypes.number.isRequired,
 };
 
 export default RegisterGuestModal;

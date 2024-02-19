@@ -204,7 +204,7 @@ const DummyCheckin = () => {
             + register new volunteer
           </Button>
         </Flex>
-        <RegisterGuestModal isOpen={isOpen} onClose={onClose} />
+        <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
 
         {showCheckedIn &&
           (checkedInVolunteers.length != 0 ? (
