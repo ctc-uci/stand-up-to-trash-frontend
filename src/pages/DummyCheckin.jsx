@@ -195,7 +195,6 @@ const DummyCheckin = () => {
           <Button
             style={{
               borderRadius: '60px',
-              backgroundColor: `${showCheckedIn ? '#696969' : '#EFEFEF'}`,
             }}
             marginLeft="1vw"
             marginTop="3vh"

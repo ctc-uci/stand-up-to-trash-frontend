@@ -1,8 +1,9 @@
 import Backend from '../../utils/utils';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup'; // Corrected import
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Modal,
   ModalOverlay,
@@ -23,11 +24,21 @@ import {
 } from '@chakra-ui/react';
 
 const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
+  const [waiverText, setWaiverText] = useState('');
+
+  useEffect(() => {
+    const getWaiverText = async () => {
+      const waiverTextData = await Backend.get(`/events/${eventId}`);
+      setWaiverText(waiverTextData.data.waiver);
+    };
+    getWaiverText();
+  }, [eventId]);
+
   const volunteerObject = yup.object().shape({
     first_name: yup.string().required('First name is required'),
     last_name: yup.string().required('Last name is required'),
-    email: yup.string().email('Invalid email format').required('Email is required'),
-    wavier: yup
+    email: yup.string().email('Invalid email format').nullable(),
+    waiver: yup
       .boolean()
       .oneOf([true], 'You must accept the terms and conditions')
       .required('Waiver is required'),
@@ -36,8 +47,8 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
   const [volunteerData] = useState({
     first_name: '',
     last_name: '',
-    email: '',
-    wavier: false,
+    email: null,
+    waiver: false,
   });
 
   const {
@@ -46,7 +57,11 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
     onClose: onAgreementClose,
   } = useDisclosure();
 
-  const { register, handleSubmit } = useForm({ defaultValues: volunteerData });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues: volunteerData, resolver: yupResolver(volunteerObject) });
 
   const postVolunteerData = async formData => {
     try {
@@ -78,6 +93,10 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
   const noReload = async (data, event) => {
     event.preventDefault();
     try {
+      if (data.email === '') {
+        data.email = null;
+      }
+      
       const validatedData = await volunteerObject.validate(data);
       const res = await postVolunteerData(validatedData);
 
@@ -111,7 +130,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
                     gap={6} // spacing between grid items
                   >
                     <GridItem colSpan={1}>
-                      <Text fontWeight={'bold'}>First Name</Text>
+                      <Text fontWeight={'bold'}>First Name*</Text>
                       <Input
                         marginTop={5}
                         placeholder="Johnny"
@@ -119,9 +138,10 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
                         {...register('first_name')}
                         type="string"
                       />
+                      {errors.first_name && <Text color="red">{errors.first_name.message}</Text>}
                     </GridItem>
                     <GridItem colSpan={1}>
-                      <Text fontWeight={'bold'}>Last Name</Text>
+                      <Text fontWeight={'bold'}>Last Name*</Text>
                       <Input
                         marginTop={5}
                         placeholder="Appleseed"
@@ -129,6 +149,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
                         {...register('last_name')}
                         type="string"
                       />
+                      {errors.last_name && <Text color="red">{errors.last_name.message}</Text>}
                     </GridItem>
                     <GridItem colSpan={1}>
                       <Text fontWeight={'bold'}>Email</Text>
@@ -139,15 +160,17 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
                         {...register('email')}
                         type="string"
                       />
+                      {errors.email && <Text color="red">{errors.email.message}</Text>}
                     </GridItem>
                     <GridItem colSpan={1}>
-                      <Text fontWeight={'bold'}>Wavier</Text>
-                      <Checkbox {...register('wavier')}>
+                      <Text fontWeight={'bold'}>Waiver*</Text>
+                      <Checkbox {...register('waiver')}>
                         I agree to the{' '}
                         <Link color="teal.500" onClick={onAgreementOpen}>
                           terms and conditions
                         </Link>
                       </Checkbox>
+                      {errors.waiver && <Text color="red">{errors.waiver.message}</Text>}
                     </GridItem>
                   </Grid>
                 </FormControl>
@@ -169,7 +192,9 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
         <ModalContent>
           <ModalHeader>Terms and Conditions</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>bruh</ModalBody>
+          <ModalBody maxHeight="80vh" overflowY="auto">
+            {waiverText}
+          </ModalBody>
         </ModalContent>
       </Modal>
     </>
@@ -179,7 +204,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
 RegisterGuestModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  eventId: PropTypes.number.isRequired,
+  eventId: PropTypes.string.isRequired,
 };
 
 export default RegisterGuestModal;
