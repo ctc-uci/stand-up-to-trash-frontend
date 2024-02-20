@@ -5,8 +5,19 @@ import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
 import { useParams } from 'react-router-dom';
-import { Container, Flex, Button, Box, IconButton, FormControl, Input } from '@chakra-ui/react';
+import {
+  Container,
+  Flex,
+  Button,
+  Box,
+  IconButton,
+  FormControl,
+  Input,
+  useDisclosure,
+  Spacer,
+} from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
+import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
 
 const DummyCheckin = () => {
   const [joinedData, setJoinedData] = useState([]);
@@ -16,7 +27,10 @@ const DummyCheckin = () => {
   const [notCheckedInVolunteers, setNotCheckedInVolunteers] = useState([]);
   const [input, setInput] = useState('');
   const [showCheckedIn, setShowCheckedIn] = useState(false);
+
   const { eventId } = useParams();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   /*
     Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
@@ -154,28 +168,42 @@ const DummyCheckin = () => {
           </FormControl>
         </Container>
 
-        <Button
-          style={{
-            borderRadius: '60px',
-            backgroundColor: `${showCheckedIn ? '#EFEFEF' : '#696969'}`,
-          }}
-          marginLeft="1vw"
-          marginTop="3vh"
-          onClick={() => setShowCheckedIn(false)}
-        >
-          not checked-in
-        </Button>
-        <Button
-          style={{
-            borderRadius: '60px',
-            backgroundColor: `${showCheckedIn ? '#696969' : '#EFEFEF'}`,
-          }}
-          marginLeft="1vw"
-          marginTop="3vh"
-          onClick={() => setShowCheckedIn(true)}
-        >
-          checked-in
-        </Button>
+        <Flex>
+          <Button
+            style={{
+              borderRadius: '60px',
+              backgroundColor: `${showCheckedIn ? '#EFEFEF' : '#696969'}`,
+            }}
+            marginLeft="1vw"
+            marginTop="3vh"
+            onClick={() => setShowCheckedIn(false)}
+          >
+            not checked-in
+          </Button>
+          <Button
+            style={{
+              borderRadius: '60px',
+              backgroundColor: `${showCheckedIn ? '#696969' : '#EFEFEF'}`,
+            }}
+            marginLeft="1vw"
+            marginTop="3vh"
+            onClick={() => setShowCheckedIn(true)}
+          >
+            checked-in
+          </Button>
+          <Spacer />
+          <Button
+            style={{
+              borderRadius: '60px',
+            }}
+            marginLeft="1vw"
+            marginTop="3vh"
+            onClick={onOpen}
+          >
+            + register new volunteer
+          </Button>
+        </Flex>
+        <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
 
         {showCheckedIn &&
           (checkedInVolunteers.length != 0 ? (
