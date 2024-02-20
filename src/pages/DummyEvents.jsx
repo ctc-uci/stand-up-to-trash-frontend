@@ -50,7 +50,7 @@ const DummyEvents = () => {
   const confirmArchive = async () => {
     for (const id of selectedEvents) {
       try {
-        await Backend.put(`/events/${id}/archive`);
+        await Backend.put(`/events/archive/${id}`);
         getEvents();
       } catch (error) {
         console.log(`Error archiving event: ${id}`, error.message);
@@ -198,7 +198,7 @@ const DummyEvents = () => {
               <ArchiveEventsModal
                 isOpen={isArchiveEventModalOpen}
                 onClose={onArchiveEventModalClose}
-                confirmDelete={confirmArchive}
+                confirmArchive={confirmArchive}
                 events={events.filter(event => selectedEvents.includes(event.id))}
               />
             </Box>

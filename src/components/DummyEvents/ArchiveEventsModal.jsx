@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 
-const ArchiveEventsModal = ({ isOpen, onClose, events, confirmDelete }) => {
+const ArchiveEventsModal = ({ isOpen, onClose, events, confirmArchive }) => {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -30,7 +30,7 @@ const ArchiveEventsModal = ({ isOpen, onClose, events, confirmDelete }) => {
           </ModalBody>
           <ModalFooter>
             <Button onClick={onClose}>Cancel</Button>
-            <Button colorScheme="red" ml={3} onClick={confirmDelete}>
+            <Button colorScheme="red" ml={3} onClick={confirmArchive}>
               Archive
             </Button>
           </ModalFooter>
@@ -43,7 +43,7 @@ const ArchiveEventsModal = ({ isOpen, onClose, events, confirmDelete }) => {
 ArchiveEventsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  confirmDelete: PropTypes.func.isRequired,
+  confirmArchive: PropTypes.func.isRequired,
   events: PropTypes.array.isRequired,
 };
 
