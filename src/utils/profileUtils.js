@@ -25,4 +25,9 @@ const getProfileById = async id => {
   return response.data;
 };
 
-export { getProfile, getAdminProfile, postProfile, deleteProfile, getProfileById };
+const updateProfile = async (id, profile) => {
+  const response = await Backend.put(`/profiles/${id}`, profile);
+  return response.data;
+};
+
+export { getProfile, getAdminProfile, postProfile, deleteProfile, getProfileById, updateProfile };

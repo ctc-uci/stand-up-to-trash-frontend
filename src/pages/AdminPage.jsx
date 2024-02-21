@@ -31,8 +31,6 @@ export default function AdminPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
 
-  console.log(selectedAdmin);
-
   useEffect(() => {
     getAdminProfile()
       .then(data => setAdminData(data))
@@ -46,7 +44,7 @@ export default function AdminPage() {
 
   const closeEditModal = () => {
     setIsEditModalOpen(false);
-    setSelectedAdmin(null); // Clear the selected admin data
+    setSelectedAdmin(null);
   };
 
   const openAddModal = () => {
@@ -64,7 +62,7 @@ export default function AdminPage() {
           <Image
             boxSize="60px"
             borderRadius={'full'}
-            src="https://i.pinimg.com/1200x/00/70/16/00701602b0eac0390b3107b9e2a665e0.jpg"
+            src={admin.image_url || 'https://via.placeholder.com/150'}
           />
           <Flex flexDir={'column'} gap={2}>
             <Text fontSize={'md'} fontWeight={'500'}>
@@ -96,12 +94,12 @@ export default function AdminPage() {
   ));
 
   return (
-    <Flex flexDir={'column'} w={'100vw'} padding={'2%'} gap={'1em'}>
+    <Flex flexDir={'column'} padding={'2%'} gap={'1em'} backgroundColor={'#C8E6FF'}>
       <Flex justify={'space-between'}>
         <Text fontFamily={'Poppins'} fontSize={'2.3rem'} fontWeight={500}>
           Administrators
         </Text>
-        <Button borderRadius={20} onClick={openAddModal}>
+        <Button borderRadius={20} onClick={openAddModal} backgroundColor={'#EFEFEF'}>
           + Add Admin
         </Button>
       </Flex>
@@ -111,18 +109,28 @@ export default function AdminPage() {
           <InputLeftElement>
             <SearchIcon />
           </InputLeftElement>
-          <Input size={'lg'} placeholder="Search Administrator Name (e.g. “Amy Santiago”)"></Input>
+          <Input
+            size={'lg'}
+            placeholder="Search Administrator Name (e.g. “Amy Santiago”)"
+            backgroundColor={'white'}
+          ></Input>
         </InputGroup>
-        <IconButton background={'#2D558A'} color="white" icon={<SearchIcon />} size={'lg'} />
+        <IconButton
+          background={'#2D558A'}
+          color="white"
+          icon={<SearchIcon />}
+          size={'lg'}
+          w={'4rem'}
+        />
       </Flex>
 
       <TableContainer>
         <Table
           size="sm"
           colorScheme="gray"
-          border="1px solid #E2E8F0"
           borderRadius={'lg'}
           overflow={'hidden'}
+          backgroundColor={'white'}
         >
           <Thead backgroundColor={'#E2E8F0'} h={'3em'}>
             <Tr>
@@ -155,15 +163,15 @@ export default function AdminPage() {
         <EditUserModal
           isOpen={isEditModalOpen}
           onClose={closeEditModal}
-          profileImage={selectedAdmin.profile_image}
-          firstName={selectedAdmin.first_name}
-          lastName={selectedAdmin.last_name}
-          email={selectedAdmin.email}
-          userId={selectedAdmin.id}
+          selectedAdmin={selectedAdmin}
+          setAdminData={setAdminData}
+          adminData={adminData}
         />
       )}
 
-      {isAddModalOpen && <AddUserModal isOpen={isAddModalOpen} onClose={closeAddModal} />}
+      {isAddModalOpen && (
+        <AddUserModal isOpen={isAddModalOpen} onClose={closeAddModal} setAdminData={setAdminData} />
+      )}
     </Flex>
   );
 }

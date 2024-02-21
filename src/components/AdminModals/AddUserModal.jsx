@@ -1,135 +1,180 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
 import {
+  Flex,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
+  ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  Button,
+  Spinner,
   FormControl,
   FormLabel,
   Input,
+  Button,
   Select,
-  Center,
   useToast,
-  Flex,
+  ModalCloseButton,
 } from '@chakra-ui/react';
-import Backend from '../../utils/utils';
-import Dropzone from '../Dropzone'; // Make sure the path is correct based on your project structure
+import Dropzone from '../Dropzone.tsx';
+import { useState} from 'react';
+import { postProfile } from '../../utils/profileUtils.js';
+import PropTypes from 'prop-types';
 
-const AddUserModal = ({ isOpen, onClose }) => {
-  const [selectedImage, setSelectedImage] = useState('');
+
+export default function AddUserModal({ isOpen, onClose, setAdminData }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState({
+    first_name: '',
+    last_name: '',
+    role: 'admin',
+    email: '',
+    imageUrl: '',
+  });
   const toast = useToast();
-  const { register, handleSubmit, formState: { isSubmitting } } = useForm();
 
-  const postUserData = async (formData) => {
-    const updatedFormData = {
-      ...formData,
-      profile_image: selectedImage, // Use the image URL from the Dropzone component
-      role: 'admin',
-    };
-
+  const handleSubmit = async () => {
     try {
-      const endpoint = `/profiles`;
-      const response = await Backend.post(endpoint, updatedFormData);
-
-      if (!response.ok) {
-        throw new Error(`Failed to add user. Status code: ${response.status}`);
-      }
+      await postProfile(userData);
 
       toast({
-        title: "User added successfully.",
-        description: "A new user has been added.",
-        status: "success",
-        duration: 5000,
+        title: 'New administrator added.',
+        description: 'New administrator added.',
+        position: 'bottom-right',
+        status: 'success',
+        duration: 9000,
         isClosable: true,
       });
+
+      setAdminData(prev => [...prev, userData]);
+      setUserData({
+        first_name: '',
+        last_name: '',
+        role: 'admin',
+        email: '',
+      });
+
       onClose();
-    } catch (error) {
-      console.error('Error adding user:', error);
+    } catch (err) {
+      console.log('Error:', err);
       toast({
-        title: "Error adding user.",
-        description: error.toString(),
-        status: "error",
-        duration: 5000,
+        title: 'Error creating new administrator.',
+        description: 'There was an error creating new administator. Please try again.',
+        status: 'error',
+        position: 'bottom-right',
+        duration: 9000,
         isClosable: true,
       });
     }
   };
 
-  const onSubmit = (data, event) => {
-    event.preventDefault();
-    postUserData(data);
-  };
+  const isSubmittable =
+    userData.first_name === '' || userData.last_name === '' || userData.email === '';
+
+  console.log('userData:', userData);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
-      <ModalOverlay />
-      <ModalContent sx={{ borderRadius: '22px' }}>
-        <ModalHeader align="center" sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Add New User</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Flex direction="column" align="center" justify="center" gap="20px">
-              <Dropzone
-                setEventData={(data) => setSelectedImage(data.imageUrl)}
-                eventData={{ imageUrl: selectedImage }}
-                setIsLoading={() => {}}
+    <Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent
+          minW={'40%'}
+          borderRadius={'30px'}
+          boxShadow={'0px 6.9760003089904785px 6.9760003089904785px 0px #00000080'}
+        >
+          <ModalHeader>
+            <ModalHeader
+              fontSize={'24px'}
+              justify={'center'}
+              align={'center'}
+              fontWeight={'700'}
+              lineHeight={'29.05px'}
+              marginBottom={'-25px'}
+            >
+              Add New User
+            </ModalHeader>
+            <ModalCloseButton />
+          </ModalHeader>
+
+          <ModalBody>
+            <FormControl>
+              <Flex flexDir={'column'} align={'center'} justify={'center'}>
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  <Dropzone
+                    height={'141px'}
+                    setIsLoading={setIsLoading}
+                    setData={setUserData}
+                    data={userData}
+                  />
+                )}
+              </Flex>
+
+              <Flex flexDirection={'row'}>
+                <Flex flexDirection={'column'} width={'100%'} paddingRight={'10px'}>
+                  <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                    First Name
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Johnny"
+                    onChange={e => setUserData({ ...userData, first_name: e.target.value })}
+                  />
+                </Flex>
+                <Flex flexDirection={'column'} width={'100%'} paddingLeft={'10px'}>
+                  <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                    Last Name
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Appleseed"
+                    onChange={e => setUserData({ ...userData, last_name: e.target.value })}
+                  />
+                </Flex>
+              </Flex>
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                Email
+              </FormLabel>
+              <Input
+                type="email"
+                placeholder="johnny@gmail.com"
+                onChange={e => setUserData({ ...userData, email: e.target.value })}
               />
-              <FormControl>
-                <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>First Name</FormLabel>
-                <Input {...register('first_name')} />
-              </FormControl>
-              <FormControl>
-                <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Last Name</FormLabel>
-                <Input {...register('last_name')} />
-              </FormControl>
-              <FormControl>
-                <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Email</FormLabel>
-                <Input {...register('email')} type="email" />
-              </FormControl>
-              <FormControl>
-                  <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Add Role</FormLabel>
-                  <Input value="admin" disabled={true} />
-              </FormControl>
-              <FormControl>
-                <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Account Type</FormLabel>
-                <Select {...register('account_type')}>
-                  <option value="admin">Admin</option>
-                </Select>
-              </FormControl>
-              <Center p={8} gap={4} width="full" justifyContent="center">
-                  <Button
-                      type="submit"
-                      sx={{
-                      width: "full", 
-                      borderRadius: "15px", 
-                      backgroundColor: '#95D497',
-                      color: 'black',
-                      fontWeight: 'bold',
-                      _hover: {
-                          bg: 'green.200',
-                      },
-                      }}
-                      isLoading={isSubmitting}
-                  >
-                      Send Email
-                  </Button>
-              </Center>
-            </Flex>
-          </form>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                Add Role
+              </FormLabel>
+              <Input type="text" placeholder="Admin" isDisabled />
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                Set Account Type
+              </FormLabel>
+              <Select
+                value={userData.role}
+                onChange={e => setUserData({ ...userData, role: e.target.value })}
+              >
+                <option value="admin">Admin</option>
+              </Select>
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter justifyContent={'center'}>
+            <Button
+              backgroundColor={'#95D497'}
+              borderRadius={'30px'}
+              isDisabled={isSubmittable}
+              w={'100%'}
+              onClick={handleSubmit}
+            >
+              Send Email
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Flex>
   );
-};
+}
 
 AddUserModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  setAdminData: PropTypes.func.isRequired,
 };
-
-export default AddUserModal;

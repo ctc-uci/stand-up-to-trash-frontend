@@ -1,220 +1,226 @@
-import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalCloseButton,
-    Button,
-    FormControl,
-    FormLabel,
-    Input,
-    Select,
-    Center,
-    useToast,
-    Flex,
+  Flex,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  Spinner,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Select,
+  useToast,
+  ModalCloseButton,
 } from '@chakra-ui/react';
+import Dropzone from '../Dropzone.tsx';
+import { useState } from 'react';
+import { updateProfile, deleteProfile } from '../../utils/profileUtils.js';
+import PropTypes from 'prop-types';
 
-import Backend from '../../utils/utils'; 
-import Dropzone from '../Dropzone'; 
+export default function EditUserModal({ isOpen, onClose, selectedAdmin, setAdminData, adminData }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState({
+    first_name: selectedAdmin.first_name,
+    last_name: selectedAdmin.last_name,
+    role: 'admin',
+    email: selectedAdmin.email,
+    imageUrl: selectedAdmin.image_url,
+  });
+  const toast = useToast();
 
-const EditUserModal = ({
-    isOpen,
-    onClose,
-    profileImage,
-    firstName,
-    lastName,
-    email,
-    userId,
-  }) => {
-    const { register, handleSubmit, formState: { isSubmitting } } = useForm({
-      defaultValues: {
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        profile_image: profileImage,
-      },
-    });
-  
-    const toast = useToast();
-  
-    const setEventData = (data) => {
-      register('profile_image', { value: data.imageUrl });
-    };
-  
-    const updateUserData = async (formData) => {
-      const updatedFormData = {
-        ...formData,
-        role: 'admin',
-      };
-  
-      try {
-        const endpoint = `/profiles/${userId}`;
-        const response = await Backend.put(endpoint, updatedFormData);
-  
-        if (!response.ok) {
-          throw new Error(`Failed to update user. Status code: ${response.status}`);
-        }
-  
-        toast({
-          title: "User updated successfully.",
-          description: "The user's details have been updated.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-        onClose();
-      } catch (error) {
-        console.error('Error updating user:', error);
-        toast({
-          title: "Error updating user.",
-          description: error.toString(),
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-      }
-    };
-  
-    const onSubmit = (data, event) => {
-      event.preventDefault();
-      updateUserData(data);
-    };
-  
+  const editAdminDataArray = () => {
+    const arrayIndex = adminData.findIndex(admin => admin.id === selectedAdmin.id);
 
+    if (arrayIndex !== -1) {
+      const newAdminDataArray = [
+        ...adminData.slice(0, arrayIndex),
+        currentUserData,
+        ...adminData.slice(arrayIndex + 1),
+      ];
 
-  const removeUser = async () => {
+      return newAdminDataArray;
+    }
+  };
+
+  const handleSubmit = async () => {
     try {
-      const endpoint = `/profiles/${userId}`;
-      const response = await Backend.delete(endpoint); // Replace with your actual API call logic
-
-      if (response.status !== 200) {
-        throw new Error('Failed to delete user');
-      }
-
+      await updateProfile(selectedAdmin.id, currentUserData);
       toast({
-        title: "User removed successfully.",
-        description: "The user has been removed from the database.",
-        status: "success",
-        duration: 5000,
+        title: 'Changes saved.',
+        description: 'Changes saved.',
+        position: 'bottom-right',
+        status: 'success',
+        duration: 9000,
         isClosable: true,
       });
-
-      onClose(); // Close the modal after successful deletion
-      // Optionally, refresh the list of users in the parent component
-
-    } catch (error) {
-      console.error('Error removing user:', error);
+      setAdminData(editAdminDataArray());
+      onClose();
+    } catch (err) {
+      console.log(err);
       toast({
-        title: "Error removing user.",
-        description: error.toString(),
-        status: "error",
-        duration: 5000,
+        title: 'Error updating administrator.',
+        description: 'There was an error updating administator. Please try again.',
+        status: 'error',
+        position: 'bottom-right',
+        duration: 9000,
         isClosable: true,
       });
     }
   };
 
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
-      <ModalOverlay />
-      <ModalContent sx={{
-      borderRadius: '22px', 
-      }}>
-        <ModalHeader align="center" sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Edit Admin</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Flex direction="column" align="center" justify="center" mb={4}>
-                <Dropzone
-                    setEventData={setEventData}
-                    eventData={{ imageUrl: profileImage }}
-                    setIsLoading={() => {}}
-                />
-            </Flex>
+  const handleDelete = async () => {
+    try {
+      await deleteProfile(selectedAdmin.id);
+      toast({
+        title: 'Administrator removed.',
+        description: 'Administrator removed.',
+        position: 'bottom-right',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+      setAdminData(prev => prev.filter(admin => admin.id !== selectedAdmin.id));
+      onClose();
+    } catch (err) {
+      console.log(err);
+      toast({
+        title: 'Error removing administrator.',
+        description: 'There was an error removing administator. Please try again.',
+        status: 'error',
+        position: 'bottom-right',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
 
-            <Flex justify="space-between" mt={4}>
-              <FormControl pr={2} w="50%">
-                <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>First Name</FormLabel>
-                <Input {...register('first_name')} />
-              </FormControl>
-              <FormControl pl={2} w="50%">
-                <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Last Name</FormLabel>
-                <Input {...register('last_name')} />
-              </FormControl>
-            </Flex>
-            <FormControl mt={4}>
-              <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Email</FormLabel>
-              <Input {...register('email')} type="email" />
-            </FormControl>
-            {/* Role is not editable and set to admin by default */}
-            <FormControl mt={4}>
-                <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Add Role</FormLabel>
-                <Input value="admin" disabled={true} />
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Account Type</FormLabel>
-              <Select {...register('account_type')}>
+  console.log('currentUserData:', currentUserData);
+
+  return (
+    <Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent
+          minW={'40%'}
+          borderRadius={'30px'}
+          boxShadow={'0px 6.9760003089904785px 6.9760003089904785px 0px #00000080'}
+        >
+          <ModalHeader>
+            <ModalHeader
+              fontSize={'24px'}
+              justify={'center'}
+              align={'center'}
+              fontWeight={'700'}
+              lineHeight={'29.05px'}
+              marginBottom={'-25px'}
+            >
+              Edit Admin
+            </ModalHeader>
+            <ModalCloseButton />
+          </ModalHeader>
+
+          <ModalBody>
+            <FormControl>
+              <Flex flexDir={'column'} align={'center'} justify={'center'}>
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  <Dropzone
+                    height={'141px'}
+                    setIsLoading={setIsLoading}
+                    setData={setCurrentUserData}
+                    data={currentUserData}
+                  />
+                )}
+              </Flex>
+
+              <Flex flexDirection={'row'}>
+                <Flex flexDirection={'column'} width={'100%'} paddingRight={'10px'}>
+                  <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                    First Name
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Johnny"
+                    value={currentUserData.first_name}
+                    onChange={e =>
+                      setCurrentUserData({ ...currentUserData, first_name: e.target.value })
+                    }
+                  />
+                </Flex>
+                <Flex flexDirection={'column'} width={'100%'} paddingLeft={'10px'}>
+                  <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                    Last Name
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Appleseed"
+                    value={currentUserData.last_name}
+                    onChange={e =>
+                      setCurrentUserData({ ...currentUserData, last_name: e.target.value })
+                    }
+                  />
+                </Flex>
+              </Flex>
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                Email
+              </FormLabel>
+              <Input
+                type="email"
+                placeholder="johnny@gmail.com"
+                value={currentUserData.email}
+                onChange={e => setCurrentUserData({ ...currentUserData, email: e.target.value })}
+              />
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                Add Role
+              </FormLabel>
+              <Input type="text" placeholder="Admin" isDisabled />
+              <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
+                Set Account Type
+              </FormLabel>
+              <Select
+                value={currentUserData.role}
+                onChange={e => setCurrentUserData({ ...currentUserData, role: e.target.value })}
+              >
                 <option value="admin">Admin</option>
               </Select>
             </FormControl>
-            <Center p={8} gap={4} width="full" justifyContent="center">
-                <Flex gap={4} width="full" justifyContent="space-between">
-                    <Button
-                        colorScheme="red"
-                        variant="outline"
-                        borderColor="red.500"
-                        color="red.500"
-                        sx={{
-                        width: "452px", // Width as per requirement
-                        height: "37px", // Height as per requirement
-                        borderRadius: "15px", // Border radius as per requirement
-                        borderWidth: "4px", // Thick border as per the image
-                        fontWeight: "bold",
-                        fontFamily: 'Poppins',
-                        }}
-                        isLoading={isSubmitting}
-                        onClick={removeUser}
-                    >
-                    Remove
-                    </Button>
-                    <Button
-                        type="submit"
-                        sx={{
-                        width: "475px", // Width as per requirement
-                        height: "37px", // Height as per requirement
-                        borderRadius: "15px", // Border radius as per requirement
-                        backgroundColor: '#95D497',
-                        color: 'black',
-                        fontWeight: 'bold',
-                        _hover: {
-                            bg: 'green.200',
-                        },
-                        fontFamily: 'Poppins',
-                        }}
-                        isLoading={isSubmitting}
-                    >
-                        Save User
-                    </Button>
-                </Flex>
-            </Center>
-          </form>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+          </ModalBody>
+
+          <ModalFooter justifyContent={'center'} gap={3}>
+            <Button
+              borderColor={'red'}
+              borderWidth={2}
+              borderRadius={'30px'}
+              backgroundColor={'white'}
+              color={'red'}
+              w={'50%'}
+              onClick={handleDelete}
+            >
+              Remove User
+            </Button>
+            <Button
+              backgroundColor={'#95D497'}
+              borderRadius={'30px'}
+              w={'50%'}
+              onClick={handleSubmit}
+            >
+              Save User
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Flex>
   );
-};
+}
 
 EditUserModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  profileImage: PropTypes.string,
-  firstName: PropTypes.string.isRequired,
-  lastName: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  userId: PropTypes.number.isRequired,
+  selectedAdmin: PropTypes.object.isRequired,
+  setAdminData: PropTypes.func.isRequired,
+  adminData: PropTypes.array.isRequired,
 };
-
-export default EditUserModal;
