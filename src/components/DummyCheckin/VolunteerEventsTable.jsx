@@ -64,7 +64,6 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
               <DataEntryModal
                 isOpen={isOpen}
                 onClose={onClose}
-                profileImage={image_url}
                 firstName={first_name}
                 lastName={last_name}
                 volunteerId={volunteer_id}
