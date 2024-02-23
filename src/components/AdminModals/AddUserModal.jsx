@@ -28,7 +28,7 @@ export default function AddUserModal({ isOpen, onClose, setAdminData }) {
     last_name: '',
     role: 'admin',
     email: '',
-    imageUrl: '',
+    imageUrl: 'https://i.pinimg.com/originals/a4/af/12/a4af1288eab8714320fa8453f72d79fd.jpg'
   });
   const toast = useToast();
 
@@ -67,8 +67,9 @@ export default function AddUserModal({ isOpen, onClose, setAdminData }) {
     }
   };
 
+  const emailRegex = /\S+@\S+\.\S+/;
   const isSubmittable =
-    userData.first_name === '' || userData.last_name === '' || userData.email === '';
+    userData.first_name === '' || userData.last_name === '' || !emailRegex.test(userData.email);
 
   console.log('userData:', userData);
 
