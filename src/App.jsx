@@ -49,6 +49,7 @@ const App = () => {
             <Route path="/playground" element={<Playground />} />
           </Route>
 
+          {/* AUTHENTICATION PAGES-- */}
           <Route path="/login" element={<Login />} />
           <Route path="/loginv2" element={<LoginV2 />} />
           <Route path="/signup" element={<Signup />} />
@@ -56,6 +57,7 @@ const App = () => {
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/forgotpasswordv2" element={<ForgotPasswordV2 />} />
           <Route path="/successful-login" element={<DummySuccessfulLogin />} />
+          {/* --AUTHENTICATION PAGES */}
 
           {/* VOLUNTEER PAGES-- */}
           <Route path="/register/:eventId" element={<Register />} />
