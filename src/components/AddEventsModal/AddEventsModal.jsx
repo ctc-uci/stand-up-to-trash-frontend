@@ -20,7 +20,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { AttachmentIcon } from '@chakra-ui/icons';
+import { AttachmentIcon, AddIcon } from '@chakra-ui/icons';
 import Dropzone from '../Dropzone.tsx';
 import { theme, CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
 import { postEvent } from '../../utils/eventsUtils.js';
@@ -99,12 +99,8 @@ const AddEventsModal = () => {
 
   return (
     <ChakraProvider theme={extendTheme(theme)}>
-      <Button
-        style={{ backgroundColor: '#95D497', borderRadius: '30px' }}
-        height="50px"
-        onClick={onOpen}
-      >
-        <Box padding="13px 13px" fontSize="20px" display="inline-flex" gap="10px">
+      <a href="#" onClick={onOpen}>
+        {/* <Box padding="13px 13px" fontSize="20px" display="inline-flex" gap="10px">
           <svg
             width="24"
             height="24"
@@ -118,8 +114,24 @@ const AddEventsModal = () => {
             />
           </svg>
           Create Event
+        </Box> */}
+        <Box
+          width="293px"
+          height="250px"
+          boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+          display="flex"
+          flexDir="column"
+          alignItems={'center'}
+          justifyContent={'center'}
+          borderRadius="30px"
+          background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%)`}
+          backgroundSize="cover"
+        >
+          <Box px="27px" py="20px" color="white">
+            <AddIcon justifyContent={'center'} boxSize={50} />
+          </Box>
         </Box>
-      </Button>
+      </a>
 
       <Modal isOpen={isOpen} onClose={handleCancel}>
         <ModalOverlay />
