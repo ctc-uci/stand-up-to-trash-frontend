@@ -28,7 +28,6 @@ export default function AddUserModal({ isOpen, onClose, setAdminData }) {
     last_name: '',
     role: 'admin',
     email: '',
-    imageUrl: '',
   });
   const toast = useToast();
 
@@ -67,8 +66,9 @@ export default function AddUserModal({ isOpen, onClose, setAdminData }) {
     }
   };
 
+  const emailRegex = /\S+@\S+\.\S+/;
   const isSubmittable =
-    userData.first_name === '' || userData.last_name === '' || userData.email === '';
+    userData.first_name === '' || userData.last_name === '' || !emailRegex.test(userData.email);
 
   console.log('userData:', userData);
 
