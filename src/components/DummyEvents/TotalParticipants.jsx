@@ -1,11 +1,16 @@
 import { Box, Icon, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { BsArrowDownRight, BsArrowUpRight } from 'react-icons/bs';
-const TotalParticipantsCard = ({ totalParticipants, totalTrash }) => {
+const TotalParticipantsCard = ({
+  totalParticipants,
+  totalTrash,
+  participantsChange,
+  trashChange,
+}) => {
   return (
     <>
       <Box mt="12px" mx="11px" display="flex" flexDir="row" gap="38px" alignContent="center">
-        <Box w="200px" h="173px" alignContent='center' justifyContent='center'>
+        <Box w="200px" h="173px" alignContent="center" justifyContent="center">
           <Box
             mx="13px"
             display="flex"
@@ -15,10 +20,17 @@ const TotalParticipantsCard = ({ totalParticipants, totalTrash }) => {
             gap="25px"
             h="100%"
           >
-            <span>
-              <Icon as={BsArrowUpRight} /> + {totalParticipants}%
+            <span style={{ textAlign: 'center' }}>
+              <Icon
+                as={participantsChange > 0 ? BsArrowUpRight : BsArrowDownRight}
+                color={participantsChange > 0 ? 'green' : 'red'}
+              />{' '}
+              {participantsChange > 0 ? '+' : '-'}
+              {participantsChange}%
             </span>
-            <Text fontWeight='bold'>total participants</Text>
+            <Text fontWeight="bold" textAlign={'center'}>
+              {totalParticipants} <br /> total participants
+            </Text>
           </Box>
         </Box>
         <Box w="200px" h="170px" alignContent>
@@ -31,10 +43,17 @@ const TotalParticipantsCard = ({ totalParticipants, totalTrash }) => {
             gap="25px"
             h="100%"
           >
-            <span>
-              <Icon as={BsArrowDownRight} /> - {totalTrash}%
+            <span style={{ textAlign: 'center' }}>
+              <Icon
+                as={trashChange > 0 ? BsArrowUpRight : BsArrowDownRight}
+                color={trashChange > 0 ? 'green' : 'red'}
+              />{' '}
+              {trashChange > 0 ? '+' : ''}
+              {trashChange}%
             </span>
-            <Text fontWeight='bold'>total trash</Text>
+            <Text fontWeight="bold" textAlign={'center'}>
+              {totalTrash} lbs <br /> total trash
+            </Text>
           </Box>
         </Box>
       </Box>
@@ -45,6 +64,8 @@ const TotalParticipantsCard = ({ totalParticipants, totalTrash }) => {
 TotalParticipantsCard.propTypes = {
   totalParticipants: PropTypes.number,
   totalTrash: PropTypes.number,
+  trashChange: PropTypes.number,
+  participantsChange: PropTypes.number,
 };
 
 export default TotalParticipantsCard;

@@ -1,6 +1,6 @@
 import Backend from './utils.js';
 
-/* 
+/*
   fetches all the events data
 */
 const fetchEvents = async () => {
@@ -16,4 +16,12 @@ const fetchJoinedEvents = async () => {
   return data.data;
 };
 
-export { fetchEvents, fetchJoinedEvents };
+/*
+    fetches joined data from all tables for a specific event
+*/
+const fetchJoinedEventsById = async event_id => {
+  const data = await Backend.get(`/events/joined/${event_id}`);
+  return data.data;
+};
+
+export { fetchEvents, fetchJoinedEvents, fetchJoinedEventsById };
