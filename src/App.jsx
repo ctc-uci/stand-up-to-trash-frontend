@@ -2,6 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import DummyEvents from './pages/DummyEvents';
+import ArchivedEvents from './pages/ArchivedEvents';
 import DummyProfiles from './pages/DummyProfiles';
 import DummySearchVolunteerEvents from './pages/DummySearchVolunteerEvents';
 import DummySuccessfulLogin from './pages/DummySuccessfulLogin';
@@ -36,7 +37,7 @@ const Layout = () => {
   );
 };
 
-import { theme } from "./utils/chakraTheme";
+import { theme } from './utils/chakraTheme';
 
 const App = () => {
   return (
@@ -58,6 +59,7 @@ const App = () => {
           <Route path="/event-data" element={<DummyVolunteerData />} />
           <Route path="/volunteer-event" element={<DummyVolunteerEvent />} />
           <Route path="/events" element={<DummyEvents />} />
+          <Route path="/archived-events" element={<ArchivedEvents />} />
           <Route path="/search-volunteer-events" element={<DummySearchVolunteerEvents />} />
           <Route path="/profiles" element={<DummyProfiles />} />
           <Route path="/event-creation" element={<DummyEventCreation />} />

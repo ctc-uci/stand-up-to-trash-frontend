@@ -1,35 +1,36 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useCallback } from 'react';
+import { fetchJoinedEventsById } from '../utils/fuseUtils';
+import Backend from '../utils/utils';
+import Fuse from 'fuse.js';
+import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
 import { useParams } from 'react-router-dom';
-import { Input } from '@chakra-ui/react';
-import { fetchJoinedEvents } from '../utils/fuseUtils';
 import {
   Container,
-  Center,
-  Text,
-  Card,
-  CardBody,
   Flex,
   Button,
   Box,
+  IconButton,
+  FormControl,
+  Input,
+  useDisclosure,
   Spacer,
 } from '@chakra-ui/react';
-import Fuse from 'fuse.js';
-import JoinedDataContainer from '../components/DummySearchVolunteerEvents/JoinedDataContainer';
-import DataEntryModal from '../components/DataEntryModal/DataEntryModal';
-import Backend from '../utils/utils';
-import { useDisclosure } from '@chakra-ui/react';
+import { SearchIcon } from '@chakra-ui/icons';
+import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
 
 const DummyCheckin = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [joinedData, setJoinedData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [checkedInVolunteers, setCheckedInVolunteers] = useState([]);
   const [notCheckedInVolunteers, setNotCheckedInVolunteers] = useState([]);
   const [input, setInput] = useState('');
-  const { eventId } = useParams();
   const [showCheckedIn, setShowCheckedIn] = useState(false);
+
+  const { eventId } = useParams();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   /*
     Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
@@ -37,7 +38,7 @@ const DummyCheckin = () => {
   useEffect(() => {
     const filterHandler = () => {
       const filterdData = joinedData.filter(item => {
-        if (item.props.data.event_id == eventId || eventId == -1) {
+        if (item.event_id == eventId || eventId == -1) {
           return true;
         }
       });
@@ -47,110 +48,29 @@ const DummyCheckin = () => {
   }, [joinedData, eventId]);
 
   /*
-    Dynamically re-renders volunteer entries when a user checks them in
+    Async function for grabbing all joined data for the specified event
   */
-
-  /*
-    This asynchronous function updates the checkin status of an eventData entry, if its true it becomes false, if its false it becomes true
-  */
-  const changeIsCheckedIn = async eventData => {
-    const { event_data_id } = eventData;
+  const setData = async () => {
     try {
-      const response = await Backend.put(`/data/checkin/${event_data_id}`);
-      sortEventCardsByCheckIn(); // rerender event cards so checked in volunteers show up in the correct category
-      return response;
-    } catch (err) {
-      console.log(err);
+      // Fetching joined events data by ID
+      const data = await fetchJoinedEventsById(eventId);
+
+      // Mapping the data to components
+      // const joinedContainers = data.map(event => (
+      //   <JoinedDataContainer data={event} key={event.volunteer_id} />
+      // ));
+
+      // Setting the joined data
+      setJoinedData(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
 
   /*
-  Card components that display the volunteer information for the current event
-  */
-  const CheckedInEventCard = ({ eventData }) => {
-    return (
-      <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`} marginTop="5vh">
-        <CardBody bg="gray" style={{ boxShadow: '.1 .1 .1 .1' }}>
-          <Flex justifyContent="left">
-            <Flex direction="column" justifyContent="left" ml="2rem">
-              <Text justifyContent="center" fontSize="2xl" fontWeight="bold">
-                {eventData.first_name}
-              </Text>
-              <Text>Check-In</Text>
-            </Flex>
-            <Spacer />
-            <Button
-              onClick={onOpen}
-              style={{ color: 'black', backgroundColor: 'white' }}
-              borderRadius="0px"
-              size="lg"
-              mt={1}
-            >
-              Input Data
-            </Button>
-            <DataEntryModal
-              isOpen={isOpen}
-              onClose={onClose}
-              profileImage={eventData.image_url}
-              firstName={eventData.first_name}
-              lastName={eventData.last_name}
-              unusualItems={eventData.unusual_items}
-              eventId={eventData.event_id}
-              volunteerId={eventData.volunteer_id}
-            />
-          </Flex>
-        </CardBody>
-      </Card>
-    );
-  };
-
-  const NotCheckedInEventCard = ({ eventData }) => {
-    return (
-      <Card key={`${eventData.event_data_id}-${eventData.is_checked_in}`} marginTop="5vh">
-        <CardBody bg="white" style={{ boxShadow: '.1 .1 .1 .1' }}>
-          <Flex justifyContent="center">
-            <Center w="100%">
-              <Text
-                mt={1}
-                fontSize="2xl"
-                fontWeight="bold"
-                style={{ boxShadow: '0 0 0 1px var(--chakra-colors-dark-background)' }}
-              >
-                {eventData.first_name}
-              </Text>
-            </Center>
-            <Spacer />
-            <Button
-              onClick={() => changeIsCheckedIn(eventData)}
-              style={{ color: 'black', backgroundColor: '#95D497' }}
-              borderRadius="0px"
-              size="lg"
-            >
-              Check-in
-            </Button>
-          </Flex>
-        </CardBody>
-      </Card>
-    );
-  };
-
-  /*
-    This is the filtered data based on the event chosen in event-card-page
-  */
-
-  /*
-    This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
+    useEffect for getting joined data on first render
   */
   useEffect(() => {
-    const setData = async () => {
-      // await fetchEvents().then(data => setEventsData(data));
-      await fetchJoinedEvents().then(data => {
-        const joinedContainers = data.map(event => {
-          return <JoinedDataContainer data={event} key={event.volunteer_id} />;
-        });
-        setJoinedData(joinedContainers);
-      });
-    };
     setData();
   }, []);
 
@@ -158,36 +78,59 @@ const DummyCheckin = () => {
     This useffect is used for updating the display volunteer data based on user input utilizing fuzzy search
   */
   useEffect(() => {
-    const options = {
-      keys: ['props.data.first_name', 'props.data.last_name', 'props.data.email'],
-    };
-    const fuse = new Fuse(searchResults, options);
-    const searchResult = fuse.search(input);
-    const reduceResult = searchResult.map(result => result.item);
-    setVolunteerResults(reduceResult);
-  }, [input, searchResults]);
+    // If input is empty, display all volunteers, else conduct the search
+    if (input.trim() === '') {
+      setVolunteerResults(joinedData);
+    } else {
+      const options = {
+        keys: ['first_name', 'last_name', 'email'],
+      };
+      const fuse = new Fuse(searchResults, options);
+      const searchResult = fuse.search(input);
+      const reduceResult = searchResult.map(result => result.item);
+      setVolunteerResults(reduceResult);
+    }
+  }, [input, searchResults, joinedData]);
 
-  const handleButtonClick = () => {
-    setShowCheckedIn(!showCheckedIn);
-  };
-
+  /*
+    Sort volunteer results into checked in and not checked in volunteers for rendering
+  */
   const sortEventCardsByCheckIn = useCallback(() => {
     if (volunteerResults.length !== 0) {
       setCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in === true),
+        volunteerResults.filter(volunteer => volunteer.is_checked_in === true),
       );
       setNotCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.props.data.is_checked_in === false),
+        volunteerResults.filter(volunteer => volunteer.is_checked_in === false),
       );
     } else {
-      setCheckedInVolunteers([]); // for refreshing when the user deletes the searched entry
+      setCheckedInVolunteers([]);
       setNotCheckedInVolunteers([]);
     }
   }, [volunteerResults]);
 
+  /*
+    update checked in and not checked in volunteers on change to volunteer results - when fuzzy search returns different results
+  */
   useEffect(() => {
     sortEventCardsByCheckIn();
   }, [volunteerResults, sortEventCardsByCheckIn]);
+
+  /*
+    updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
+  */
+  const changeIsCheckedIn = async event_data_id => {
+    try {
+      const response = await Backend.put(`/data/checkin/${event_data_id}`).then(async () => {
+        await setData().then(sortEventCardsByCheckIn);
+      });
+
+      // rerender event cards so checked in volunteers show up in the correct category
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -201,55 +144,85 @@ const DummyCheckin = () => {
         ></Box>
       </Flex>
       <Container maxW="90%">
-        <Input
-          value={input}
-          onChange={event => setInput(event.target.value)}
-          borderRadius="0px"
-          marginTop="5vh"
-          placeholder="Search"
-        />
+        <Container
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignContent: 'center',
+            marginTop: '3vh',
+            gap: '1vw',
+          }}
+        >
+          <FormControl>
+            <Flex>
+              <Input
+                value={input}
+                onChange={event => setInput(event.target.value)}
+                borderRadius="0px"
+                placeholder='Search Volunteer Name (e.g. "John Doe")'
+              />
+              <IconButton icon={<SearchIcon />} ml={1} />
+            </Flex>
+          </FormControl>
+        </Container>
 
-        <Button
-          style={{
-            borderRadius: '60px',
-            backgroundColor: `${showCheckedIn ? '#EFEFEF' : '#696969'}`,
-          }}
-          marginLeft="1vw"
-          marginTop="3vh"
-          onClick={() => handleButtonClick()}
-        >
-          not checked-in
-        </Button>
-        <Button
-          style={{
-            borderRadius: '60px',
-            backgroundColor: `${showCheckedIn ? '#696969' : '#EFEFEF'}`,
-          }}
-          marginLeft="1vw"
-          marginTop="3vh"
-          onClick={() => handleButtonClick()}
-        >
-          checked-in
-        </Button>
+        <Flex>
+          <Button
+            style={{
+              borderRadius: '60px',
+              backgroundColor: `${showCheckedIn ? '#EFEFEF' : '#696969'}`,
+            }}
+            marginLeft="1vw"
+            marginTop="3vh"
+            onClick={() => setShowCheckedIn(false)}
+          >
+            not checked-in
+          </Button>
+          <Button
+            style={{
+              borderRadius: '60px',
+              backgroundColor: `${showCheckedIn ? '#696969' : '#EFEFEF'}`,
+            }}
+            marginLeft="1vw"
+            marginTop="3vh"
+            onClick={() => setShowCheckedIn(true)}
+          >
+            checked-in
+          </Button>
+          <Spacer />
+          <Button
+            style={{
+              borderRadius: '60px',
+            }}
+            marginLeft="1vw"
+            marginTop="3vh"
+            onClick={onOpen}
+          >
+            + register new volunteer
+          </Button>
+        </Flex>
+        <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
 
         {showCheckedIn &&
-          (checkedInVolunteers.length != 0
-            ? checkedInVolunteers.map(volunteer => (
-                <CheckedInEventCard
-                  eventData={volunteer.props.data}
-                  key={volunteer.props.data.volunteer_id}
-                />
-              ))
-            : '')}
+          (checkedInVolunteers.length != 0 ? (
+            <VolunteerEventsTable
+              volunteers={checkedInVolunteers}
+              changeIsCheckedIn={changeIsCheckedIn}
+            />
+          ) : (
+            ''
+          ))}
         {!showCheckedIn &&
-          (notCheckedInVolunteers.length != 0
-            ? notCheckedInVolunteers.map(volunteer => (
-                <NotCheckedInEventCard
-                  eventData={volunteer.props.data}
-                  key={volunteer.props.data.volunteer_id}
-                />
-              ))
-            : '')}
+          (notCheckedInVolunteers.length != 0 ? (
+            <VolunteerEventsTable
+              volunteers={notCheckedInVolunteers}
+              changeIsCheckedIn={changeIsCheckedIn}
+            />
+          ) : (
+            ''
+          ))}
       </Container>
     </>
   );
