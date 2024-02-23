@@ -1,7 +1,7 @@
 import { Heading, Grid, Center, GridItem } from '@chakra-ui/react';
 import Backend from '../utils/utils';
 import { useEffect, useState } from 'react';
-import EventCard from '../components/DummyEvents/EventCard';
+import EventCard from '../components/Events/EventCard';
 
 const ArchivedEvents = () => {
   const [events, setEvents] = useState([]);

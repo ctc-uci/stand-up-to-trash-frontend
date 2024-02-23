@@ -2,15 +2,14 @@ import { Box, Button, Grid, GridItem, Spacer, useDisclosure, useToast } from '@c
 import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import AllData from '../components/DummyEvents/AllData';
-import ArchiveEventsModal from '../components/DummyEvents/ArchiveEventsModal';
-import EventCard from '../components/DummyEvents/EventCard';
-import RecentEventsCard from '../components/DummyEvents/RecentEventsCard';
-import Sidebar from '../components/DummyEvents/Sidebar';
+import AllData from '../components/Events/AllData';
+import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
+import EventCard from '../components/Events/EventCard';
+import RecentEventsCard from '../components/Events/RecentEventsCard';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
 import Backend from '../utils/utils';
 
-const DummyEvents = () => {
+const EventsPage = () => {
   const toast = useToast();
   const [events, setEvents] = useState([]);
   // const [eventId, setEventId] = useState('');
@@ -49,7 +48,7 @@ const DummyEvents = () => {
     for (const id of selectedEvents) {
       try {
         await Backend.put(`/events/archive/${id}`);
-        getEvents();
+        getEvents(); //modify events state for local instead
       } catch (error) {
         console.log(`Error archiving event: ${id}`, error.message);
       }
@@ -175,41 +174,39 @@ const DummyEvents = () => {
   };
 
   return (
-    <Sidebar>
-      <Box mx="156px" py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
-        <Box
-          mb="60px"
-          display="flex"
-          flexDirection="row"
-          gap="83px"
-          justifyContent="center"
-          alignItems={'left'}
-        >
-          <RecentEventsCard events={events} />
-          <AllData />
-        </Box>
-        <Spacer />
-        <Box display="flex" justifyContent={'center'}>
-          <Box justifyContent="space-between" width="930px">
-            <Box display="flex" flex-direction="row" justifyContent="space-between">
-              {isCreateButton ? <AddEventsModal getEvents={getEvents} /> : <DeselectButton />}
-              {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
-              <ArchiveEventsModal
-                isOpen={isArchiveEventModalOpen}
-                onClose={onArchiveEventModalClose}
-                confirmArchive={confirmArchive}
-                events={events.filter(event => selectedEvents.includes(event.id))}
-              />
-            </Box>
-            <Spacer />
-            <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
-              <Box marginTop="3vh">{eventCards}</Box>
-            </Box>
+    <Box mx="156px" py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
+      <Box
+        mb="60px"
+        display="flex"
+        flexDirection="row"
+        gap="83px"
+        justifyContent="center"
+        alignItems={'left'}
+      >
+        <RecentEventsCard events={events} />
+        <AllData />
+      </Box>
+      <Spacer />
+      <Box display="flex" justifyContent={'center'}>
+        <Box justifyContent="space-between" width="930px">
+          <Box display="flex" flex-direction="row" justifyContent="space-between">
+            {isCreateButton ? <AddEventsModal getEvents={getEvents} /> : <DeselectButton />}
+            {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
+            <ArchiveEventsModal
+              isOpen={isArchiveEventModalOpen}
+              onClose={onArchiveEventModalClose}
+              confirmArchive={confirmArchive}
+              events={events.filter(event => selectedEvents.includes(event.id))}
+            />
+          </Box>
+          <Spacer />
+          <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
+            <Box marginTop="3vh">{eventCards}</Box>
           </Box>
         </Box>
       </Box>
-    </Sidebar>
+    </Box>
   );
 };
 
-export default DummyEvents;
+export default EventsPage;

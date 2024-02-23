@@ -30,6 +30,7 @@ import { CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
 import { useState, useRef } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
+import { useNavigate } from 'react-router-dom';
 
 // Copied and modified from https://stackoverflow.com/a/66390028/7203225
 const units = [
@@ -119,6 +120,7 @@ const EventCard = ({
   getEvents,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   // Placeholder for testing a high-res image
   // image_url = "https://s3-alpha-sig.figma.com/img/925a/d6ba/98e5fc832087ccc9eb019a8562418d70?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hmVTqMVJanXYQRLkiQ91N0JuEs6HSNy3zmb28YJAdYA4ZaA7hJpZEvoc5jQwIPEqcVV4msa8S4Azw49FqP6jBPiSQyE-Q5u41YMTPge1HaDhA2eQ7me21XG1hlJ~qeOQ3se7sk35~qVkkdaRruV7tBRDsc-Y980XKneuEAfggh35IQJqIn3~HvVb0WogiqR8SYsVOy2FQhlStCRojrOgzhO5YmwdKuwWozhmBuqYNEl6sm45YfLTCfinIci8E8fflDlTtlUhDwUlBpGu0k5ojol7GP2Czwv-ggac6Yijbj~rkDzdWfmj0Vs-7FqgyFtRsSaAvChFPn0yVcaZjrWS1g__";
@@ -144,6 +146,7 @@ const EventCard = ({
         onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
         background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
         backgroundSize="cover"
+        as="button"
       >
         {/* {showSelect ? (
           <Checkbox
@@ -231,8 +234,10 @@ const EventCard = ({
                       backgroundColor="rgba(149, 189, 212, 0.71)"
                       borderRadius="0"
                       colorScheme={'grey'}
-                      as="a"
-                      href={`/checkin/${id}`}
+                      as="button"
+                      onClick={() => {
+                        navigate(`/checkin/${id}`);
+                      }}
                       target="_blank"
                     >
                       View More
