@@ -28,7 +28,6 @@ export default function AddUserModal({ isOpen, onClose, setAdminData }) {
     last_name: '',
     role: 'admin',
     email: '',
-    imageUrl: 'https://i.pinimg.com/originals/a4/af/12/a4af1288eab8714320fa8453f72d79fd.jpg'
   });
   const toast = useToast();
 
