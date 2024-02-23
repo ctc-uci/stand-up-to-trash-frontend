@@ -1,6 +1,5 @@
-import Backend from '../../utils/utils';
+import  { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Modal,
@@ -11,11 +10,19 @@ import {
   ModalCloseButton,
   Button,
   FormControl,
-  Input,
   FormLabel,
+  Input,
   Center,
   Image,
+  useNumberInput,
+  HStack,
+  InputGroup,
+  InputRightElement,
+  Flex,
+  Text,
 } from '@chakra-ui/react';
+import Backend from '../../utils/utils'; // Ensure this path is correct
+
 
 const DataEntryModal = ({
   isOpen,
@@ -98,6 +105,66 @@ const DataEntryModal = ({
     }
   };
 
+  
+
+  const TrashWeightInputs = () => {
+    const [pounds, setPounds] = useState(0);
+    const [ounces, setOunces] = useState(0);
+  
+    const poundsProps = useNumberInput({
+      step: 0.01,
+      precision: 2,
+      min: 0,
+      onChange: (valueAsString, valueAsNumber) => setPounds(valueAsNumber),
+    });
+  
+    const ouncesProps = useNumberInput({
+      step: 0.01,
+      precision: 2,
+      min: 0,
+      onChange: (valueAsString, valueAsNumber) => setOunces(valueAsNumber),
+    });
+  
+    const poundsInc = poundsProps.getIncrementButtonProps();
+    const poundsInput = poundsProps.getInputProps({ name: 'pounds' });
+  
+    const ouncesInc = ouncesProps.getIncrementButtonProps();
+    const ouncesInput = ouncesProps.getInputProps({ name: 'ounces' });
+
+    return (
+      <>
+      <HStack spacing={4}>
+      <FormControl>
+        <FormLabel htmlFor="pounds">Pounds</FormLabel>
+        <InputGroup>
+          <Input {...poundsInput} placeholder='e.g. 20'/>
+          <InputRightElement width="2.7rem">
+            <Button {...poundsInc} size={"md"}>+</Button>
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor="ounces">Ounces</FormLabel>
+        <InputGroup>
+          <Input {...ouncesInput} placeholder='e.g. 5'/>
+          <InputRightElement width="2.7rem">
+            <Button {...ouncesInc}>+</Button>
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
+    </HStack>
+    <Flex mt={4} justifyContent="space-between" alignItems="center">
+        <Text fontSize="lg">
+          Total Trash Weight:
+        </Text>
+        <Text fontSize="lg">
+          {(pounds + ounces / 16).toFixed(2)} lbs
+        </Text>
+      </Flex>
+      </>
+    );
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -116,21 +183,9 @@ const DataEntryModal = ({
               <Center>
                 <Button>Go to Profile</Button>
               </Center>
+              <TrashWeightInputs />
+
               <FormControl>
-                <Input
-                  marginTop={5}
-                  placeholder="Enter trash weight (lbs)"
-                  alignItems={'center'}
-                  {...register('pounds')}
-                  type="number"
-                />
-                <Input
-                  marginTop={5}
-                  placeholder="Enter trash weight (oz)"
-                  alignItems={'center'}
-                  {...register('ounces')}
-                  type="number"
-                />
                 <Center>
                   <FormLabel paddingTop={'20px'}>Enter Unusual Items</FormLabel>{' '}
                 </Center>
