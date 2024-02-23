@@ -11,7 +11,7 @@ const DummySearchVolunteerEvents = () => {
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
 
-  /* 
+  /*
     This useEffect is for fetching all the events and JOINED events/volunteers/events_data data
   */
   useEffect(() => {
@@ -38,7 +38,7 @@ const DummySearchVolunteerEvents = () => {
     const searchResult = fuse.search(input);
     const reduceResult = searchResult.map(result => result.item);
     setVolunteerResults(reduceResult);
-  }, [input]);
+  }, [input, searchResults]);
 
   /*
     This is all the options for the dropdown, it's the name of all the events
