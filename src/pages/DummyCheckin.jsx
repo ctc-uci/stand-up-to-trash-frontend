@@ -132,6 +132,7 @@ const DummyCheckin = () => {
     }
   };
 
+  console.log(joinedData);
   return (
     <>
       <Flex justifyContent="center">
