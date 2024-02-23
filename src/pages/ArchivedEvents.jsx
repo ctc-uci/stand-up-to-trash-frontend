@@ -16,6 +16,7 @@ import {
   Tr,
   Th,
   Td,
+  Text,
   TableContainer,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
@@ -25,7 +26,6 @@ import {
   FaMapMarkerAlt,
   FaRegCalendar,
   FaUser,
-  FaLocationArrow,
 } from 'react-icons/fa';
 import Backend from '../utils/utils';
 import { useEffect, useState } from 'react';
@@ -39,6 +39,48 @@ const ArchivedEvents = () => {
       console.log(`Error getting events: `, err.message);
     }
   };
+
+  const eventRows = events.map(event => (
+    <>
+      {console.log(event)}
+      <Tr key={event.id}>
+        <Td>
+          <Flex>
+            <Image borderRadius="full" boxSize="50px" src={event.image_url} alt="image"></Image>{' '}
+            <Center marginLeft={3} fontWeight={'500'}>
+              <Text fontWeight={'500'} fontSize={'lg'}>
+                {event.name}
+              </Text>
+            </Center>
+          </Flex>
+        </Td>
+        <Td>
+          <Text fontWeight={'400'} fontSize={'lg'}>
+            {event.location}
+          </Text>
+        </Td>
+
+        <Td>
+          <Text fontWeight={'400'} fontSize={'lg'}>
+            {event.date.substring(5, 7)}/{event.date.substring(8, 10)}/{event.date.substring(0, 4)}
+          </Text>
+        </Td>
+        <Td>
+          <Button
+            borderRadius={20}
+            backgroundColor={'#30548c'}
+            color={'white'}
+            // width={20}
+            // height={10}
+            px={3}
+            fontSize={'sm'}
+          >
+            View Details
+          </Button>
+        </Td>
+      </Tr>
+    </>
+  ));
 
   useEffect(() => {
     getEvents();
@@ -162,45 +204,7 @@ const ArchivedEvents = () => {
               <Th></Th>
             </Tr>
           </Thead>
-          <Tbody>
-            {events.map(element => (
-              <>
-                {console.log(element)}
-                <Tr key={element.id}>
-                  <Td>
-                    <Flex>
-                      <Image
-                        borderRadius="full"
-                        boxSize="50px"
-                        src={element.image_url}
-                        alt="image"
-                      ></Image>{' '}
-                      <Center marginLeft={3}>{element.name}</Center>
-                    </Flex>
-                  </Td>
-                  <Td>{element.location}</Td>
-
-                  <Td>
-                    {element.date.substring(5, 7)}/{element.date.substring(8, 10)}/
-                    {element.date.substring(0, 4)}{' '}
-                  </Td>
-                  <Td>
-                    <Button
-                      borderRadius={20}
-                      backgroundColor={'#30548c'}
-                      color={'white'}
-                      // width={20}
-                      // height={10}
-                      padding={1}
-                      fontSize={13}
-                    >
-                      View Details
-                    </Button>
-                  </Td>
-                </Tr>
-              </>
-            ))}
-          </Tbody>
+          <Tbody>{eventRows}</Tbody>
         </Table>
       </TableContainer>
     </Box>
