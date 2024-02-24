@@ -47,6 +47,10 @@ const App = () => {
           <Route element={<Layout />}>
             <Route path="/playground" element={<Playground />} />
             <Route path="/dummyevents" element={<DummyEvents />} />
+            <Route path="/events" element={<DummyEvents />} />
+            <Route path="/archived-events" element={<ArchivedEvents />} />
+            <Route path="/checkin/:eventId" element={<DummyCheckin />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Route>
 
           <Route path="/login" element={<Login />} />
@@ -65,7 +69,6 @@ const App = () => {
           <Route path="/event-creation" element={<DummyEventCreation />} />
           <Route path="/select-event" element={<SelectEvent />} />
 
-         
           <Route path="/data-entry-modal-test" element={<DataEntryModalTestPage />} />
           <Route path="/checkin/:eventId" element={<DummyCheckin />} />
           <Route path="/stats" element={<DummyStatsPage />} />
