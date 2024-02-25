@@ -405,8 +405,8 @@ const EditEvents = ({
                   <Spinner />
                 ) : (
                   <Dropzone
-                    setEventData={setEventData}
-                    eventData={eventData}
+                    setData={setEventData}
+                    data={eventData}
                     height={'141px'}
                     setIsLoading={setIsLoading}
                   />
