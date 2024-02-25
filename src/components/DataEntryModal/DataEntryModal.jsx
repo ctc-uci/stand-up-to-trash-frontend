@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import {
   Modal,
   ModalOverlay,
@@ -20,11 +20,11 @@ import {
   Flex,
   Text,
   Stack,
+  useToast,
 } from '@chakra-ui/react';
-import Backend from '../../utils/utils';
-import { FiPaperclip } from "react-icons/fi";
-import { FaCamera } from "react-icons/fa";
-
+import { FiPaperclip } from 'react-icons/fi';
+import { FaCamera } from 'react-icons/fa';
+import { postEventData } from '../../utils/dataUtils';
 
 const DataEntryModal = ({
   isOpen,
@@ -34,18 +34,19 @@ const DataEntryModal = ({
   volunteerId,
   eventId,
   unusualItems,
+  ounces,
+  pounds,
 }) => {
-  const [volunteerData, setVolunteerData] = useState({
+  const volunteerData = {
     volunteer_id: volunteerId,
     number_in_party: 0,
-    pounds: 0,
-    ounces: 0,
-    unusual_items: [],
+    pounds: pounds,
+    ounces: ounces,
+    unusual_items: unusualItems,
     event_id: eventId,
-    is_checked_in: false,
-  });
+    is_checked_in: true,
+  };
   // const [other, setOther] = useState('');
-  const other = '';
   // let [unusualItemsArray, setUnusualItemsArray] = useState([]);
 
   // COMMENTED OUT BECAUSE DESIGN FLAW
@@ -54,8 +55,7 @@ const DataEntryModal = ({
   // useEffect(() => {
   //   formatUnusualItems();
   // }, []);
-  useEffect(() => {}), [unusualItems];
-
+  // useEffect(() => {}), [unusualItems];
   // const formatUnusualItems = () => {
   //   if (unusualItems.length != 0 && unusualItems[0] === '{') {
   //     let trimmed = unusualItems.replace(/{|}/g, '').trim();
@@ -68,118 +68,175 @@ const DataEntryModal = ({
   // };
 
   //   const { register, handleSubmit } = useForm(volunteerData);
+  const toast = useToast();
 
-  const { handleSubmit } = useForm(volunteerData);
+  const { handleSubmit, control, getValues } = useForm(volunteerData);
 
-  const postVolunteerData = async formData => {
+  const postDataEntry = async () => {
     try {
+      const { pounds, ounces, unusual_items } = getValues();
+
       const dataToSend = {
         ...volunteerData,
-        pounds: formData.pounds,
-        ounces: formData.ounces,
-        unusual_items: formData.other,
+        pounds: pounds,
+        ounces: ounces,
+        unusual_items: unusual_items,
       };
-      await Backend.post('/data', dataToSend);
+
+      await postEventData(dataToSend);
+      toast({
+        title: 'Data saved.',
+        description: 'Data saved.',
+        position: 'bottom-right',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+
       onClose();
     } catch (error) {
-      console.error('Error creating new volunteer:', error.message);
+      console.error(error.message);
+      toast({
+        title: 'Error saving data.',
+        description: 'There was an error saving data. Please try again.',
+        status: 'error',
+        position: 'bottom-right',
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
 
   const noReload = (data, event) => {
     event.preventDefault();
-    addUnusualItem(true, other);
-    postVolunteerData(data);
+    postDataEntry(data);
   };
 
-  const addUnusualItem = (isChecked, newItem) => {
-    if (isChecked && newItem.trim() !== '') {
-      setVolunteerData(prevData => ({
-        ...prevData,
-        unusual_items: [...new Set([...prevData.unusual_items, newItem, other])].filter(Boolean), //FILTERS EMPTY STRING
-      }));
-    } else {
-      setVolunteerData(prevData => ({
-        ...prevData,
-        unusual_items: [...new Set(prevData.unusual_items.filter(item => item !== newItem))].filter(
-          Boolean,
-        ), //FILTERS EMPTY STRING
-      }));
-    }
-  };
+  // COMMENTED OUT BECAUSE DESIGN FLAW
 
-  const TrashWeightInputs = () => {
-    const [inputPounds, setInputPounds] = useState('');
-    const [inputOunces, setInputOunces] = useState('');
-    const [totalWeight, setTotalWeight] = useState(0);
-  
-    const [lastPounds, setLastPounds] = useState(0);
-    const [lastOunces, setLastOunces] = useState(0);
-  
-    const addPoundsToTotal = () => {
-      setTotalWeight((prevWeight) => prevWeight + lastPounds);
+  // const addUnusualItem = (isChecked, newItem) => {
+  //   if (isChecked && newItem.trim() !== '') {
+  //     setVolunteerData(prevData => ({
+  //       ...prevData,
+  //       unusual_items: [...new Set([...prevData.unusual_items, newItem, other])].filter(Boolean), //FILTERS EMPTY STRING
+  //     }));
+  //   } else {
+  //     setVolunteerData(prevData => ({
+  //       ...prevData,
+  //       unusual_items: [...new Set(prevData.unusual_items.filter(item => item !== newItem))].filter(
+  //         Boolean,
+  //       ), //FILTERS EMPTY STRING
+  //     }));
+  //   }
+  // };
+  // control.getFieldState('pounds').setValue(pounds);
+
+  const TrashWeightInputs = ({ parentControl }) => {
+    // const [inputPounds, setInputPounds] = useState('');
+    // const [inputOunces, setInputOunces] = useState('');
+    const [totalWeight, setTotalWeight] = useState(pounds + ounces / 16);
+
+    const updateTotalWeightPounds = () => {
+      setTotalWeight(prev => prev + parseInt(getValues().pounds));
     };
-  
-    const addOuncesToTotal = () => {
-      setTotalWeight((prevWeight) => prevWeight + lastOunces / 16);
+
+    const updateTotalWeightOunces = () => {
+      setTotalWeight(prev => prev + parseInt(getValues().ounces) / 16);
     };
-  
-    const updateLastPounds = (e) => {
-      const newPounds = parseFloat(e.target.value) || 0;
-      setInputPounds(e.target.value); // Keep the input as string
-      setLastPounds(newPounds); // Convert to number for calculations
-    };
-  
-    const updateLastOunces = (e) => {
-      const newOunces = parseFloat(e.target.value) || 0;
-      setInputOunces(e.target.value); // Keep the input as string
-      setLastOunces(newOunces); // Convert to number for calculations
-    }
-  
+
+    // const [lastPounds, setLastPounds] = useState(0);
+    // const [lastOunces, setLastOunces] = useState(0);
+
+    // const addPoundsToTotal = () => {
+    //   setTotalWeight(prevWeight => prevWeight + lastPounds);
+    // };
+
+    // const addOuncesToTotal = () => {
+    //   setTotalWeight(prevWeight => prevWeight + lastOunces / 16);
+    // };
+
+    // const updateLastPounds = e => {
+    //   const newPounds = parseFloat(e.target.value) || 0;
+    //   setInputPounds(e.target.value); // Keep the input as string
+    //   setLastPounds(newPounds); // Convert to number for calculations
+    // };
+
+    // const updateLastOunces = e => {
+    //   const newOunces = parseFloat(e.target.value) || 0;
+    //   setInputOunces(e.target.value); // Keep the input as string
+    //   setLastOunces(newOunces); // Convert to number for calculations
+    // };
+
+    // console.log('volunteerData', volunteerData);
+    
     return (
       <>
-        <HStack spacing={4}>
-          <FormControl>
-            <FormLabel htmlFor="pounds" fontSize="16px">Enter Pounds</FormLabel>
-            <InputGroup>
-              <Input
-                placeholder="e.g. 20"
-                onChange={updateLastPounds}
-                value={inputPounds}
+        <form>
+          <HStack spacing={4}>
+            <FormControl>
+              <FormLabel htmlFor="pounds" fontSize="16px">
+                Enter Pounds
+              </FormLabel>
+              <Controller
                 name="pounds"
-                type="number"
+                control={parentControl}
+                defaultValue={''}
+                render={({ field }) => (
+                  <InputGroup>
+                    <Input
+                      placeholder="e.g. 20"
+                      onChange={e => field.onChange(e.target.value)}
+                      value={field.value}
+                      type="number"
+                    />
+                    <InputRightElement width="2.7rem">
+                      <Button size={'md'} onClick={updateTotalWeightPounds}>
+                        +
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                )}
               />
-              <InputRightElement width="2.7rem">
-                <Button onClick={addPoundsToTotal} size={'md'}>
-                  +
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="ounces" fontSize="16px">Enter Ounces</FormLabel>
-            <InputGroup>
-              <Input
-                placeholder="e.g. 5"
-                onChange={updateLastOunces}
-                value={inputOunces}
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="ounces" fontSize="16px">
+                Enter Ounces
+              </FormLabel>
+              <Controller
                 name="ounces"
-                type="number"
+                control={parentControl}
+                defaultValue={''}
+                render={({ field }) => (
+                  <InputGroup>
+                    <Input
+                      placeholder="e.g. 5"
+                      onChange={e => field.onChange(e.target.value)}
+                      value={field.value}
+                      type="number"
+                    />
+                    <InputRightElement width="2.7rem">
+                      <Button onClick={updateTotalWeightOunces} size={'md'}>
+                        +
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                )}
               />
-              <InputRightElement width="2.7rem">
-                <Button onClick={addOuncesToTotal}>
-                  +
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-          </FormControl>
-        </HStack>
-        <Flex mt={4} justifyContent="space-between" alignItems="center">
-          <Text fontSize="16px">Total Trash Weight:</Text>
-          <Text fontWeight="bold" fontSize="16px">{totalWeight.toFixed(2)} lbs</Text>
-        </Flex>
+            </FormControl>
+          </HStack>
+          <Flex mt={4} justifyContent="space-between" alignItems="center">
+            <Text fontSize="16px">Total Trash Weight:</Text>
+            <Text fontWeight="bold" fontSize="16px">
+              {totalWeight.toFixed(2)} lbs
+            </Text>
+          </Flex>
+        </form>
       </>
     );
+  };
+
+  TrashWeightInputs.propTypes = {
+    parentControl: PropTypes.object.isRequired,
   };
 
   return (
@@ -194,13 +251,25 @@ const DataEntryModal = ({
         <form onSubmit={handleSubmit(noReload)}>
           <FormControl>
             <ModalBody>
-              <FormLabel fontSize="18px" fontWeight="bold">Trash Weight</FormLabel>{' '}
-              <TrashWeightInputs />
-
+              <FormLabel fontSize="18px" fontWeight="bold">
+                Trash Weight
+              </FormLabel>
+              <TrashWeightInputs parentControl={control} />
               <FormControl>
-                  <FormLabel fontSize="16px" fontWeight="bold" paddingTop={'20px'}>Other Information</FormLabel>{' '}
+                <FormLabel fontSize="16px" fontWeight="bold" paddingTop={'20px'}>
+                  Other Information
+                </FormLabel>
+                <Controller
+                  name="unusual_items"
+                  control={control}
+                  defaultValue={''}
+                  render={({ field }) => (
+                    <Textarea fontSize="14px" placeholder="Unusual items, etc..." {...field} />
+                  )}
+                />
+              </FormControl>
 
-                {/* <Center>
+              {/* <Center>
                   {unusualItemsArray.length === 0 ? (
                     <div>No Unusual Items</div>
                   ) : (
@@ -222,23 +291,47 @@ const DataEntryModal = ({
                   )}
                 </Center> */}
 
-                <Center>
-                <Textarea fontSize="14px" placeholder='Unusual items, etc...' />
-                </Center>
-              </FormControl>
-              <FormLabel paddingTop="10px" fontSize="12px" fontWeight={'bold'}>Add Images</FormLabel>
-              <Stack  spacing={4} direction='row' align='center'>
-              <Button borderRadius="15px" leftIcon={<FiPaperclip />} fontWeight="400" color='#D9D9D9' textColor="black" fontSize="12px" width="82px" height="28px">
-                Upload
-              </Button>
-              <Button borderRadius="15px" leftIcon={<FaCamera />}fontWeight="400" color='#D9D9D9' textColor="black" fontSize="12px" width="112px" height="28px">
-                Take a picture
-              </Button>
+              <FormLabel paddingTop="10px" fontSize="12px" fontWeight={'bold'}>
+                Add Images
+              </FormLabel>
+              <Stack spacing={4} direction="row" align="center">
+                <Button
+                  borderRadius="15px"
+                  leftIcon={<FiPaperclip />}
+                  fontWeight="400"
+                  color="#D9D9D9"
+                  textColor="black"
+                  fontSize="12px"
+                  width="82px"
+                  height="28px"
+                >
+                  Upload
+                </Button>
+                <Button
+                  borderRadius="15px"
+                  leftIcon={<FaCamera />}
+                  fontWeight="400"
+                  color="#D9D9D9"
+                  textColor="black"
+                  fontSize="12px"
+                  width="112px"
+                  height="28px"
+                >
+                  Take a picture
+                </Button>
               </Stack>
             </ModalBody>
 
             <Center paddingBottom={7} paddingTop={5}>
-              <Button type="submit" color="black" bg="#95D497" width="110px" height="37px" borderRadius="15px" fontSize="13px">
+              <Button
+                type="submit"
+                color="black"
+                bg="#95D497"
+                width="110px"
+                height="37px"
+                borderRadius="15px"
+                fontSize="13px"
+              >
                 Save Data
               </Button>
             </Center>
@@ -258,6 +351,8 @@ DataEntryModal.propTypes = {
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   unusualItems: PropTypes.string.isRequired,
+  ounces: PropTypes.number.isRequired,
+  pounds: PropTypes.number.isRequired,
 };
 
 export default DataEntryModal;

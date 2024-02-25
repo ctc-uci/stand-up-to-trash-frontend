@@ -34,6 +34,8 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     event_id,
     id,
     unusual_items,
+    ounces,
+    pounds,
   } = volunteer;
 
   return (
@@ -69,6 +71,8 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
                 volunteerId={volunteer_id}
                 eventId={event_id}
                 unusualItems={unusual_items}
+                ounces={ounces}
+                pounds={pounds}
               />
             </>
           ) : (
