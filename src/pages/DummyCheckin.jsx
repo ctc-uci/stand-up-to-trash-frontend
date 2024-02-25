@@ -133,7 +133,6 @@ const DummyCheckin = () => {
       const response = await Backend.put(`/data/checkin/${event_data_id}`).then(async () => {
         await setData().then(sortEventCardsByCheckIn);
       });
-
       // rerender event cards so checked in volunteers show up in the correct category
       return response;
     } catch (err) {
@@ -142,7 +141,7 @@ const DummyCheckin = () => {
   };
 
   return (
-    <div style={{backgroundColor: "#C8E6FF"}}>
+    <Box bg="#C8E6FF" minH="100vh">
       <Flex justifyContent="center">
         <Box
           w="100%"
@@ -151,14 +150,14 @@ const DummyCheckin = () => {
           position="relative"
         >
           <Image src={event['image_url']} objectFit="cover" width="100%" height="100%" bg="rgba(217, 217, 217, 0.72)" />
-          <Flex position="absolute" top="20%" bottom="5px" right="5px" left="10px" mb="10rem">          
+          <Flex position="absolute" top="20%" bottom="5px" right="5px" left="10px" mb="10rem">
           <Text color="white" fontSize="4xl" fontWeight="bold">event title</Text>
             {event && <HappeningInChip date={new Date(Date.parse(event['date']))}/>}
           </Flex>
         </Box>
       </Flex>
       <Center>
-        <Flex width="93%" gap={3}>
+        <Flex width="93%" gap={3} mt={5}>
               <InputGroup>
                 <InputLeftElement pointerEvents='none' top={'6px'} left={'5px'}>
                   <GreyCustomSearchIcon w={'24px'} h={'18px'}/>
@@ -177,8 +176,8 @@ const DummyCheckin = () => {
               />
               </InputGroup>
 
-              <IconButton 
-                icon={<CustomSearchIcon w={'24px'} h={'24px'}/>} 
+              <IconButton
+                icon={<CustomSearchIcon w={'24px'} h={'24px'}/>}
                 width='69px'
                 height='53px'
                 borderRadius='15px'
@@ -203,7 +202,7 @@ const DummyCheckin = () => {
           </FormControl>
         </Container>
 
-        <Flex>
+        <Flex mb={5}>
           <Button
             style={{
               borderRadius: '100px',
@@ -262,7 +261,7 @@ const DummyCheckin = () => {
             ''
           ))}
       </Container>
-    </div>
+    </Box>
   );
 };
 

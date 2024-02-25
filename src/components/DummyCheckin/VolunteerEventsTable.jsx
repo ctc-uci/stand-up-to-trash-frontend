@@ -29,12 +29,13 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     email,
     image_url,
     is_checked_in,
-    event_data_id,
+    event_data_new_id,
     volunteer_id,
     event_id,
     id,
     unusual_items,
   } = volunteer;
+  console.log(volunteer);
 
   return (
     <Tr key={id} bg="#FFFFFF">
@@ -75,7 +76,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
               />
             </>
           ) : (
-            <Tag onClick={() => changeIsCheckedIn(event_data_id)} cursor={'pointer'} bg="#2D558A" textColor={"#FFFFFF"}>
+            <Tag onClick={() => changeIsCheckedIn(event_data_new_id)} cursor={'pointer'} bg="#2D558A" textColor={"#FFFFFF"}>
               Check-In
             </Tag>
           )}
