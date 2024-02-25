@@ -13,14 +13,18 @@ import {
   FormLabel,
   Input,
   Center,
-  useNumberInput,
+  Textarea,
   HStack,
   InputGroup,
   InputRightElement,
   Flex,
   Text,
+  Stack,
 } from '@chakra-ui/react';
-import Backend from '../../utils/utils'; // Ensure this path is correct
+import Backend from '../../utils/utils';
+import { FiPaperclip } from "react-icons/fi";
+import { FaCamera } from "react-icons/fa";
+
 
 const DataEntryModal = ({
   isOpen,
@@ -63,7 +67,9 @@ const DataEntryModal = ({
   //   }
   // };
 
-  const { register, handleSubmit } = useForm(volunteerData);
+  //   const { register, handleSubmit } = useForm(volunteerData);
+
+  const { handleSubmit } = useForm(volunteerData);
 
   const postVolunteerData = async formData => {
     try {
@@ -103,56 +109,74 @@ const DataEntryModal = ({
   };
 
   const TrashWeightInputs = () => {
-    const [pounds, setPounds] = useState(0);
-    const [ounces, setOunces] = useState(0);
-
-    const poundsProps = useNumberInput({
-      step: 0.01,
-      precision: 2,
-      min: 0,
-      onChange: (valueAsString, valueAsNumber) => setPounds(valueAsNumber),
-    });
-
-    const ouncesProps = useNumberInput({
-      step: 0.01,
-      precision: 2,
-      min: 0,
-      onChange: (valueAsString, valueAsNumber) => setOunces(valueAsNumber),
-    });
-
-    const poundsInc = poundsProps.getIncrementButtonProps();
-    const poundsInput = poundsProps.getInputProps({ name: 'pounds' });
-
-    const ouncesInc = ouncesProps.getIncrementButtonProps();
-    const ouncesInput = ouncesProps.getInputProps({ name: 'ounces' });
-
+    const [inputPounds, setInputPounds] = useState('');
+    const [inputOunces, setInputOunces] = useState('');
+    const [totalWeight, setTotalWeight] = useState(0);
+  
+    const [lastPounds, setLastPounds] = useState(0);
+    const [lastOunces, setLastOunces] = useState(0);
+  
+    const addPoundsToTotal = () => {
+      setTotalWeight((prevWeight) => prevWeight + lastPounds);
+    };
+  
+    const addOuncesToTotal = () => {
+      setTotalWeight((prevWeight) => prevWeight + lastOunces / 16);
+    };
+  
+    const updateLastPounds = (e) => {
+      const newPounds = parseFloat(e.target.value) || 0;
+      setInputPounds(e.target.value); // Keep the input as string
+      setLastPounds(newPounds); // Convert to number for calculations
+    };
+  
+    const updateLastOunces = (e) => {
+      const newOunces = parseFloat(e.target.value) || 0;
+      setInputOunces(e.target.value); // Keep the input as string
+      setLastOunces(newOunces); // Convert to number for calculations
+    }
+  
     return (
       <>
         <HStack spacing={4}>
           <FormControl>
-            <FormLabel htmlFor="pounds">Pounds</FormLabel>
+            <FormLabel htmlFor="pounds" fontSize="16px">Enter Pounds</FormLabel>
             <InputGroup>
-              <Input {...poundsInput} placeholder="e.g. 20" />
+              <Input
+                placeholder="e.g. 20"
+                onChange={updateLastPounds}
+                value={inputPounds}
+                name="pounds"
+                type="number"
+              />
               <InputRightElement width="2.7rem">
-                <Button {...poundsInc} size={'md'}>
+                <Button onClick={addPoundsToTotal} size={'md'}>
                   +
                 </Button>
               </InputRightElement>
             </InputGroup>
           </FormControl>
           <FormControl>
-            <FormLabel htmlFor="ounces">Ounces</FormLabel>
+            <FormLabel htmlFor="ounces" fontSize="16px">Enter Ounces</FormLabel>
             <InputGroup>
-              <Input {...ouncesInput} placeholder="e.g. 5" />
+              <Input
+                placeholder="e.g. 5"
+                onChange={updateLastOunces}
+                value={inputOunces}
+                name="ounces"
+                type="number"
+              />
               <InputRightElement width="2.7rem">
-                <Button {...ouncesInc}>+</Button>
+                <Button onClick={addOuncesToTotal}>
+                  +
+                </Button>
               </InputRightElement>
             </InputGroup>
           </FormControl>
         </HStack>
         <Flex mt={4} justifyContent="space-between" alignItems="center">
-          <Text fontSize="lg">Total Trash Weight:</Text>
-          <Text fontSize="lg">{(pounds + ounces / 16).toFixed(2)} lbs</Text>
+          <Text fontSize="16px">Total Trash Weight:</Text>
+          <Text fontWeight="bold" fontSize="16px">{totalWeight.toFixed(2)} lbs</Text>
         </Flex>
       </>
     );
@@ -161,21 +185,21 @@ const DataEntryModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent borderRadius="30px">
         <ModalCloseButton />
-        <ModalHeader alignSelf={'center'}>
+        <ModalHeader fontSize="24px" alignSelf={'center'}>
           {firstName} {lastName}
         </ModalHeader>
         {/* postVolunteerData(10, 5, 5, 5, 10, 10) */}
         <form onSubmit={handleSubmit(noReload)}>
           <FormControl>
             <ModalBody>
+              <FormLabel fontSize="18px" fontWeight="bold">Trash Weight</FormLabel>{' '}
               <TrashWeightInputs />
 
               <FormControl>
-                <Center>
-                  <FormLabel paddingTop={'20px'}>Enter Unusual Items</FormLabel>{' '}
-                </Center>
+                  <FormLabel fontSize="16px" fontWeight="bold" paddingTop={'20px'}>Other Information</FormLabel>{' '}
+
                 {/* <Center>
                   {unusualItemsArray.length === 0 ? (
                     <div>No Unusual Items</div>
@@ -198,21 +222,24 @@ const DataEntryModal = ({
                   )}
                 </Center> */}
 
-                <Center paddingTop={'20px'}>
-                  <Input
-                    marginTop={5}
-                    placeholder="Other"
-                    alignItems={'center'}
-                    {...register('other')}
-                    type="text"
-                  />
+                <Center>
+                <Textarea fontSize="14px" placeholder='Unusual items, etc...' />
                 </Center>
               </FormControl>
+              <FormLabel paddingTop="10px" fontSize="12px" fontWeight={'bold'}>Add Images</FormLabel>
+              <Stack  spacing={4} direction='row' align='center'>
+              <Button borderRadius="15px" leftIcon={<FiPaperclip />} fontWeight="400" color='#D9D9D9' textColor="black" fontSize="12px" width="82px" height="28px">
+                Upload
+              </Button>
+              <Button borderRadius="15px" leftIcon={<FaCamera />}fontWeight="400" color='#D9D9D9' textColor="black" fontSize="12px" width="112px" height="28px">
+                Take a picture
+              </Button>
+              </Stack>
             </ModalBody>
 
-            <Center p={8}>
-              <Button type="submit" color="black" bg="#95D497" w="70%">
-                Save
+            <Center paddingBottom={7} paddingTop={5}>
+              <Button type="submit" color="black" bg="#95D497" width="110px" height="37px" borderRadius="15px" fontSize="13px">
+                Save Data
               </Button>
             </Center>
           </FormControl>
