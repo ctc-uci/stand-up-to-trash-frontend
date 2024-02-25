@@ -1,5 +1,5 @@
 import { FacebookAuthProvider } from 'firebase/auth';
-import { getAuth, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
+import { getAuth, signInWithRedirect, signOut } from 'firebase/auth';
 
 const provider = new FacebookAuthProvider();
 
@@ -9,23 +9,9 @@ const auth = getAuth();
  * @param {string} redirect Link to redirect to after successful login
  * @param {hook} navigate useNavigate hook
  */
-export function createFacebookUserInFirebase(redirect, navigate) {
-  signInWithRedirect(auth, provider);
-
-  getRedirectResult(auth)
-    .then(result => {
-      const credential = provider.credentialFromResult(result);
-      const token = credential.accessToken;
-      const user = result.user;
-
-      navigate(redirect);
-      return { token: token, user: user };
-    })
-    .catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error('An error occurred', errorCode, errorMessage);
-    });
+export async function createFacebookUserInFirebase(redirect, navigate) {
+  await signInWithRedirect(auth, provider);
+  navigate(redirect);
 }
 
 /**
