@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useCallback } from 'react';
 import { fetchJoinedEventsById } from '../utils/fuseUtils';
+import { getEventById } from '../utils/eventsUtils';
+// import { relativeTimeFromDates, inThePast } from '../utils/timeUtils';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
 import { useParams } from 'react-router-dom';
 import {
   Container,
+  Text,
+  Center,
   Flex,
   Button,
   Box,
@@ -15,9 +19,13 @@ import {
   Input,
   useDisclosure,
   Spacer,
+  Image,
+  InputGroup,
+  InputLeftElement
 } from '@chakra-ui/react';
-import { SearchIcon } from '@chakra-ui/icons';
+import { CustomSearchIcon, GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
+import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 
 const DummyCheckin = () => {
   const [joinedData, setJoinedData] = useState([]);
@@ -27,9 +35,8 @@ const DummyCheckin = () => {
   const [notCheckedInVolunteers, setNotCheckedInVolunteers] = useState([]);
   const [input, setInput] = useState('');
   const [showCheckedIn, setShowCheckedIn] = useState(false);
-
+  const [event, setEvent] = useState('');
   const { eventId } = useParams();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   /*
@@ -49,12 +56,13 @@ const DummyCheckin = () => {
 
   /*
     Async function for grabbing all joined data for the specified event
+    Also gets the event image
   */
   const setData = async () => {
     try {
       // Fetching joined events data by ID
       const data = await fetchJoinedEventsById(eventId);
-
+      const event = await getEventById(eventId);
       // Mapping the data to components
       // const joinedContainers = data.map(event => (
       //   <JoinedDataContainer data={event} key={event.volunteer_id} />
@@ -62,6 +70,7 @@ const DummyCheckin = () => {
 
       // Setting the joined data
       setJoinedData(data);
+      setEvent(event);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -133,17 +142,51 @@ const DummyCheckin = () => {
   };
 
   return (
-    <>
+    <div style={{backgroundColor: "#C8E6FF"}}>
       <Flex justifyContent="center">
         <Box
-          w="88%"
+          w="100%"
           h="15rem"
           bg="white"
-          style={{ boxShadow: ' 0px 4px 4px 0px rgba(0, 0, 0, 0.25)' }}
-          mt={1}
-        ></Box>
+          position="relative"
+        >
+          <Image src={event['image_url']} objectFit="cover" width="100%" height="100%" bg="rgba(217, 217, 217, 0.72)" />
+          <Flex position="absolute" top="20%" bottom="5px" right="5px" left="10px" mb="10rem">          
+          <Text color="white" fontSize="4xl" fontWeight="bold">event title</Text>
+            {event && <HappeningInChip date={new Date(Date.parse(event['date']))}/>}
+          </Flex>
+        </Box>
       </Flex>
-      <Container maxW="90%">
+      <Center>
+        <Flex width="93%" gap={3}>
+              <InputGroup>
+                <InputLeftElement pointerEvents='none' top={'6px'} left={'5px'}>
+                  <GreyCustomSearchIcon w={'24px'} h={'18px'}/>
+                </InputLeftElement>
+                <Input
+                  value={input}
+                  onChange={event => setInput(event.target.value)}
+                  borderRadius='15px'
+                  backgroundColor='#FFFFFF'
+                  height='53px'
+                  width='100%'
+                  padding={'13px, 16px, 12px, 16px'}
+                  paddingLeft={"50px"}
+                  border='1px solid #E2E8F0'
+                  placeholder='Search Volunteer Name (e.g. "John Doe")'
+              />
+              </InputGroup>
+
+              <IconButton 
+                icon={<CustomSearchIcon w={'24px'} h={'24px'}/>} 
+                width='69px'
+                height='53px'
+                borderRadius='15px'
+                background='#2D558A'
+              />
+            </Flex>
+            </Center>
+      <Container maxW="95%">
         <Container
           style={{
             display: 'flex',
@@ -156,25 +199,17 @@ const DummyCheckin = () => {
           }}
         >
           <FormControl>
-            <Flex>
-              <Input
-                value={input}
-                onChange={event => setInput(event.target.value)}
-                borderRadius="0px"
-                placeholder='Search Volunteer Name (e.g. "John Doe")'
-              />
-              <IconButton icon={<SearchIcon />} ml={1} />
-            </Flex>
+
           </FormControl>
         </Container>
 
         <Flex>
           <Button
             style={{
-              borderRadius: '60px',
-              backgroundColor: `${showCheckedIn ? '#EFEFEF' : '#696969'}`,
+              borderRadius: '100px',
+              backgroundColor: `${showCheckedIn ? '#FFFFFF' : '#2D558A'}`,
+              color: `${showCheckedIn ? '#000000' : '#FFFFFF'}`
             }}
-            marginLeft="1vw"
             marginTop="3vh"
             onClick={() => setShowCheckedIn(false)}
           >
@@ -182,8 +217,9 @@ const DummyCheckin = () => {
           </Button>
           <Button
             style={{
-              borderRadius: '60px',
-              backgroundColor: `${showCheckedIn ? '#696969' : '#EFEFEF'}`,
+              borderRadius: '100px',
+              backgroundColor: `${showCheckedIn ? '#2D558A' : '#FFFFFF'}`,
+              color: `${showCheckedIn ? '#FFFFFF' : '#000000'}`
             }}
             marginLeft="1vw"
             marginTop="3vh"
@@ -194,11 +230,13 @@ const DummyCheckin = () => {
           <Spacer />
           <Button
             style={{
-              borderRadius: '60px',
+              borderRadius: '100px',
+              mixBlendMode: 'Luminosity'
             }}
             marginLeft="1vw"
             marginTop="3vh"
             onClick={onOpen}
+            background='#EFEFEF'
           >
             + register new volunteer
           </Button>
@@ -224,7 +262,7 @@ const DummyCheckin = () => {
             ''
           ))}
       </Container>
-    </>
+    </div>
   );
 };
 

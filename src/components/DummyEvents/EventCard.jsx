@@ -69,6 +69,7 @@ const relativeTimeFromElapsed = elapsed => {
 const HOUR_IN_MS = 1000 * 60 * 60;
 
 const HappeningInChip = ({ date }) => {
+  console.log(`The date is ${date} !`);
   let color = '#5BD260'; // Default "happening right now" color
   let inThePast = false;
   const relativeTimeInMs = date.getTime() - new Date().getTime();
