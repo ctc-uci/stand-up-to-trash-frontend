@@ -140,6 +140,17 @@ const DummyCheckin = () => {
     }
   };
 
+  // formats dbms date into Month Day, Year
+  const getDateString = () => {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const dateObject = new Date(Date.parse(event['date']));
+    const dateString = `${months[dateObject.getMonth()]}  ${dateObject.getDate()}, ${dateObject.getFullYear()}`;
+    if (isNaN(dateObject)) { // on page load, prevents displaying "Undefined" as date
+      return '';
+    }
+    return dateString;
+  }
+
   return (
     <Box bg="#C8E6FF" minH="100vh">
       <Flex justifyContent="center">
@@ -150,10 +161,14 @@ const DummyCheckin = () => {
           position="relative"
         >
           <Image src={event['image_url']} objectFit="cover" width="100%" height="100%" bg="rgba(217, 217, 217, 0.72)" />
-          <Flex position="absolute" top="20%" bottom="5px" right="5px" left="10px" mb="10rem">
-          <Text color="white" fontSize="4xl" fontWeight="bold">event title</Text>
-            {event && <HappeningInChip date={new Date(Date.parse(event['date']))}/>}
+          <Flex position="absolute" top="60%" right="57%" direction="column" width="40%">
+              <Text color="white" fontSize="4xl" fontWeight="bold">{event['name']}</Text>
+              <Text color="white">{getDateString()}</Text>
           </Flex>
+          <Box position="absolute" top="80%" left="90%">
+            {event && <HappeningInChip date={new Date(Date.parse(event['date']))}/>}
+          </Box>
+
         </Box>
       </Flex>
       <Center>
