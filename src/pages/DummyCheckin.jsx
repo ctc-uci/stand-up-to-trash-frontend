@@ -50,7 +50,7 @@ const DummyCheckin = () => {
   };
 
   /*
-    useEffect for getting joined data on first render and filtering it
+    useEffect for getting joined data on first render
   */
   useEffect(() => {
     setData();

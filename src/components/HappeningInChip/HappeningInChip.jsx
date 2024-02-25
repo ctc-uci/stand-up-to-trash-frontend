@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
-import {
-    Box,
-  } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 // Copied and modified from https://stackoverflow.com/a/66390028/7203225
 const units = [
