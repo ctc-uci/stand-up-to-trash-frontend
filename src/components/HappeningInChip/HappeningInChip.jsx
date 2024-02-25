@@ -13,7 +13,7 @@ const units = [
     { unit: 'second', ms: 1000 },
   ];
   const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
-  
+
   /**
    * Get language-sensitive relative time message from Dates.
    * @param relative  - the relative dateTime, generally is in the past or future
@@ -24,7 +24,7 @@ const units = [
     const elapsed = relative.getTime() - pivot.getTime();
     return relativeTimeFromElapsed(elapsed);
   };
-  
+
   /**
    * Get language-sensitive relative time message from elapsed time.
    * @param elapsed   - the elapsed time in milliseconds
@@ -37,12 +37,10 @@ const units = [
     }
     return '';
   };
-  
-  const HOUR_IN_MS = 1000 * 60 * 60;
-  
-  const HappeningInChip = ({ date }) => {
-    console.log(date);
 
+  const HOUR_IN_MS = 1000 * 60 * 60;
+
+  const HappeningInChip = ({ date }) => {
     let color = '#5BD260'; // Default "happening right now" color
     let inThePast = false;
     const relativeTimeInMs = date.getTime() - new Date().getTime();
@@ -74,7 +72,7 @@ const units = [
       </Box>
     );
   };
-  
+
 // HappeningInChip.propTypes = {
 // date: PropTypes.object.isRequired,
 // };

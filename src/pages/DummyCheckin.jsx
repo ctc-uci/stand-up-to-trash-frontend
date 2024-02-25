@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchJoinedEventsById } from '../utils/fuseUtils';
 import { getEventById } from '../utils/eventsUtils';
 // import { relativeTimeFromDates, inThePast } from '../utils/timeUtils';
@@ -15,7 +15,6 @@ import {
   Button,
   Box,
   IconButton,
-  FormControl,
   Input,
   useDisclosure,
   Spacer,
@@ -29,46 +28,20 @@ import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 
 const DummyCheckin = () => {
   const [joinedData, setJoinedData] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
-  const [checkedInVolunteers, setCheckedInVolunteers] = useState([]);
-  const [notCheckedInVolunteers, setNotCheckedInVolunteers] = useState([]);
   const [input, setInput] = useState('');
   const [showCheckedIn, setShowCheckedIn] = useState(false);
   const [event, setEvent] = useState('');
   const { eventId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const searchResults = joinedData.filter(item => (item.event_id == eventId) || (eventId == -1));
+  const checkedInVolunteers = volunteerResults.filter(volunteer => volunteer.is_checked_in === true);
+  const notCheckedInVolunteers = volunteerResults.filter(volunteer => volunteer.is_checked_in === false);
 
-  /*
-    Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
-  */
-  useEffect(() => {
-    const filterHandler = () => {
-      const filterdData = joinedData.filter(item => {
-        if (item.event_id == eventId || eventId == -1) {
-          return true;
-        }
-      });
-      setSearchResults(filterdData);
-    };
-    filterHandler();
-  }, [joinedData, eventId]);
-
-  /*
-    Async function for grabbing all joined data for the specified event
-    Also gets the event image
-  */
   const setData = async () => {
     try {
-      // Fetching joined events data by ID
-      const data = await fetchJoinedEventsById(eventId);
-      const event = await getEventById(eventId);
-      // Mapping the data to components
-      // const joinedContainers = data.map(event => (
-      //   <JoinedDataContainer data={event} key={event.volunteer_id} />
-      // ));
-
-      // Setting the joined data
+      const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
+      const event = await getEventById(eventId); // event data for page rendering eg. image src
       setJoinedData(data);
       setEvent(event);
     } catch (error) {
@@ -77,7 +50,7 @@ const DummyCheckin = () => {
   };
 
   /*
-    useEffect for getting joined data on first render
+    useEffect for getting joined data on first render and filtering it
   */
   useEffect(() => {
     setData();
@@ -102,38 +75,14 @@ const DummyCheckin = () => {
   }, [input, searchResults, joinedData]);
 
   /*
-    Sort volunteer results into checked in and not checked in volunteers for rendering
-  */
-  const sortEventCardsByCheckIn = useCallback(() => {
-    if (volunteerResults.length !== 0) {
-      setCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.is_checked_in === true),
-      );
-      setNotCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.is_checked_in === false),
-      );
-    } else {
-      setCheckedInVolunteers([]);
-      setNotCheckedInVolunteers([]);
-    }
-  }, [volunteerResults]);
-
-  /*
-    update checked in and not checked in volunteers on change to volunteer results - when fuzzy search returns different results
-  */
-  useEffect(() => {
-    sortEventCardsByCheckIn();
-  }, [volunteerResults, sortEventCardsByCheckIn]);
-
-  /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
   */
   const changeIsCheckedIn = async event_data_id => {
     try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
       const response = await Backend.put(`/data/checkin/${event_data_id}`).then(async () => {
-        await setData().then(sortEventCardsByCheckIn);
+        await setData();
       });
-      // rerender event cards so checked in volunteers show up in the correct category
       return response;
     } catch (err) {
       console.log(err);
@@ -168,7 +117,6 @@ const DummyCheckin = () => {
           <Box position="absolute" top="80%" left="90%">
             {event && <HappeningInChip date={new Date(Date.parse(event['date']))}/>}
           </Box>
-
         </Box>
       </Flex>
       <Center>
@@ -190,7 +138,6 @@ const DummyCheckin = () => {
                   placeholder='Search Volunteer Name (e.g. "John Doe")'
               />
               </InputGroup>
-
               <IconButton
                 icon={<CustomSearchIcon w={'24px'} h={'24px'}/>}
                 width='69px'
@@ -212,11 +159,7 @@ const DummyCheckin = () => {
             gap: '1vw',
           }}
         >
-          <FormControl>
-
-          </FormControl>
         </Container>
-
         <Flex mb={5}>
           <Button
             style={{
