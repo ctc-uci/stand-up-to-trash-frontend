@@ -25,37 +25,41 @@ import { createGoogleUserInFirebase } from '../utils/googleAuthUtils';
 import { createFacebookUserInFirebase } from '../utils/facebookAuthUtils';
 import { useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getProfileByFirebaseUid, postProfile } from "../utils/profileUtils"
-
-
+import { getProfileByFirebaseUid, postProfile } from '../utils/profileUtils';
 
 const LoginV2 = () => {
   const auth = getAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      try{
+    const unsubscribe = onAuthStateChanged(auth, async user => {
+      try {
         if (user) {
-          const userName = user.displayName.split(" ")
-          const firstName = userName[0]
-          const lastName = userName.length > 1 ? userName[1] : ""
+          // Keep in mind that if the user logs in with the plain email/password, they'll have no displayName attribute
+          console.log(user);
+          const userName = user.displayName.split(' ');
+          const firstName = userName[0];
+          const lastName = userName.length > 1 ? userName[1] : '';
 
-          const profile =  {"first_name": firstName, "last_name": lastName, "role": "volunteer", "email": user.email, "firebase_uid": user.uid};
+          const profile = {
+            first_name: firstName,
+            last_name: lastName,
+            role: 'volunteer',
+            email: user.email,
+            firebase_uid: user.uid,
+          };
 
           console.log(profile);
-          console.log("success");
+          console.log('success');
 
-          if(!(await getProfileByFirebaseUid(profile.firebase_uid))) {
-              postProfile(profile); 
+          if (!(await getProfileByFirebaseUid(profile.firebase_uid))) {
+            postProfile(profile);
           }
           navigate('/successful-login');
-        }
-        else {
+        } else {
           console.log('No one in');
         }
-      }
-      catch(error){
+      } catch (error) {
         console.log(error, error.status);
       }
     });

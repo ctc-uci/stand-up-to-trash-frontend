@@ -1,9 +1,9 @@
 import { FacebookAuthProvider } from 'firebase/auth';
-import { getAuth, signInWithRedirect, signOut } from 'firebase/auth';
+import { signInWithRedirect, signOut } from 'firebase/auth';
+import { auth } from './firebaseAuthUtils';
 
 const provider = new FacebookAuthProvider();
 
-const auth = getAuth();
 /**
  * Function to create new user in Firebase with Facebook Auth
  * @param {string} redirect Link to redirect to after successful login

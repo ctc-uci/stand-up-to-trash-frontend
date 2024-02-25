@@ -1,8 +1,7 @@
-import { getAuth, signInWithRedirect, signOut, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithRedirect, signOut, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from './firebaseAuthUtils';
 
 const provider = new GoogleAuthProvider();
-
-const auth = getAuth();
 
 /**
  * Function to create new user in Firebase with Google Auth
