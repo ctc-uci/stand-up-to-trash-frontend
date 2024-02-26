@@ -29,11 +29,14 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     email,
     image_url,
     is_checked_in,
+    number_in_party,
     event_data_new_id,
     volunteer_id,
     event_id,
     id,
     unusual_items,
+    ounces,
+    pounds,
   } = volunteer;
   console.log(volunteer);
 
@@ -67,12 +70,15 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
               <DataEntryModal
                 isOpen={isOpen}
                 onClose={onClose}
-                profileImage={image_url}
+                id={id}
                 firstName={first_name}
                 lastName={last_name}
                 volunteerId={volunteer_id}
+                numberInParty={number_in_party}
                 eventId={event_id}
                 unusualItems={unusual_items}
+                ounces={ounces}
+                pounds={pounds}
               />
             </>
           ) : (
