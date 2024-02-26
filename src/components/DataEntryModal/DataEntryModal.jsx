@@ -24,22 +24,25 @@ import {
 } from '@chakra-ui/react';
 import { FiPaperclip } from 'react-icons/fi';
 import { FaCamera } from 'react-icons/fa';
-import { postEventData } from '../../utils/dataUtils';
+import Backend from '../../utils/utils';
 
 const DataEntryModal = ({
   isOpen,
   onClose,
+  id,
   firstName,
   lastName,
   volunteerId,
+  numberInParty,
   eventId,
   unusualItems,
   ounces,
   pounds,
 }) => {
   const volunteerData = {
+    id: id,
     volunteer_id: volunteerId,
-    number_in_party: 0,
+    number_in_party: numberInParty,
     pounds: pounds,
     ounces: ounces,
     unusual_items: unusualItems,
@@ -72,18 +75,19 @@ const DataEntryModal = ({
 
   const { handleSubmit, control, getValues } = useForm(volunteerData);
 
-  const postDataEntry = async () => {
+  const putDataEntry = async () => {
     try {
       const { pounds, ounces, unusual_items } = getValues();
 
       const dataToSend = {
         ...volunteerData,
-        pounds: pounds,
-        ounces: ounces,
-        unusual_items: unusual_items,
+        pounds: pounds === "" ? 0 : parseInt(pounds),
+        ounces: ounces === "" ? 0 : parseInt(ounces),
+        unusual_items: unusual_items === "" ? null : unusual_items,
       };
+      console.log(dataToSend);
 
-      await postEventData(dataToSend);
+      await Backend.put(`/data/${id}`, dataToSend);
       toast({
         title: 'Data saved.',
         description: 'Data saved.',
@@ -109,7 +113,7 @@ const DataEntryModal = ({
 
   const noReload = (data, event) => {
     event.preventDefault();
-    postDataEntry(data);
+    putDataEntry(data);
   };
 
   // COMMENTED OUT BECAUSE DESIGN FLAW
@@ -168,7 +172,7 @@ const DataEntryModal = ({
     // };
 
     // console.log('volunteerData', volunteerData);
-    
+
     return (
       <>
         <form>
@@ -343,7 +347,9 @@ const DataEntryModal = ({
 };
 
 DataEntryModal.propTypes = {
+  id: PropTypes.number.isRequired,
   volunteerId: PropTypes.string.isRequired,
+  numberInParty: PropTypes.number.isRequired,
   eventId: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
