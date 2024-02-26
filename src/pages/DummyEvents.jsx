@@ -1,5 +1,19 @@
-import { Box, Button, Grid, GridItem, Spacer, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Spacer,
+  HStack,
+  useDisclosure,
+  useToast,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Heading,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { SearchIcon } from '@chakra-ui/icons';
 
 import PropTypes from 'prop-types';
 import AllData from '../components/DummyEvents/AllData';
@@ -9,21 +23,29 @@ import RecentEventsCard from '../components/DummyEvents/RecentEventsCard';
 // import Sidebar from '../components/DummyEvents/Sidebar';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
 import Backend from '../utils/utils';
+import Fuse from 'fuse.js';
 
 const DummyEvents = () => {
   const toast = useToast();
   const [events, setEvents] = useState([]);
+  const [displayEvents, setDisplayEvents] = useState([]);
   // const [eventId, setEventId] = useState('');
   // const [showEvents, setShowEvents] = useState(true);
   const [showSelect, setShowSelect] = useState(false);
   const [isSelectButton, setIsSelectButton] = useState(true);
   const [isCreateButton, setIsCreateButton] = useState(true); // toggle between create event button and deselect button
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [name, setName] = useState('');
+  const [date, setDate] = useState('');
+  const [location, setLocation] = useState('');
+  const [fuse, setFuse] = useState();
 
   const getEvents = async () => {
     try {
       const eventsData = await Backend.get('/events');
       setEvents(eventsData.data);
+      const options = { keys: ['name', 'date', 'location'], includeScore: true };
+      setFuse(new Fuse(eventsData.data, options));
     } catch (err) {
       console.log(`Error getting events: `, err.message);
     }
@@ -90,21 +112,17 @@ const DummyEvents = () => {
     console.log(selectedEvents);
   };
 
-  const eventCards = (
-    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-      {events.map(element => (
-        <GridItem key={element.id}>
-          <EventCard
-            {...element}
-            isSelected={selectedEvents.includes(element.id)}
-            showSelect={showSelect}
-            handleCheckboxChange={handleCheckboxChange}
-            getEvents={getEvents}
-          />
-        </GridItem>
-      ))}
-    </Grid>
-  );
+  const eventCards = displayEvents.map(element => (
+    <GridItem key={element.id}>
+      <EventCard
+        {...element}
+        isSelected={selectedEvents.includes(element.id)}
+        showSelect={showSelect}
+        handleCheckboxChange={handleCheckboxChange}
+        getEvents={getEvents}
+      />
+    </GridItem>
+  ));
 
   useEffect(() => {
     getEvents();
@@ -174,6 +192,28 @@ const DummyEvents = () => {
     );
   };
 
+  useEffect(() => {
+    if (!fuse) {
+      return;
+    }
+    console.log(name);
+    let ands = [];
+    if (name) ands.push({ name: name });
+    if (location) ands.push({ location: location });
+    if (date) ands.push({ date: date });
+
+    let result;
+    if (ands.length > 0) {
+      const fuseResult = fuse.search({ $and: ands });
+      console.log(fuseResult);
+      // If we want to filter by score:
+      // result = fuseResult.filter(item => item.score <= 0.5).map(item => item.item);
+      result = fuseResult.map(item => item.item);
+    } else result = events;
+    console.log(result);
+    setDisplayEvents(result);
+  }, [name, location, date, fuse]);
+
   return (
     <Box mx="156px" py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
       <div style={{ marginLeft: '15rem' }}>
@@ -189,10 +229,52 @@ const DummyEvents = () => {
           <AllData />
         </Box>
         <Spacer />
+        <Box display="flex" justifyContent={'center'} mb="4">
+          <Heading width="930px">Upcoming Events</Heading>
+        </Box>
         <Box display="flex" justifyContent={'center'}>
           <Box justifyContent="space-between" width="930px">
             <Box display="flex" flex-direction="row" justifyContent="space-between">
-              {isCreateButton ? <AddEventsModal getEvents={getEvents} /> : <DeselectButton />}
+              {isCreateButton ? <></> : <DeselectButton />}
+              <HStack>
+                <InputGroup w="50%">
+                  <InputLeftElement pointerEvents="none">
+                    <SearchIcon />
+                  </InputLeftElement>
+                  <Input
+                    value={name}
+                    onChange={event => {
+                      setName(event.target.value);
+                    }}
+                    placeholder='Search Event Name (e.g. "Festival of Whales")'
+                  />
+                </InputGroup>
+                <InputGroup w="25%">
+                  <InputLeftElement pointerEvents="none">
+                    <SearchIcon />
+                  </InputLeftElement>
+                  <Input
+                    value={location}
+                    onChange={event => {
+                      setLocation(event.target.value);
+                    }}
+                    placeholder="Search Location"
+                  />
+                </InputGroup>
+                <InputGroup w="25%">
+                  <InputLeftElement pointerEvents="none">
+                    <SearchIcon />
+                  </InputLeftElement>
+                  <Input
+                    value={date}
+                    placeholder="Search Date"
+                    onChange={event => {
+                      setDate(event.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </HStack>
+
               {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
               <ArchiveEventsModal
                 isOpen={isArchiveEventModalOpen}
@@ -203,7 +285,12 @@ const DummyEvents = () => {
             </Box>
             <Spacer />
             <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
-              <Box marginTop="3vh">{eventCards}</Box>
+              <Box marginTop="3vh">
+                <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+                  <AddEventsModal getEvents={getEvents} />
+                  {eventCards}
+                </Grid>
+              </Box>
             </Box>
           </Box>
         </Box>
