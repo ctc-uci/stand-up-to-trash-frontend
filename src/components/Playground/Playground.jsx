@@ -38,7 +38,7 @@ const Playground = () => {
 
       <AddEventsModal />
       <Dropzone />
-      <Leaderboard />
+      <Leaderboard event_id={35} />
     </Flex>
   );
 };
