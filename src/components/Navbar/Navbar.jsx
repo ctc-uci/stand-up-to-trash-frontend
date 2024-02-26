@@ -62,7 +62,7 @@ const Navbar = () => {
                 navigate('/archived-events');
               }}
             >
-              <img src={profile} />
+              <img src={archive} />
               <Text>Event Archive</Text>
             </Box>
             <Box
@@ -83,7 +83,7 @@ const Navbar = () => {
                 navigate('/admin');
               }}
             >
-              <img src={archive} />
+              <img src={profile} />
               <Text>Admins</Text>
             </Box>
           </Box>
