@@ -1,67 +1,49 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchJoinedEventsById } from '../utils/fuseUtils';
+import { getEventById } from '../utils/eventsUtils';
+// import { relativeTimeFromDates, inThePast } from '../utils/timeUtils';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
 import { useParams } from 'react-router-dom';
 import {
   Container,
+  Text,
+  Center,
   Flex,
   Button,
   Box,
   IconButton,
-  FormControl,
   Input,
   useDisclosure,
   Spacer,
+  Image,
+  InputGroup,
+  InputLeftElement
 } from '@chakra-ui/react';
-import { SearchIcon } from '@chakra-ui/icons';
+import { CustomSearchIcon, GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
+import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 
 const DummyCheckin = () => {
   const [joinedData, setJoinedData] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
-  const [checkedInVolunteers, setCheckedInVolunteers] = useState([]);
-  const [notCheckedInVolunteers, setNotCheckedInVolunteers] = useState([]);
   const [input, setInput] = useState('');
   const [showCheckedIn, setShowCheckedIn] = useState(false);
-
+  const [event, setEvent] = useState('');
   const { eventId } = useParams();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const searchResults = joinedData.filter(item => (item.event_id == eventId) || (eventId == -1));
+  const checkedInVolunteers = volunteerResults.filter(volunteer => volunteer.is_checked_in === true);
+  const notCheckedInVolunteers = volunteerResults.filter(volunteer => volunteer.is_checked_in === false);
 
-  /*
-    Filters on change to joinedData which it relies on, only really necessary once but needs to happen aftr joinedData complete
-  */
-  useEffect(() => {
-    const filterHandler = () => {
-      const filterdData = joinedData.filter(item => {
-        if (item.event_id == eventId || eventId == -1) {
-          return true;
-        }
-      });
-      setSearchResults(filterdData);
-    };
-    filterHandler();
-  }, [joinedData, eventId]);
-
-  /*
-    Async function for grabbing all joined data for the specified event
-  */
   const setData = async () => {
     try {
-      // Fetching joined events data by ID
-      const data = await fetchJoinedEventsById(eventId);
-
-      // Mapping the data to components
-      // const joinedContainers = data.map(event => (
-      //   <JoinedDataContainer data={event} key={event.volunteer_id} />
-      // ));
-
-      // Setting the joined data
+      const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
+      const event = await getEventById(eventId); // event data for page rendering eg. image src
       setJoinedData(data);
+      setEvent(event);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -93,57 +75,79 @@ const DummyCheckin = () => {
   }, [input, searchResults, joinedData]);
 
   /*
-    Sort volunteer results into checked in and not checked in volunteers for rendering
-  */
-  const sortEventCardsByCheckIn = useCallback(() => {
-    if (volunteerResults.length !== 0) {
-      setCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.is_checked_in === true),
-      );
-      setNotCheckedInVolunteers(
-        volunteerResults.filter(volunteer => volunteer.is_checked_in === false),
-      );
-    } else {
-      setCheckedInVolunteers([]);
-      setNotCheckedInVolunteers([]);
-    }
-  }, [volunteerResults]);
-
-  /*
-    update checked in and not checked in volunteers on change to volunteer results - when fuzzy search returns different results
-  */
-  useEffect(() => {
-    sortEventCardsByCheckIn();
-  }, [volunteerResults, sortEventCardsByCheckIn]);
-
-  /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
   */
   const changeIsCheckedIn = async event_data_id => {
     try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
       const response = await Backend.put(`/data/checkin/${event_data_id}`).then(async () => {
-        await setData().then(sortEventCardsByCheckIn);
+        await setData();
       });
-
-      // rerender event cards so checked in volunteers show up in the correct category
       return response;
     } catch (err) {
       console.log(err);
     }
   };
 
+  // formats dbms date into Month Day, Year
+  const getDateString = () => {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const dateObject = new Date(Date.parse(event['date']));
+    const dateString = `${months[dateObject.getMonth()]}  ${dateObject.getDate()}, ${dateObject.getFullYear()}`;
+    if (isNaN(dateObject)) { // on page load, prevents displaying "Undefined" as date
+      return '';
+    }
+    return dateString;
+  }
+
   return (
-    <>
+    <Box bg="#C8E6FF" minH="100vh">
       <Flex justifyContent="center">
         <Box
-          w="88%"
+          w="100%"
           h="15rem"
           bg="white"
-          style={{ boxShadow: ' 0px 4px 4px 0px rgba(0, 0, 0, 0.25)' }}
-          mt={1}
-        ></Box>
+          position="relative"
+        >
+          <Image src={event['image_url']} objectFit="cover" width="100%" height="100%" bg="rgba(217, 217, 217, 0.72)" />
+          <Flex position="absolute" top="60%" right="57%" direction="column" width="40%">
+              <Text color="white" fontSize="4xl" fontWeight="bold">{event['name']}</Text>
+              <Text color="white">{getDateString()}</Text>
+          </Flex>
+          <Box position="absolute" top="80%" left="90%">
+            {event && <HappeningInChip date={new Date(Date.parse(event['date']))}/>}
+          </Box>
+        </Box>
       </Flex>
-      <Container maxW="90%">
+      <Center>
+        <Flex width="93%" gap={3} mt={5}>
+              <InputGroup>
+                <InputLeftElement pointerEvents='none' top={'6px'} left={'5px'}>
+                  <GreyCustomSearchIcon w={'24px'} h={'18px'}/>
+                </InputLeftElement>
+                <Input
+                  value={input}
+                  onChange={event => setInput(event.target.value)}
+                  borderRadius='15px'
+                  backgroundColor='#FFFFFF'
+                  height='53px'
+                  width='100%'
+                  padding={'13px, 16px, 12px, 16px'}
+                  paddingLeft={"50px"}
+                  border='1px solid #E2E8F0'
+                  placeholder='Search Volunteer Name (e.g. "John Doe")'
+              />
+              </InputGroup>
+              <IconButton
+                icon={<CustomSearchIcon w={'24px'} h={'24px'}/>}
+                width='69px'
+                height='53px'
+                borderRadius='15px'
+                background='#2D558A'
+              />
+            </Flex>
+            </Center>
+      <Container maxW="95%">
         <Container
           style={{
             display: 'flex',
@@ -155,26 +159,14 @@ const DummyCheckin = () => {
             gap: '1vw',
           }}
         >
-          <FormControl>
-            <Flex>
-              <Input
-                value={input}
-                onChange={event => setInput(event.target.value)}
-                borderRadius="0px"
-                placeholder='Search Volunteer Name (e.g. "John Doe")'
-              />
-              <IconButton icon={<SearchIcon />} ml={1} />
-            </Flex>
-          </FormControl>
         </Container>
-
-        <Flex>
+        <Flex mb={5}>
           <Button
             style={{
-              borderRadius: '60px',
-              backgroundColor: `${showCheckedIn ? '#EFEFEF' : '#696969'}`,
+              borderRadius: '100px',
+              backgroundColor: `${showCheckedIn ? '#FFFFFF' : '#2D558A'}`,
+              color: `${showCheckedIn ? '#000000' : '#FFFFFF'}`
             }}
-            marginLeft="1vw"
             marginTop="3vh"
             onClick={() => setShowCheckedIn(false)}
           >
@@ -182,8 +174,9 @@ const DummyCheckin = () => {
           </Button>
           <Button
             style={{
-              borderRadius: '60px',
-              backgroundColor: `${showCheckedIn ? '#696969' : '#EFEFEF'}`,
+              borderRadius: '100px',
+              backgroundColor: `${showCheckedIn ? '#2D558A' : '#FFFFFF'}`,
+              color: `${showCheckedIn ? '#FFFFFF' : '#000000'}`
             }}
             marginLeft="1vw"
             marginTop="3vh"
@@ -194,11 +187,13 @@ const DummyCheckin = () => {
           <Spacer />
           <Button
             style={{
-              borderRadius: '60px',
+              borderRadius: '100px',
+              mixBlendMode: 'Luminosity'
             }}
             marginLeft="1vw"
             marginTop="3vh"
             onClick={onOpen}
+            background='#EFEFEF'
           >
             + register new volunteer
           </Button>
@@ -224,7 +219,7 @@ const DummyCheckin = () => {
             ''
           ))}
       </Container>
-    </>
+    </Box>
   );
 };
 
