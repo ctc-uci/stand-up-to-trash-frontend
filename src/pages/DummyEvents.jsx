@@ -20,7 +20,7 @@ import AllData from '../components/DummyEvents/AllData';
 import ArchiveEventsModal from '../components/DummyEvents/ArchiveEventsModal';
 import EventCard from '../components/DummyEvents/EventCard';
 import RecentEventsCard from '../components/DummyEvents/RecentEventsCard';
-import Sidebar from '../components/DummyEvents/Sidebar';
+// import Sidebar from '../components/DummyEvents/Sidebar';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
@@ -215,8 +215,8 @@ const DummyEvents = () => {
   }, [name, location, date, fuse]);
 
   return (
-    <Sidebar>
-      <Box py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
+    <Box mx="156px" py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
+      <div style={{ marginLeft: '15rem' }}>
         <Box
           mb="60px"
           display="flex"
@@ -294,8 +294,8 @@ const DummyEvents = () => {
             </Box>
           </Box>
         </Box>
-      </Box>
-    </Sidebar>
+      </div>
+    </Box>
   );
 };
 
