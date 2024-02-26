@@ -30,7 +30,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     image_url,
     is_checked_in,
     number_in_party,
-    event_data_id,
+    event_data_new_id,
     volunteer_id,
     event_id,
     id,
