@@ -23,8 +23,27 @@ import fbicon from '../Assets/fb.png';
 import { logInWithEmailAndPassWord } from '../utils/firebaseAuthUtils';
 import { createGoogleUserInFirebase } from '../utils/googleAuthUtils';
 import { createFacebookUserInFirebase } from '../utils/facebookAuthUtils';
-
+import { useEffect } from 'react';
+import { auth } from '../utils/googleAuthUtils';
+import { onAuthStateChanged } from 'firebase/auth';
 const LoginV2 = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // logout();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        // We now have user, handle db stuff here
+        console.log(user);
+        navigate('/successful-login');
+      } else {
+        console.log('No one in');
+      }
+    });
+
+    return () => unsubscribe();
+  });
+
   return <LoginForm />;
 };
 

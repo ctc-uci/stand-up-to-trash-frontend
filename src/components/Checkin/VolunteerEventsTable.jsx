@@ -35,8 +35,8 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     event_id,
     id,
     unusual_items,
-    ounces,
     pounds,
+    ounces,
   } = volunteer;
   console.log(volunteer);
 
@@ -46,10 +46,10 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
         <Flex ml="5rem">
           <Image src={image_url} boxSize="4rem" borderRadius="full" />
           <Flex direction="column" ml={3} mt={2} g={1}>
-            <Text color={"#2D3748"}>
+            <Text color={'#2D3748'}>
               {first_name} {last_name}
             </Text>
-            <Text fontWeight="light" color={"#718096"}>
+            <Text fontWeight="light" color={'#718096'}>
               {email}
             </Text>
           </Flex>
@@ -64,25 +64,31 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
         <Flex gap={2}>
           {is_checked_in ? (
             <>
-              <Tag cursor={'pointer'} onClick={onOpen} bg="#2D558A" textColor={"#FFFFFF"}>
+              <Tag cursor={'pointer'} onClick={onOpen} bg="#2D558A" textColor={'#FFFFFF'}>
                 Input Data
               </Tag>
               <DataEntryModal
                 isOpen={isOpen}
                 onClose={onClose}
-                id={id}
+                id={event_data_new_id}
+                profileImage={image_url}
                 firstName={first_name}
                 lastName={last_name}
                 volunteerId={volunteer_id}
                 numberInParty={number_in_party}
                 eventId={event_id}
                 unusualItems={unusual_items}
-                ounces={ounces}
                 pounds={pounds}
+                ounces={ounces}
               />
             </>
           ) : (
-            <Tag onClick={() => changeIsCheckedIn(event_data_new_id)} cursor={'pointer'} bg="#2D558A" textColor={"#FFFFFF"}>
+            <Tag
+              onClick={() => changeIsCheckedIn(event_data_new_id)}
+              cursor={'pointer'}
+              bg="#2D558A"
+              textColor={'#FFFFFF'}
+            >
               Check-In
             </Tag>
           )}

@@ -38,7 +38,7 @@ const Navbar = () => {
               onClick={e => {
                 e.preventDefault();
                 setCurrentPath('home');
-                navigate('/events');
+                navigate('/');
               }}
             >
               <img src={home} />

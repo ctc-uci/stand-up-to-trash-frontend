@@ -1,42 +1,45 @@
 import { Flex, Text, Button } from '@chakra-ui/react';
 import { GoogleMapsIcon } from '../Icons/GoogleMapsIcon';
-import { getEventById } from "../../utils/eventsUtils";
-
+import { getEventById } from '../../utils/eventsUtils';
 
 // eslint-disable-next-line react/prop-types
 const GetMapDirectionsButton = ({ eventId }) => {
-    return (
+  return (
     <Flex>
-        <Button
-        background={'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))'}
+      <Button
+        // background={'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))'}
         style={{
-            background: 'linear-gradient(0deg, rgba(28, 28, 28, 0.1), rgba(28, 28, 28, 0.1))',
-            border: '1.8px solid #00000080',
-            width: '185px',
-            height: 'Hug (50px)',
-            borderRadius: '11px',
+          background: 'white',
+          border: '1.8px solid #00000080',
+          width: '185px',
+          height: 'Hug (50px)',
+          borderRadius: '11px',
         }}
         onClick={async () => {
           const { location } = await getEventById(eventId);
-          window.open(`https://www.google.com/maps/search/?api=1&query=${location}`)
+          // ++ ACTUAL ONE +++
+          // window.open(`https://www.google.com/maps/search/?api=1&query=${location}`);
+
+          // ++ FOR DEMO +++
+          window.open(`https://www.google.com/maps/dir/?api=1&destination=${location}`);
         }}
+      >
+        <GoogleMapsIcon marginRight="5px" />
+        <Text
+          style={{
+            family: 'Inter',
+            size: '14px',
+            weight: '600',
+            lineHeight: '17px',
+            letterSpacing: '0em',
+            textAlign: 'left',
+            color: '#00000080',
+          }}
         >
-            <GoogleMapsIcon marginRight="5px" />
-            <Text
-            style={{
-                family: 'Inter',
-                size: '14px',
-                weight: '600',
-                lineHeight: '17px',
-                letterSpacing: '0em',
-                textAlign: 'left',
-                color: '#00000080'
-            }}
-            >
-                get map directions
-            </Text>
-        </Button>
+          get map directions
+        </Text>
+      </Button>
     </Flex>
-    );
-}
+  );
+};
 export default GetMapDirectionsButton;

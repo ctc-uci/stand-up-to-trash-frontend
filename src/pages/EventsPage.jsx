@@ -16,16 +16,15 @@ import { useEffect, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 
 import PropTypes from 'prop-types';
-import AllData from '../components/DummyEvents/AllData';
-import ArchiveEventsModal from '../components/DummyEvents/ArchiveEventsModal';
-import EventCard from '../components/DummyEvents/EventCard';
-import RecentEventsCard from '../components/DummyEvents/RecentEventsCard';
-// import Sidebar from '../components/DummyEvents/Sidebar';
+import AllData from '../components/Events/AllData';
+import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
+import EventCard from '../components/Events/EventCard';
+import RecentEventsCard from '../components/Events/RecentEventsCard';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 
-const DummyEvents = () => {
+const Events = () => {
   const toast = useToast();
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
@@ -162,10 +161,9 @@ const DummyEvents = () => {
       <>
         <Button
           style={{ backgroundColor: '#FFABAB', borderRadius: '30px' }}
-          h="50px"
           onClick={() => archiveEvents(id)}
         >
-          <Box padding="13px 13px" fontSize="20px" display="inline-flex" gap="10px">
+          <Box padding={3} fontSize={'lg'} display="inline-flex" gap={10}>
             Archive Event(s)
           </Box>
         </Button>
@@ -215,88 +213,86 @@ const DummyEvents = () => {
   }, [name, location, date, fuse]);
 
   return (
-    <Box mx="156px" py="30px" justifyContent="flex-start" display="flex" flexDirection="column">
-      <div style={{ marginLeft: '15rem' }}>
-        <Box
-          mb="60px"
-          display="flex"
-          flexDirection="row"
-          gap="83px"
-          justifyContent="center"
-          alignItems={'left'}
-        >
-          <RecentEventsCard events={events} />
-          <AllData />
-        </Box>
-        <Spacer />
-        <Box display="flex" justifyContent={'center'} mb="4">
-          <Heading width="930px">Upcoming Events</Heading>
-        </Box>
-        <Box display="flex" justifyContent={'center'}>
-          <Box justifyContent="space-between" width="930px">
-            <Box display="flex" flex-direction="row" justifyContent="space-between">
-              {isCreateButton ? <></> : <DeselectButton />}
-              <HStack>
-                <InputGroup w="50%">
-                  <InputLeftElement pointerEvents="none">
-                    <SearchIcon />
-                  </InputLeftElement>
-                  <Input
-                    value={name}
-                    onChange={event => {
-                      setName(event.target.value);
-                    }}
-                    placeholder='Search Event Name (e.g. "Festival of Whales")'
-                  />
-                </InputGroup>
-                <InputGroup w="25%">
-                  <InputLeftElement pointerEvents="none">
-                    <SearchIcon />
-                  </InputLeftElement>
-                  <Input
-                    value={location}
-                    onChange={event => {
-                      setLocation(event.target.value);
-                    }}
-                    placeholder="Search Location"
-                  />
-                </InputGroup>
-                <InputGroup w="25%">
-                  <InputLeftElement pointerEvents="none">
-                    <SearchIcon />
-                  </InputLeftElement>
-                  <Input
-                    value={date}
-                    placeholder="Search Date"
-                    onChange={event => {
-                      setDate(event.target.value);
-                    }}
-                  />
-                </InputGroup>
-              </HStack>
+    <Box py="30px" justifyContent="flex-start" display="flex" flexDirection="column" ml="15rem">
+      <Box
+        mb="60px"
+        display="flex"
+        flexDirection="row"
+        gap="83px"
+        justifyContent="center"
+        alignItems={'left'}
+      >
+        <RecentEventsCard events={events} />
+        <AllData />
+      </Box>
+      <Spacer />
+      <Box display="flex" justifyContent={'center'} mb="4">
+        <Heading width="930px">Upcoming Events</Heading>
+      </Box>
+      <Box display="flex" justifyContent={'center'}>
+        <Box justifyContent="space-between" width="930px">
+          <Box display="flex" flex-direction="row" justifyContent="space-between">
+            {isCreateButton ? <></> : <DeselectButton />}
+            <HStack>
+              <InputGroup w="50%">
+                <InputLeftElement pointerEvents="none">
+                  <SearchIcon />
+                </InputLeftElement>
+                <Input
+                  value={name}
+                  onChange={event => {
+                    setName(event.target.value);
+                  }}
+                  placeholder='Search Event Name (e.g. "Festival of Whales")'
+                />
+              </InputGroup>
+              <InputGroup w="25%">
+                <InputLeftElement pointerEvents="none">
+                  <SearchIcon />
+                </InputLeftElement>
+                <Input
+                  value={location}
+                  onChange={event => {
+                    setLocation(event.target.value);
+                  }}
+                  placeholder="Search Location"
+                />
+              </InputGroup>
+              <InputGroup w="25%">
+                <InputLeftElement pointerEvents="none">
+                  <SearchIcon />
+                </InputLeftElement>
+                <Input
+                  value={date}
+                  placeholder="Search Date"
+                  onChange={event => {
+                    setDate(event.target.value);
+                  }}
+                />
+              </InputGroup>
+            </HStack>
 
-              {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
-              <ArchiveEventsModal
-                isOpen={isArchiveEventModalOpen}
-                onClose={onArchiveEventModalClose}
-                confirmArchive={confirmArchive}
-                events={events.filter(event => selectedEvents.includes(event.id))}
-              />
-            </Box>
-            <Spacer />
-            <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
-              <Box marginTop="3vh">
-                <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                  <AddEventsModal getEvents={getEvents} />
-                  {eventCards}
-                </Grid>
-              </Box>
+            {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
+            <ArchiveEventsModal
+              isOpen={isArchiveEventModalOpen}
+              onClose={onArchiveEventModalClose}
+              confirmArchive={confirmArchive}
+              events={events.filter(event => selectedEvents.includes(event.id))}
+            />
+          </Box>
+          <Spacer />
+          <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
+            <Box marginTop="3vh">
+              <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+                <AddEventsModal getEvents={getEvents} />
+                {eventCards}
+              </Grid>
             </Box>
           </Box>
         </Box>
-      </div>
+      </Box>
     </Box>
   );
 };
 
-export default DummyEvents;
+export default Events;

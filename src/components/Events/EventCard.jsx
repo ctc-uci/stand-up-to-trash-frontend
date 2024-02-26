@@ -26,11 +26,16 @@ import {
 import { AttachmentIcon } from '@chakra-ui/icons';
 import pencil_icon from '../../Assets/pencil_icon.png';
 import PropTypes from 'prop-types';
+import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import { CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
 import { useState, useRef } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
+import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
+import ExportButton from '../ExportCSVButton/ExportButton';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
+
+import { useNavigate } from 'react-router-dom';
 
 const EventCard = ({
   id,
@@ -45,6 +50,7 @@ const EventCard = ({
   handleCheckboxChange,
   getEvents,
 }) => {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Placeholder for testing a high-res image
@@ -66,6 +72,7 @@ const EventCard = ({
         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
         display="flex"
         flexDir="column"
+        cursor={'pointer'}
         justifyContent={'space-between'}
         borderRadius="30px"
         onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
@@ -88,7 +95,7 @@ const EventCard = ({
         </Text>
         <Spacer /> */}
 
-        <Box w={'100%'} display="flex" pointerEvents={'none'} position={'relative'} zIndex={-30}>
+        <Box w={'100%'} display="flex" pointerEvents={'none'} position={'relative'} zIndex={30}>
           {/* Top section, for things like select and edit icons */}
           {showSelect ? (
             <Checkbox
@@ -133,10 +140,17 @@ const EventCard = ({
           <ModalBody p="0">
             <Box display="flex" flexDir="row" h="660px" w="800px">
               <Box flexBasis="60%" display="flex" flexDir="column">
-                <Box flexBasis="60%" bg="#D9D9D9" display="flex" alignItems="end" p="2">
+                <Box
+                  flexBasis="60%"
+                  background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
+                  backgroundSize="cover"
+                  display="flex"
+                  alignItems="end"
+                  p="2"
+                >
                   <Stack mx="6">
-                    <Heading>{name}</Heading>
-                    <Text>{location}</Text>
+                    <Heading color={'white'}>{name}</Heading>
+                    <Text color={'white'}>{location}</Text>
                   </Stack>
                 </Box>
                 <Box
@@ -158,8 +172,10 @@ const EventCard = ({
                       backgroundColor="rgba(149, 189, 212, 0.71)"
                       borderRadius="0"
                       colorScheme={'grey'}
-                      as="a"
-                      href={`/checkin/${id}`}
+                      as="button"
+                      onClick={() => {
+                        navigate(`/checkin/${id}`);
+                      }}
                       target="_blank"
                     >
                       View More
@@ -172,9 +188,15 @@ const EventCard = ({
                 bg="rgba(217, 217, 217, 0.40)"
                 display="flex"
                 justifyItems={'end'}
-                alignItems={'start'}
+                alignItems={'center'}
+                flexDir={'column'}
+                marginTop={10}
+                gap={10}
               >
-                <ModalCloseButton />
+                <ModalCloseButton marginBottom={5} />
+                <Leaderboard event_id={id} />
+                <GetMapDirectionsButton eventId={id} />
+                <ExportButton eventId={id} />
               </Box>
             </Box>
           </ModalBody>

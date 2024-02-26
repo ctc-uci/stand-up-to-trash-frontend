@@ -5,7 +5,7 @@ import { getEventById } from '../utils/eventsUtils';
 // import { relativeTimeFromDates, inThePast } from '../utils/timeUtils';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
-import VolunteerEventsTable from '../components/DummyCheckin/VolunteerEventsTable';
+import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
 import { useParams } from 'react-router-dom';
 import {
   Container,
@@ -20,13 +20,13 @@ import {
   Spacer,
   Image,
   InputGroup,
-  InputLeftElement
+  InputLeftElement,
 } from '@chakra-ui/react';
 import { CustomSearchIcon, GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 
-const DummyCheckin = () => {
+const CheckinPage = () => {
   const [joinedData, setJoinedData] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
@@ -34,9 +34,13 @@ const DummyCheckin = () => {
   const [event, setEvent] = useState('');
   const { eventId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const searchResults = joinedData.filter(item => (item.event_id == eventId) || (eventId == -1));
-  const checkedInVolunteers = volunteerResults.filter(volunteer => volunteer.is_checked_in === true);
-  const notCheckedInVolunteers = volunteerResults.filter(volunteer => volunteer.is_checked_in === false);
+  const searchResults = joinedData.filter(item => item.event_id == eventId || eventId == -1);
+  const checkedInVolunteers = volunteerResults.filter(
+    volunteer => volunteer.is_checked_in === true,
+  );
+  const notCheckedInVolunteers = volunteerResults.filter(
+    volunteer => volunteer.is_checked_in === false,
+  );
 
   const setData = async () => {
     try {
@@ -54,6 +58,7 @@ const DummyCheckin = () => {
   */
   useEffect(() => {
     setData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /*
@@ -91,62 +96,81 @@ const DummyCheckin = () => {
 
   // formats dbms date into Month Day, Year
   const getDateString = () => {
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
     const dateObject = new Date(Date.parse(event['date']));
-    const dateString = `${months[dateObject.getMonth()]}  ${dateObject.getDate()}, ${dateObject.getFullYear()}`;
-    if (isNaN(dateObject)) { // on page load, prevents displaying "Undefined" as date
+    const dateString = `${
+      months[dateObject.getMonth()]
+    }  ${dateObject.getDate()}, ${dateObject.getFullYear()}`;
+    if (isNaN(dateObject)) {
+      // on page load, prevents displaying "Undefined" as date
       return '';
     }
     return dateString;
-  }
+  };
 
   return (
-    <Box bg="#C8E6FF" minH="100vh">
+    <Box bg="#C8E6FF" minH="100vh" ml="15rem">
       <Flex justifyContent="center">
-        <Box
-          w="100%"
-          h="15rem"
-          bg="white"
-          position="relative"
-        >
-          <Image src={event['image_url']} objectFit="cover" width="100%" height="100%" bg="rgba(217, 217, 217, 0.72)" />
+        <Box w="100%" h="15rem" bg="white" position="relative">
+          <Image
+            src={event['image_url']}
+            objectFit="cover"
+            width="100%"
+            height="100%"
+            bg="rgba(0, 0, 0, 0.5)"
+          />
           <Flex position="absolute" top="60%" right="57%" direction="column" width="40%">
-              <Text color="white" fontSize="4xl" fontWeight="bold">{event['name']}</Text>
-              <Text color="white">{getDateString()}</Text>
+            <Text color="white" fontSize="4xl" fontWeight="bold">
+              {event['name']}
+            </Text>
+            <Text color="white">{getDateString()}</Text>
           </Flex>
           <Box position="absolute" top="80%" left="90%">
-            {event && <HappeningInChip date={new Date(Date.parse(event['date']))}/>}
+            {event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}
           </Box>
         </Box>
       </Flex>
       <Center>
         <Flex width="93%" gap={3} mt={5}>
-              <InputGroup>
-                <InputLeftElement pointerEvents='none' top={'6px'} left={'5px'}>
-                  <GreyCustomSearchIcon w={'24px'} h={'18px'}/>
-                </InputLeftElement>
-                <Input
-                  value={input}
-                  onChange={event => setInput(event.target.value)}
-                  borderRadius='15px'
-                  backgroundColor='#FFFFFF'
-                  height='53px'
-                  width='100%'
-                  padding={'13px, 16px, 12px, 16px'}
-                  paddingLeft={"50px"}
-                  border='1px solid #E2E8F0'
-                  placeholder='Search Volunteer Name (e.g. "John Doe")'
-              />
-              </InputGroup>
-              <IconButton
-                icon={<CustomSearchIcon w={'24px'} h={'24px'}/>}
-                width='69px'
-                height='53px'
-                borderRadius='15px'
-                background='#2D558A'
-              />
-            </Flex>
-            </Center>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none" top={'6px'} left={'5px'}>
+              <GreyCustomSearchIcon w={'24px'} h={'18px'} />
+            </InputLeftElement>
+            <Input
+              value={input}
+              onChange={event => setInput(event.target.value)}
+              borderRadius="15px"
+              backgroundColor="#FFFFFF"
+              height="53px"
+              width="100%"
+              padding={'13px, 16px, 12px, 16px'}
+              paddingLeft={'50px'}
+              border="1px solid #E2E8F0"
+              placeholder='Search Volunteer Name (e.g. "John Doe")'
+            />
+          </InputGroup>
+          <IconButton
+            icon={<CustomSearchIcon w={'24px'} h={'24px'} />}
+            width="69px"
+            height="53px"
+            borderRadius="15px"
+            background="#2D558A"
+          />
+        </Flex>
+      </Center>
       <Container maxW="95%">
         <Container
           style={{
@@ -158,14 +182,13 @@ const DummyCheckin = () => {
             marginTop: '3vh',
             gap: '1vw',
           }}
-        >
-        </Container>
+        ></Container>
         <Flex mb={5}>
           <Button
             style={{
               borderRadius: '100px',
               backgroundColor: `${showCheckedIn ? '#FFFFFF' : '#2D558A'}`,
-              color: `${showCheckedIn ? '#000000' : '#FFFFFF'}`
+              color: `${showCheckedIn ? '#000000' : '#FFFFFF'}`,
             }}
             marginTop="3vh"
             onClick={() => setShowCheckedIn(false)}
@@ -176,7 +199,7 @@ const DummyCheckin = () => {
             style={{
               borderRadius: '100px',
               backgroundColor: `${showCheckedIn ? '#2D558A' : '#FFFFFF'}`,
-              color: `${showCheckedIn ? '#FFFFFF' : '#000000'}`
+              color: `${showCheckedIn ? '#FFFFFF' : '#000000'}`,
             }}
             marginLeft="1vw"
             marginTop="3vh"
@@ -188,12 +211,12 @@ const DummyCheckin = () => {
           <Button
             style={{
               borderRadius: '100px',
-              mixBlendMode: 'Luminosity'
+              mixBlendMode: 'Luminosity',
             }}
             marginLeft="1vw"
             marginTop="3vh"
             onClick={onOpen}
-            background='#EFEFEF'
+            background="#EFEFEF"
           >
             + register new volunteer
           </Button>
@@ -223,4 +246,4 @@ const DummyCheckin = () => {
   );
 };
 
-export default DummyCheckin;
+export default CheckinPage;
