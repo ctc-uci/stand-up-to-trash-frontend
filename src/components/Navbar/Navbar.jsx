@@ -3,11 +3,24 @@ import home from '../../Assets/navbar/home.png';
 import profile from '../../Assets/navbar/profile.png';
 import archive from '../../Assets/navbar/archive.png';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import UserContext from '../../utils/UserContext';
+import RoleContext from '../../utils/RoleContext';
+import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [currPath, setCurrentPath] = useState('home');
+  const { user } = useContext(UserContext);
+  const { role } = useContext(RoleContext);
+
+  useEffect(() => {
+    console.log(`Here is the user info:`);
+    console.log(user);
+    console.log(`The user's role is: ${role}`)
+    console.log('Current route:', location.pathname);
+  });
 
   return (
     <>

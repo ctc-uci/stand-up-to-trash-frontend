@@ -5,22 +5,22 @@ import Backend from './utils';
 import { Spinner } from '@chakra-ui/react';
 
 // Create a context object
-const RoleContext = createContext();
+const UserContext = createContext();
 
 // Create a provider component
-export const RoleProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
   const auth = getAuth();
-  const [role, setRole] = useState('');
+  const [user, setUser] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
       if (user) {
         const res = await Backend.get(`/firebase/${user.uid}`);
-        setRole(res.data.role);
+        setUser(res.data);
         setLoading(false);
       } else {
-        setRole('unloggedIn');
+        setUser(null);
         setLoading(false);
       }
     });
@@ -32,11 +32,11 @@ export const RoleProvider = ({ children }) => {
     return <Spinner />;
   }
 
-  return <RoleContext.Provider value={{ role, setRole }}>{children}</RoleContext.Provider>;
+  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };
 
-RoleProvider.propTypes = {
+UserProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default RoleContext;
+export default UserContext;
