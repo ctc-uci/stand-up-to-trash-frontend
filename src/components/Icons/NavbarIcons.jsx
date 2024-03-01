@@ -160,7 +160,7 @@ const SettingsIconBlue = createIcon({
 
 const LogOutIcon = createIcon({
     displayName: 'LogOutIcon',
-    viewBox: "0 0 19 19",
+    viewBox: "0 0 16 16",
     width: '17',
     height: '16',
     fill: 'none',

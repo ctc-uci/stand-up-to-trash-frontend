@@ -23,7 +23,7 @@ const NavbarButton = ({buttonText, path, navigate, UnfocusedIcon, FocusedIcon}) 
         flexDirection: 'row',
         alignItems: 'center',
         gap: '10px',
-        paddingLeft: '20px',
+        paddingLeft: '10px',
         marginLeft: '14px',
         marginRight: '14px',
         marginBottom: '6px',
@@ -154,10 +154,10 @@ const Navbar = () => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     gap: '10px',
-                    paddingLeft: '20px',
+                    paddingLeft: '10px',
                     marginLeft: '14px',
                     marginRight: '14px',
-                    marginBottom: '6px',
+                    marginBottom: '-13px',
                     borderRadius: '4px',
                   }}
                   onClick={e => {
@@ -183,10 +183,10 @@ const Navbar = () => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     gap: '10px',
-                    paddingLeft: '20px',
+                    paddingLeft: '10px',
                     marginLeft: '14px',
                     marginRight: '14px',
-                    marginBottom: '6px',
+                    marginBottom: '2px',
                     borderRadius: '4px',
                   }}
                   onClick={e => {
@@ -205,7 +205,7 @@ const Navbar = () => {
             </Box>
 
 
-            {/* User car at bottom */}
+            {/* User card at bottom */}
             <Box style={{
                     height: '68px',
                     width: '210px',
@@ -224,7 +224,7 @@ const Navbar = () => {
                 >
                   {/* User image */}
                   <Box style={{ borderRadius: '50%'}}>
-                    <img src={user.image_url} style={{ width: '36.5px', height: '36.5px', borderRadius: '50%'}} />
+                    <img src={user.image_url} style={{ width: '45px', height: '45px', borderRadius: '50%'}} />
                   </Box>
                   <Box style= {{
                     flexDirection: 'column',
@@ -233,12 +233,27 @@ const Navbar = () => {
                     {/* User name */}
                     <Text style={{
                       fontFamily : 'Avenir',
-                      fontWeight: '500',
+                      fontWeight: '800',
+                      color: '#000000',
+                      fontSize: '16px',
                       lineHeight: '25px',
-                      textAlign: 'center',
-                      overflowY: 'auto'
+                      textAlign: 'left',
+                      overflowY: 'auto',
+                      marginTop: '-1px'
                     }}>{user.first_name} {user.last_name}</Text>
-                    <Tag style= {{fontFamily : 'Avenir', fontSize: '12px'}}>Primary Admin</Tag>
+
+                    <Tag style= {{fontFamily : 'Avenir', 
+                                  fontSize: '12px',
+                                  fontWeight: '500',
+                                  lineHeight: '16px',
+                                  color: '#717171',
+                                  alignContent: 'left',
+                                  width: 'Hug(19px)',
+                                  height: 'Hug(89px)',
+                                  padding: '2px 6px 2px 6px',
+                                  borderRadius: '4px',
+                                  gap: '10px'
+                                  }}>Primary Admin</Tag>
                   </Box>
                   {/* Logout button */}
                   <Box style = {{ display: 'flex', padding: '4.985px', alignItems: 'center', gap: '4.985px', backgroundColor: '#FFE1E1', borderRadius: '4px' }}
