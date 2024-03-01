@@ -1,9 +1,5 @@
 import { Box, Text } from '@chakra-ui/react';
-// import home from '../../Assets/navbar/home_navbar.svg';
-// import profile from '../../Assets/navbar/profile.svg';
-// import archive from '../../Assets/navbar/archived_events_navbar.svg';
 import adminLogo from '../../Assets/navbar/stand_up_to_trash_logo.png';
-// import event from '../../Assets/navbar/events_navbar.svg';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import UserContext from '../../utils/UserContext';
