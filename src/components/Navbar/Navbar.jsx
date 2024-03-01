@@ -13,6 +13,46 @@ import { Tag } from '@chakra-ui/react';
 import { logout } from '../../utils/firebaseAuthUtils';
 
 
+// eslint-disable-next-line react/prop-types
+const NavbarButton = ({buttonText, path, navigate, UnfocusedIcon, FocusedIcon}) => {
+  return (
+    <Box
+      style={{
+        height: '49px',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: '10px',
+        paddingLeft: '20px',
+        marginLeft: '14px',
+        marginRight: '14px',
+        marginBottom: '6px',
+        backgroundColor: location.pathname === path ? '#D4E4F9' : 'transparent',
+        borderRadius: '4px',
+      }}
+      onClick={e => {
+        e.preventDefault();
+        navigate(path);
+      }}
+    >
+      {location.pathname === path ? (
+        <FocusedIcon style={{width: '14px', height: '14px'}}/>
+      ) : (
+        <UnfocusedIcon style={{width: '14px', height: '14px'}}/>
+      )}
+      <Text style={{
+        fontFamily : 'Avenir',
+        fontSize: location.pathname === path ? '18px' : '16px',
+        fontWeight: '500',
+        lineHeight: '25px',
+        textAlign: 'center',
+        color: location.pathname === path ? '#1873FB' : '#717171',
+      }}>{buttonText}</Text>
+    </Box>
+  );
+};
+
+
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,7 +77,7 @@ const Navbar = () => {
   const settingsPath = '/playground';
 
   // For logout in case it changes from /logoutv2
-  const logoutPath  = '/logoutv2';
+  const logoutPath  = '/loginv2';
 
   return (
     <>
@@ -86,154 +126,27 @@ const Navbar = () => {
 
 
             {/* Home button */}
-            <Box
-              style={{
-                height: '49px',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: '10px',
-                paddingLeft: '20px',
-                marginLeft: '14px',
-                marginRight: '14px',
-                marginBottom: '6px',
-                backgroundColor: location.pathname === homePath ? '#D4E4F9' : 'transparent',
-                borderRadius: '4px',
-              }}
-              onClick={e => {
-                e.preventDefault();
-                navigate(homePath);
-              }}
-            >
-              {location.pathname === homePath ? (
-                <HomeIconBlue style={{width: '14px', height: '14px'}}/>
-              ) : (
-                <HomeIconGrey style={{width: '14px', height: '14px'}}/>
-              )}
-              <Text style={{
-                fontFamily : 'Avenir',
-                fontSize: location.pathname === homePath ? '18px' : '16px',
-                fontWeight: '500',
-                lineHeight: '25px',
-                textAlign: 'center',
-                color: location.pathname === homePath ? '#1873FB' : '#717171',
-              }}>Home</Text>
-            </Box>
+            <NavbarButton buttonText={'Home'} path={homePath} navigate={navigate} 
+                          FocusedIcon={HomeIconBlue} UnfocusedIcon={HomeIconGrey} />
 
 
             {/* Events button */}
-            <Box
-              style={{
-                height: '49px',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: '10px',
-                paddingLeft: '20px',
-                marginLeft: '14px',
-                marginRight: '14px',
-                marginBottom: '6px',
-                backgroundColor: location.pathname === eventsPath ? '#D4E4F9' : 'transparent',
-                borderRadius: '4px',
-              }}
-              onClick={e => {
-                e.preventDefault();
-                navigate(eventsPath);
-              }}
-            >
-              {location.pathname === eventsPath ? (
-                <EventsIconBlue />
-              ) : (
-                  <EventsIconGrey />
-              )}
-              <Text style={{
-                fontFamily : 'Avenir',
-                fontSize: location.pathname === eventsPath ? '18px' : '16px',
-                fontWeight: '500',
-                lineHeight: '25px',
-                textAlign: 'center',
-                color: location.pathname === eventsPath ? '#1873FB' : '#717171',
-              }}>Events</Text>
-            </Box>
+            <NavbarButton buttonText={'Events'} path={eventsPath} navigate={navigate}
+                          FocusedIcon={EventsIconBlue} UnfocusedIcon={EventsIconGrey} />
 
 
             {/* Archived events button */}
-            <Box
-              style={{
-                height: '49px',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: '10px',
-                paddingLeft: '20px',
-                marginLeft: '14px',
-                marginRight: '14px',
-                marginBottom: '6px',
-                backgroundColor: location.pathname === archivedEventsPath ? '#D4E4F9' : 'transparent',
-                borderRadius: '4px',
-              }}
-              onClick={e => {
-                e.preventDefault();
-                navigate(archivedEventsPath);
-              }}
-            >
-              {location.pathname === archivedEventsPath ? (
-                <ArchivedEventsIconBlue />
-              ) : (
-                <ArchivedEventsIconGrey />
-              )}
-              <Text style={{
-                fontFamily : 'Avenir',
-                fontSize: location.pathname === archivedEventsPath ? '18px' : '16px',
-                fontWeight: '500',
-                lineHeight: '25px',
-                textAlign: 'center',
-                color: location.pathname === archivedEventsPath ? '#1873FB' : '#717171',
-              }}>Archived Events</Text>
-            </Box>
+            <NavbarButton buttonText={'Archived Events'} path={archivedEventsPath} navigate={navigate}
+                          FocusedIcon={ArchivedEventsIconBlue} UnfocusedIcon={ArchivedEventsIconGrey} />
 
 
             {/* Volunteers button */}
-            <Box
-              style={{
-                height: '49px',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: '10px',
-                paddingLeft: '20px',
-                marginLeft: '14px',
-                marginRight: '14px',
-                marginBottom: '6px',
-                backgroundColor: location.pathname === volunteersPath ? '#D4E4F9' : 'transparent',
-                borderRadius: '4px',
-              }}
-              onClick={e => {
-                e.preventDefault();
-                navigate(volunteersPath);
-              }}
-            >
-              {location.pathname === volunteersPath ? (
-                <VolunteersIconBlue />
-              ) : (
-                <VolunteersIconGrey />
-              )}
-              <Text style={{
-                fontFamily : 'Avenir',
-                fontSize: location.pathname === volunteersPath ? '18px' : '16px',
-                fontWeight: '500',
-                lineHeight: '25px',
-                textAlign: 'center',
-                color: location.pathname === volunteersPath ? '#1873FB' : '#717171',
-              }}>Volunteers</Text>
-            </Box>
+            <NavbarButton buttonText={'Volunteers'} path={volunteersPath} navigate={navigate}
+                          FocusedIcon={VolunteersIconBlue} UnfocusedIcon={VolunteersIconGrey} />
+
           </Box>
-
-
           {/* Bottom of navbar, support and below */}
           <Box>
-
-
             {/* Support button */}
             <Box style={{
                     height: '49px',
@@ -333,7 +246,7 @@ const Navbar = () => {
                                   e.preventDefault();
                                   logout(logoutPath, navigate);
                                 }}>
-                    <LogOutIcon />
+                    <LogOutIcon/>
                   </Box>
             </Box>
           </Box>
