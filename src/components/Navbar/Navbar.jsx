@@ -6,7 +6,9 @@ import UserContext from '../../utils/UserContext';
 import RoleContext from '../../utils/RoleContext';
 import { useLocation } from 'react-router-dom';
 import { ArchivedEventsIconBlue, ArchivedEventsIconGrey, HomeIconBlue, 
-        HomeIconGrey, EventsIconBlue, EventsIconGrey, VolunteersIconBlue, VolunteersIconGrey, SupportIconGrey, SettingsIconGrey, LogOutIcon } from '../Icons/NavbarIcons';
+        HomeIconGrey, EventsIconBlue, EventsIconGrey, VolunteersIconBlue, 
+        VolunteersIconGrey, SupportIconGrey, SettingsIconGrey, LogOutIcon 
+} from '../Icons/NavbarIcons';
 import { Tag } from '@chakra-ui/react';
 import { logout } from '../../utils/firebaseAuthUtils';
 
@@ -24,7 +26,6 @@ const Navbar = () => {
     console.log('Current route:', location.pathname);
   });
 
-
   // Change the paths for each button since these might change
   const homePath = '/';
   const eventsPath = '/';
@@ -40,7 +41,9 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Box for entire navbar */}
       <Box position="fixed" top="0" w={'15rem'} float="left">
+        {/* Box for entire nabar with coloring */}
         <Box
           h="100vh"
           backgroundColor="#F5F8F9"
@@ -51,7 +54,9 @@ const Navbar = () => {
           justifyContent="space-between"
           alignItems="start"
         >
+          {/* Box containing everything above "support" */}
           <Box display="flex" flexDir="column" width={'full'} as="a" href="/">
+          {/* Box containing the logo and role title at the top */}
           <Box
               style={{
                 height: '40px',
@@ -74,9 +79,13 @@ const Navbar = () => {
                 textAlign: 'left',
                 color: '#000000BF'
               }}>{role.charAt(0).toUpperCase() + role.slice(1)}</Text>
-            </Box>
+          </Box>
+            {/* Add break between role and logo at the top and the nav buttons */}
             <hr style = {{ color: 'black', marginLeft: '14px', marginRight: '14px' }}/>
             <br></br>
+
+
+            {/* Home button */}
             <Box
               style={{
                 height: '49px',
@@ -110,6 +119,9 @@ const Navbar = () => {
                 color: location.pathname === homePath ? '#1873FB' : '#717171',
               }}>Home</Text>
             </Box>
+
+
+            {/* Events button */}
             <Box
               style={{
                 height: '49px',
@@ -143,6 +155,9 @@ const Navbar = () => {
                 color: location.pathname === eventsPath ? '#1873FB' : '#717171',
               }}>Events</Text>
             </Box>
+
+
+            {/* Archived events button */}
             <Box
               style={{
                 height: '49px',
@@ -176,6 +191,9 @@ const Navbar = () => {
                 color: location.pathname === archivedEventsPath ? '#1873FB' : '#717171',
               }}>Archived Events</Text>
             </Box>
+
+
+            {/* Volunteers button */}
             <Box
               style={{
                 height: '49px',
@@ -210,7 +228,13 @@ const Navbar = () => {
               }}>Volunteers</Text>
             </Box>
           </Box>
+
+
+          {/* Bottom of navbar, support and below */}
           <Box>
+
+
+            {/* Support button */}
             <Box style={{
                     height: '49px',
                     display: 'flex',
@@ -237,6 +261,9 @@ const Navbar = () => {
                     textAlign: 'center',
                   }}>Support</Text>
             </Box>
+
+
+            {/* Settings button */}
             <Box style={{
                     height: '49px',
                     display: 'flex',
@@ -263,6 +290,9 @@ const Navbar = () => {
                     textAlign: 'center',
                   }}>Settings</Text>
             </Box>
+
+
+            {/* User car at bottom */}
             <Box style={{
                     height: '68px',
                     width: '210px',
@@ -279,6 +309,7 @@ const Navbar = () => {
                     border: '1px',
                   }}
                 >
+                  {/* User image */}
                   <Box style={{ borderRadius: '50%'}}>
                     <img src={user.image_url} style={{ width: '36.5px', height: '36.5px', borderRadius: '50%'}} />
                   </Box>
@@ -286,7 +317,7 @@ const Navbar = () => {
                     flexDirection: 'column',
                     alignItems: 'center',
                   }}>
-
+                    {/* User name */}
                     <Text style={{
                       fontFamily : 'Avenir',
                       fontWeight: '500',
@@ -296,12 +327,12 @@ const Navbar = () => {
                     }}>{user.first_name} {user.last_name}</Text>
                     <Tag style= {{fontFamily : 'Avenir', fontSize: '12px'}}>Primary Admin</Tag>
                   </Box>
+                  {/* Logout button */}
                   <Box style = {{ display: 'flex', padding: '4.985px', alignItems: 'center', gap: '4.985px', backgroundColor: '#FFE1E1', borderRadius: '4px' }}
                        onClick = {e => {   
                                   e.preventDefault();
                                   logout(logoutPath, navigate);
-                                }}
-                  >
+                                }}>
                     <LogOutIcon />
                   </Box>
             </Box>
