@@ -46,15 +46,15 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
 
   let status = "Registered";
   let statusColor = "white";
-  if (is_checked_in === false) {
+  if (role === "guest") {
+    status = "Guest"
+    statusColor = "#FF84B0"
+  } else if (is_checked_in === false) {
     status = "Registered";
     statusColor = "#8589dc"
   } else if (is_checked_in === true) {
     status = "Checked-in"
     statusColor = "green"
-  } else if (role === "guest") {
-    status = "Guest"
-    statusColor = "#FF84B0"
   }
   
 
@@ -88,7 +88,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
       <Td>
         <Text>
           <Flex borderRadius={"full"} padding={1} border={"solid 1px rgba(0, 0, 0, 0.3)"}>
-            <Box ml={1} borderRadius={"100%"} backgroundColor={statusColor} padding={2}></Box>
+            <Box ml={1} borderRadius={"100%"} backgroundColor={statusColor} padding={2} w="14px" h="14px" my="auto"></Box>
             <Text fontSize="13" ml={2} mr={2}>{status}</Text>
           </Flex>
         </Text>
