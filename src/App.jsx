@@ -54,28 +54,119 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="/archived-events" element={<ArchivedEvents />} />
-                <Route path="/checkin/:eventId" element={<CheckinPage />} />
-                <Route path="/admin-qr/" element={<DummyAdminQR />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <AdminPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/archived-events"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <ArchivedEvents />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/checkin/:eventId"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <CheckinPage />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin-qr/"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <DummyAdminQR />{' '}
+                    </ProtectedRoute>
+                  }
+                />
                 {/* --ADMIN PAGES */}
 
                 <Route path="/playground" element={<Playground />} />
               </Route>
 
               {/* AUTHENTICATION PAGES-- */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/loginv2" element={<LoginV2 />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/signupv2" element={<SignupV2 />} />
-              <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/forgotpasswordv2" element={<ForgotPasswordV2 />} />
-              <Route path="/successful-login" element={<DummySuccessfulLogin />} />
+              <Route
+                path="/login"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <Login />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/loginv2"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <LoginV2 />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <Signup />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/signupv2"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <SignupV2 />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/forgotpassword"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <ForgotPassword />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/forgotpasswordv2"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <ForgotPasswordV2 />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/successful-login"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <DummySuccessfulLogin />
+                  </ProtectedRoute>
+                }
+              />
               {/* --AUTHENTICATION PAGES */}
 
               {/* VOLUNTEER PAGES-- */}
-              <Route path="/register/:eventId" element={<Register />} />
-              <Route path="/volunteer-qr/:eventId/:volunteerId" element={<DummyVolunteerQR />} />
+              <Route
+                path="/register/:eventId"
+                element={
+                  <ProtectedRoute pageType="volunteer">
+                    <Register />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/volunteer-qr/:eventId/:volunteerId"
+                element={
+                  <ProtectedRoute pageType="volunteer">
+                    <DummyVolunteerQR />
+                  </ProtectedRoute>
+                }
+              />
               {/*--VOLUNTEER PAGES*/}
 
               {/* PLAYGROUND */}

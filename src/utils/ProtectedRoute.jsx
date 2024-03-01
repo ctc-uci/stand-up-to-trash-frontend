@@ -1,21 +1,44 @@
-// import { Navigate } from "react-router-dom";
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import RoleContext from './RoleContext';
-
+import { useNavigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, pageType }) => {
-  // Utilize the useContext to obtain the role
   const { role } = useContext(RoleContext);
+  const navigate = useNavigate();
   console.log(`The current user's role is: ${role}`);
   console.log(`The type of page is: ${pageType}`);
 
-  // Logic here for authenticating
-  // Admins: role="admin"
-  // Volunteers: role="volunteer"
-  // Not logged in: role="unloggedIn"
-  // Side note: There exists a role called "guest" but it is not possible to login with that account
+  useEffect(() => {
+    if (pageType === 'admin') {
+      if (role === 'admin') {
+        return children;
+      } else if (role === 'volunteer') {
+        navigate('/playground');
+      } else if (role === 'unloggedIn') {
+        navigate('/loginv2');
+      }
+    }
 
-  return children;
+    if (pageType === 'volunteer') {
+      if (role === 'admin') {
+        return children;
+      } else if (role === 'volunteer') {
+        return children;
+      } else if (role === 'unloggedIn') {
+        navigate('/loginv2');
+      }
+    }
+
+    if (pageType === 'authentication') {
+      if (role === 'admin') {
+        navigate('/');
+      } else if (role === 'volunteer') {
+        navigate('/playground');
+      } else if (role === 'unloggedIn') {
+        return children;
+      }
+    }
+  }, [children, navigate, pageType, role]);
 };
 
 export default ProtectedRoute;

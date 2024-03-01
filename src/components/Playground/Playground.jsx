@@ -11,6 +11,7 @@ import 'react-html5-camera-photo/build/css/index.css';
 import { Image } from '@chakra-ui/react';
 import Backend from '../../utils/utils.js';
 import axios from 'axios';
+import { logGoogleUserOut } from '../../utils/googleAuthUtils.js';
 
 const auth = getAuth();
 
@@ -59,6 +60,13 @@ const Playground = () => {
     >
       <p>Use this page to test out the look of any of your components!</p>
       <p>{user?.email}</p>
+
+      <button
+        onClick={logGoogleUserOut}
+        style={{ backgroundColor: 'red', padding: '6px', borderRadius: '10px', color: 'white' }}
+      >
+        LOGOUT
+      </button>
 
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
