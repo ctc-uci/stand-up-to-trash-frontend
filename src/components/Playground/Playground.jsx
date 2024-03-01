@@ -2,52 +2,35 @@ import ExportButton from '../ExportCSVButton/ExportButton';
 import AddEventsModal from '../AddEventsModal/AddEventsModal';
 import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import Dropzone from '../Dropzone.tsx';
-import { Flex } from '@chakra-ui/react';
+import { Flex, useDisclosure, Button } from '@chakra-ui/react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
-import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
-import { Image } from '@chakra-ui/react';
-import Backend from '../../utils/utils.js';
-import axios from 'axios';
+import { getImagesByEventID } from "../../utils/imageUtils"
+
+import ImageTag from '../ImageTag';
+import CameraModal from '../CameraModal';
 
 const auth = getAuth();
 
 const Playground = () => {
   const [user, setUser] = useState(auth.currentUser);
-  const [uri, setUri] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       setUser(user);
     });
-
     return () => unsubscribe();
   }, []);
 
-  // For Steven and Rayan
-  const handleTakePhoto = dataUri => {
-    setUri(dataUri);
-    console.log(dataUri);
-    const uploadImage = async dataUri => {
-      // get S3 upload url from server
-      const { data: uploadUrl } = await Backend.get('/s3Upload');
-      const blob = await fetch(dataUri).then(res => res.blob());
+  const updateTags = async id => await getImagesByEventID(id);
 
-      // upload image directly to S3 bucket
-      await axios.put(uploadUrl, blob, {
-        headers: {
-          'Content-Type': blob.type,
-        },
-      });
-
-      const imageUrl = uploadUrl.split('?')[0];
-      return imageUrl;
-    };
-
-    uploadImage(dataUri);
-  };
+  useEffect(() => {
+    updateTags(3).then((data) => setTags(data));
+  }, []);
 
   return (
     <Flex
@@ -68,12 +51,13 @@ const Playground = () => {
       <AddEventsModal />
       <Dropzone />
       <Leaderboard event_id={35} />
-      <Camera
-        onTakePhoto={dataUri => {
-          handleTakePhoto(dataUri);
-        }}
-      />
-      <Image src={uri} />
+      <Flex g={3}>
+      {
+        tags && tags.map(item => <ImageTag key={item.id} imageName={item.name} imageID={item.id} eventID={3} setTags={setTags}/>)
+      }
+      </Flex>
+      <Button onClick={onOpen}>CLICK FOR CAMERA</Button>
+      <CameraModal isOpen={isOpen} onClose={onClose} setTags={setTags} eventID={3}/>
     </Flex>
   );
 };
