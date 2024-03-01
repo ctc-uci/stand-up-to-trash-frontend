@@ -21,6 +21,11 @@ import {
   Image,
   InputGroup,
   InputLeftElement,
+  Tabs,
+  TabList, 
+  Tab, 
+  Badge,
+  Alert,
 } from '@chakra-ui/react';
 import { CustomSearchIcon, GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
@@ -30,17 +35,27 @@ const CheckinPage = () => {
   const [joinedData, setJoinedData] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
-  const [showCheckedIn, setShowCheckedIn] = useState(false);
   const [event, setEvent] = useState('');
   const { eventId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const searchResults = joinedData.filter(item => item.event_id == eventId || eventId == -1);
-  const checkedInVolunteers = volunteerResults.filter(
-    volunteer => volunteer.is_checked_in === true,
-  );
-  const notCheckedInVolunteers = volunteerResults.filter(
-    volunteer => volunteer.is_checked_in === false,
-  );
+  const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
+  const [tabIndex, setTabIndex] = useState(0);
+
+  useEffect(() => {
+    // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
+    if (tabIndex === 0)
+      setDisplayedVolunteers(volunteerResults);
+    else if (tabIndex === 1)
+      setDisplayedVolunteers(volunteerResults.filter(
+        volunteer => volunteer.is_checked_in === true,
+      ));
+    else if (tabIndex === 2) 
+      setDisplayedVolunteers(volunteerResults.filter(
+        volunteer => volunteer.is_checked_in === false,
+      ));
+    else if (tabIndex === 3)
+      setDisplayedVolunteers(volunteerResults.filter(v => v.role === "guest"));
+  }, [tabIndex, volunteerResults]);
 
   const setData = async () => {
     try {
@@ -72,12 +87,12 @@ const CheckinPage = () => {
       const options = {
         keys: ['first_name', 'last_name', 'email'],
       };
-      const fuse = new Fuse(searchResults, options);
+      const fuse = new Fuse(joinedData.filter(item => item.event_id == eventId || eventId == -1), options);
       const searchResult = fuse.search(input);
       const reduceResult = searchResult.map(result => result.item);
       setVolunteerResults(reduceResult);
     }
-  }, [input, searchResults, joinedData]);
+  }, [input, joinedData]);
 
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
@@ -120,6 +135,8 @@ const CheckinPage = () => {
     }
     return dateString;
   };
+
+  console.log({displayedVolunteers});
 
   return (
     <Box bg="#C8E6FF" minH="100vh" ml="15rem">
@@ -183,14 +200,21 @@ const CheckinPage = () => {
             gap: '1vw',
           }}
         ></Container>
-        <Flex mb={5}>
-          <Button
+        <Flex mb={5} marginTop="3vh">
+          <Tabs onChange={setTabIndex}>
+            <TabList>
+              <Tab>All <Badge ml="2">{volunteerResults.length}</Badge></Tab>
+              <Tab>Checked-in <Badge ml="2">{volunteerResults.filter(v => v.is_checked_in === true).length}</Badge></Tab>
+              <Tab>Not Checked-in <Badge ml="2">{volunteerResults.filter(v => v.is_checked_in === false).length}</Badge></Tab>
+              <Tab>Guests <Badge ml="2">{volunteerResults.filter(v => v.role === "guest").length}</Badge></Tab>
+            </TabList>
+          </Tabs>
+          {/* <Button
             style={{
               borderRadius: '100px',
               backgroundColor: `${showCheckedIn ? '#FFFFFF' : '#2D558A'}`,
               color: `${showCheckedIn ? '#000000' : '#FFFFFF'}`,
             }}
-            marginTop="3vh"
             onClick={() => setShowCheckedIn(false)}
           >
             not checked-in
@@ -202,11 +226,10 @@ const CheckinPage = () => {
               color: `${showCheckedIn ? '#FFFFFF' : '#000000'}`,
             }}
             marginLeft="1vw"
-            marginTop="3vh"
             onClick={() => setShowCheckedIn(true)}
           >
             checked-in
-          </Button>
+          </Button> */}
           <Spacer />
           <Button
             style={{
@@ -214,7 +237,6 @@ const CheckinPage = () => {
               mixBlendMode: 'Luminosity',
             }}
             marginLeft="1vw"
-            marginTop="3vh"
             onClick={onOpen}
             background="#EFEFEF"
           >
@@ -222,25 +244,19 @@ const CheckinPage = () => {
           </Button>
         </Flex>
         <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
-
-        {showCheckedIn &&
-          (checkedInVolunteers.length != 0 ? (
-            <VolunteerEventsTable
-              volunteers={checkedInVolunteers}
-              changeIsCheckedIn={changeIsCheckedIn}
-            />
-          ) : (
-            ''
-          ))}
-        {!showCheckedIn &&
-          (notCheckedInVolunteers.length != 0 ? (
-            <VolunteerEventsTable
-              volunteers={notCheckedInVolunteers}
-              changeIsCheckedIn={changeIsCheckedIn}
-            />
-          ) : (
-            ''
-          ))}
+        
+        {(displayedVolunteers.length != 0 ? (
+          <VolunteerEventsTable
+            volunteers={displayedVolunteers}
+            changeIsCheckedIn={changeIsCheckedIn}
+          />
+        ) : (
+          <Alert status='warning' borderRadius={"8"} w="50%" mx="auto">
+            <Box textAlign={"center"} w="100%">
+              No volunteers found for current search
+            </Box>
+          </Alert>
+        ))}
       </Container>
     </Box>
   );
