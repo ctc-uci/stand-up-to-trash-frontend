@@ -10,8 +10,10 @@ import UserContext from '../../utils/UserContext';
 import RoleContext from '../../utils/RoleContext';
 import { useLocation } from 'react-router-dom';
 import { ArchivedEventsIconBlue, ArchivedEventsIconGrey, HomeIconBlue, 
-        HomeIconGrey, EventsIconBlue, EventsIconGrey, VolunteersIconBlue, VolunteersIconGrey, SupportIconGrey, SettingsIconBlue, SettingsIconGrey, LogOutIcon } from '../Icons/NavbarIcons';
+        HomeIconGrey, EventsIconBlue, EventsIconGrey, VolunteersIconBlue, VolunteersIconGrey, SupportIconGrey, SettingsIconGrey, LogOutIcon } from '../Icons/NavbarIcons';
 import { Tag } from '@chakra-ui/react';
+import { logout } from '../../utils/firebaseAuthUtils';
+
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -25,6 +27,20 @@ const Navbar = () => {
     console.log(`The user's role is: ${role}`)
     console.log('Current route:', location.pathname);
   });
+
+
+  // Change the paths for each button since these might change
+  const homePath = '/';
+  const eventsPath = '/';
+  const archivedEventsPath = '/archived-events';
+  const volunteersPath = '/playground';
+
+  // For the support and settings button at the bottom above the user
+  const supportPath = '/playground';
+  const settingsPath = '/playground';
+
+  // For logout in case it changes from /logoutv2
+  const logoutPath  = '/logoutv2';
 
   return (
     <>
@@ -61,7 +77,7 @@ const Navbar = () => {
                 lineHeight: '22px',
                 textAlign: 'left',
                 color: '#000000BF'
-              }}>{role}</Text>
+              }}>{role.charAt(0).toUpperCase() + role.slice(1)}</Text>
             </Box>
             <hr style = {{ color: 'black', marginLeft: '14px', marginRight: '14px' }}/>
             <br></br>
@@ -76,26 +92,26 @@ const Navbar = () => {
                 marginLeft: '14px',
                 marginRight: '14px',
                 marginBottom: '6px',
-                backgroundColor: location.pathname === '/' ? '#D4E4F9' : 'transparent',
+                backgroundColor: location.pathname === homePath ? '#D4E4F9' : 'transparent',
                 borderRadius: '4px',
               }}
               onClick={e => {
                 e.preventDefault();
-                navigate('/');
+                navigate(homePath);
               }}
             >
-              {location.pathname === "/" ? (
+              {location.pathname === homePath ? (
                 <HomeIconBlue style={{width: '14px', height: '14px'}}/>
               ) : (
                 <HomeIconGrey style={{width: '14px', height: '14px'}}/>
               )}
               <Text style={{
                 fontFamily : 'Avenir',
-                fontSize: location.pathname === '/' ? '18px' : '16px',
+                fontSize: location.pathname === homePath ? '18px' : '16px',
                 fontWeight: '500',
                 lineHeight: '25px',
                 textAlign: 'center',
-                color: location.pathname === '/' ? '#1873FB' : '#717171',
+                color: location.pathname === homePath ? '#1873FB' : '#717171',
               }}>Home</Text>
             </Box>
             <Box
@@ -109,26 +125,26 @@ const Navbar = () => {
                 marginLeft: '14px',
                 marginRight: '14px',
                 marginBottom: '6px',
-                backgroundColor: location.pathname === '/select-event' ? '#D4E4F9' : 'transparent',
+                backgroundColor: location.pathname === eventsPath ? '#D4E4F9' : 'transparent',
                 borderRadius: '4px',
               }}
               onClick={e => {
                 e.preventDefault();
-                navigate('/');
+                navigate(eventsPath);
               }}
             >
-              {location.pathname === "/select-event" ? (
+              {location.pathname === eventsPath ? (
                 <EventsIconBlue />
               ) : (
                   <EventsIconGrey />
               )}
               <Text style={{
                 fontFamily : 'Avenir',
-                fontSize: location.pathname === '/select-event' ? '18px' : '16px',
+                fontSize: location.pathname === eventsPath ? '18px' : '16px',
                 fontWeight: '500',
                 lineHeight: '25px',
                 textAlign: 'center',
-                color: location.pathname === '/select-event' ? '#1873FB' : '#717171',
+                color: location.pathname === eventsPath ? '#1873FB' : '#717171',
               }}>Events</Text>
             </Box>
             <Box
@@ -142,26 +158,26 @@ const Navbar = () => {
                 marginLeft: '14px',
                 marginRight: '14px',
                 marginBottom: '6px',
-                backgroundColor: location.pathname === '/archived-events' ? '#D4E4F9' : 'transparent',
+                backgroundColor: location.pathname === archivedEventsPath ? '#D4E4F9' : 'transparent',
                 borderRadius: '4px',
               }}
               onClick={e => {
                 e.preventDefault();
-                navigate('/archived-events');
+                navigate(archivedEventsPath);
               }}
             >
-              {location.pathname === "/archived-events" ? (
+              {location.pathname === archivedEventsPath ? (
                 <ArchivedEventsIconBlue />
               ) : (
                 <ArchivedEventsIconGrey />
               )}
               <Text style={{
                 fontFamily : 'Avenir',
-                fontSize: location.pathname === '/archived-events' ? '18px' : '16px',
+                fontSize: location.pathname === archivedEventsPath ? '18px' : '16px',
                 fontWeight: '500',
                 lineHeight: '25px',
                 textAlign: 'center',
-                color: location.pathname === '/archived-events' ? '#1873FB' : '#717171',
+                color: location.pathname === archivedEventsPath ? '#1873FB' : '#717171',
               }}>Archived Events</Text>
             </Box>
             <Box
@@ -175,26 +191,26 @@ const Navbar = () => {
                 marginLeft: '14px',
                 marginRight: '14px',
                 marginBottom: '6px',
-                backgroundColor: location.pathname === '/playground' ? '#D4E4F9' : 'transparent',
+                backgroundColor: location.pathname === volunteersPath ? '#D4E4F9' : 'transparent',
                 borderRadius: '4px',
               }}
               onClick={e => {
                 e.preventDefault();
-                navigate('/playground');
+                navigate(volunteersPath);
               }}
             >
-              {location.pathname === "/playground" ? (
+              {location.pathname === volunteersPath ? (
                 <VolunteersIconBlue />
               ) : (
                 <VolunteersIconGrey />
               )}
               <Text style={{
                 fontFamily : 'Avenir',
-                fontSize: location.pathname === '/playground' ? '18px' : '16px',
+                fontSize: location.pathname === volunteersPath ? '18px' : '16px',
                 fontWeight: '500',
                 lineHeight: '25px',
                 textAlign: 'center',
-                color: location.pathname === '/playground' ? '#1873FB' : '#717171',
+                color: location.pathname === volunteersPath ? '#1873FB' : '#717171',
               }}>Volunteers</Text>
             </Box>
           </Box>
@@ -213,7 +229,7 @@ const Navbar = () => {
                   }}
                   onClick={e => {
                     e.preventDefault();
-                    navigate('/playground');
+                    navigate(supportPath);
                   }}
                 >
                   <SupportIconGrey />
@@ -239,7 +255,7 @@ const Navbar = () => {
                   }}
                   onClick={e => {
                     e.preventDefault();
-                    navigate('/playground');
+                    navigate(settingsPath);
                   }}
                 >
                   <SettingsIconGrey />
@@ -266,12 +282,10 @@ const Navbar = () => {
                     backgroundColor: '#FFF',
                     border: '1px',
                   }}
-                  onClick={e => {
-                    e.preventDefault();
-                    navigate('/playground');
-                  }}
                 >
-                  <SettingsIconBlue style={{width: '36.5px', height: '36.5px'}} />
+                  <Box style={{ borderRadius: '50%'}}>
+                    <img src={user.image_url} style={{ width: '36.5px', height: '36.5px', borderRadius: '50%'}} />
+                  </Box>
                   <Box style= {{
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -282,10 +296,16 @@ const Navbar = () => {
                       fontWeight: '500',
                       lineHeight: '25px',
                       textAlign: 'center',
-                    }}>Joseph Smith</Text>
+                      overflowY: 'auto'
+                    }}>{user.first_name} {user.last_name}</Text>
                     <Tag style= {{fontFamily : 'Avenir', fontSize: '12px'}}>Primary Admin</Tag>
                   </Box>
-                  <Box style = {{ display: 'flex', padding: '4.985px', alignItems: 'center', gap: '4.985px', backgroundColor: '#FFE1E1', borderRadius: '4px' }}>
+                  <Box style = {{ display: 'flex', padding: '4.985px', alignItems: 'center', gap: '4.985px', backgroundColor: '#FFE1E1', borderRadius: '4px' }}
+                       onClick = {e => {   
+                                  e.preventDefault();
+                                  logout(logoutPath, navigate);
+                                }}
+                  >
                     <LogOutIcon />
                   </Box>
             </Box>
