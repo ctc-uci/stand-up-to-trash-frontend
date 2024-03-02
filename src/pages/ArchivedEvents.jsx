@@ -31,6 +31,23 @@ const ArchivedEvents = () => {
 
   const [inputLocation, setInputLocation] = useState('');
   const [inputDate, setInputDate] = useState('');
+  const [inputEvent, setInputEvent] = useState('');
+
+  useEffect(() => {
+    // If input is empty, display all volunteers, else conduct the search
+    if (inputEvent.trim() === '') {
+      setEvents(originalEvents);
+    } else {
+      const options = {
+        keys: ['name'],
+      };
+      const fuse = new Fuse(events, options);
+      const searchResult = fuse.search(inputEvent);
+      const reduceResult = searchResult.map(result => result.item);
+      setEvents(reduceResult);
+    }
+  }, [inputEvent]);
+
 
   useEffect(() => {
     // If input is empty, display all volunteers, else conduct the search
@@ -43,6 +60,7 @@ const ArchivedEvents = () => {
       const fuse = new Fuse(events, options);
       const searchResult = fuse.search(inputLocation);
       const reduceResult = searchResult.map(result => result.item);
+
       setEvents(reduceResult);
     }
   }, [inputLocation]);
@@ -160,6 +178,7 @@ const ArchivedEvents = () => {
             backgroundColor={'white'}
             placeholder="Search Event Name (e.g. Festival of Whales)"
             marginBottom={0}
+            onChange={e => setInputEvent(e.target.value)}
           />
         </InputGroup>
 
