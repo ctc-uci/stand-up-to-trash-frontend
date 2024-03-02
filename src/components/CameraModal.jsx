@@ -39,8 +39,6 @@ const CameraModal = ({isOpen, onClose, setTags, uploadedImages}) => {
             // await postImage(image_url);
             // const image = await getImageID(image_url);
             // await putListImageByID(eventID, image.id)
-            console.log(typeof image_url)
-            console.log(`URL IS ${image_url}`)
             const newImageObject = {
               name: "weird name",
               id: Math.floor(Math.random() * 200),

@@ -123,8 +123,8 @@ const DataEntryModal = ({
   };
 
   const uploadImage = async(imageItem) => {
-    await postImage(imageItem.imageUrl);
-    const image = await getImageID(imageItem.imageUrl);
+    await postImage(imageItem.s3_url);
+    const image = await getImageID(imageItem.s3_url);
     console.log('eventid', id)
     await putListImageByID(id, image.id);
   }
@@ -134,7 +134,7 @@ const DataEntryModal = ({
       await deleteListImageByID(id, imageID);
   }
 
-  console.log('detled images', deletedImageIds)
+  console.log('uploaded images', uploadImages)
   const noReload = (data, event) => {
     event.preventDefault();
     putDataEntry(data);
@@ -390,7 +390,7 @@ const DataEntryModal = ({
         </form>
       </ModalContent>
     </Modal>
-    <CameraModal isOpen={cameraIsOpen} onClose={cameraOnClose} eventID={eventId} setTags={setTags} uploadedImages={uploadImages}/>
+    <CameraModal isOpen={cameraIsOpen} onClose={cameraOnClose} setTags={setTags} uploadedImages={uploadImages}/>
     </>
   );
 };
