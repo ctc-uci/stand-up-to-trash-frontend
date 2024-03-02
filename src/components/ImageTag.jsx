@@ -11,13 +11,10 @@ const ImageTag = ({image, setTags, deletedImages }) => {
       // remove tag from render and database
       // await deleteImageByID(imageID);
       // await deleteListImageByID(eventID, imageID);
-      console.log('hui')
       setTags(prev => {
         return prev.filter((item) => {
-          console.log('itemid', item.id, 'imageid', imageID)
           return item.id != imageID})
       })
-      console.log("gkdfldsf", deletedImages)
       deletedImages.current.push(imageID);
   }
 
@@ -36,6 +33,6 @@ const ImageTag = ({image, setTags, deletedImages }) => {
     </>
 
   );
-}
+};
 
 export default ImageTag;
