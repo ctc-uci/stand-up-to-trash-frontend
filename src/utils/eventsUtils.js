@@ -8,7 +8,7 @@ const getEvents = async () => {
 const getEventById = async id => {
   const response = await Backend.get(`/events/${id}`);
   return response.data;
-}
+};
 
 const postEvent = async eventData => {
   const response = await Backend.post('/events', eventData);

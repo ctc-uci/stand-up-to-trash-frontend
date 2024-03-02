@@ -18,10 +18,15 @@ import {
   Input,
   useDisclosure,
   Spacer,
-  Image,
   InputGroup,
   InputLeftElement,
+  HStack,
+  VStack,
 } from '@chakra-ui/react';
+import { FaLocationDot } from 'react-icons/fa6';
+import { IoDocumentText } from 'react-icons/io5';
+import { IoMdPeople } from 'react-icons/io';
+import { CalendarIcon, TimeIcon } from '@chakra-ui/icons';
 import { CustomSearchIcon, GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
@@ -32,6 +37,8 @@ const CheckinPage = () => {
   const [input, setInput] = useState('');
   const [showCheckedIn, setShowCheckedIn] = useState(false);
   const [event, setEvent] = useState('');
+  const [registered, setRegistered] = useState('');
+  const [checkin, setCheckin] = useState('');
   const { eventId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const searchResults = joinedData.filter(item => item.event_id == eventId || eventId == -1);
@@ -46,11 +53,15 @@ const CheckinPage = () => {
     try {
       const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
       const event = await getEventById(eventId); // event data for page rendering eg. image src
+      console.log(event);
       setJoinedData(data);
       setEvent(event);
+      getRegistered(event.id);
+      getCheckin(event.id);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+    // console.log(registered);
   };
 
   /*
@@ -58,7 +69,8 @@ const CheckinPage = () => {
   */
   useEffect(() => {
     setData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /*
@@ -96,24 +108,24 @@ const CheckinPage = () => {
 
   // formats dbms date into Month Day, Year
   const getDateString = () => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+    // const months = [
+    //   'January',
+    //   'February',
+    //   'March',
+    //   'April',
+    //   'May',
+    //   'June',
+    //   'July',
+    //   'August',
+    //   'September',
+    //   'October',
+    //   'November',
+    //   'December',
+    // ];
     const dateObject = new Date(Date.parse(event['date']));
-    const dateString = `${
-      months[dateObject.getMonth()]
-    }  ${dateObject.getDate()}, ${dateObject.getFullYear()}`;
+    const dateString = `${[
+      dateObject.getMonth(),
+    ]}/${dateObject.getDate()}/${dateObject.getFullYear()}`;
     if (isNaN(dateObject)) {
       // on page load, prevents displaying "Undefined" as date
       return '';
@@ -121,9 +133,155 @@ const CheckinPage = () => {
     return dateString;
   };
 
+  const getTimeString = () => {
+    const time = event.time.substring(0, 5);
+    const value = parseInt(time.substring(0, 2));
+    if (value > 12) {
+      return (value - 12).toString() + time.substring(2);
+    }
+    return time;
+  };
+
+  //gets the number of ppl that registered and checked in
+  const getRegistered = async event_id => {
+    try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
+      //console.log(event_id);
+      const response = await Backend.get(`/stats/register/${event_id}`).then(data => {
+        setRegistered(data.data);
+      });
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getCheckin = async event_id => {
+    try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
+      const response = await Backend.get(`/stats/checkin/${event_id}`).then(data => {
+        setCheckin(data.data);
+      });
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Box bg="#C8E6FF" minH="100vh" ml="15rem">
-      <Flex justifyContent="center">
+      <Box bg="white" p={4} boxShadow="md" borderRadius="lg">
+        <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="space-evenly">
+          <VStack align="start" spacing={3}>
+            <Box position="relative">
+              {event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}
+            </Box>
+            <Text fontSize="2xl" fontWeight="bold">
+              Christmas Beach Cleanup
+            </Text>
+            <HStack align="center" spacing={2}>
+              <CalendarIcon />
+              <Text>{getDateString()}</Text>
+            </HStack>
+            <HStack align="center" spacing={2}>
+              <FaLocationDot />
+              <Text>{event.location}</Text>
+            </HStack>
+            <HStack align="center" spacing={2}>
+              <TimeIcon />
+              <Text>{getTimeString()}</Text>
+            </HStack>
+          </VStack>
+
+          <Button variant="outline" size="sm">
+            Event flyer
+          </Button>
+
+          <HStack spacing={4}>
+            <VStack bg="gray.100" p={50} borderRadius="md" align="center">
+              <IoDocumentText size={30} color="lightgreen" />
+              <Text fontSize={20}>{event.registered}</Text>
+              <Text>Registered</Text>
+              <Text fontSize={32}>{registered}</Text>
+            </VStack>
+            <VStack bg="gray.100" p={50} borderRadius="md" align="center">
+              <IoMdPeople size={30} color="purple" />
+              <Text fontSize={20}>{event.checkedIn}</Text>
+              <Text>Checked-In</Text>
+              <Text fontSize={32}>{checkin}</Text>
+            </VStack>
+          </HStack>
+        </Flex>
+      </Box>
+
+      {/* <Box w="100%" h="15rem" bg="white">
+        <HStack w="100%" h="15rem" align="center" justify="space-between" p={4}>
+          <VStack align="start" spacing={4}>
+            <Text fontSize="2xl" fontWeight="bold">
+              Christmas Beach Cleanup
+            </Text>
+            <HStack spacing={4}>
+              <CalendarIcon />
+              <Text fontSize="md">{event.date}</Text>
+              <InfoOutlineIcon />
+              <Text fontSize="md">{event.location}</Text>
+              <TimeIcon />
+              <Text fontSize="md">{event.time}</Text>
+              <Button size="sm" variant="outline">
+                Event flyer
+              </Button>
+            </HStack>
+          </VStack>
+
+          <HStack>
+            <VStack bg="gray.200" p={4} borderRadius="md">
+              <CalendarIcon />
+              <Text fontSize="xl">{event.registered}</Text>
+              <Text>Registered</Text>
+            </VStack>
+            <VStack bg="gray.200" p={4} borderRadius="md">
+              <CalendarIcon />
+              <Text fontSize="xl">{event.checkedIn}</Text>
+              <Text>Checked-In</Text>
+            </VStack>
+          </HStack>
+        </HStack>
+      </Box> */}
+
+      {/* <Box w="100%" h="15rem" bg="white" position="relative">
+        <HStack w="100%" h="15rem" position="relative" align="stretch" spacing={10}>
+          <VStack bg="yellow" alignItems="start" spacing={2} align="stretch" w="50%">
+            <Box bottom="80%" right="80%">
+              {event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}
+            </Box>
+            <Text>Christmas Beach Cleanup</Text>
+            <Box>
+              <Grid templateColumns="repeat(3, 1fr)" gap={6} alignItems={'center'}>
+                <GridItem colSpan={1}>
+                  <VStack spacing={2} alignItems={'start'}>
+                    <CalendarIcon />
+                    <FaLocationDot />
+                    <TimeIcon />
+                  </VStack>
+                </GridItem>
+                <GridItem colEnd={3}>
+                  <Button size="xs">flyer</Button>
+                </GridItem>
+              </Grid>
+            </Box>
+          </VStack>{' '}
+          <Box bg="gray" w="13rem" h="13rem">
+            <CalendarIcon />
+            <Text>h1</Text>
+          </Box>
+          <Box bg="gray" w="13rem" h="13rem">
+            <CalendarIcon />
+            <Text>h1</Text>
+          </Box>
+        </HStack>
+      </Box> */}
+
+      {/* <Flex justifyContent="center">
         <Box w="100%" h="15rem" bg="white" position="relative">
           <Image
             src={event['image_url']}
@@ -142,7 +300,7 @@ const CheckinPage = () => {
             {event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}
           </Box>
         </Box>
-      </Flex>
+      </Flex> */}
       <Center>
         <Flex width="93%" gap={3} mt={5}>
           <InputGroup>
