@@ -123,9 +123,9 @@ const DataEntryModal = ({
   };
 
   const uploadImage = async(imageItem) => {
-    await postImage(imageItem.s3_url);
+    console.log("name", imageItem.name)
+    await postImage(imageItem.name, imageItem.s3_url);
     const image = await getImageID(imageItem.s3_url);
-    console.log('eventid', id)
     await putListImageByID(id, image.id);
   }
 
@@ -134,7 +134,6 @@ const DataEntryModal = ({
       await deleteListImageByID(id, imageID);
   }
 
-  console.log('uploaded images', uploadImages)
   const noReload = (data, event) => {
     event.preventDefault();
     putDataEntry(data);
@@ -175,7 +174,6 @@ const DataEntryModal = ({
   useEffect(() => console.log(tags), [tags]);
 
 
-  console.log("tags", tags.length)
   const TrashWeightInputs = ({ parentControl }) => {
     // const [inputPounds, setInputPounds] = useState('');
     // const [inputOunces, setInputOunces] = useState('');

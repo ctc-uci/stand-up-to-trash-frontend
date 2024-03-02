@@ -1,9 +1,12 @@
 import Backend from './utils';
 
-export const postImage = async (s3_url) => {
+export const postImage = async (name, s3_url) => {
     const response = await Backend.post('/data/image/', {
-        s3_url: s3_url
+        s3_url: s3_url,
+        name: name
     });
+    console.log("name", name)
+
     return response.data;
   };
 
