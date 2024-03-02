@@ -7,9 +7,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
 import 'react-html5-camera-photo/build/css/index.css';
-import { getImagesByEventID } from "../../utils/imageUtils"
 
-import ImageTag from '../ImageTag';
 import CameraModal from '../CameraModal';
 
 const auth = getAuth();
@@ -17,7 +15,6 @@ const auth = getAuth();
 const Playground = () => {
   const [user, setUser] = useState(auth.currentUser);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
@@ -26,11 +23,8 @@ const Playground = () => {
     return () => unsubscribe();
   }, []);
 
-  const updateTags = async id => await getImagesByEventID(id);
 
-  useEffect(() => {
-    updateTags(3).then((data) => setTags(data));
-  }, []);
+
 
   return (
     <Flex
@@ -51,13 +45,8 @@ const Playground = () => {
       <AddEventsModal />
       <Dropzone />
       <Leaderboard event_id={35} />
-      <Flex g={3}>
-      {
-        tags && tags.map(item => <ImageTag key={item.id} imageName={item.name} imageID={item.id} eventID={3} setTags={setTags}/>)
-      }
-      </Flex>
       <Button onClick={onOpen}>CLICK FOR CAMERA</Button>
-      <CameraModal isOpen={isOpen} onClose={onClose} setTags={setTags} eventID={3}/>
+      <CameraModal isOpen={isOpen} onClose={onClose} eventID={3}/>
     </Flex>
   );
 };

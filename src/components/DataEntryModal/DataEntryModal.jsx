@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import {
@@ -21,10 +21,15 @@ import {
   Text,
   Stack,
   useToast,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { FiPaperclip } from 'react-icons/fi';
 import { FaCamera } from 'react-icons/fa';
 import Backend from '../../utils/utils';
+import CameraModal from '../CameraModal';
+import ImageTag from '../ImageTag';
+import { postImage, getImageID, putListImageByID, getImagesByEventID, deleteImageByID, deleteListImageByID } from "../../utils/imageUtils"
+
 
 const DataEntryModal = ({
   isOpen,
@@ -75,6 +80,12 @@ const DataEntryModal = ({
 
   const { handleSubmit, control, getValues } = useForm(volunteerData);
 
+  const { isOpen: cameraIsOpen, onOpen: cameraOnOpen, onClose: cameraOnClose } = useDisclosure();
+  const [tags, setTags] = useState([]);
+  const deletedImageIds = useRef([]);
+  const uploadImages = useRef([]);
+
+
   const putDataEntry = async () => {
     try {
       const { pounds, ounces, unusual_items } = getValues();
@@ -111,9 +122,30 @@ const DataEntryModal = ({
     }
   };
 
+  const uploadImage = async(imageItem) => {
+    await postImage(imageItem.imageUrl);
+    const image = await getImageID(imageItem.imageUrl);
+    console.log('eventid', id)
+    await putListImageByID(id, image.id);
+  }
+
+  const deleteImage = async (imageID) => {
+      await deleteImageByID(imageID);
+      await deleteListImageByID(id, imageID);
+  }
+
+  console.log('detled images', deletedImageIds)
   const noReload = (data, event) => {
     event.preventDefault();
     putDataEntry(data);
+    // tags.forEach((image) => uploadImage(image));
+    if (deletedImageIds.current.length != 0){
+      deletedImageIds.current.forEach((imageId) => deleteImage(imageId))
+      deletedImageIds.current = [];
+    }
+    if (uploadImages.current.length != 0) {
+      uploadImages.current.forEach((image) => uploadImage(image));
+    }
   };
 
   // COMMENTED OUT BECAUSE DESIGN FLAW
@@ -135,6 +167,15 @@ const DataEntryModal = ({
   // };
   // control.getFieldState('pounds').setValue(pounds);
 
+  const updateTags = async id => await getImagesByEventID(id);
+  useEffect(() => {
+    updateTags(id).then((data) => setTags(data));
+  }, []);
+
+  useEffect(() => console.log(tags), [tags]);
+
+
+  console.log("tags", tags.length)
   const TrashWeightInputs = ({ parentControl }) => {
     // const [inputPounds, setInputPounds] = useState('');
     // const [inputOunces, setInputOunces] = useState('');
@@ -244,6 +285,7 @@ const DataEntryModal = ({
   };
 
   return (
+    <>
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent borderRadius="30px">
@@ -320,12 +362,17 @@ const DataEntryModal = ({
                   fontSize="12px"
                   width="112px"
                   height="28px"
+                  onClick={cameraOnOpen}
                 >
                   Take a picture
                 </Button>
               </Stack>
+              <Flex g={3} wrap="wrap" mt={2}>
+              {
+                tags && tags.map(item => <ImageTag key={item.id} image={item} eventID={eventId} setTags={setTags} deletedImages={deletedImageIds}/>)
+              }
+              </Flex>
             </ModalBody>
-
             <Center paddingBottom={7} paddingTop={5}>
               <Button
                 type="submit"
@@ -343,6 +390,8 @@ const DataEntryModal = ({
         </form>
       </ModalContent>
     </Modal>
+    <CameraModal isOpen={cameraIsOpen} onClose={cameraOnClose} eventID={eventId} setTags={setTags} uploadedImages={uploadImages}/>
+    </>
   );
 };
 

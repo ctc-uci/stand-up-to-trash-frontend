@@ -6,21 +6,19 @@ import {
     ModalHeader,
     ModalBody,
     ModalCloseButton,
-    Image,
   } from '@chakra-ui/react'
-import { useState } from 'react';
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import Backend from '../utils/utils';
 import axios from 'axios';
-import {postImage, getImageID, putListImageByID } from "../utils/imageUtils"
 
 
-const CameraModal = ({isOpen, onClose, setTags, eventID}) => {
-  const [uri, setUri] = useState('');
+const CameraModal = ({isOpen, onClose, setTags, uploadedImages}) => {
+  // const [uri, setUri] = useState('');
+  // const [tags, setTags] = useState([]);
 
     const handleTakePhoto = dataUri => {
-        setUri(dataUri);
+        // setUri(dataUri);
         const uploadImage = async dataUri => {
           // get S3 upload url from server
           const { data: uploadUrl } = await Backend.get('/s3Upload');
@@ -38,15 +36,26 @@ const CameraModal = ({isOpen, onClose, setTags, eventID}) => {
         };
 
         uploadImage(dataUri).then(async (image_url) => {
-            await postImage(image_url);
-            const image = await getImageID(image_url);
-            await putListImageByID(eventID, image.id)
-            setTags(prev => [...prev, {
-                name: image.name,
-                id: image.id
-            }])
+            // await postImage(image_url);
+            // const image = await getImageID(image_url);
+            // await putListImageByID(eventID, image.id)
+            console.log(typeof image_url)
+            console.log(`URL IS ${image_url}`)
+            const newImageObject = {
+              name: "weird name",
+              id: Math.floor(Math.random() * 200),
+              s3_url: image_url,
+            }
+
+            setTags(prev => [...prev, newImageObject])
+            uploadedImages.current.push(newImageObject)
         })
       };
+
+    // const updateTags = async id => await getImagesByEventID(id);
+    // useEffect(() => {
+    //   updateTags(eventID).then((data) => setTags(data));
+    // }, []);
 
     return (
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -56,11 +65,11 @@ const CameraModal = ({isOpen, onClose, setTags, eventID}) => {
           <ModalCloseButton />
           <ModalBody>
             <Camera
-        onTakePhoto={dataUri => {
-          handleTakePhoto(dataUri);
-        }}
-      />
-      <Image src={uri}/>
+              onTakePhoto={dataUri => {
+                handleTakePhoto(dataUri);
+                onClose();
+            }}
+          />
           </ModalBody>
         </ModalContent>
       </Modal>
