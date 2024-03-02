@@ -52,11 +52,24 @@ const CreateEventButton = ({ getEvents }) => {
 
   return (
     <>
-      <Button style={{ backgroundColor: '#95D497', borderRadius: '30px' }} height="50px" onClick={onOpen}>
+      <Button
+        style={{ backgroundColor: '#95D497', borderRadius: '30px' }}
+        height="50px"
+        onClick={onOpen}
+      >
         <Box padding="13px 13px" fontSize="20px" display="inline-flex" gap="10px">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11.1429 12.8571H3V10.1429H11.1429V2H13.8571V10.1429H22V12.8571H13.8571V21H11.1429V12.8571Z" fill="black"/>
-          </svg> 
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.1429 12.8571H3V10.1429H11.1429V2H13.8571V10.1429H22V12.8571H13.8571V21H11.1429V12.8571Z"
+              fill="black"
+            />
+          </svg>
           Create Event
         </Box>
       </Button>

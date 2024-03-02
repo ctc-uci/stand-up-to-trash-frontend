@@ -81,9 +81,9 @@ const DataEntryModal = ({
 
       const dataToSend = {
         ...volunteerData,
-        pounds: pounds === "" ? 0 : parseInt(pounds),
-        ounces: ounces === "" ? 0 : parseInt(ounces),
-        unusual_items: unusual_items === "" ? null : unusual_items,
+        pounds: pounds === '' ? 0 : parseInt(pounds),
+        ounces: ounces === '' ? 0 : parseInt(ounces),
+        unusual_items: unusual_items === '' ? null : unusual_items,
       };
       console.log(dataToSend);
 

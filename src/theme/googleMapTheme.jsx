@@ -1,9 +1,9 @@
 import { extendTheme } from '@chakra-ui/react';
-import { GoogleMapsIcon  } from '../components/Icons/GoogleMapsIcon';
+import { GoogleMapsIcon } from '../components/Icons/GoogleMapsIcon';
 
 const theme = extendTheme({
   icons: {
-    GoogleMapsIcon
+    GoogleMapsIcon,
   },
 });
 

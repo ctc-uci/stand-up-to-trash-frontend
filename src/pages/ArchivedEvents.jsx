@@ -48,7 +48,6 @@ const ArchivedEvents = () => {
     }
   }, [inputEvent]);
 
-
   useEffect(() => {
     // If input is empty, display all volunteers, else conduct the search
     if (inputLocation.trim() === '') {
