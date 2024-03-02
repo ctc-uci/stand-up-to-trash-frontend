@@ -18,7 +18,7 @@ const Navbar = () => {
   useEffect(() => {
     console.log(`Here is the user info:`);
     console.log(user);
-    console.log(`The user's role is: ${role}`)
+    console.log(`The user's role is: ${role}`);
     console.log('Current route:', location.pathname);
   });
 

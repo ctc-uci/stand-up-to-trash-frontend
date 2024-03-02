@@ -23,12 +23,67 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { FaArrowUp, FaArrowDown, FaMapMarkerAlt, FaRegCalendar, FaUser } from 'react-icons/fa';
 import Backend from '../utils/utils';
 import { useEffect, useState } from 'react';
+import Fuse from 'fuse.js';
+
 const ArchivedEvents = () => {
   const [events, setEvents] = useState([]);
+  const [originalEvents, setOriginalEvents] = useState([]);
+
+  const [inputLocation, setInputLocation] = useState('');
+  const [inputDate, setInputDate] = useState('');
+  const [inputEvent, setInputEvent] = useState('');
+
+  useEffect(() => {
+    // If input is empty, display all volunteers, else conduct the search
+    if (inputEvent.trim() === '') {
+      setEvents(originalEvents);
+    } else {
+      const options = {
+        keys: ['name'],
+      };
+      const fuse = new Fuse(events, options);
+      const searchResult = fuse.search(inputEvent);
+      const reduceResult = searchResult.map(result => result.item);
+      setEvents(reduceResult);
+    }
+  }, [inputEvent]);
+
+  useEffect(() => {
+    // If input is empty, display all volunteers, else conduct the search
+    if (inputLocation.trim() === '') {
+      setEvents(originalEvents);
+    } else {
+      const options = {
+        keys: ['location'],
+      };
+      const fuse = new Fuse(events, options);
+      const searchResult = fuse.search(inputLocation);
+      const reduceResult = searchResult.map(result => result.item);
+
+      setEvents(reduceResult);
+    }
+  }, [inputLocation]);
+
+  useEffect(() => {
+    // If input is empty, display all volunteers, else conduct the search
+    if (inputDate.trim() === '') {
+      setEvents(originalEvents);
+    } else {
+      const options = {
+        keys: ['date'],
+      };
+      const fuse = new Fuse(events, options);
+      const searchResult = fuse.search(inputDate);
+      const reduceResult = searchResult.map(result => result.item);
+      setEvents(reduceResult);
+    }
+  }, [inputDate]);
+
   const getEvents = async () => {
     try {
       const eventsData = await Backend.get('/events/archiveEvents');
       setEvents(eventsData.data);
+      setOriginalEvents(eventsData.data);
     } catch (err) {
       console.log(`Error getting events: `, err.message);
     }
@@ -36,7 +91,6 @@ const ArchivedEvents = () => {
 
   const eventRows = events.map(event => (
     <>
-      {console.log(event)}
       <Tr key={event.id}>
         <Td>
           <Flex>
@@ -123,6 +177,7 @@ const ArchivedEvents = () => {
             backgroundColor={'white'}
             placeholder="Search Event Name (e.g. Festival of Whales)"
             marginBottom={0}
+            onChange={e => setInputEvent(e.target.value)}
           />
         </InputGroup>
 
@@ -135,11 +190,18 @@ const ArchivedEvents = () => {
             size={'lg'}
             type="location"
             placeholder="Search Location"
+            onChange={e => setInputLocation(e.target.value)}
           />
         </InputGroup>
 
         <InputGroup borderRadius={5} width={'20%'}>
-          <Input backgroundColor={'white'} size={'lg'} type="day" placeholder="Search Date" />
+          <Input
+            backgroundColor={'white'}
+            size={'lg'}
+            type="day"
+            placeholder="Search Date"
+            onChange={e => setInputDate(e.target.value)}
+          />
         </InputGroup>
 
         <Box

@@ -2,7 +2,6 @@
 import { useContext } from 'react';
 import RoleContext from './RoleContext';
 
-
 const ProtectedRoute = ({ children, pageType }) => {
   // Utilize the useContext to obtain the role
   const { role } = useContext(RoleContext);

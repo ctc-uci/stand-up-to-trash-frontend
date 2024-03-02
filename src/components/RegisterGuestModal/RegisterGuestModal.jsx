@@ -96,7 +96,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
       if (data.email === '') {
         data.email = null;
       }
-      
+
       const validatedData = await volunteerObject.validate(data);
       const res = await postVolunteerData(validatedData);
 
