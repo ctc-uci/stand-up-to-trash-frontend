@@ -7,9 +7,6 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
 import 'react-html5-camera-photo/build/css/index.css';
-import { Image } from '@chakra-ui/react';
-import Backend from '../../utils/utils.js';
-import axios from 'axios';
 import { logGoogleUserOut } from '../../utils/googleAuthUtils.js';
 import CameraModal from '../CameraModal';
 
