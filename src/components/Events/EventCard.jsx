@@ -26,84 +26,16 @@ import {
 import { AttachmentIcon } from '@chakra-ui/icons';
 import pencil_icon from '../../Assets/pencil_icon.png';
 import PropTypes from 'prop-types';
+import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import { CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
 import { useState, useRef } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
+import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
+import ExportButton from '../ExportCSVButton/ExportButton';
+import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
 
-// Copied and modified from https://stackoverflow.com/a/66390028/7203225
-const units = [
-  { unit: 'year', ms: 31536000000 },
-  { unit: 'month', ms: 2628000000 },
-  { unit: 'day', ms: 86400000 },
-  { unit: 'hour', ms: 3600000 },
-  { unit: 'minute', ms: 60000 },
-  { unit: 'second', ms: 1000 },
-];
-const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
-
-/**
- * Get language-sensitive relative time message from Dates.
- * @param relative  - the relative dateTime, generally is in the past or future
- * @param pivot     - the dateTime of reference, generally is the current time
- */
-const relativeTimeFromDates = (relative, pivot = new Date()) => {
-  if (!relative) return '';
-  const elapsed = relative.getTime() - pivot.getTime();
-  return relativeTimeFromElapsed(elapsed);
-};
-
-/**
- * Get language-sensitive relative time message from elapsed time.
- * @param elapsed   - the elapsed time in milliseconds
- */
-const relativeTimeFromElapsed = elapsed => {
-  for (const { unit, ms } of units) {
-    if (Math.abs(elapsed) >= ms || unit === 'second') {
-      return rtf.format(Math.round(elapsed / ms), unit);
-    }
-  }
-  return '';
-};
-
-const HOUR_IN_MS = 1000 * 60 * 60;
-
-const HappeningInChip = ({ date }) => {
-  let color = '#5BD260'; // Default "happening right now" color
-  let inThePast = false;
-  const relativeTimeInMs = date.getTime() - new Date().getTime();
-  if (relativeTimeInMs > HOUR_IN_MS * 3)
-    color = '#EAA554'; // Happening in the future (3+ hours from now)
-  else if (relativeTimeInMs < HOUR_IN_MS * 6) {
-    color = '#ea5468'; // Happening in the past (6+ hours in the past)
-    inThePast = true;
-  }
-  return (
-    <Box
-      borderRadius="15px"
-      background="rgba(217, 217, 217, 0.72)"
-      display="inline-flex"
-      padding="5px 9px"
-      flexDir="column"
-      justifyContent={'center'}
-      alignItems={'center'}
-      gap="10px"
-      color="black"
-      fontSize="11px"
-    >
-      <Box display="flex" alignItems="center" gap="6px">
-        <svg width="8" height="9" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="4" cy="4.5" r="3.5" fill={color} stroke="black" />
-        </svg>
-        {inThePast ? 'happened' : 'happening'} {relativeTimeFromDates(date)}
-      </Box>
-    </Box>
-  );
-};
-
-HappeningInChip.propTypes = {
-  date: PropTypes.object.isRequired,
-};
+import { useNavigate } from 'react-router-dom';
 
 const EventCard = ({
   id,
@@ -118,6 +50,7 @@ const EventCard = ({
   handleCheckboxChange,
   getEvents,
 }) => {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Placeholder for testing a high-res image
@@ -139,6 +72,7 @@ const EventCard = ({
         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
         display="flex"
         flexDir="column"
+        cursor={'pointer'}
         justifyContent={'space-between'}
         borderRadius="30px"
         onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
@@ -161,7 +95,7 @@ const EventCard = ({
         </Text>
         <Spacer /> */}
 
-        <Box w={'100%'} display="flex" pointerEvents={'none'} position={'relative'} zIndex={-30}>
+        <Box w={'100%'} display="flex" pointerEvents={'none'} position={'relative'} zIndex={30}>
           {/* Top section, for things like select and edit icons */}
           {showSelect ? (
             <Checkbox
@@ -206,10 +140,17 @@ const EventCard = ({
           <ModalBody p="0">
             <Box display="flex" flexDir="row" h="660px" w="800px">
               <Box flexBasis="60%" display="flex" flexDir="column">
-                <Box flexBasis="60%" bg="#D9D9D9" display="flex" alignItems="end" p="2">
+                <Box
+                  flexBasis="60%"
+                  background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
+                  backgroundSize="cover"
+                  display="flex"
+                  alignItems="end"
+                  p="2"
+                >
                   <Stack mx="6">
-                    <Heading>{name}</Heading>
-                    <Text>{location}</Text>
+                    <Heading color={'white'}>{name}</Heading>
+                    <Text color={'white'}>{location}</Text>
                   </Stack>
                 </Box>
                 <Box
@@ -231,8 +172,10 @@ const EventCard = ({
                       backgroundColor="rgba(149, 189, 212, 0.71)"
                       borderRadius="0"
                       colorScheme={'grey'}
-                      as="a"
-                      href={`/checkin/${id}`}
+                      as="button"
+                      onClick={() => {
+                        navigate(`/checkin/${id}`);
+                      }}
                       target="_blank"
                     >
                       View More
@@ -245,9 +188,15 @@ const EventCard = ({
                 bg="rgba(217, 217, 217, 0.40)"
                 display="flex"
                 justifyItems={'end'}
-                alignItems={'start'}
+                alignItems={'center'}
+                flexDir={'column'}
+                marginTop={10}
+                gap={10}
               >
-                <ModalCloseButton />
+                <ModalCloseButton marginBottom={5} />
+                <Leaderboard event_id={id} />
+                <GetMapDirectionsButton eventId={id} />
+                <ExportButton eventId={id} />
               </Box>
             </Box>
           </ModalBody>
@@ -405,8 +354,8 @@ const EditEvents = ({
                   <Spinner />
                 ) : (
                   <Dropzone
-                    setEventData={setEventData}
-                    eventData={eventData}
+                    setData={setEventData}
+                    data={eventData}
                     height={'141px'}
                     setIsLoading={setIsLoading}
                   />

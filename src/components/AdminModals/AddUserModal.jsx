@@ -16,10 +16,9 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 import Dropzone from '../Dropzone.tsx';
-import { useState} from 'react';
+import { useState } from 'react';
 import { postProfile } from '../../utils/profileUtils.js';
 import PropTypes from 'prop-types';
-
 
 export default function AddUserModal({ isOpen, onClose, setAdminData }) {
   const [isLoading, setIsLoading] = useState(false);

@@ -29,23 +29,29 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     email,
     image_url,
     is_checked_in,
-    event_data_id,
+    number_in_party,
+    event_data_new_id,
     volunteer_id,
     event_id,
     id,
     unusual_items,
+    pounds,
+    ounces,
   } = volunteer;
+  // console.log(volunteer);
 
   return (
-    <Tr key={id}>
+    <Tr key={id} bg="#FFFFFF">
       <Td>
         <Flex ml="5rem">
           <Image src={image_url} boxSize="4rem" borderRadius="full" />
           <Flex direction="column" ml={3} mt={2} g={1}>
-            <Text>
+            <Text color={'#2D3748'}>
               {first_name} {last_name}
             </Text>
-            <Text fontWeight="light">{email}</Text>
+            <Text fontWeight="light" color={'#718096'}>
+              {email}
+            </Text>
           </Flex>
         </Flex>
       </Td>
@@ -58,22 +64,31 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
         <Flex gap={2}>
           {is_checked_in ? (
             <>
-              <Tag cursor={'pointer'} onClick={onOpen} bg="#D53F8C" color="white">
+              <Tag cursor={'pointer'} onClick={onOpen} bg="#2D558A" textColor={'#FFFFFF'}>
                 Input Data
               </Tag>
               <DataEntryModal
                 isOpen={isOpen}
                 onClose={onClose}
+                id={event_data_new_id}
                 profileImage={image_url}
                 firstName={first_name}
                 lastName={last_name}
                 volunteerId={volunteer_id}
+                numberInParty={number_in_party}
                 eventId={event_id}
                 unusualItems={unusual_items}
+                pounds={pounds}
+                ounces={ounces}
               />
             </>
           ) : (
-            <Tag onClick={() => changeIsCheckedIn(event_data_id)} cursor={'pointer'} bg="#95D497">
+            <Tag
+              onClick={() => changeIsCheckedIn(event_data_new_id)}
+              cursor={'pointer'}
+              bg="#2D558A"
+              textColor={'#FFFFFF'}
+            >
               Check-In
             </Tag>
           )}
@@ -89,7 +104,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
 
 const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
   return (
-    <TableContainer>
+    <TableContainer borderRadius={'15px'}>
       <Table variant="simple">
         <TableCaption>Volunteers for this event</TableCaption>
         <Thead bg="#F7FAFC">
@@ -97,15 +112,15 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
             <Th w="65%">
               <Flex gap={2} ml="5rem">
                 <FaUser size="1rem" />
-                <Text color="black" fontWeight="650">
-                  NAME
+                <Text color="#2D3748" fontWeight="650">
+                  VOLUNTEER NAME
                 </Text>
               </Flex>
             </Th>
             <Th>
               <Flex gap={2}>
                 <FaClock size="1rem" />
-                <Text color="black" fontWeight="650">
+                <Text color="#2D3748" fontWeight="650">
                   STATUS
                 </Text>
                 <FaArrowUp size="1rem" />
@@ -114,7 +129,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
             <Th>
               <Flex gap={2}>
                 <FaTag size="1rem" transform="rotate(90)" />
-                <Text color="black" fontWeight="650">
+                <Text color="#2D3748" fontWeight="650">
                   ACTION
                 </Text>
               </Flex>

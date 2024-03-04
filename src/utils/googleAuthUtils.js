@@ -28,3 +28,5 @@ export function logGoogleUserOut(redirect, navigate) {
       console.log('An error occurred while signing out', error.code, error.message);
     });
 }
+
+export { auth };

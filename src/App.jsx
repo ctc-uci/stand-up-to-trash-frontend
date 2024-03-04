@@ -1,16 +1,13 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import DummyEvents from './pages/DummyEvents';
+import EventsPage from './pages/EventsPage';
 import ArchivedEvents from './pages/ArchivedEvents';
 import DummyProfiles from './pages/DummyProfiles';
 import DummySearchVolunteerEvents from './pages/DummySearchVolunteerEvents';
 import DummySuccessfulLogin from './pages/DummySuccessfulLogin';
-import DummyVolunteerData from './pages/DummyVolunteerData';
-import DummyVolunteerEvent from './pages/DummyVolunteerEvent';
 import DummyStatsPage from './pages/DummyStatsPage';
-import DummyCheckin from './pages/DummyCheckin';
-import DummyEventCreation from './pages/DummyEventCreation';
+import CheckinPage from './pages/CheckinPage';
 import Login from './pages/Login';
 import LoginV2 from './pages/LoginV2';
 import Signup from './pages/Signup';
@@ -18,15 +15,16 @@ import SignupV2 from './pages/SignupV2';
 import ForgotPassword from './pages/ForgotPassword';
 import ForgotPasswordV2 from './pages/ForgotPasswordV2';
 import Playground from './components/Playground/Playground';
-import EventCardTest from './pages/EventCardTest';
 import FilteredEvents from './pages/FilteredEvent';
-import DataEntryModalTestPage from './pages/DataEntryModalTestPage';
 import Register from './pages/Register';
 import SelectEvent from './pages/SelectEvent';
 import DummyVolunteerQR from './pages/DummyVolunteerQR';
 import DummyAdminQR from './pages/DummyAdminQR';
 import Navbar from './components/Navbar/Navbar';
 import AdminPage from './pages/AdminPage';
+import { RoleProvider } from './utils/RoleContext';
+import { UserProvider } from './utils/UserContext';
+import ProtectedRoute from './utils/ProtectedRoute';
 
 const Layout = () => {
   return (
@@ -43,42 +41,146 @@ const App = () => {
   return (
     <ChakraProvider theme={theme}>
       <Router>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/playground" element={<Playground />} />
-            <Route path="/dummyevents" element={<DummyEvents />} />
-          </Route>
+        <RoleProvider>
+          <UserProvider>
+            <Routes>
+              <Route element={<Layout />}>
+                {/* ADMIN PAGES-- */}
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <EventsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <AdminPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/archived-events"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <ArchivedEvents />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/checkin/:eventId"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <CheckinPage />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin-qr/"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <DummyAdminQR />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                {/* --ADMIN PAGES */}
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/loginv2" element={<LoginV2 />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signupv2" element={<SignupV2 />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/forgotpasswordv2" element={<ForgotPasswordV2 />} />
-          <Route path="/successful-login" element={<DummySuccessfulLogin />} />
-          <Route path="/event-data" element={<DummyVolunteerData />} />
-          <Route path="/volunteer-event" element={<DummyVolunteerEvent />} />
-          <Route path="/events" element={<DummyEvents />} />
-          <Route path="/archived-events" element={<ArchivedEvents />} />
-          <Route path="/search-volunteer-events" element={<DummySearchVolunteerEvents />} />
-          <Route path="/profiles" element={<DummyProfiles />} />
-          <Route path="/event-creation" element={<DummyEventCreation />} />
-          <Route path="/select-event" element={<SelectEvent />} />
+                <Route path="/playground" element={<Playground />} />
+              </Route>
 
-         
-          <Route path="/data-entry-modal-test" element={<DataEntryModalTestPage />} />
-          <Route path="/checkin/:eventId" element={<DummyCheckin />} />
-          <Route path="/stats" element={<DummyStatsPage />} />
-          <Route path="/event-card-page" element={<EventCardTest />} />
-          <Route path="/filtered-event-page" element={<FilteredEvents />} />
-          <Route path="/register/:eventId" element={<Register />} />
-          <Route path="/playground" element={<Playground />} />
+              {/* AUTHENTICATION PAGES-- */}
+              <Route
+                path="/login"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <Login />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/loginv2"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <LoginV2 />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <Signup />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/signupv2"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <SignupV2 />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/forgotpassword"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <ForgotPassword />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/forgotpasswordv2"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <ForgotPasswordV2 />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/successful-login"
+                element={
+                  <ProtectedRoute pageType="authentication">
+                    <DummySuccessfulLogin />
+                  </ProtectedRoute>
+                }
+              />
+              {/* --AUTHENTICATION PAGES */}
 
-          <Route path="/volunteer-qr/:eventId/:volunteerId" element={<DummyVolunteerQR />} />
-          <Route path="/admin-qr/" element={<DummyAdminQR />} />
+              {/* VOLUNTEER PAGES-- */}
+              <Route
+                path="/register/:eventId"
+                element={
+                  <ProtectedRoute pageType="volunteer">
+                    <Register />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/volunteer-qr/:eventId/:volunteerId"
+                element={
+                  <ProtectedRoute pageType="volunteer">
+                    <DummyVolunteerQR />
+                  </ProtectedRoute>
+                }
+              />
+              {/*--VOLUNTEER PAGES*/}
 
-          <Route path="/admin" element={<AdminPage />} />
-        </Routes>
+              {/* PLAYGROUND */}
+              <Route path="/playground" element={<Playground />} />
+              <Route path="/stats" element={<DummyStatsPage />} />
+
+              {/* TEST PAGES */}
+              <Route path="/filtered-event-page" element={<FilteredEvents />} />
+              <Route path="/search-volunteer-events" element={<DummySearchVolunteerEvents />} />
+              <Route path="/profiles" element={<DummyProfiles />} />
+              <Route path="/select-event" element={<SelectEvent />} />
+            </Routes>
+          </UserProvider>
+        </RoleProvider>
       </Router>
     </ChakraProvider>
   );

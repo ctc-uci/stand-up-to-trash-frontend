@@ -20,13 +20,7 @@ import {
   TableContainer,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-  FaArrowUp,
-  FaArrowDown,
-  FaMapMarkerAlt,
-  FaRegCalendar,
-  FaUser,
-} from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaMapMarkerAlt, FaRegCalendar, FaUser } from 'react-icons/fa';
 import Backend from '../utils/utils';
 import { useEffect, useState } from 'react';
 const ArchivedEvents = () => {
@@ -87,7 +81,7 @@ const ArchivedEvents = () => {
   }, []);
 
   return (
-    <Box style={{ display: 'grid', gap: '22px' }} backgroundColor={'#c8e6fe'}>
+    <Box ml="15rem" style={{ display: 'grid', gap: '22px' }} backgroundColor={'#c8e6fe'}>
       {/* Overall Imapct Card */}
       <Heading marginLeft={10} marginTop={5}>
         Overall Impact
@@ -118,8 +112,8 @@ const ArchivedEvents = () => {
       <Heading marginLeft={10} marginTop={5}>
         Past Events
       </Heading>
-      <Stack spacing={4} direction={'row'}>
-        <InputGroup marginLeft={10} borderRadius={5} width={'700px'}>
+      <Stack spacing={4} direction={'row'} mr={10}>
+        <InputGroup marginLeft={10} borderRadius={5} width={'37%'}>
           <InputLeftElement pointerEvents="none">
             <SearchIcon color="gray.400" />
           </InputLeftElement>
@@ -132,7 +126,7 @@ const ArchivedEvents = () => {
           />
         </InputGroup>
 
-        <InputGroup borderRadius={5} width={'350px'}>
+        <InputGroup borderRadius={5} width={'30%'}>
           <InputLeftElement pointerEvents="none">
             <SearchIcon color="gray.400" />
           </InputLeftElement>
@@ -144,7 +138,7 @@ const ArchivedEvents = () => {
           />
         </InputGroup>
 
-        <InputGroup borderRadius={5} width={'250px'}>
+        <InputGroup borderRadius={5} width={'20%'}>
           <Input backgroundColor={'white'} size={'lg'} type="day" placeholder="Search Date" />
         </InputGroup>
 
