@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import RoleContext from './RoleContext';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { Spinner } from '@chakra-ui/react';
 
 const ProtectedRoute = ({ children, pageType }) => {
   const { role } = useContext(RoleContext);
@@ -14,36 +16,36 @@ const ProtectedRoute = ({ children, pageType }) => {
     const isAuthenticated = () => {
       if (pageType === 'admin') {
         if (role === 'admin') {
-          setLoading(true);
+          setLoading(false);
         } else if (role === 'volunteer') {
           navigate('/playground');
-          setLoading(false);
+          setLoading(true);
         } else if (role === 'unloggedIn') {
           navigate('/loginv2');
-          setLoading(false);
+          setLoading(true);
         }
       }
 
       if (pageType === 'volunteer') {
         if (role === 'admin') {
-          setLoading(true);
+          setLoading(false);
         } else if (role === 'volunteer') {
-          setLoading(true);
+          setLoading(false);
         } else if (role === 'unloggedIn') {
           navigate('/loginv2');
-          setLoading(false);
+          setLoading(true);
         }
       }
 
       if (pageType === 'authentication') {
         if (role === 'admin') {
           navigate('/');
-          setLoading(false);
+          setLoading(true);
         } else if (role === 'volunteer') {
           navigate('/playground');
-          setLoading(false);
-        } else if (role === 'unloggedIn') {
           setLoading(true);
+        } else if (role === 'unloggedIn') {
+          setLoading(false);
         }
       }
     };
@@ -52,10 +54,15 @@ const ProtectedRoute = ({ children, pageType }) => {
   }, [children, navigate, pageType, role]);
 
   if (loading) {
-    return;
+    return <Spinner />
   }
 
   return children;
+};
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+  pageType: PropTypes.string
 };
 
 export default ProtectedRoute;
