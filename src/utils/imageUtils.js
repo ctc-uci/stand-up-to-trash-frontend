@@ -32,7 +32,6 @@ export const deleteListImageByID = async (id, eventImageKey) => {
 
 export const getImagesByEventID = async (id) => {
     const response = await Backend.get(`/data/image/${id}`);
-    console.log(`OMG! ${JSON.stringify(response.data)}`)
     return response.data;
     };
 

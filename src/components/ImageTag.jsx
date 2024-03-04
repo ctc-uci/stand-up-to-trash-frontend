@@ -3,7 +3,7 @@ import { Tag, TagLabel, TagLeftIcon, TagCloseButton, Flex, useDisclosure, } from
 import { AttachmentIcon } from '@chakra-ui/icons';
 import ImageModal from './ImageModal';
 
-const ImageTag = ({image, setTags, deletedImages }) => {
+const ImageTag = ({image, setTags, deletedImages, uploadImages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { name: imageName, id: imageID, s3_url: imageUrl } = image
   console.log(image)
@@ -16,6 +16,7 @@ const ImageTag = ({image, setTags, deletedImages }) => {
           return item.id != imageID})
       })
       deletedImages.current.push(imageID);
+      uploadImages.current = uploadImages.current.filter(item => item.id !== imageID);
   }
 
   return (

@@ -38,7 +38,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     pounds,
     ounces,
   } = volunteer;
-  console.log(volunteer);
+  // console.log(volunteer);
 
   return (
     <Tr key={id} bg="#FFFFFF">
