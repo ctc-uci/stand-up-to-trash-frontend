@@ -97,3 +97,5 @@ export const sendResetPasswordPrompt = async email => {
   // be caught by UI layer.
   await sendPasswordResetEmail(auth, email);
 };
+
+export { auth };

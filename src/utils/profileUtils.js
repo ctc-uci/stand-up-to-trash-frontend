@@ -30,4 +30,9 @@ const updateProfile = async (id, profile) => {
   return response.data;
 };
 
-export { getProfile, getAdminProfile, postProfile, deleteProfile, getProfileById, updateProfile };
+const getProfileByFirebaseUid = async uid => {
+  const response = await Backend.get(`/profiles/firebase/${uid}`);
+  return response.data;
+};
+
+export { getProfile, getAdminProfile, postProfile, deleteProfile, getProfileById, updateProfile, getProfileByFirebaseUid };
