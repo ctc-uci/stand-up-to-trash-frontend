@@ -6,28 +6,23 @@ import { getEventById } from '../utils/eventsUtils';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
+import VolunteerTabNavigation from '../components/Checkin/VolunteerTabNavigation';
 import { useParams } from 'react-router-dom';
 import {
   Container,
   Text,
-  Center,
   Flex,
   Button,
   Box,
-  IconButton,
   Input,
   useDisclosure,
   Spacer,
   Image,
   InputGroup,
   InputLeftElement,
-  Tabs,
-  TabList, 
-  Tab, 
-  Badge,
   Alert,
 } from '@chakra-ui/react';
-import { CustomSearchIcon, GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
+import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 
@@ -43,18 +38,17 @@ const CheckinPage = () => {
 
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
-    if (tabIndex === 0)
-      setDisplayedVolunteers(volunteerResults);
+    if (tabIndex === 0) setDisplayedVolunteers(volunteerResults);
     else if (tabIndex === 1)
-      setDisplayedVolunteers(volunteerResults.filter(
-        volunteer => volunteer.is_checked_in === true,
-      ));
-    else if (tabIndex === 2) 
-      setDisplayedVolunteers(volunteerResults.filter(
-        volunteer => volunteer.is_checked_in === false,
-      ));
+      setDisplayedVolunteers(
+        volunteerResults.filter(volunteer => volunteer.is_checked_in === true),
+      );
+    else if (tabIndex === 2)
+      setDisplayedVolunteers(
+        volunteerResults.filter(volunteer => volunteer.is_checked_in === false),
+      );
     else if (tabIndex === 3)
-      setDisplayedVolunteers(volunteerResults.filter(v => v.role === "guest"));
+      setDisplayedVolunteers(volunteerResults.filter(v => v.role === 'guest'));
   }, [tabIndex, volunteerResults]);
 
   const setData = async () => {
@@ -73,7 +67,7 @@ const CheckinPage = () => {
   */
   useEffect(() => {
     setData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /*
@@ -87,7 +81,10 @@ const CheckinPage = () => {
       const options = {
         keys: ['first_name', 'last_name', 'email'],
       };
-      const fuse = new Fuse(joinedData.filter(item => item.event_id == eventId || eventId == -1), options);
+      const fuse = new Fuse(
+        joinedData.filter(item => item.event_id == eventId || eventId == -1),
+        options,
+      );
       const searchResult = fuse.search(input);
       const reduceResult = searchResult.map(result => result.item);
       setVolunteerResults(reduceResult);
@@ -136,10 +133,10 @@ const CheckinPage = () => {
     return dateString;
   };
 
-  console.log({displayedVolunteers});
+  console.log({ displayedVolunteers });
 
   return (
-    <Box bg="#C8E6FF" minH="100vh" ml="15rem">
+    <Box bg="#E6EAEF" minH="100vh" ml="15rem">
       <Flex justifyContent="center">
         <Box w="100%" h="15rem" bg="white" position="relative">
           <Image
@@ -160,9 +157,11 @@ const CheckinPage = () => {
           </Box>
         </Box>
       </Flex>
-      <Center>
-        <Flex width="93%" gap={3} mt={5}>
-          <InputGroup>
+
+      <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} maxW="95%">
+        {/* SEARCH BAR---- */}
+        <Flex gap={3} mt={5}>
+          <InputGroup mt={10}>
             <InputLeftElement pointerEvents="none" top={'6px'} left={'5px'}>
               <GreyCustomSearchIcon w={'24px'} h={'18px'} />
             </InputLeftElement>
@@ -179,84 +178,39 @@ const CheckinPage = () => {
               placeholder='Search Volunteer Name (e.g. "John Doe")'
             />
           </InputGroup>
-          <IconButton
-            icon={<CustomSearchIcon w={'24px'} h={'24px'} />}
-            width="69px"
-            height="53px"
-            borderRadius="15px"
-            background="#2D558A"
-          />
         </Flex>
-      </Center>
-      <Container maxW="95%">
-        <Container
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignContent: 'center',
-            marginTop: '3vh',
-            gap: '1vw',
-          }}
-        ></Container>
-        <Flex mb={5} marginTop="3vh">
-          <Tabs onChange={setTabIndex}>
-            <TabList>
-              <Tab>All <Badge ml="2">{volunteerResults.length}</Badge></Tab>
-              <Tab>Checked-in <Badge ml="2">{volunteerResults.filter(v => v.is_checked_in === true).length}</Badge></Tab>
-              <Tab>Not Checked-in <Badge ml="2">{volunteerResults.filter(v => v.is_checked_in === false).length}</Badge></Tab>
-              <Tab>Guests <Badge ml="2">{volunteerResults.filter(v => v.role === "guest").length}</Badge></Tab>
-            </TabList>
-          </Tabs>
-          {/* <Button
-            style={{
-              borderRadius: '100px',
-              backgroundColor: `${showCheckedIn ? '#FFFFFF' : '#2D558A'}`,
-              color: `${showCheckedIn ? '#000000' : '#FFFFFF'}`,
-            }}
-            onClick={() => setShowCheckedIn(false)}
-          >
-            not checked-in
-          </Button>
-          <Button
-            style={{
-              borderRadius: '100px',
-              backgroundColor: `${showCheckedIn ? '#2D558A' : '#FFFFFF'}`,
-              color: `${showCheckedIn ? '#FFFFFF' : '#000000'}`,
-            }}
-            marginLeft="1vw"
-            onClick={() => setShowCheckedIn(true)}
-          >
-            checked-in
-          </Button> */}
+        {/* ----SEARCH BAR*/}
+
+        <Flex mb={5} marginTop="4vh">
+          <VolunteerTabNavigation volunteerResults={volunteerResults} setTabIndex={setTabIndex} />
+
           <Spacer />
           <Button
             style={{
               borderRadius: '100px',
-              mixBlendMode: 'Luminosity',
             }}
             marginLeft="1vw"
             onClick={onOpen}
-            background="#EFEFEF"
+            color={'#FFFFFF'}
+            background="#1873FB"
           >
-            + register new volunteer
+            + Add Guest
           </Button>
         </Flex>
         <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
-        
-        {(displayedVolunteers.length != 0 ? (
+
+        {displayedVolunteers.length != 0 ? (
           <VolunteerEventsTable
             volunteers={displayedVolunteers}
             changeIsCheckedIn={changeIsCheckedIn}
           />
         ) : (
-          <Alert status='warning' borderRadius={"8"} w="50%" mx="auto">
-            <Box textAlign={"center"} w="100%">
+          <Alert status="warning" borderRadius={'8'} w="50%" mx="auto">
+            <Box textAlign={'center'} w="100%">
               No volunteers found for current search
             </Box>
           </Alert>
-        ))}
+        )}
       </Container>
     </Box>
   );
