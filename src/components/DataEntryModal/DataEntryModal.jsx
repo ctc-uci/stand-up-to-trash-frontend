@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import {
@@ -21,10 +21,21 @@ import {
   Text,
   Stack,
   useToast,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { FiPaperclip } from 'react-icons/fi';
 import { FaCamera } from 'react-icons/fa';
 import Backend from '../../utils/utils';
+import CameraModal from '../CameraModal';
+import ImageTag from '../ImageTag';
+import {
+  postImage,
+  getImageID,
+  putListImageByID,
+  getImagesByEventID,
+  deleteImageByID,
+  deleteListImageByID,
+} from '../../utils/imageUtils';
 
 const DataEntryModal = ({
   isOpen,
@@ -75,6 +86,11 @@ const DataEntryModal = ({
 
   const { handleSubmit, control, getValues } = useForm(volunteerData);
 
+  const { isOpen: cameraIsOpen, onOpen: cameraOnOpen, onClose: cameraOnClose } = useDisclosure();
+  const [tags, setTags] = useState([]);
+  const deletedImageIds = useRef([]);
+  const uploadImages = useRef([]);
+
   const putDataEntry = async () => {
     try {
       const { pounds, ounces, unusual_items } = getValues();
@@ -111,9 +127,32 @@ const DataEntryModal = ({
     }
   };
 
+  const uploadImage = async imageItem => {
+    await postImage(imageItem.name, imageItem.s3_url);
+    const image = await getImageID(imageItem.s3_url);
+    await putListImageByID(id, image.id);
+  };
+
+  const deleteImage = async imageID => {
+    await deleteImageByID(imageID);
+    await deleteListImageByID(id, imageID);
+  };
+
   const noReload = (data, event) => {
+    // console.log(`deletedImageIds`, deletedImageIds);
+    // console.log(`uploadImages`, uploadImages);
     event.preventDefault();
     putDataEntry(data);
+    // tags.forEach((image) => uploadImage(image));
+    if (deletedImageIds.current.length != 0) {
+      deletedImageIds.current.forEach(imageId => deleteImage(imageId));
+      deletedImageIds.current = [];
+    }
+    if (uploadImages.current.length != 0) {
+      // Problem is that this is currently always set to whatever is there so it will always get added
+      uploadImages.current.forEach(image => uploadImage(image));
+      uploadImages.current = [];
+    }
   };
 
   // COMMENTED OUT BECAUSE DESIGN FLAW
@@ -134,6 +173,14 @@ const DataEntryModal = ({
   //   }
   // };
   // control.getFieldState('pounds').setValue(pounds);
+
+  const updateTags = async id => await getImagesByEventID(id);
+  useEffect(() => {
+    updateTags(id).then(data => setTags(data));
+    // console.log('Tags', tags);
+  }, [id]);
+
+  // useEffect(() => console.log('Tags', tags), [tags]);
 
   const TrashWeightInputs = ({ parentControl }) => {
     // const [inputPounds, setInputPounds] = useState('');
@@ -244,36 +291,37 @@ const DataEntryModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent borderRadius="30px">
-        <ModalCloseButton />
-        <ModalHeader fontSize="24px" alignSelf={'center'}>
-          {firstName} {lastName}
-        </ModalHeader>
-        {/* postVolunteerData(10, 5, 5, 5, 10, 10) */}
-        <form onSubmit={handleSubmit(noReload)}>
-          <FormControl>
-            <ModalBody>
-              <FormLabel fontSize="18px" fontWeight="bold">
-                Trash Weight
-              </FormLabel>
-              <TrashWeightInputs parentControl={control} />
-              <FormControl>
-                <FormLabel fontSize="16px" fontWeight="bold" paddingTop={'20px'}>
-                  Other Information
+    <>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent borderRadius="30px">
+          <ModalCloseButton />
+          <ModalHeader fontSize="24px" alignSelf={'center'}>
+            {firstName} {lastName}
+          </ModalHeader>
+          {/* postVolunteerData(10, 5, 5, 5, 10, 10) */}
+          <form onSubmit={handleSubmit(noReload)}>
+            <FormControl>
+              <ModalBody>
+                <FormLabel fontSize="18px" fontWeight="bold">
+                  Trash Weight
                 </FormLabel>
-                <Controller
-                  name="unusual_items"
-                  control={control}
-                  defaultValue={''}
-                  render={({ field }) => (
-                    <Textarea fontSize="14px" placeholder="Unusual items, etc..." {...field} />
-                  )}
-                />
-              </FormControl>
+                <TrashWeightInputs parentControl={control} />
+                <FormControl>
+                  <FormLabel fontSize="16px" fontWeight="bold" paddingTop={'20px'}>
+                    Other Information
+                  </FormLabel>
+                  <Controller
+                    name="unusual_items"
+                    control={control}
+                    defaultValue={''}
+                    render={({ field }) => (
+                      <Textarea fontSize="14px" placeholder="Unusual items, etc..." {...field} />
+                    )}
+                  />
+                </FormControl>
 
-              {/* <Center>
+                {/* <Center>
                   {unusualItemsArray.length === 0 ? (
                     <div>No Unusual Items</div>
                   ) : (
@@ -295,54 +343,74 @@ const DataEntryModal = ({
                   )}
                 </Center> */}
 
-              <FormLabel paddingTop="10px" fontSize="12px" fontWeight={'bold'}>
-                Add Images
-              </FormLabel>
-              <Stack spacing={4} direction="row" align="center">
+                <FormLabel paddingTop="10px" fontSize="12px" fontWeight={'bold'}>
+                  Add Images
+                </FormLabel>
+                <Stack spacing={4} direction="row" align="center">
+                  <Button
+                    borderRadius="15px"
+                    leftIcon={<FiPaperclip />}
+                    fontWeight="400"
+                    color="#D9D9D9"
+                    textColor="black"
+                    fontSize="12px"
+                    width="82px"
+                    height="28px"
+                  >
+                    Upload
+                  </Button>
+                  <Button
+                    borderRadius="15px"
+                    leftIcon={<FaCamera />}
+                    fontWeight="400"
+                    color="#D9D9D9"
+                    textColor="black"
+                    fontSize="12px"
+                    width="112px"
+                    height="28px"
+                    onClick={cameraOnOpen}
+                  >
+                    Take a picture
+                  </Button>
+                </Stack>
+                <Flex g={3} wrap="wrap" mt={2}>
+                  {tags &&
+                    tags.map(item => (
+                      <ImageTag
+                        key={item.id}
+                        image={item}
+                        eventID={eventId}
+                        setTags={setTags}
+                        deletedImages={deletedImageIds}
+                        uploadImages={uploadImages}
+                      />
+                    ))}
+                </Flex>
+              </ModalBody>
+              <Center paddingBottom={7} paddingTop={5}>
                 <Button
+                  type="submit"
+                  color="black"
+                  bg="#95D497"
+                  width="110px"
+                  height="37px"
                   borderRadius="15px"
-                  leftIcon={<FiPaperclip />}
-                  fontWeight="400"
-                  color="#D9D9D9"
-                  textColor="black"
-                  fontSize="12px"
-                  width="82px"
-                  height="28px"
+                  fontSize="13px"
                 >
-                  Upload
+                  Save Data
                 </Button>
-                <Button
-                  borderRadius="15px"
-                  leftIcon={<FaCamera />}
-                  fontWeight="400"
-                  color="#D9D9D9"
-                  textColor="black"
-                  fontSize="12px"
-                  width="112px"
-                  height="28px"
-                >
-                  Take a picture
-                </Button>
-              </Stack>
-            </ModalBody>
-
-            <Center paddingBottom={7} paddingTop={5}>
-              <Button
-                type="submit"
-                color="black"
-                bg="#95D497"
-                width="110px"
-                height="37px"
-                borderRadius="15px"
-                fontSize="13px"
-              >
-                Save Data
-              </Button>
-            </Center>
-          </FormControl>
-        </form>
-      </ModalContent>
-    </Modal>
+              </Center>
+            </FormControl>
+          </form>
+        </ModalContent>
+      </Modal>
+      <CameraModal
+        isOpen={cameraIsOpen}
+        onClose={cameraOnClose}
+        setTags={setTags}
+        uploadedImages={uploadImages}
+      />
+    </>
   );
 };
 

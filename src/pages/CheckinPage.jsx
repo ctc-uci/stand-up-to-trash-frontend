@@ -22,7 +22,7 @@ import {
   Alert,
 } from '@chakra-ui/react';
 
-import {GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
+import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
 
 const CheckinPage = () => {
@@ -71,7 +71,6 @@ const CheckinPage = () => {
   */
   useEffect(() => {
     setData();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -136,6 +135,8 @@ const CheckinPage = () => {
       console.log(err);
     }
   };
+
+  console.log({ displayedVolunteers });
 
   return (
     <Flex
