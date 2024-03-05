@@ -24,23 +24,48 @@ import { logInWithEmailAndPassWord } from '../utils/firebaseAuthUtils';
 import { createGoogleUserInFirebase } from '../utils/googleAuthUtils';
 import { createFacebookUserInFirebase } from '../utils/facebookAuthUtils';
 import { useEffect } from 'react';
-import { auth } from '../utils/googleAuthUtils';
-import { onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getProfileByFirebaseUid, postProfile } from '../utils/profileUtils';
+
 const LoginV2 = () => {
+
+  const auth = getAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // logout();
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      if (user) {
-        // We now have user, handle db stuff here
-        console.log(user);
-        navigate('/successful-login');
-      } else {
-        console.log('No one in');
+    const unsubscribe = onAuthStateChanged(auth, async user => {
+      console.log("inside useeffect")
+      try {
+        if (user && (user.providerData[0].providerId == "google.com" || user.providerData[0].providerId == "facebook.com")) {
+          // Keep in mind that if the user logs in with the plain email/password, they'll have no displayName attribute
+          console.log(user);
+          console.log("firebase inside")
+          const userName = user.displayName.split(' ');
+          const firstName = userName[0];
+          const lastName = userName.length > 1 ? userName[1] : '';
+
+          const profile = {
+            first_name: firstName,
+            last_name: lastName,
+            role: 'volunteer',
+            email: user.email,
+            firebase_uid: user.uid,
+          };
+
+          console.log(profile);
+          console.log('success');
+
+          if (!(await getProfileByFirebaseUid(profile.firebase_uid))) {
+            postProfile(profile);
+          }
+          navigate('/successful-login');
+        } else {
+          console.log('No one in');
+        }
+      } catch (error) {
+        console.log(error, error.status);
       }
     });
-
     return () => unsubscribe();
   });
 
