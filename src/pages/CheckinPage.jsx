@@ -2,35 +2,36 @@
 import { useState, useEffect } from 'react';
 import { fetchJoinedEventsById } from '../utils/fuseUtils';
 import { getEventById } from '../utils/eventsUtils';
-// import { relativeTimeFromDates, inThePast } from '../utils/timeUtils';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
+import CheckinStatsDashboard from '../components/Checkin/CheckinStatsDashboard';
 import VolunteerTabNavigation from '../components/Checkin/VolunteerTabNavigation';
+
 import { useParams } from 'react-router-dom';
 import {
   Container,
-  Text,
   Flex,
   Button,
   Box,
   Input,
   useDisclosure,
   Spacer,
-  Image,
   InputGroup,
   InputLeftElement,
   Alert,
 } from '@chakra-ui/react';
+
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
-import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 
 const CheckinPage = () => {
   const [joinedData, setJoinedData] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
   const [event, setEvent] = useState('');
+  const [registered, setRegistered] = useState('');
+  const [checkin, setCheckin] = useState('');
   const { eventId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
@@ -55,8 +56,11 @@ const CheckinPage = () => {
     try {
       const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
       const event = await getEventById(eventId); // event data for page rendering eg. image src
+      console.log(event);
       setJoinedData(data);
       setEvent(event);
+      getRegistered(event.id);
+      getCheckin(event.id);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -106,59 +110,46 @@ const CheckinPage = () => {
     }
   };
 
-  // formats dbms date into Month Day, Year
-  const getDateString = () => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    const dateObject = new Date(Date.parse(event['date']));
-    const dateString = `${
-      months[dateObject.getMonth()]
-    }  ${dateObject.getDate()}, ${dateObject.getFullYear()}`;
-    if (isNaN(dateObject)) {
-      // on page load, prevents displaying "Undefined" as date
-      return '';
+  //gets the number of ppl that registered and checked in
+  const getRegistered = async event_id => {
+    try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
+      //console.log(event_id);
+      const response = await Backend.get(`/stats/register/${event_id}`).then(data => {
+        setRegistered(parseInt(data.data));
+      });
+      return response;
+    } catch (err) {
+      console.log(err);
     }
-    return dateString;
+  };
+
+  const getCheckin = async event_id => {
+    try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
+      const response = await Backend.get(`/stats/checkin/${event_id}`).then(data => {
+        setCheckin(parseInt(data.data));
+      });
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   console.log({ displayedVolunteers });
 
   return (
-    <Box bg="#E6EAEF" minH="100vh" ml="15rem">
-      <Flex justifyContent="center">
-        <Box w="100%" h="15rem" bg="white" position="relative">
-          <Image
-            src={event['image_url']}
-            objectFit="cover"
-            width="100%"
-            height="100%"
-            bg="rgba(0, 0, 0, 0.5)"
-          />
-          <Flex position="absolute" top="60%" right="57%" direction="column" width="40%">
-            <Text color="white" fontSize="4xl" fontWeight="bold">
-              {event['name']}
-            </Text>
-            <Text color="white">{getDateString()}</Text>
-          </Flex>
-          <Box position="absolute" top="80%" left="90%">
-            {event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}
-          </Box>
-        </Box>
-      </Flex>
+    <Flex
+      flexDir={'column'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      bg="#E6EAEF"
+      minH="100vh"
+      ml="15rem"
+    >
+      <CheckinStatsDashboard event={event} registered={registered} checkin={checkin} />
 
-      <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} maxW="95%">
+      <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
         {/* SEARCH BAR---- */}
         <Flex gap={3} mt={5}>
           <InputGroup mt={10}>
@@ -212,7 +203,7 @@ const CheckinPage = () => {
           </Alert>
         )}
       </Container>
-    </Box>
+    </Flex>
   );
 };
 

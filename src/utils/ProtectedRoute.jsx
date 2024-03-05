@@ -54,7 +54,7 @@ const ProtectedRoute = ({ children, pageType }) => {
   }, [children, navigate, pageType, role]);
 
   if (loading) {
-    return <Spinner />
+    return <Spinner />;
   }
 
   return children;
@@ -62,7 +62,7 @@ const ProtectedRoute = ({ children, pageType }) => {
 
 ProtectedRoute.propTypes = {
   children: PropTypes.node.isRequired,
-  pageType: PropTypes.string
+  pageType: PropTypes.string,
 };
 
 export default ProtectedRoute;
