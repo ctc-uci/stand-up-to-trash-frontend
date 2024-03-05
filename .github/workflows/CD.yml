@@ -2,7 +2,7 @@ name: S3 Deploy
 on:
   push:
     branches:
-      - dev
+      - dev-deployment
 env:
   NODE_ENV: ${{ secrets.NODE_ENV }}
   VITE_FIREBASE_APIKEY: ${{ secrets.VITE_FIREBASE_APIKEY }}
