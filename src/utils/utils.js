@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const Backend = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: import.meta.VITE_BACKEND_HOST,
   withCredentials: true,
 });
 
