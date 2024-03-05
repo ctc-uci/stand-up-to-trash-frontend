@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const Backend = axios.create({
-  baseURL: import.meta.VITE_BACKEND_HOST,
+  baseURL: import.meta.env.VITE_BACKEND_HOST,
   withCredentials: true,
 });
 
