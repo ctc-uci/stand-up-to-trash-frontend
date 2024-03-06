@@ -139,10 +139,14 @@ const LoginForm = () => {
   };
 
   return (
-    <SimpleGrid columns={2} spacing={0} height={'100vh'}>
-      <Box backgroundColor="#9DDAEF" position="relative">
+    <SimpleGrid columns={2} spacing={0} height={'100vh'} style={{ fontFamily: 'Poppins' }}>
+      <Box backgroundColor="#2D558A" position="relative">
         <AbsoluteCenter>
-          <Image borderRadius="full" width={350} height={430} src={S2T_Logo} alt="Logo" />
+          <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
+          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center'}}>
+            <h1 style={{ color: 'white', fontSize: '40px', fontWeight: '600', marginTop: '52px', textAlign: 'center' }}>Stand Up To Trash</h1>
+            <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '600', marginTop: '20px', textAlign: 'center' }}>Making a Difference</h1>
+          </Box>
         </AbsoluteCenter>
       </Box>
       <Box marginTop={40}>
@@ -157,6 +161,7 @@ const LoginForm = () => {
                 width={'40%'}
                 marginTop={30}
                 borderRadius={8}
+                fontFamily={'Avenir'}
                 placeholder="Email"
                 boxShadow={'0 4px 2px -2px gray'}
                 type="email"
@@ -174,6 +179,7 @@ const LoginForm = () => {
                 width={'40%'}
                 marginTop={30}
                 borderRadius={8}
+                fontFamily={'Avenir'}
                 placeholder="Password"
                 type="password"
                 boxShadow={'0 4px 2px -2px gray'}
@@ -198,14 +204,19 @@ const LoginForm = () => {
               >
                 Login
               </Button>
-              <Text marginTop={5} fontWeight="bold">
+              <Text marginTop={2} fontWeight="bold" style={{
+                fontFamily: 'Avenir',
+                fontSize: '20px',
+                fontWeight: '500'
+              }}>
                 Other ways to login
               </Text>
               <Button
                 leftIcon={<Image src={ggicon} alt="Google Icon" />}
                 size="md"
-                width="140%"
-                marginTop={5}
+                // width={'36.82vh'}
+                width={'115%'}
+                marginTop={2}
                 border="1px solid black"
                 backgroundColor={'transparent'}
                 onClick={handleGoogleLogin}
@@ -215,7 +226,8 @@ const LoginForm = () => {
               <Button
                 leftIcon={<Image src={fbicon} alt="Facebook Icon" />}
                 size="md"
-                width="140%"
+                // width={'36.82vh'}
+                width={'115%'}
                 marginTop={3}
                 border="1px solid black"
                 backgroundColor={'transparent'}
@@ -223,6 +235,42 @@ const LoginForm = () => {
               >
                 Login with Facebook
               </Button>
+
+              <Box style={{
+                fontFamily: 'Avenir',
+                fontSize: '18px',
+                fontWeight: '800',
+                textAlign: 'center',
+              }}>
+                <Button style={{
+                  background: 'none',
+                  height: '24px',
+                  fontFamily: 'Avenir',
+                  fontSize: '18px',
+                  fontWeight: '800',
+                  textAlign: 'center',
+                  paddingTop: '15px'
+                  }}
+                  onClick={() => navigate('/forgotpasswordv2')}
+                >Forgot Password?</Button>
+                {/* <Text paddingTop='15px'>Forgot Password?</Text> */}
+                <Box display='flex' flexDir='row' paddingTop='20px'>
+                  <Text lineHeight='24px'>Don’t have an account?</Text>
+
+                  <Button style={{
+                    background: 'none',
+                    height: '24px',
+                    color: '#478CB6',
+                    fontFamily: 'Avenir',
+                    fontSize: '18px',
+                    fontWeight: '800',
+                    textAlign: 'center',
+                    marginLeft: '-5px',
+                  }}
+                  onClick={() => navigate('/signupv2')}
+                  ><u>Sign up</u></Button>
+                </Box>
+              </Box>
             </VStack>
           </Center>
         </form>
