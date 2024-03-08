@@ -17,13 +17,13 @@ const Scanner = () => {
         scanDelay={1000}
         onResult={result => {
           if (result) {
-            console.log('scanned');
+            // console.log('scanned');
             setData(result.getText()); // Displays the link obtained
-            // checkinVolunteer(result.event_id, result.volunteer_id);
+            checkinVolunteer(result.event_id, result.volunteer_id);
 
-            const event_id = 35;
-            const volunteer_id = 112;
-            checkinVolunteer({ event_id, volunteer_id });
+            // const event_id = 35;
+            // const volunteer_id = 112;
+            // checkinVolunteer({ event_id, volunteer_id });
           }
         }}
         ViewFinder={() => {
