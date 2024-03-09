@@ -49,6 +49,7 @@ const App = () => {
                 <Route
                   path="/"
                   element={
+                    // <EventsPage />
                     <ProtectedRoute pageType="admin">
                       <EventsPage />
                     </ProtectedRoute>

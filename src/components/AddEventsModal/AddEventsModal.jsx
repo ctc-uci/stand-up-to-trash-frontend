@@ -123,11 +123,11 @@ const AddEventsModal = () => {
           flexDir="column"
           alignItems={'center'}
           justifyContent={'center'}
-          borderRadius="30px"
-          background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%)`}
+          borderRadius="10px"
+          backgroundColor={'white'}
           backgroundSize="cover"
         >
-          <Box px="27px" py="20px" color="white">
+          <Box px="27px" py="20px" color="blue">
             <AddIcon justifyContent={'center'} boxSize={50} />
           </Box>
         </Box>

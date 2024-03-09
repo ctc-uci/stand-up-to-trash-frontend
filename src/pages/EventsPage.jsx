@@ -4,7 +4,6 @@ import {
   Grid,
   GridItem,
   Spacer,
-  HStack,
   useDisclosure,
   useToast,
   Input,
@@ -16,10 +15,8 @@ import { useEffect, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 
 import PropTypes from 'prop-types';
-import AllData from '../components/Events/AllData';
 import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
 import EventCard from '../components/Events/EventCard';
-import RecentEventsCard from '../components/Events/RecentEventsCard';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
@@ -213,8 +210,15 @@ const Events = () => {
   }, [name, location, date, fuse]);
 
   return (
-    <Box py="30px" justifyContent="flex-start" display="flex" flexDirection="column" ml="15rem">
-      <Box
+    <Box
+      py="30px"
+      justifyContent="flex-start"
+      display="flex"
+      flexDirection="column"
+      ml="15rem"
+      backgroundColor={'#eff1fc'}
+    >
+      {/* <Box
         mb="60px"
         display="flex"
         flexDirection="row"
@@ -224,53 +228,65 @@ const Events = () => {
       >
         <RecentEventsCard events={events} />
         <AllData />
-      </Box>
+      </Box> */}
       <Spacer />
-      <Box display="flex" justifyContent={'center'} mb="4">
-        <Heading width="930px">Upcoming Events</Heading>
+      <Box
+        display="flex"
+        flexDirection={'column'}
+        justifyContent={'center'}
+        mb="4"
+        backgroundColor={'#fffafa'}
+        rounded={'10'}
+        p={'30'}
+        w={'930px'}
+        ml="14"
+      >
+        <Heading width="930px" fontSize={'30px'} mb={'8'}>
+          Upcoming Events
+        </Heading>
+        <InputGroup w="100%" mb={'5'}>
+          <InputLeftElement pointerEvents="none">
+            <SearchIcon />
+          </InputLeftElement>
+          <Input
+            value={name}
+            onChange={event => {
+              setName(event.target.value);
+            }}
+            placeholder='Search Event Name (e.g. "Festival of Whales")'
+          />
+        </InputGroup>
+        <Box display={'flex'} flexDirection={'row'} gap={'5'}>
+          <InputGroup w="25%">
+            <InputLeftElement pointerEvents="none">
+              <SearchIcon />
+            </InputLeftElement>
+            <Input
+              value={location}
+              onChange={event => {
+                setLocation(event.target.value);
+              }}
+              placeholder="Search Location"
+            />
+          </InputGroup>
+          <InputGroup w="25%">
+            <InputLeftElement pointerEvents="none">
+              <SearchIcon />
+            </InputLeftElement>
+            <Input
+              value={date}
+              placeholder="Search Date"
+              onChange={event => {
+                setDate(event.target.value);
+              }}
+            />
+          </InputGroup>
+        </Box>
       </Box>
       <Box display="flex" justifyContent={'center'}>
         <Box justifyContent="space-between" width="930px">
           <Box display="flex" flex-direction="row" justifyContent="space-between">
             {isCreateButton ? <></> : <DeselectButton />}
-            <HStack>
-              <InputGroup w="50%">
-                <InputLeftElement pointerEvents="none">
-                  <SearchIcon />
-                </InputLeftElement>
-                <Input
-                  value={name}
-                  onChange={event => {
-                    setName(event.target.value);
-                  }}
-                  placeholder='Search Event Name (e.g. "Festival of Whales")'
-                />
-              </InputGroup>
-              <InputGroup w="25%">
-                <InputLeftElement pointerEvents="none">
-                  <SearchIcon />
-                </InputLeftElement>
-                <Input
-                  value={location}
-                  onChange={event => {
-                    setLocation(event.target.value);
-                  }}
-                  placeholder="Search Location"
-                />
-              </InputGroup>
-              <InputGroup w="25%">
-                <InputLeftElement pointerEvents="none">
-                  <SearchIcon />
-                </InputLeftElement>
-                <Input
-                  value={date}
-                  placeholder="Search Date"
-                  onChange={event => {
-                    setDate(event.target.value);
-                  }}
-                />
-              </InputGroup>
-            </HStack>
 
             {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
             <ArchiveEventsModal

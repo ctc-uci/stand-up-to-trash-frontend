@@ -74,7 +74,7 @@ const EventCard = ({
         flexDir="column"
         cursor={'pointer'}
         justifyContent={'space-between'}
-        borderRadius="30px"
+        borderRadius="10px"
         onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
         background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
         backgroundSize="cover"
