@@ -16,11 +16,12 @@ import { useEffect, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 
 import PropTypes from 'prop-types';
-import AllData from '../components/Events/AllData';
+// import AllData from '../components/Events/AllData';
 import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
 import EventCard from '../components/Events/EventCard';
-import RecentEventsCard from '../components/Events/RecentEventsCard';
+// import DataCard from '../components/Events/DataCard';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
+import ImpactSummary from '../components/Events/ImpactSummary';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 
@@ -125,6 +126,7 @@ const Events = () => {
 
   useEffect(() => {
     getEvents();
+
     // getEventId(eventId);
   }, []);
 
@@ -214,18 +216,12 @@ const Events = () => {
 
   return (
     <Box py="30px" justifyContent="flex-start" display="flex" flexDirection="column" ml="15rem">
-      <Box
-        mb="60px"
-        display="flex"
-        flexDirection="row"
-        gap="83px"
-        justifyContent="center"
-        alignItems={'left'}
-      >
-        <RecentEventsCard events={events} />
-        <AllData />
+      <Box display="flex" justifyContent={'center'}>
+        <Box justifyContent="space-between" width="930px">
+          <ImpactSummary></ImpactSummary>
+        </Box>
       </Box>
-      <Spacer />
+
       <Box display="flex" justifyContent={'center'} mb="4">
         <Heading width="930px">Upcoming Events</Heading>
       </Box>
