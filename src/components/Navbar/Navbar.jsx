@@ -257,7 +257,8 @@ const Navbar = () => {
               <Box style={{ borderRadius: '50%' }}>
                 <img
                   src={user.image_url}
-                  style={{ width: '45px', height: '45px', borderRadius: '50%' }}
+                  style={{ width
+                    : '45px', height: '45px', borderRadius: '50%' }}
                 />
               </Box>
               <Box
