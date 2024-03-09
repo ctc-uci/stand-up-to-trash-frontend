@@ -57,7 +57,7 @@ const Playground = () => {
       <Button onClick={onOpen}>CLICK FOR CAMERA</Button>
       <CameraModal isOpen={isOpen} onClose={onClose} eventID={3}/>
       <Button onClick={onOpen}>RegisterGuestModal</Button>
-      <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={"3"}/>
+      <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={"4"}/>
     </Flex>
   );
 };
