@@ -212,36 +212,21 @@ const Events = () => {
   return (
     <Box
       py="30px"
-      justifyContent="flex-start"
       display="flex"
       flexDirection="column"
-      ml="15rem"
       backgroundColor={'#eff1fc'}
+      ml="12rem" 
+      pl={'10'}
     >
-      {/* <Box
-        mb="60px"
-        display="flex"
-        flexDirection="row"
-        gap="83px"
-        justifyContent="center"
-        alignItems={'left'}
-      >
-        <RecentEventsCard events={events} />
-        <AllData />
-      </Box> */}
-      <Spacer />
+      {/* "Upcoming Events" section */}
       <Box
-        display="flex"
-        flexDirection={'column'}
-        justifyContent={'center'}
         mb="4"
         backgroundColor={'#fffafa'}
         rounded={'10'}
-        p={'30'}
-        w={'930px'}
-        ml="14"
+        p={'10'}
+        w={'96%'} // Consistent width for alignment
       >
-        <Heading width="930px" fontSize={'30px'} mb={'8'}>
+        <Heading fontSize={'30px'} mb={'8'}>
           Upcoming Events
         </Heading>
         <InputGroup w="100%" mb={'5'}>
@@ -250,9 +235,7 @@ const Events = () => {
           </InputLeftElement>
           <Input
             value={name}
-            onChange={event => {
-              setName(event.target.value);
-            }}
+            onChange={event => setName(event.target.value)}
             placeholder='Search Event Name (e.g. "Festival of Whales")'
           />
         </InputGroup>
@@ -263,9 +246,7 @@ const Events = () => {
             </InputLeftElement>
             <Input
               value={location}
-              onChange={event => {
-                setLocation(event.target.value);
-              }}
+              onChange={event => setLocation(event.target.value)}
               placeholder="Search Location"
             />
           </InputGroup>
@@ -275,40 +256,49 @@ const Events = () => {
             </InputLeftElement>
             <Input
               value={date}
+              onChange={event => setDate(event.target.value)}
               placeholder="Search Date"
-              onChange={event => {
-                setDate(event.target.value);
-              }}
             />
           </InputGroup>
         </Box>
       </Box>
-      <Box display="flex" justifyContent={'center'}>
-        <Box justifyContent="space-between" width="930px">
-          <Box display="flex" flex-direction="row" justifyContent="space-between">
-            {isCreateButton ? <></> : <DeselectButton />}
+  
+      {/* Buttons section */}
+      <Box
+        mb="4"
+        display="flex"
+        flexDirection="row"
+        justifyContent="flex-start"
+        w={'96%'} 
+      >
+        
+        {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
+        <Spacer />
 
-            {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
-            <ArchiveEventsModal
-              isOpen={isArchiveEventModalOpen}
-              onClose={onArchiveEventModalClose}
-              confirmArchive={confirmArchive}
-              events={events.filter(event => selectedEvents.includes(event.id))}
-            />
-          </Box>
-          <Spacer />
-          <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
-            <Box marginTop="3vh">
-              <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                <AddEventsModal getEvents={getEvents} />
-                {eventCards}
-              </Grid>
-            </Box>
-          </Box>
-        </Box>
+        {isCreateButton ? null : <DeselectButton />}
+        <ArchiveEventsModal
+          isOpen={isArchiveEventModalOpen}
+          onClose={onArchiveEventModalClose}
+          confirmArchive={confirmArchive}
+          events={events.filter(event => selectedEvents.includes(event.id))}
+        />
+      </Box>
+
+  
+      {/* Events cards section */}
+      
+      <Box display={'flex'} flexDirection={'row'}
+        w={'95%'} // Consistent width for alignment
+        justifyContent="left"
+      >
+        <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+        <AddEventsModal getEvents={getEvents} />
+
+          {eventCards}
+        </Grid>
       </Box>
     </Box>
-  );
+  );  
 };
 
 export default Events;
