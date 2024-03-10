@@ -5,6 +5,7 @@ import { useContext, useEffect } from 'react';
 import UserContext from '../../utils/UserContext';
 import RoleContext from '../../utils/RoleContext';
 import { useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   ArchivedEventsIconBlue,
   ArchivedEventsIconGrey,
@@ -62,11 +63,13 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
   );
 };
 
-const Navbar = () => {
+const Navbar = ({ isVolunteer = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useContext(UserContext);
-  const { role } = useContext(RoleContext);
+  let { role } = useContext(RoleContext);
+
+  if (isVolunteer) role = 'volunteer';
 
   useEffect(() => {
     console.log(`Here is the user info:`);
@@ -152,37 +155,40 @@ const Navbar = () => {
               UnfocusedIcon={EventsIconGrey}
             />
 
-            {/* Archived events button */}
-            <NavbarButton
-              buttonText={'Archived Events'}
-              path={archivedEventsPath}
-              navigate={navigate}
-              FocusedIcon={ArchivedEventsIconBlue}
-              UnfocusedIcon={ArchivedEventsIconGrey}
-            />
+            {!isVolunteer && (
+              <>
+                {/* Archived events button */}
+                <NavbarButton
+                  buttonText={'Archived Events'}
+                  path={archivedEventsPath}
+                  navigate={navigate}
+                  FocusedIcon={ArchivedEventsIconBlue}
+                  UnfocusedIcon={ArchivedEventsIconGrey}
+                />
 
-            {/* Volunteers button */}
-            <NavbarButton
-              buttonText={'Volunteers'}
-              path={volunteersPath}
-              navigate={navigate}
-              FocusedIcon={VolunteersIconBlue}
-              UnfocusedIcon={VolunteersIconGrey}
-            />
+                {/* Volunteers button */}
+                <NavbarButton
+                  buttonText={'Volunteers'}
+                  path={volunteersPath}
+                  navigate={navigate}
+                  FocusedIcon={VolunteersIconBlue}
+                  UnfocusedIcon={VolunteersIconGrey}
+                />
+              </>
+            )}
           </Box>
           {/* Bottom of navbar, support and below */}
           <Box>
             {/* Support button */}
             <Box
-              height="49px"
               display="flex"
               flexDirection="row"
               alignItems="center"
               gap="10px"
               paddingLeft="10px"
               marginLeft="14px"
+              my="14px"
               marginRight="14px"
-              marginBottom="-13px"
               borderRadius="4px"
               cursor="pointer" // Add this to change cursor to pointer
               onClick={e => {
@@ -204,37 +210,40 @@ const Navbar = () => {
               </Text>
             </Box>
 
-            {/* Settings button */}
-            <Box
-              height="49px"
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              gap="10px"
-              paddingLeft="10px"
-              marginLeft="14px"
-              marginRight="14px"
-              marginBottom="2px"
-              borderRadius="4px"
-              cursor="pointer"
-              onClick={e => {
-                e.preventDefault();
-                navigate(settingsPath);
-              }}
-            >
-              <SettingsIconGrey />
-              <Text
-                style={{
-                  fontFamily: 'Avenir',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  lineHeight: '25px',
-                  textAlign: 'center',
-                }}
-              >
-                Settings
-              </Text>
-            </Box>
+            {!isVolunteer && (
+              <>
+                {/* Settings button */}
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  gap="10px"
+                  paddingLeft="10px"
+                  marginLeft="14px"
+                  marginRight="14px"
+                  my="14px"
+                  borderRadius="4px"
+                  cursor="pointer"
+                  onClick={e => {
+                    e.preventDefault();
+                    navigate(settingsPath);
+                  }}
+                >
+                  <SettingsIconGrey />
+                  <Text
+                    style={{
+                      fontFamily: 'Avenir',
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      lineHeight: '25px',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Settings
+                  </Text>
+                </Box>
+              </>
+            )}
 
             {/* User card at bottom */}
             <Box
@@ -251,13 +260,14 @@ const Navbar = () => {
                 borderRadius: '12px',
                 backgroundColor: '#FFF',
                 border: '1px',
+                width: "100%",
               }}
             >
               {/* User image */}
               <Box style={{ borderRadius: '50%' }}>
                 <img
-                  src={user.image_url}
-                  style={{ width: '45px', height: '45px', borderRadius: '50%' }}
+                  src={user.image_ur || 'https://cataas.com/cat'}
+                  style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: "cover" }}
                 />
               </Box>
               <Box
@@ -279,7 +289,7 @@ const Navbar = () => {
                     marginTop: '-1px',
                   }}
                 >
-                  {user.first_name} {user.last_name}
+                  {isVolunteer ? "Name" : `${user.first_name} ${user.last_name}`}
                 </Text>
 
                 <Tag
@@ -297,7 +307,7 @@ const Navbar = () => {
                     gap: '10px',
                   }}
                 >
-                  Primary Admin
+                  {isVolunteer ? 'Volunteer' : 'Primary Admin'}
                 </Tag>
               </Box>
               {/* Logout button */}
@@ -322,6 +332,10 @@ const Navbar = () => {
       </Box>
     </>
   );
+};
+
+Navbar.propTypes = {
+  isVolunteer: PropTypes.bool,
 };
 
 export default Navbar;
