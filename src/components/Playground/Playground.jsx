@@ -9,6 +9,7 @@ import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsBu
 import 'react-html5-camera-photo/build/css/index.css';
 import { logGoogleUserOut } from '../../utils/googleAuthUtils.js';
 import CameraModal from '../CameraModal';
+import Scanner from '../Scanner.jsx';
 
 const auth = getAuth();
 
@@ -22,9 +23,6 @@ const Playground = () => {
     });
     return () => unsubscribe();
   }, []);
-
-
-
 
   return (
     <Flex
@@ -44,6 +42,9 @@ const Playground = () => {
         LOGOUT
       </button>
 
+      <p>Scanner: </p>
+      <Scanner />
+
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
 
@@ -53,7 +54,7 @@ const Playground = () => {
       <Dropzone />
       <Leaderboard event_id={35} />
       <Button onClick={onOpen}>CLICK FOR CAMERA</Button>
-      <CameraModal isOpen={isOpen} onClose={onClose} eventID={3}/>
+      <CameraModal isOpen={isOpen} onClose={onClose} eventID={3} />
     </Flex>
   );
 };
