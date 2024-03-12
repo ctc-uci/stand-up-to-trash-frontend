@@ -11,6 +11,7 @@ import { logGoogleUserOut } from '../../utils/googleAuthUtils.js';
 import CameraModal from '../CameraModal';
 import RegisterGuestModal from '../RegisterGuestModal/RegisterGuestModal.jsx';
 
+import Scanner from '../Scanner.jsx';
 
 const auth = getAuth();
 
@@ -24,9 +25,6 @@ const Playground = () => {
     });
     return () => unsubscribe();
   }, []);
-
-
-
 
   return (
     <Flex
@@ -46,6 +44,9 @@ const Playground = () => {
         LOGOUT
       </button>
 
+      <p>Scanner: </p>
+      <Scanner />
+
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
 
@@ -55,9 +56,9 @@ const Playground = () => {
       <Dropzone />
       <Leaderboard event_id={35} />
       <Button onClick={onOpen}>CLICK FOR CAMERA</Button>
-      <CameraModal isOpen={isOpen} onClose={onClose} eventID={3}/>
       <Button onClick={onOpen}>RegisterGuestModal</Button>
-      <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={"4"}/>
+      <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={'4'} />
+      <CameraModal isOpen={isOpen} onClose={onClose} eventID={3} />
     </Flex>
   );
 };

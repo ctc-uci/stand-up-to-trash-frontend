@@ -256,9 +256,8 @@ const Navbar = () => {
               {/* User image */}
               <Box style={{ borderRadius: '50%' }}>
                 <img
-                  src={user.image_url}
-                  style={{ width
-                    : '45px', height: '45px', borderRadius: '50%' }}
+                  src={user?.image_url}
+                  style={{ width: '45px', height: '45px', borderRadius: '50%' }}
                 />
               </Box>
               <Box
@@ -280,7 +279,7 @@ const Navbar = () => {
                     marginTop: '-1px',
                   }}
                 >
-                  {user.first_name} {user.last_name}
+                  {user?.first_name} {user?.last_name}
                 </Text>
 
                 <Tag
