@@ -115,15 +115,19 @@ const CreateAccount = () => {
   };
 
   return (
-    <SimpleGrid columns={2} spacing={0} height={'100vh'}>
-      <Box backgroundColor="#9DDAEF" position="relative">
+    <SimpleGrid columns={2} spacing={0} height={'100vh'} style={{ fontFamily: 'Poppins' }}>
+      <Box backgroundColor="#2D558A" position="relative">
         <AbsoluteCenter>
-          <Image borderRadius="full" width={350} height={430} src={S2T_Logo} alt="Logo" />
+        <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
+          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center'}}>
+            <h1 style={{ color: 'white', fontSize: '40px', fontWeight: '600', marginTop: '52px', textAlign: 'center' }}>Stand Up To Trash</h1>
+            <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '600', marginTop: '20px', textAlign: 'center' }}>Making a Difference</h1>
+          </Box>
         </AbsoluteCenter>
       </Box>
       <Box marginTop={40}>
         <Center>
-          <VStack spacing={4} padding={10}>
+          <VStack spacing={4} padding={10} width={'48vh'}>
             <Heading>Sign Up</Heading>
             <form onSubmit={handleSubmit(onSubmit)}>
               <HStack spacing={4} justifyContent={'center'}>
@@ -133,6 +137,7 @@ const CreateAccount = () => {
                     width={'100%'}
                     marginTop={30}
                     marginRight={'70%'}
+                    fontFamily={'Avenir'}
                     size={'lg'}
                     borderRadius={8}
                     boxShadow={'0 4px 2px -2px gray'}
@@ -149,6 +154,7 @@ const CreateAccount = () => {
                     marginTop={30}
                     size={'lg'}
                     borderRadius={8}
+                    fontFamily={'Avenir'}
                     boxShadow={'0 4px 2px -2px gray'}
                     placeholder="Last name"
                     type="text"
@@ -165,8 +171,9 @@ const CreateAccount = () => {
                     marginTop={30}
                     size={'lg'}
                     borderRadius={8}
+                    fontFamily={'Avenir'}
                     boxShadow={'0 4px 2px -2px gray'}
-                    placeholder={'Email address'}
+                    placeholder={'Email'}
                     type="email"
                     {...register('email')}
                   />
@@ -183,6 +190,7 @@ const CreateAccount = () => {
                     marginTop={30}
                     size={'lg'}
                     borderRadius={8}
+                    fontFamily={'Avenir'}
                     boxShadow={'0 4px 2px -2px gray'}
                     placeholder={'Password'}
                     type="password"
@@ -201,6 +209,7 @@ const CreateAccount = () => {
                     marginTop={30}
                     size={'lg'}
                     borderRadius={8}
+                    fontFamily={'Avenir'}
                     boxShadow={'0 4px 2px -2px gray'}
                     placeholder={'Confirm Password'}
                     type="password"
@@ -224,6 +233,7 @@ const CreateAccount = () => {
                   onClick={handleSubmit(onSubmit)}
                   backgroundColor={'#3182CE'}
                   textColor={'white'}
+                  width={'20vh'}
                 >
                   Sign Up Now
                 </Button>

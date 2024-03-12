@@ -3,25 +3,26 @@ import AddEventsModal from '../AddEventsModal/AddEventsModal';
 import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import Dropzone from '../Dropzone.tsx';
 import { Flex, useDisclosure, Button } from '@chakra-ui/react';
-// import { getAuth, onAuthStateChanged } from 'firebase/auth';
-// import { useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
 import 'react-html5-camera-photo/build/css/index.css';
 import { logGoogleUserOut } from '../../utils/googleAuthUtils.js';
 import CameraModal from '../CameraModal';
+import Scanner from '../Scanner.jsx';
 
-// const auth = getAuth();
+const auth = getAuth();
 
 const Playground = () => {
-  // const [user, setUser] = useState(auth.currentUser);
+  const [user, setUser] = useState(auth.currentUser);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // useEffect(() => {
-  // const unsubscribe = onAuthStateChanged(auth, user => {
-  //   // setUser(user);
-  // });
-  // return () => unsubscribe();
-  // }, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <Flex
@@ -32,7 +33,7 @@ const Playground = () => {
       backgroundColor={'#FFFFFF'}
     >
       <p>Use this page to test out the look of any of your components!</p>
-      {/* <p>{user?.email}</p> */}
+      <p>{user?.email}</p>
 
       <button
         onClick={logGoogleUserOut}
@@ -40,6 +41,9 @@ const Playground = () => {
       >
         LOGOUT
       </button>
+
+      <p>Scanner: </p>
+      <Scanner />
 
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
