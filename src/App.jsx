@@ -28,7 +28,7 @@ import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
-const Layout = ({ volunteer = false }) => {
+const Layout = ({volunteer = false}) => {
   return (
     <>
       <Navbar isVolunteer={volunteer} />
@@ -39,7 +39,7 @@ const Layout = ({ volunteer = false }) => {
 
 Layout.propTypes = {
   volunteer: PropTypes.bool,
-};
+}
 
 import { theme } from './utils/chakraTheme';
 
@@ -175,7 +175,7 @@ const App = () => {
               />
 
               {/*--VOLUNTEER PAGES*/}
-              <Route element={<Layout volunteer={true} />}>
+              <Route element={<Layout volunteer={true}/>}>
                 <Route path="/volunteer-profile" element={<DummyVolunteerProfilePage />} />
               </Route>
 
