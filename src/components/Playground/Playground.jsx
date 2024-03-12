@@ -9,6 +9,8 @@ import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsBu
 import 'react-html5-camera-photo/build/css/index.css';
 import { logGoogleUserOut } from '../../utils/googleAuthUtils.js';
 import CameraModal from '../CameraModal';
+import RegisterGuestModal from '../RegisterGuestModal/RegisterGuestModal.jsx';
+
 import Scanner from '../Scanner.jsx';
 
 const auth = getAuth();
@@ -54,6 +56,8 @@ const Playground = () => {
       <Dropzone />
       <Leaderboard event_id={35} />
       <Button onClick={onOpen}>CLICK FOR CAMERA</Button>
+      <Button onClick={onOpen}>RegisterGuestModal</Button>
+      <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={'4'} />
       <CameraModal isOpen={isOpen} onClose={onClose} eventID={3} />
     </Flex>
   );
