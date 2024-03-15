@@ -127,7 +127,7 @@ const Navbar = () => {
                   color: '#000000BF',
                 }}
               >
-                {role.charAt(0).toUpperCase() + role.slice(1)}
+                {role?.charAt(0).toUpperCase() + role?.slice(1)}
               </Text>
             </Box>
             {/* Add break between role and logo at the top and the nav buttons */}
