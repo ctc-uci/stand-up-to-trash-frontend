@@ -42,6 +42,7 @@ Layout.propTypes = {
 }
 
 import { theme } from './utils/chakraTheme';
+import InputDataPage from './pages/InputDataPage';
 
 const App = () => {
   return (
@@ -81,6 +82,14 @@ const App = () => {
                   element={
                     <ProtectedRoute pageType="admin">
                       <CheckinPage />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/input-data/:eventId"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <InputDataPage />{' '}
                     </ProtectedRoute>
                   }
                 />
