@@ -16,9 +16,11 @@ import {
   Flex,
   Stack,
   Textarea,
+  HStack,
+  useToast,
 } from '@chakra-ui/react';
 
-type UserProfile = {
+type VolunteerProfile = {
   id: number;
   firebase_uid: string;
   email: string;
@@ -32,28 +34,58 @@ type UserProfile = {
 };
 
 const VolunteerCardModal = ({ volunteerId }: { volunteerId: number }) => {
-  const [volunteerData, setVolunteerData] = useState<UserProfile>();
+  const [volunteerData, setVolunteerData] = useState<VolunteerProfile>();
+  const [volunteerStats, setVolunteerStats] = useState<number>();
+  const [volunteerEvents, setVolunteerEvents] = useState<string[]>();
+  const [volunteerImages, setVolunteerImages] = useState<string[]>();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+
   const handleClick = async () => {
+    setLoading(true);
+
     try {
-      const response = await Backend.get(`/profiles/${volunteerId}`);
-      setVolunteerData(response.data);
+      const profileResponse = await Backend.get(`/profiles/${volunteerId}`);
+      setVolunteerData(profileResponse.data);
+
+      const statsResponse = await Backend.get(`stats/volunteer/${volunteerId}`);
+      setVolunteerStats(statsResponse.data);
+
+      const eventsResponse = await Backend.get(`data/volunteer/${volunteerId}/event`);
+      setVolunteerEvents(eventsResponse.data);
+
+      const imagesResponse = await Backend.get(`data/images/${volunteerId}`);
+      setVolunteerImages(imagesResponse.data);
 
       onOpen();
     } catch (err) {
+      toast({
+        title: 'Error opening volunteer profile',
+        description: 'Could not fetch data',
+        position: 'bottom-right',
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      });
+
       console.log(`Error getting profile: `, err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <Button onClick={handleClick}>Volunteer Modal</Button>
+      <Button onClick={handleClick} isLoading={loading}>
+        Volunteer Modal
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent padding={9} boxShadow="xl" maxWidth={500}>
+        <ModalContent paddingY={4} paddingX={6} boxShadow="xl" maxWidth={500}>
           <ModalCloseButton />
           <ModalBody>
             <Stack gap={4}>
@@ -68,17 +100,42 @@ const VolunteerCardModal = ({ volunteerId }: { volunteerId: number }) => {
               </Flex>
 
               <Flex display="flex" flexDirection="column" gap={1}>
-                <Text fontSize="md" fontWeight={600} flexWrap="wrap">
-                  Total Trash: BLANK lbs
-                </Text>
-                <Text fontSize="md" fontWeight={600} flexWrap="wrap" display="flex">
-                  Events Attended:&nbsp;<Text fontWeight={400}>1, 2, 3</Text>
-                </Text>
+                <HStack gap={0} flexWrap="wrap">
+                  <Text fontSize="md" fontWeight={600}>
+                    Total Trash:&nbsp;
+                  </Text>
+                  <Text fontWeight={400}>{volunteerStats} lbs</Text>
+                </HStack>
+                <HStack gap={0} flexWrap="wrap">
+                  <Text fontSize="md" fontWeight={600}>
+                    Events Attended:&nbsp;
+                  </Text>
+                  <Text fontWeight={400}>{volunteerEvents?.join(', ')}</Text>
+                </HStack>
                 <Stack>
-                  <Text fontSize="md" fontWeight={600} flexWrap="wrap">
-                    Other Information
+                  <Text fontSize="md" fontWeight={600}>
+                    Other Information:
                   </Text>
                   <Textarea placeholder="Notes..." />
+                </Stack>
+              </Flex>
+
+              <Flex display="flex" flexDirection="column" gap={1}>
+                <Stack gap={0}>
+                  <Text fontSize="md" fontWeight={600}>
+                    Unusual Items:
+                  </Text>
+                  <HStack overflow="scroll">
+                    {volunteerImages?.map((imageUrl, index) => (
+                      <Image
+                        src={imageUrl}
+                        alt={`unusual item ${index + 1}`}
+                        w={32}
+                        h={32}
+                        objectFit="contain"
+                      />
+                    ))}
+                  </HStack>
                 </Stack>
               </Flex>
             </Stack>
