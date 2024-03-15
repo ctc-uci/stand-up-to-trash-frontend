@@ -2,7 +2,8 @@ import { ChakraProvider } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import EventsPage from './pages/EventsPage';
+import EventPage from './pages/EventPage';
+import HomePage from './pages/HomePage';
 import ArchivedEvents from './pages/ArchivedEvents';
 import DummyProfiles from './pages/DummyProfiles';
 import DummyVolunteerProfilePage from './pages/DummyVolunteerProfilePage';
@@ -28,7 +29,7 @@ import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
-const Layout = ({volunteer = false}) => {
+const Layout = ({ volunteer = false }) => {
   return (
     <>
       <Navbar isVolunteer={volunteer} />
@@ -39,7 +40,7 @@ const Layout = ({volunteer = false}) => {
 
 Layout.propTypes = {
   volunteer: PropTypes.bool,
-}
+};
 
 import { theme } from './utils/chakraTheme';
 
@@ -56,7 +57,15 @@ const App = () => {
                   path="/"
                   element={
                     <ProtectedRoute pageType="admin">
-                      <EventsPage />
+                      <HomePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/event"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <EventPage />
                     </ProtectedRoute>
                   }
                 />
@@ -175,7 +184,7 @@ const App = () => {
               />
 
               {/*--VOLUNTEER PAGES*/}
-              <Route element={<Layout volunteer={true}/>}>
+              <Route element={<Layout volunteer={true} />}>
                 <Route path="/volunteer-profile" element={<DummyVolunteerProfilePage />} />
               </Route>
 

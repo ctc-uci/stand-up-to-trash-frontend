@@ -20,12 +20,12 @@ import PropTypes from 'prop-types';
 import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
 import EventCard from '../components/Events/EventCard';
 // import DataCard from '../components/Events/DataCard';
-import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
+// import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
 import ImpactSummary from '../components/Events/ImpactSummary';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 
-const Events = () => {
+const Home = () => {
   const toast = useToast();
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
@@ -280,7 +280,7 @@ const Events = () => {
           <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
             <Box marginTop="3vh">
               <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                <AddEventsModal getEvents={getEvents} />
+                {/* <AddEventsModal getEvents={getEvents} /> */}
                 {eventCards}
               </Grid>
             </Box>
@@ -291,4 +291,4 @@ const Events = () => {
   );
 };
 
-export default Events;
+export default Home;

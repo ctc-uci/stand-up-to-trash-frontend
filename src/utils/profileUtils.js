@@ -35,4 +35,12 @@ const getProfileByFirebaseUid = async uid => {
   return response.data;
 };
 
-export { getProfile, getAdminProfile, postProfile, deleteProfile, getProfileById, updateProfile, getProfileByFirebaseUid };
+export {
+  getProfile,
+  getAdminProfile,
+  postProfile,
+  deleteProfile,
+  getProfileById,
+  updateProfile,
+  getProfileByFirebaseUid,
+};

@@ -77,7 +77,7 @@ const Navbar = () => {
 
   // Change the paths for each button since these might change
   const homePath = '/';
-  const eventsPath = '/';
+  const eventsPath = '/event';
   const archivedEventsPath = '/archived-events';
   const volunteersPath = '/playground';
 
