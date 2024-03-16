@@ -63,10 +63,10 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
 };
 
 const Navbar = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const { user } = useContext(UserContext);
   const { role } = useContext(RoleContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(`Here is the user info:`);
@@ -87,6 +87,12 @@ const Navbar = () => {
 
   // For logout in case it changes from /logoutv2
   const logoutPath = '/loginv2';
+
+  // For navigating to the user profile when you click on it
+  // at the bottom
+  // This will then conditionally route the user to the volunteer
+  // profile or to the admin profile
+  const profilePath = '/profile';
 
   return (
     <>
@@ -252,12 +258,18 @@ const Navbar = () => {
                 backgroundColor: '#FFF',
                 border: '1px',
               }}
+              onClick={e => {
+                e.preventDefault();
+                navigate(profilePath);
+              }}
+              as="a"
+              href="#"
             >
               {/* User image */}
               <Box style={{ borderRadius: '50%' }}>
                 <img
-                  src={user?.image_url}
-                  style={{ width: '45px', height: '45px', borderRadius: '50%' }}
+                  src={user.image_url}
+                  style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: "cover" }}
                 />
               </Box>
               <Box
@@ -272,7 +284,7 @@ const Navbar = () => {
                     fontFamily: 'Avenir',
                     fontWeight: '800',
                     color: '#000000',
-                    fontSize: '16px',
+                    fontSize: '14px',
                     lineHeight: '25px',
                     textAlign: 'left',
                     overflowY: 'auto',
@@ -295,9 +307,11 @@ const Navbar = () => {
                     padding: '2px 6px 2px 6px',
                     borderRadius: '4px',
                     gap: '10px',
+                    textTransform: 'capitalize',
                   }}
                 >
-                  Primary Admin
+                  {role}
+                  {/* Primary Admin */}
                 </Tag>
               </Box>
               {/* Logout button */}

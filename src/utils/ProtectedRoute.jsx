@@ -37,6 +37,17 @@ const ProtectedRoute = ({ children, pageType }) => {
         }
       }
 
+      if (pageType === 'settings') {
+        if (role === 'admin') {
+          setLoading(false);
+        } else if (role === 'volunteer') {
+          setLoading(false);
+        } else if (role === 'unloggedIn') {
+          navigate('/loginv2');
+          setLoading(true);
+        }
+      }
+
       if (pageType === 'authentication') {
         if (role === 'admin') {
           navigate('/');
