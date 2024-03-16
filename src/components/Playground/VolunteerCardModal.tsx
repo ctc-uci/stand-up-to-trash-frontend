@@ -131,6 +131,7 @@ const VolunteerCardModal = ({ volunteerId }: { volunteerId: number }) => {
                         w={32}
                         h={32}
                         objectFit="contain"
+                        key={imageUrl}
                       />
                     ))}
                   </HStack>
