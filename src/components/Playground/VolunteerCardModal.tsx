@@ -46,16 +46,16 @@ const VolunteerCardModal = ({ volunteerId }: { volunteerId: number }) => {
     setLoading(true);
 
     try {
-      const profileResponse = await Backend.get(`/profiles/${volunteerId}`);
+      const [profileResponse, statsResponse, eventsResponse, imagesResponse] = await Promise.all([
+        Backend.get(`/profiles/${volunteerId}`),
+        Backend.get(`stats/volunteer/${volunteerId}`),
+        Backend.get(`data/volunteer/${volunteerId}/event`),
+        Backend.get(`data/images/${volunteerId}`),
+      ]);
+
       setVolunteerData(profileResponse.data);
-
-      const statsResponse = await Backend.get(`stats/volunteer/${volunteerId}`);
       setVolunteerStats(statsResponse.data);
-
-      const eventsResponse = await Backend.get(`data/volunteer/${volunteerId}/event`);
       setVolunteerEvents(eventsResponse.data);
-
-      const imagesResponse = await Backend.get(`data/images/${volunteerId}`);
       setVolunteerImages(imagesResponse.data);
 
       onOpen();
