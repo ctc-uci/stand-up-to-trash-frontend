@@ -126,6 +126,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
                 unusualItems={unusual_items}
                 pounds={pounds}
                 ounces={ounces}
+                image_url={image_url}
               />
             </>
           ) : (
