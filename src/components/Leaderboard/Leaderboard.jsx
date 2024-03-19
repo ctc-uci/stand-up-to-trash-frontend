@@ -1,7 +1,10 @@
-import { Box, Card, Text } from '@chakra-ui/react';
+import { Card, Text, Flex, Image } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Backend from '../../utils/utils.js';
+import first from '../../Assets/leaderboard_icon/first.png';
+import second from '../../Assets/leaderboard_icon/second.png';
+import third from '../../Assets/leaderboard_icon/third.png';
 
 const LeaderboardCard = ({ event_id }) => {
   const [topThree, setTopThree] = useState([]);
@@ -28,9 +31,7 @@ const LeaderboardCard = ({ event_id }) => {
   const ActualLeaderboard = ({ LeaderboardArray }) => {
     return (
       <>
-        <Box
-          width="331px"
-          height="195px"
+        <Flex
           mx="13px"
           my="19px"
           display="flex"
@@ -40,27 +41,66 @@ const LeaderboardCard = ({ event_id }) => {
           gap="9px"
           h="100%"
         >
-          <Text fontWeight="bold" decoration="underline" textAlign="center">
-            top 3 volunteers
+          <Text fontSize={'xl'} fontWeight="sm" textAlign="center">
+            Leaderboard
           </Text>
-          <Box mx="23px" bgColor="#2D558A" color="white" borderRadius="60px" padding="2px">
-            <Text fontWeight="bold" color="white" textAlign="center">
-              {LeaderboardArray[0] && LeaderboardArray[0].volunteer_first_name}{' '}
-              {LeaderboardArray[0] && LeaderboardArray[0].volunteer_last_name} ...........{' '}
-              {LeaderboardArray[0] && truncate(LeaderboardArray[0].total_weight, 2)} lbs
+
+          {/* 1ST PLACE */}
+          <Flex
+            bgColor="#D4E4F9"
+            color="#1873FB"
+            borderRadius={'md'}
+            px={3}
+            py={2}
+            alignItems={'center'}
+            gap={3}
+          >
+            <Flex gap={4} alignItems={'center'}>
+              <Flex justifyContent={'center'} w={'30px'}>
+                <Image src={first} />
+              </Flex>
+              <Text fontWeight="bold" textAlign="center">
+                {LeaderboardArray[0] && LeaderboardArray[0].volunteer_first_name}{' '}
+                {LeaderboardArray[0] && LeaderboardArray[0].volunteer_last_name}
+              </Text>
+            </Flex>
+            <Text fontWeight="bold">
+              {LeaderboardArray[0] && truncate(LeaderboardArray[0].total_weight, 2)} lb
             </Text>
-          </Box>
-          <Text fontWeight="bold" textAlign="center">
-            {LeaderboardArray[1] && LeaderboardArray[1].volunteer_first_name}{' '}
-            {LeaderboardArray[1] && LeaderboardArray[1].volunteer_last_name} ............{' '}
-            {LeaderboardArray[1] && truncate(LeaderboardArray[1].total_weight, 2)} lbs
-          </Text>
-          <Text fontWeight="bold" textAlign="center">
-            {LeaderboardArray[2] && LeaderboardArray[2].volunteer_first_name}{' '}
-            {LeaderboardArray[2] && LeaderboardArray[2].volunteer_last_name} ...........{' '}
-            {LeaderboardArray[2] && truncate(LeaderboardArray[2].total_weight, 2)} lbs
-          </Text>
-        </Box>
+          </Flex>
+
+          {/* 2ND PLACE */}
+          <Flex color="black" borderRadius={'md'} px={3} py={2} alignItems={'center'} gap={3}>
+            <Flex gap={4} alignItems={'center'}>
+              <Flex justifyContent={'center'} w={'30px'}>
+                <Image w={'50%'} src={second} />
+              </Flex>
+              <Text fontWeight="medium" textAlign="center">
+                {LeaderboardArray[1] && LeaderboardArray[1].volunteer_first_name}{' '}
+                {LeaderboardArray[1] && LeaderboardArray[1].volunteer_last_name}
+              </Text>
+            </Flex>
+            <Text fontWeight="medium">
+              {LeaderboardArray[1] && truncate(LeaderboardArray[1].total_weight, 2)} lb
+            </Text>
+          </Flex>
+
+          {/* 3RD PLACE */}
+          <Flex borderRadius={'md'} px={3} py={2} alignItems={'center'} gap={3}>
+            <Flex gap={4} alignItems={'center'}>
+              <Flex justifyContent={'center'} w={'30px'}>
+                <Image w={'50%'} src={third} />
+              </Flex>
+              <Text fontWeight="medium" textAlign="center">
+                {LeaderboardArray[2] && LeaderboardArray[2].volunteer_first_name}{' '}
+                {LeaderboardArray[2] && LeaderboardArray[2].volunteer_last_name}
+              </Text>
+            </Flex>
+            <Text fontWeight="medium">
+              {LeaderboardArray[2] && truncate(LeaderboardArray[2].total_weight, 2)} lb
+            </Text>
+          </Flex>
+        </Flex>
       </>
     );
   };

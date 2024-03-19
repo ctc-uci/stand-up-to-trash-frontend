@@ -5,7 +5,7 @@ import { getEventById } from '../utils/eventsUtils';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
-import CheckinStatsDashboard from '../components/Checkin/CheckinStatsDashboard';
+import InputDataDashboard from '../components/InputData/InputDataDashboard';
 
 import { useParams } from 'react-router-dom';
 import { Container, Flex, Box, Input, InputGroup, InputLeftElement, Alert } from '@chakra-ui/react';
@@ -68,7 +68,7 @@ const InputDataPage = () => {
       const reduceResult = searchResult.map(result => result.item);
       setVolunteerResults(reduceResult);
     }
-  }, [input, joinedData]);
+  }, [input, joinedData, eventId]);
 
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
@@ -120,7 +120,7 @@ const InputDataPage = () => {
       minH="100vh"
       ml="15rem"
     >
-      <CheckinStatsDashboard event={event} registered={registered} checkin={checkin} />
+      <InputDataDashboard event={event} registered={registered} checkin={checkin} />
       <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
         {/* SEARCH BAR---- */}
         <Flex gap={3} mt={5} mb={5}>
@@ -142,25 +142,6 @@ const InputDataPage = () => {
             />
           </InputGroup>
         </Flex>
-        {/* ----SEARCH BAR*/}
-
-        {/* <Flex mb={5} marginTop="4vh">
-          <VolunteerTabNavigation volunteerResults={volunteerResults} setTabIndex={setTabIndex} />
-
-          <Spacer />
-          <Button
-            style={{
-              borderRadius: '100px',
-            }}
-            marginLeft="1vw"
-            onClick={onOpen}
-            color={'#FFFFFF'}
-            background="#1873FB"
-          >
-            + Add Guest
-          </Button>
-        </Flex>
-        <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} /> */}
 
         {displayedVolunteers.length != 0 ? (
           <VolunteerEventsTable
