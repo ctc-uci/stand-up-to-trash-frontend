@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Backend from '../../utils/utils.js';
 import first from '../../Assets/leaderboard_icon/first.png';
-import second from '../../Assets/leaderboard_icon/second.png';
-import third from '../../Assets/leaderboard_icon/third.png';
 
 const LeaderboardCard = ({ event_id }) => {
   const [topThree, setTopThree] = useState([]);
@@ -38,10 +36,10 @@ const LeaderboardCard = ({ event_id }) => {
           flexDir="column"
           alignContent="center"
           justifyContent="center"
-          gap="9px"
+          gap="5px"
           h="100%"
         >
-          <Text fontSize={'xl'} fontWeight="sm" textAlign="center">
+          <Text fontSize={'3xl'} fontWeight="sm" textAlign="center">
             Leaderboard
           </Text>
 
@@ -54,8 +52,9 @@ const LeaderboardCard = ({ event_id }) => {
             py={2}
             alignItems={'center'}
             gap={3}
+            fontSize={'lg'}
           >
-            <Flex gap={4} alignItems={'center'}>
+            <Flex gap={4} alignItems={'center'} w={'9rem'}>
               <Flex justifyContent={'center'} w={'30px'}>
                 <Image src={first} />
               </Flex>
@@ -70,10 +69,20 @@ const LeaderboardCard = ({ event_id }) => {
           </Flex>
 
           {/* 2ND PLACE */}
-          <Flex color="black" borderRadius={'md'} px={3} py={2} alignItems={'center'} gap={3}>
-            <Flex gap={4} alignItems={'center'}>
+          <Flex
+            color="black"
+            borderRadius={'md'}
+            px={3}
+            py={2}
+            alignItems={'center'}
+            gap={3}
+            fontSize={'lg'}
+          >
+            <Flex gap={4} alignItems={'center'} w={'9rem'}>
               <Flex justifyContent={'center'} w={'30px'}>
-                <Image w={'50%'} src={second} />
+                <Text color="#1873FB" fontWeight={'medium'} fontSize={'3xl'}>
+                  2
+                </Text>
               </Flex>
               <Text fontWeight="medium" textAlign="center">
                 {LeaderboardArray[1] && LeaderboardArray[1].volunteer_first_name}{' '}
@@ -86,17 +95,19 @@ const LeaderboardCard = ({ event_id }) => {
           </Flex>
 
           {/* 3RD PLACE */}
-          <Flex borderRadius={'md'} px={3} py={2} alignItems={'center'} gap={3}>
-            <Flex gap={4} alignItems={'center'}>
+          <Flex borderRadius={'md'} px={3} py={2} alignItems={'center'} gap={3} fontSize={'lg'}>
+            <Flex gap={4} alignItems={'center'} w={'9rem'}>
               <Flex justifyContent={'center'} w={'30px'}>
-                <Image w={'50%'} src={third} />
+                <Text color="#1873FB" fontWeight={'medium'} fontSize={'3xl'}>
+                  3
+                </Text>
               </Flex>
-              <Text fontWeight="medium" textAlign="center">
+              <Text fontWeight="semibold" textAlign="center">
                 {LeaderboardArray[2] && LeaderboardArray[2].volunteer_first_name}{' '}
                 {LeaderboardArray[2] && LeaderboardArray[2].volunteer_last_name}
               </Text>
             </Flex>
-            <Text fontWeight="medium">
+            <Text fontWeight="semibold">
               {LeaderboardArray[2] && truncate(LeaderboardArray[2].total_weight, 2)} lb
             </Text>
           </Flex>
@@ -112,11 +123,11 @@ const LeaderboardCard = ({ event_id }) => {
   useEffect(() => {
     getTopThree();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [event_id]);
 
   return (
     <>
-      <Card borderRadius="0px 15px 15px 0px">
+      <Card borderRadius="medium" p={3} shadow={'none'}>
         <ActualLeaderboard LeaderboardArray={topThree} />
       </Card>
     </>

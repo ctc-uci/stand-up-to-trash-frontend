@@ -7,8 +7,11 @@ import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
 import CheckinStatsDashboard from '../components/Checkin/CheckinStatsDashboard';
 import VolunteerTabNavigation from '../components/Checkin/VolunteerTabNavigation';
+import CheckinInputPageToggle from '../components/Checkin/CheckinInputPageToggle';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Flex,
@@ -36,6 +39,8 @@ const CheckinPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
@@ -93,7 +98,7 @@ const CheckinPage = () => {
       const reduceResult = searchResult.map(result => result.item);
       setVolunteerResults(reduceResult);
     }
-  }, [input, joinedData]);
+  }, [input, joinedData, eventId]);
 
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
@@ -136,8 +141,6 @@ const CheckinPage = () => {
     }
   };
 
-  console.log({ displayedVolunteers });
-
   return (
     <Flex
       flexDir={'column'}
@@ -147,8 +150,20 @@ const CheckinPage = () => {
       minH="100vh"
       ml="15rem"
     >
+      <Flex minW="95%" justifyContent={'space-between'} mt={10} mb={5}>
+        <Button
+          gap={2}
+          alignItems={'center'}
+          onClick={() => {
+            navigate('/');
+          }}
+        >
+          <ArrowBackIcon />
+          Back to events
+        </Button>
+        <CheckinInputPageToggle eventId={eventId} isCheckinPage={true} />
+      </Flex>
       <CheckinStatsDashboard event={event} registered={registered} checkin={checkin} />
-
       <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
         {/* SEARCH BAR---- */}
         <Flex gap={3} mt={5}>
@@ -194,6 +209,7 @@ const CheckinPage = () => {
           <VolunteerEventsTable
             volunteers={displayedVolunteers}
             changeIsCheckedIn={changeIsCheckedIn}
+            isCheckinPage={true}
           />
         ) : (
           <Alert status="warning" borderRadius={'8'} w="50%" mx="auto">

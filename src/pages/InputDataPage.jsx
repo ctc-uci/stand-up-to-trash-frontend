@@ -6,9 +6,21 @@ import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
 import InputDataDashboard from '../components/InputData/InputDataDashboard';
+import CheckinInputPageToggle from '../components/Checkin/CheckinInputPageToggle';
+import { useNavigate } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
-import { Container, Flex, Box, Input, InputGroup, InputLeftElement, Alert } from '@chakra-ui/react';
+import {
+  Button,
+  Container,
+  Flex,
+  Box,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Alert,
+} from '@chakra-ui/react';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 
@@ -19,8 +31,10 @@ const InputDataPage = () => {
   const [event, setEvent] = useState('');
   const [registered, setRegistered] = useState('');
   const [checkin, setCheckin] = useState('');
+  const [trashCollected, setTrashCollected] = useState('');
   const { eventId } = useParams();
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
@@ -31,11 +45,11 @@ const InputDataPage = () => {
     try {
       const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
       const event = await getEventById(eventId); // event data for page rendering eg. image src
-      //   console.log(event);
       setJoinedData(data);
       setEvent(event);
       getRegistered(event.id);
       getCheckin(event.id);
+      getTrashCollected(event.id);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -111,6 +125,18 @@ const InputDataPage = () => {
     }
   };
 
+  const getTrashCollected = async event_id => {
+    try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
+      const response = await Backend.get(`/stats/event/${event_id}`).then(data => {
+        setTrashCollected(parseInt(data.data));
+      });
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Flex
       flexDir={'column'}
@@ -120,7 +146,25 @@ const InputDataPage = () => {
       minH="100vh"
       ml="15rem"
     >
-      <InputDataDashboard event={event} registered={registered} checkin={checkin} />
+      <Flex minW="95%" justifyContent={'space-between'} mt={10} mb={5}>
+        <Button
+          gap={2}
+          alignItems={'center'}
+          onClick={() => {
+            navigate('/');
+          }}
+        >
+          <ArrowBackIcon />
+          Back to events
+        </Button>
+        <CheckinInputPageToggle eventId={eventId} isCheckinPage={false} />
+      </Flex>
+      <InputDataDashboard
+        event={event}
+        registered={registered}
+        checkin={checkin}
+        trashCollected={trashCollected}
+      />
       <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
         {/* SEARCH BAR---- */}
         <Flex gap={3} mt={5} mb={5}>
@@ -147,6 +191,7 @@ const InputDataPage = () => {
           <VolunteerEventsTable
             volunteers={displayedVolunteers}
             changeIsCheckedIn={changeIsCheckedIn}
+            isCheckinPage={false}
           />
         ) : (
           <Alert status="warning" borderRadius={'8'} w="50%" mx="auto">

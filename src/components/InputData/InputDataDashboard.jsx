@@ -1,15 +1,14 @@
 /* eslint-disable react/prop-types */
 
-import { Text, Flex, Button, Box, VStack } from '@chakra-ui/react';
+import { Text, Flex, Button, Box } from '@chakra-ui/react';
 
-import { FaLocationDot, FaNewspaper } from 'react-icons/fa6';
-import { IoDocumentText } from 'react-icons/io5';
+import { FaLocationDot, FaNewspaper, FaScaleBalanced } from 'react-icons/fa6';
 import { IoMdPeople } from 'react-icons/io';
 import { CalendarIcon, TimeIcon } from '@chakra-ui/icons';
 import HappeningInChip from '../HappeningInChip/HappeningInChip';
 import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 
-const InputDataDashboard = ({ event, registered, checkin }) => {
+const InputDataDashboard = ({ event, checkin, trashCollected }) => {
   // formats dbms date into Month Day, Year
   const getDateString = () => {
     const dateObject = new Date(Date.parse(event['date']));
@@ -22,6 +21,7 @@ const InputDataDashboard = ({ event, registered, checkin }) => {
     }
     return dateString;
   };
+  console.log(event);
 
   const getTimeString = () => {
     if (!event || !event.time) {
@@ -38,7 +38,7 @@ const InputDataDashboard = ({ event, registered, checkin }) => {
   return (
     <Flex minW="95%" bg={'#F8F8F8'} borderRadius="lg" p={10}>
       <Flex direction={{ base: 'column', md: 'row' }} w={'full'}>
-        <Flex flexDir={'column'} w={'40%'}>
+        <Flex flexDir={'column'} w={'35%'}>
           <Box>{event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}</Box>
           <Text fontSize={40} fontWeight="bold" color={'rgba(0, 0, 0, 0.75)'}>
             {event?.name}
@@ -87,19 +87,18 @@ const InputDataDashboard = ({ event, registered, checkin }) => {
           </Flex>
         </Flex>
 
-        <Flex gap={10} w={'60%'}>
-          <VStack bg="white" p={30} borderRadius="md" align="center" w={'45%'}>
-            <Flex background={'#96DB53'} p={2.5} borderRadius={'lg'}>
-              <IoDocumentText size={30} color="white" />
-            </Flex>
-            <Text fontWeight={'medium'} fontSize={20}>
-              Registered
-            </Text>
-            <Text fontSize={50} fontWeight={'bold'} color={'rgba(0, 0, 0, 0.75)'}>
-              {registered}
-            </Text>
-          </VStack>
-          <VStack bg="white" p={30} borderRadius="md" align="center" w={'45%'}>
+        <Flex gap={10} w={'75%'} justifyContent={'center'}>
+          <Flex
+            bg="white"
+            p={30}
+            borderRadius="md"
+            align="center"
+            w={'25%'}
+            flexDir={'column'}
+            gap={3}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
             <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
               <IoMdPeople size={30} color="white" />
             </Flex>
@@ -109,8 +108,30 @@ const InputDataDashboard = ({ event, registered, checkin }) => {
             <Text fontSize={50} fontWeight={'bold'} color={'rgba(0, 0, 0, 0.75)'}>
               {checkin}
             </Text>
-          </VStack>
-          <Leaderboard event_id={35} />
+          </Flex>
+          <Flex
+            bg="white"
+            p={30}
+            borderRadius="md"
+            align="center"
+            w={'25%'}
+            flexDir={'column'}
+            gap={3}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <Flex background={'#FF84B0'} p={2.5} borderRadius={'lg'}>
+              <FaScaleBalanced size={30} color="white" />
+            </Flex>
+            <Text fontWeight={'medium'} fontSize={20}>
+              Trash Collected
+            </Text>
+            <Text fontSize={50} fontWeight={'bold'} color={'rgba(0, 0, 0, 0.75)'}>
+              {trashCollected} lb
+            </Text>
+          </Flex>
+
+          <Leaderboard event_id={event.id} />
         </Flex>
       </Flex>
     </Flex>
