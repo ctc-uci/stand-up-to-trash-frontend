@@ -7,6 +7,7 @@ import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
 import CheckinStatsDashboard from '../components/Checkin/CheckinStatsDashboard';
 import VolunteerTabNavigation from '../components/Checkin/VolunteerTabNavigation';
+import CheckinModal from '../components/Checkin/CheckinModal';
 
 import { useParams } from 'react-router-dom';
 import {
@@ -36,6 +37,8 @@ const CheckinPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
+  const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
+  const [selectedVolunteer, setSelectedVolunteer] = useState(null);
 
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
@@ -52,11 +55,11 @@ const CheckinPage = () => {
       setDisplayedVolunteers(volunteerResults.filter(v => v.role === 'guest'));
   }, [tabIndex, volunteerResults]);
 
+  
   const setData = async () => {
     try {
       const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
       const event = await getEventById(eventId); // event data for page rendering eg. image src
-      console.log(event);
       setJoinedData(data);
       setEvent(event);
       getRegistered(event.id);
@@ -101,6 +104,7 @@ const CheckinPage = () => {
   const changeIsCheckedIn = async event_data_id => {
     try {
       // send new checkin status to backend, set new data by retrieving the new backend data
+
       const response = await Backend.put(`/data/checkin/${event_data_id}`).then(async () => {
         await setData();
       });
@@ -110,6 +114,17 @@ const CheckinPage = () => {
     }
   };
 
+  const handleCheckinButtonClick = (volunteer) => {
+    console.log(volunteer);
+    setSelectedVolunteer(volunteer); // `volunteer` is the volunteer object from the list
+    setIsCheckinModalOpen(true);
+};
+
+  
+  const closeCheckinModal = () => {
+    setIsCheckinModalOpen(false);
+  };
+  
   //gets the number of ppl that registered and checked in
   const getRegistered = async event_id => {
     try {
@@ -136,7 +151,6 @@ const CheckinPage = () => {
     }
   };
 
-  console.log({ displayedVolunteers });
 
   return (
     <Flex
@@ -192,8 +206,8 @@ const CheckinPage = () => {
 
         {displayedVolunteers.length != 0 ? (
           <VolunteerEventsTable
-            volunteers={displayedVolunteers}
-            changeIsCheckedIn={changeIsCheckedIn}
+          volunteers={displayedVolunteers}
+          changeIsCheckedIn={(volunteer) => handleCheckinButtonClick(volunteer)}
           />
         ) : (
           <Alert status="warning" borderRadius={'8'} w="50%" mx="auto">
@@ -203,6 +217,13 @@ const CheckinPage = () => {
           </Alert>
         )}
       </Container>
+      <CheckinModal
+        isOpen={isCheckinModalOpen}
+        onClose={closeCheckinModal}
+        volunteer={selectedVolunteer}
+        onCheckInConfirm={changeIsCheckedIn}
+      />
+
     </Flex>
   );
 };

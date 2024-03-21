@@ -15,11 +15,18 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import PersonIcon from '../../Assets/PersonIcon.svg';
+import PropTypes from 'prop-types';
 import VolunteerTypeTag from './VolunteerTypeTag';
-function CheckinModal() {
+function CheckinModal({ isOpen, onClose, volunteer, onCheckInConfirm }) {
+  const handleCheckIn = async () => {
+    if (volunteer && volunteer.id) {
+      await onCheckInConfirm(volunteer.id);
+      onClose(); // Close the modal after the action is confirmed
+    }
+  };
   return (
     <div>
-      <Modal size="lg">
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay backgroundColor={'rgba(0, 0, 0, .5)'} />
         <ModalContent borderRadius={'22px'} padding={5} width={'80%'}>
           <ModalCloseButton backgroundColor={'#EFEFEF'} borderRadius={'100px'} />
@@ -32,10 +39,10 @@ function CheckinModal() {
             <GridItem colSpan={1}>
               <img src={PersonIcon} />
               <GridItem>
-                <Grid templateColumns="repeat(2, 1fr)">
-                  <Text fontWeight={'bold'} fontSize={'22px'}>
-                    Johnny
-                  </Text>
+              <Grid templateColumns="repeat(2, 1fr)">
+              <Text fontSize={'24px'}>
+                {volunteer ? `${volunteer.first_name} ${volunteer.last_name}` : 'Loading...'}
+              </Text>
                   <VolunteerTypeTag
                     VolunteerType='Individual'
                   />
@@ -43,7 +50,7 @@ function CheckinModal() {
               </GridItem>
             </GridItem>
           </Grid>
-          <form>
+          <form onSubmit={handleCheckIn}>
             <FormControl>
               <ModalBody>
                 <FormControl>
@@ -89,6 +96,12 @@ function CheckinModal() {
     </div>
   );
 }
+CheckinModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onCheckInConfirm: PropTypes.func.isRequired,
+  volunteer: PropTypes.object, // Ensure this is expecting an object
+};
 
 export default CheckinModal;
 
