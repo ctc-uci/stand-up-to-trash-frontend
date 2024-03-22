@@ -48,7 +48,6 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       )}
       <Text
         style={{
-          fontFamily: 'Avenir',
           fontSize: location.pathname === path ? '18px' : '16px',
           fontWeight: '500',
           lineHeight: '25px',
@@ -112,7 +111,6 @@ const Navbar = () => {
               <img src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '16px',
                   fontWeight: '800',
                   lineHeight: '22px',
@@ -186,7 +184,6 @@ const Navbar = () => {
               <SupportIconGrey />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontWeight: '500',
                   fontSize: '16px',
                   lineHeight: '25px',
@@ -218,7 +215,6 @@ const Navbar = () => {
               <SettingsIconGrey />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '16px',
                   fontWeight: '500',
                   lineHeight: '25px',
@@ -262,7 +258,6 @@ const Navbar = () => {
                 {/* User name */}
                 <Text
                   style={{
-                    fontFamily: 'Avenir',
                     fontWeight: '800',
                     color: '#000000',
                     fontSize: '16px',
@@ -277,7 +272,6 @@ const Navbar = () => {
 
                 <Tag
                   style={{
-                    fontFamily: 'Avenir',
                     fontSize: '12px',
                     fontWeight: '500',
                     lineHeight: '16px',

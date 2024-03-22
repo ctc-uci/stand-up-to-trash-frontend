@@ -112,8 +112,8 @@ const EventCard = ({
           borderRadius={'xl'}
           mt={5}
           alignSelf={'center'}
-          maxW={'80%'}
-          maxH={'9rem'}
+          maxW={'88%'}
+          h={'11vw'}
           src={image_url}
           objectFit="cover"
         />
@@ -131,11 +131,16 @@ const EventCard = ({
         /> */}
 
         <Box px="27px" py="20px">
-          {/* Bottom section for text, date/time, etc. */}
           <HappeningInChip date={dateObj} />
-          <Text fontWeight="700" fontSize="25px">
-            {name}
-          </Text>
+          {name.length > 20 ? (
+            <Text fontWeight="700" fontSize="25px">
+              {name.substring(0, 20)}...
+            </Text>
+          ) : (
+            <Text fontWeight="700" fontSize="25px">
+              {name}
+            </Text>
+          )}
           <Text fontSize="15px">{dateStr}</Text>
         </Box>
       </Box>
