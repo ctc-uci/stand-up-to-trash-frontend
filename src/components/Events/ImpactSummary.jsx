@@ -31,31 +31,25 @@ const ImpactSummary = () => {
   };
 
   return (
-    <Box>
-      <Heading mb="4">Impact Summary</Heading>
+    <Flex minW="95%" flexDir={'column'}>
+      <Heading mb="8">Impact Summary</Heading>
       <Box
-        mb="60px"
+        mb="5"
         display="flex"
         flexDirection="row"
-        gap="20px"
+        gap="8"
         justifyContent="center"
         alignItems={'center'}
         backgroundColor={'#F8F8F8'}
-        height="200px"
-        width={'1000px'}
+        borderRadius={'lg'}
+        py={10}
       >
         <DataCard
           amount={registered}
           text={'Total Registered Volunteers'}
           icon={
-            <Flex
-              backgroundColor="green"
-              height="30px"
-              width="30px"
-              justifyContent={'center'}
-              alignItems={'center'}
-            >
-              <IoDocumentText color="white" size={15}></IoDocumentText>
+            <Flex background={'#96DB53'} p={2.5} borderRadius={'lg'}>
+              <IoDocumentText color="white" size={20}></IoDocumentText>
             </Flex>
           }
         />
@@ -63,14 +57,8 @@ const ImpactSummary = () => {
           amount={checkedIn}
           text={'Total Checked-In Volunteers'}
           icon={
-            <Flex
-              backgroundColor="purple"
-              height="30px"
-              width="30px"
-              justifyContent={'center'}
-              alignItems={'center'}
-            >
-              <MdPeopleAlt color="white" size={15}></MdPeopleAlt>
+            <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
+              <MdPeopleAlt color="white" size={20}></MdPeopleAlt>
             </Flex>
           }
         />
@@ -78,18 +66,12 @@ const ImpactSummary = () => {
           amount={total}
           text={'Total Trash Weight'}
           icon={
-            <Flex
-              backgroundColor="orange"
-              height="30px"
-              width="30px"
-              justifyContent={'center'}
-              alignItems={'center'}
-            >
-              <FaTrashCan color="white" size={15} />
+            <Flex background={'#FF792E'} p={2.5} borderRadius={'lg'}>
+              <FaTrashCan color="white" size={20} />
             </Flex>
           }
         />
-        <VStack gap={110}>
+        <VStack gap={120}>
           <Box></Box>
           <Button
             colorScheme={'messenger'}
@@ -100,7 +82,7 @@ const ImpactSummary = () => {
           </Button>
         </VStack>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

@@ -1,10 +1,10 @@
 import { Box, Text } from '@chakra-ui/react';
 import adminLogo from '../../Assets/navbar/stand_up_to_trash_logo.png';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import UserContext from '../../utils/UserContext';
 import RoleContext from '../../utils/RoleContext';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import {
   ArchivedEventsIconBlue,
   ArchivedEventsIconGrey,
@@ -48,7 +48,6 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       )}
       <Text
         style={{
-          fontFamily: 'Avenir',
           fontSize: location.pathname === path ? '18px' : '16px',
           fontWeight: '500',
           lineHeight: '25px',
@@ -64,20 +63,13 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const { user } = useContext(UserContext);
   const { role } = useContext(RoleContext);
 
-  useEffect(() => {
-    console.log(`Here is the user info:`);
-    console.log(user);
-    console.log(`The user's role is: ${role}`);
-    console.log('Current route:', location.pathname);
-  });
-
   // Change the paths for each button since these might change
   const homePath = '/';
-  const eventsPath = '/';
+  const eventsPath = '/event';
   const archivedEventsPath = '/archived-events';
   const volunteersPath = '/playground';
 
@@ -119,7 +111,6 @@ const Navbar = () => {
               <img src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '16px',
                   fontWeight: '800',
                   lineHeight: '22px',
@@ -145,7 +136,7 @@ const Navbar = () => {
 
             {/* Events button */}
             <NavbarButton
-              buttonText={'Events'}
+              buttonText={'Current Events'}
               path={eventsPath}
               navigate={navigate}
               FocusedIcon={EventsIconBlue}
@@ -193,7 +184,6 @@ const Navbar = () => {
               <SupportIconGrey />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontWeight: '500',
                   fontSize: '16px',
                   lineHeight: '25px',
@@ -225,7 +215,6 @@ const Navbar = () => {
               <SettingsIconGrey />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '16px',
                   fontWeight: '500',
                   lineHeight: '25px',
@@ -269,7 +258,6 @@ const Navbar = () => {
                 {/* User name */}
                 <Text
                   style={{
-                    fontFamily: 'Avenir',
                     fontWeight: '800',
                     color: '#000000',
                     fontSize: '16px',
@@ -284,7 +272,6 @@ const Navbar = () => {
 
                 <Tag
                   style={{
-                    fontFamily: 'Avenir',
                     fontSize: '12px',
                     fontWeight: '500',
                     lineHeight: '16px',
