@@ -13,6 +13,7 @@ import {
   Heading,
   VStack,
   Select,
+  Flex,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { SearchIcon, CalendarIcon } from '@chakra-ui/icons';
@@ -269,13 +270,14 @@ const Events = () => {
   }, [name, location, date, fuse]);
 
   return (
-    <Box
-      py="30px"
-      justifyContent="flex-start"
-      display="flex"
-      flexDirection="column"
+    <Flex
+      flexDir={'column'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      bg="#E6EAEF"
+      minH="100vh"
       ml="15rem"
-      alignItems="center"
+      py={10}
     >
       <VStack
         bgColor="#F8F8F8"
@@ -287,9 +289,9 @@ const Events = () => {
         align-items="center"
         gap="24px"
         flex-shrink="0"
-        border-radius="18px"
+        borderRadius={'xl'}
       >
-        <Box display="flex" mb="4" mx="13px" w="90%">
+        <Box display="flex" mx="13px" w="90%">
           <Heading width="930px">All Upcoming Events</Heading>
         </Box>
         <Box display="flex" mx="13px" w="90%" mb="4" align-ite>
@@ -303,6 +305,7 @@ const Events = () => {
                     <SearchIcon />
                   </InputLeftElement>
                   <Input
+                    bg={'white'}
                     value={name}
                     onChange={event => {
                       setName(event.target.value);
@@ -345,10 +348,16 @@ const Events = () => {
               /> */}
               </Box>
               <Box display="flex" w="100%" flex-direction="row" justifyContent={'left'}>
-                <Select placeholder="Select Location" onChange={handleLocationChange} w="42%">
+                <Select
+                  bg={'white'}
+                  placeholder="Select Location"
+                  onChange={handleLocationChange}
+                  w="42%"
+                >
                   {getLocationOptions()}
                 </Select>
                 <Select
+                  bg={'white'}
                   icon={<CalendarIcon />}
                   onChange={handleDateChange}
                   placeholder="Select Date"
@@ -364,17 +373,17 @@ const Events = () => {
       </VStack>
       <Spacer />
 
-      <Box display="flex" justifyContent={'center'}>
+      <Box display="flex" justifyContent={'center'} px={5}>
         <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
           <Box marginTop="3vh">
-            <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
               <AddEventsModal getEvents={getEvents} />
               {eventCards}
             </Grid>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

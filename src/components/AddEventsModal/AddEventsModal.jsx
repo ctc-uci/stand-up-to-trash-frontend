@@ -116,19 +116,18 @@ const AddEventsModal = () => {
           Create Event
         </Box> */}
         <Box
-          width="293px"
-          height="250px"
-          boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+          // width="350px"
+          height="300px"
           display="flex"
           flexDir="column"
           alignItems={'center'}
           justifyContent={'center'}
           borderRadius="30px"
-          background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%)`}
           backgroundSize="cover"
+          bg={'white'}
         >
           <Box px="27px" py="20px" color="white">
-            <AddIcon justifyContent={'center'} boxSize={50} />
+            <AddIcon color={'#0075FF'} justifyContent={'center'} boxSize={50} />
           </Box>
         </Box>
       </a>

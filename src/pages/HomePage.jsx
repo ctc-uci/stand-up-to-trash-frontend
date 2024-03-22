@@ -215,7 +215,14 @@ const Home = () => {
   }, [name, location, date, fuse]);
 
   return (
-    <Box py="30px" justifyContent="flex-start" display="flex" flexDirection="column" ml="15rem">
+    <Box
+      bg="#E6EAEF"
+      py="30px"
+      justifyContent="flex-start"
+      display="flex"
+      flexDirection="column"
+      ml="15rem"
+    >
       <Box display="flex" justifyContent={'center'}>
         <Box justifyContent="space-between" width="930px">
           <ImpactSummary></ImpactSummary>
@@ -235,6 +242,7 @@ const Home = () => {
                   <SearchIcon />
                 </InputLeftElement>
                 <Input
+                  bg={'white'}
                   value={name}
                   onChange={event => {
                     setName(event.target.value);
@@ -247,6 +255,7 @@ const Home = () => {
                   <SearchIcon />
                 </InputLeftElement>
                 <Input
+                  bg={'white'}
                   value={location}
                   onChange={event => {
                     setLocation(event.target.value);
@@ -259,6 +268,7 @@ const Home = () => {
                   <SearchIcon />
                 </InputLeftElement>
                 <Input
+                  bg={'white'}
                   value={date}
                   placeholder="Search Date"
                   onChange={event => {
@@ -279,7 +289,7 @@ const Home = () => {
           <Spacer />
           <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
             <Box marginTop="3vh">
-              <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
                 {/* <AddEventsModal getEvents={getEvents} /> */}
                 {eventCards}
               </Grid>
