@@ -55,6 +55,8 @@ const DataEntryModal = ({
   ounces,
   pounds,
   image_url,
+  notes,
+  trashBags,
 }) => {
   const volunteerData = {
     id: id,
@@ -63,6 +65,7 @@ const DataEntryModal = ({
     pounds: pounds,
     ounces: ounces,
     event_id: eventId,
+    notes: notes,
     is_checked_in: true,
   };
 
@@ -74,20 +77,18 @@ const DataEntryModal = ({
   const [tags, setTags] = useState([]);
   const deletedImageIds = useRef([]);
   const uploadImages = useRef([]);
-  const [currentTrash, setCurrentTrash] = useState([]);
+  const [currentTrash, setCurrentTrash] = useState(trashBags);
   const [trashWeight, setTrashWeight] = useState(0);
   const [inputIsOn, setInputIsOn] = useState(false);
-  const [notes, setNotes] = useState('');
+  const [currentNotes, setCurrentNotes] = useState(notes);
 
   const putDataEntry = async () => {
     try {
       const dataToSend = {
         ...volunteerData,
         pounds:
-          currentTrash.length > 0
-            ? currentTrash.reduce((total, pounds) => total + parseInt(pounds), 0)
-            : 0,
-        notes: notes === '' ? null : notes,
+          currentTrash.length > 0 ? currentTrash.reduce((total, pounds) => total + pounds, 0) : 0,
+        notes: currentNotes === '' ? null : currentNotes,
       };
 
       const trashBagsToSend = {
@@ -286,7 +287,7 @@ const DataEntryModal = ({
           paddingRight={'7em'}
           boxSizing={'border-box'}
           onChange={e => {
-            setTrashWeight(e.target.value);
+            setTrashWeight(parseInt(e.target.value));
           }}
           onKeyDown={e => {
             if (e.key === 'Enter') {
@@ -304,8 +305,6 @@ const DataEntryModal = ({
       </Button>
     </Flex>
   );
-
-  console.log(currentTrash);
 
   return (
     <>
@@ -390,7 +389,8 @@ const DataEntryModal = ({
                 borderColor="#EFEFEF"
                 minH={'8em'}
                 color={'#717171'}
-                onChange={e => setNotes(e.target.value)}
+                value={currentNotes}
+                onChange={e => setCurrentNotes(e.target.value)}
               />
             </Flex>
 
@@ -471,6 +471,8 @@ DataEntryModal.propTypes = {
   ounces: PropTypes.number.isRequired,
   pounds: PropTypes.number.isRequired,
   image_url: PropTypes.string.isRequired,
+  notes: PropTypes.string.isRequired,
+  trashBags: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default DataEntryModal;
