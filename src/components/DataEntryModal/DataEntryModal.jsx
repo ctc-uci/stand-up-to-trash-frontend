@@ -67,31 +67,10 @@ const DataEntryModal = ({
     event_id: eventId,
     is_checked_in: true,
   };
-  // const [other, setOther] = useState('');
-  // let [unusualItemsArray, setUnusualItemsArray] = useState([]);
 
-  // COMMENTED OUT BECAUSE DESIGN FLAW
-
-  // parses unusual items input - single entries come as strings, multiple entries come as strings of the form {item1, item2... itemn}
-  // useEffect(() => {
-  //   formatUnusualItems();
-  // }, []);
-  // useEffect(() => {}), [unusualItems];
-  // const formatUnusualItems = () => {
-  //   if (unusualItems.length != 0 && unusualItems[0] === '{') {
-  //     let trimmed = unusualItems.replace(/{|}/g, '').trim();
-  //     let unusualItemsList = trimmed.split(',');
-  //     unusualItemsList = unusualItemsList.map(item => item.replace(/"/g, ''));
-  //     setUnusualItemsArray(unusualItemsList);
-  //   } else {
-  //     setUnusualItemsArray([unusualItems]);
-  //   }
-  // };
-
-  //   const { register, handleSubmit } = useForm(volunteerData);
   const toast = useToast();
 
-  const {  getValues } = useForm(volunteerData);
+  const { getValues } = useForm(volunteerData);
 
   const { isOpen: cameraIsOpen, onOpen: cameraOnOpen, onClose: cameraOnClose } = useDisclosure();
   const [tags, setTags] = useState([]);
@@ -165,36 +144,12 @@ const DataEntryModal = ({
     }
   };
 
-  // COMMENTED OUT BECAUSE DESIGN FLAW
-
-  // const addUnusualItem = (isChecked, newItem) => {
-  //   if (isChecked && newItem.trim() !== '') {
-  //     setVolunteerData(prevData => ({
-  //       ...prevData,
-  //       unusual_items: [...new Set([...prevData.unusual_items, newItem, other])].filter(Boolean), //FILTERS EMPTY STRING
-  //     }));
-  //   } else {
-  //     setVolunteerData(prevData => ({
-  //       ...prevData,
-  //       unusual_items: [...new Set(prevData.unusual_items.filter(item => item !== newItem))].filter(
-  //         Boolean,
-  //       ), //FILTERS EMPTY STRING
-  //     }));
-  //   }
-  // };
-  // control.getFieldState('pounds').setValue(pounds);
-
   const updateTags = async id => await getImagesByEventID(id);
   useEffect(() => {
     updateTags(id).then(data => setTags(data));
-    // console.log('Tags', tags);
   }, [id]);
 
-  // useEffect(() => console.log('Tags', tags), [tags]);
-
   const TrashWeightInputs = ({ parentControl }) => {
-    // const [inputPounds, setInputPounds] = useState('');
-    // const [inputOunces, setInputOunces] = useState('');
     const [totalWeight, setTotalWeight] = useState(pounds + ounces / 16);
 
     const updateTotalWeightPounds = () => {
@@ -204,31 +159,6 @@ const DataEntryModal = ({
     const updateTotalWeightOunces = () => {
       setTotalWeight(prev => prev + parseInt(getValues().ounces) / 16);
     };
-
-    // const [lastPounds, setLastPounds] = useState(0);
-    // const [lastOunces, setLastOunces] = useState(0);
-
-    // const addPoundsToTotal = () => {
-    //   setTotalWeight(prevWeight => prevWeight + lastPounds);
-    // };
-
-    // const addOuncesToTotal = () => {
-    //   setTotalWeight(prevWeight => prevWeight + lastOunces / 16);
-    // };
-
-    // const updateLastPounds = e => {
-    //   const newPounds = parseFloat(e.target.value) || 0;
-    //   setInputPounds(e.target.value); // Keep the input as string
-    //   setLastPounds(newPounds); // Convert to number for calculations
-    // };
-
-    // const updateLastOunces = e => {
-    //   const newOunces = parseFloat(e.target.value) || 0;
-    //   setInputOunces(e.target.value); // Keep the input as string
-    //   setLastOunces(newOunces); // Convert to number for calculations
-    // };
-
-    // console.log('volunteerData', volunteerData);
 
     return (
       <>
@@ -361,7 +291,7 @@ const DataEntryModal = ({
             }
           }}
           type="number"
-        />{' '}
+        />
         <InputRightElement w={'6em'} marginRight={'0.5em'} as={'b'}>
           Pounds (lb)
         </InputRightElement>
