@@ -52,7 +52,6 @@ const DataEntryModal = ({
   volunteerId,
   numberInParty,
   eventId,
-  unusualItems,
   ounces,
   pounds,
   image_url,
@@ -63,7 +62,6 @@ const DataEntryModal = ({
     number_in_party: numberInParty,
     pounds: pounds,
     ounces: ounces,
-    unusual_items: unusualItems,
     event_id: eventId,
     is_checked_in: true,
   };
@@ -79,19 +77,24 @@ const DataEntryModal = ({
   const [currentTrash, setCurrentTrash] = useState([]);
   const [trashWeight, setTrashWeight] = useState(0);
   const [inputIsOn, setInputIsOn] = useState(false);
+  const [notes, setNotes] = useState('');
 
   const putDataEntry = async () => {
     try {
-      const { pounds, ounces, unusual_items } = getValues();
-
       const dataToSend = {
         ...volunteerData,
-        pounds: pounds === '' ? 0 : parseInt(pounds),
-        ounces: ounces === '' ? 0 : parseInt(ounces),
-        unusual_items: unusual_items === '' ? null : unusual_items,
+        pounds:
+          currentTrash.length > 0
+            ? currentTrash.reduce((total, pounds) => total + parseInt(pounds), 0)
+            : 0,
+        notes: notes === '' ? null : notes,
       };
-      console.log(dataToSend);
 
+      const trashBagsToSend = {
+        trashBags: currentTrash,
+      };
+
+      await Backend.put(`/trashbags/${id}`, trashBagsToSend);
       await Backend.put(`/data/${id}`, dataToSend);
       toast({
         title: 'Data saved.',
@@ -127,11 +130,11 @@ const DataEntryModal = ({
     await deleteListImageByID(id, imageID);
   };
 
-  const noReload = (data, event) => {
+  const noReload = event => {
     // console.log(`deletedImageIds`, deletedImageIds);
     // console.log(`uploadImages`, uploadImages);
     event.preventDefault();
-    putDataEntry(data);
+    putDataEntry();
     // tags.forEach((image) => uploadImage(image));
     if (deletedImageIds.current.length != 0) {
       deletedImageIds.current.forEach(imageId => deleteImage(imageId));
@@ -387,6 +390,7 @@ const DataEntryModal = ({
                 borderColor="#EFEFEF"
                 minH={'8em'}
                 color={'#717171'}
+                onChange={e => setNotes(e.target.value)}
               />
             </Flex>
 
@@ -436,7 +440,7 @@ const DataEntryModal = ({
               backgroundColor={'#0075FF'}
               color={'white'}
               isDisabled={currentTrash.length < 1}
-              onClick={onClose}
+              onClick={noReload}
             >
               Save Data
             </Button>
