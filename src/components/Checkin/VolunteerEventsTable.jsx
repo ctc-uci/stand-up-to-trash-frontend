@@ -35,9 +35,10 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
     event_id,
     role,
     id,
-    unusual_items,
+    notes,
     pounds,
     ounces,
+    trash_bags,
   } = volunteer;
 
   let status = 'Registered';
@@ -125,9 +126,10 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
                     volunteerId={volunteer_id}
                     numberInParty={number_in_party}
                     eventId={event_id}
-                    unusualItems={unusual_items}
+                    notes={notes}
                     pounds={pounds}
                     ounces={ounces}
+                    trashBags={trash_bags}
                   />
                 </>
               ) : (

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const TrashCard = ({ pounds, setCurrentTrash, currentTrash, id }) => {
   // needs to remove by trash id in the future task (only removing by pounds rn)
   const handleClick = () => {
-    const reducedTrash = currentTrash.filter(trash => trash !== pounds.toString());
+    const reducedTrash = currentTrash.filter(trash => trash !== pounds);
     setCurrentTrash(reducedTrash);
   };
 
@@ -44,11 +44,10 @@ const TrashCard = ({ pounds, setCurrentTrash, currentTrash, id }) => {
 };
 
 TrashCard.propTypes = {
-    pounds: PropTypes.number.isRequired,
-    setCurrentTrash: PropTypes.func.isRequired,
-    currentTrash: PropTypes.arrayOf(PropTypes.string).isRequired,
-    id: PropTypes.number.isRequired,
-  };
+  pounds: PropTypes.number.isRequired,
+  setCurrentTrash: PropTypes.func.isRequired,
+  currentTrash: PropTypes.arrayOf(PropTypes.string).isRequired,
+  id: PropTypes.number.isRequired,
+};
 
 export default TrashCard;
-
