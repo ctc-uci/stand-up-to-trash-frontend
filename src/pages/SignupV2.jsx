@@ -118,10 +118,30 @@ const CreateAccount = () => {
     <SimpleGrid columns={2} spacing={0} height={'100vh'} style={{ fontFamily: 'Poppins' }}>
       <Box backgroundColor="#2D558A" position="relative">
         <AbsoluteCenter>
-        <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
-          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center'}}>
-            <h1 style={{ color: 'white', fontSize: '40px', fontWeight: '600', marginTop: '52px', textAlign: 'center' }}>Stand Up To Trash</h1>
-            <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '600', marginTop: '20px', textAlign: 'center' }}>Making a Difference</h1>
+          <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
+          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center' }}>
+            <h1
+              style={{
+                color: 'white',
+                fontSize: '40px',
+                fontWeight: '600',
+                marginTop: '52px',
+                textAlign: 'center',
+              }}
+            >
+              Stand Up To Trash
+            </h1>
+            <h1
+              style={{
+                color: 'white',
+                fontSize: '32px',
+                fontWeight: '600',
+                marginTop: '20px',
+                textAlign: 'center',
+              }}
+            >
+              Making a Difference
+            </h1>
           </Box>
         </AbsoluteCenter>
       </Box>

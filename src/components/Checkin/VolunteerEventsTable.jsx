@@ -21,7 +21,7 @@ import {
 import { FaUser } from 'react-icons/fa';
 import { MdInput, MdCheck } from 'react-icons/md';
 
-const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
+const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     first_name,
@@ -100,34 +100,41 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
         <Flex gap={2}>
           {is_checked_in ? (
             <>
-              <Tag
-                cursor={'pointer'}
-                onClick={onOpen}
-                borderRadius={10}
-                padding={2}
-                color={'#7B7C7D'}
-                bg={'#E2E4E5'}
-              >
-                <Box mr="2">
-                  <MdInput />
-                </Box>
-                Input Data
-              </Tag>
-              <DataEntryModal
-                isOpen={isOpen}
-                onClose={onClose}
-                id={event_data_new_id}
-                profileImage={image_url}
-                firstName={first_name}
-                lastName={last_name}
-                volunteerId={volunteer_id}
-                numberInParty={number_in_party}
-                eventId={event_id}
-                unusualItems={unusual_items}
-                pounds={pounds}
-                ounces={ounces}
-                image_url={image_url}
-              />
+              {!isCheckinPage ? (
+                <>
+                  <Tag
+                    cursor={'pointer'}
+                    onClick={onOpen}
+                    borderRadius={10}
+                    padding={2}
+                    color={'#7B7C7D'}
+                    bg={'#E2E4E5'}
+                  >
+                    <Box mr="2">
+                      <MdInput />
+                    </Box>
+                    Input Data
+                  </Tag>
+                  <DataEntryModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    id={event_data_new_id}
+                    profileImage={image_url}
+                    firstName={first_name}
+                    lastName={last_name}
+                    volunteerId={volunteer_id}
+                    numberInParty={number_in_party}
+                    eventId={event_id}
+                    unusualItems={unusual_items}
+                    pounds={pounds}
+                    ounces={ounces}
+                  />
+                </>
+              ) : (
+                <Text color={'#717171'} fontWeight={400}>
+                  Checked-in
+                </Text>
+              )}
             </>
           ) : (
             <Tag
@@ -152,7 +159,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
   );
 };
 
-const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
+const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) => {
   return (
     <TableContainer border={'2px solid #E2E8F0'} borderRadius={'15px'}>
       <Table
@@ -196,7 +203,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
             <Th>
               <Flex gap={2}>
                 <Text color="#2D3748" fontWeight="650">
-                  Number in Party
+                  Party Size
                 </Text>
               </Flex>
             </Th>
@@ -208,6 +215,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn }) => {
               key={volunteer.id}
               volunteer={volunteer}
               changeIsCheckedIn={changeIsCheckedIn}
+              isCheckinPage={isCheckinPage}
             />
           ))}
         </Tbody>
