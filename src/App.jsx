@@ -1,12 +1,11 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import EventPage from './pages/EventPage';
 import HomePage from './pages/HomePage';
 import ArchivedEvents from './pages/ArchivedEvents';
 import DummyProfiles from './pages/DummyProfiles';
-import DummyVolunteerProfilePage from './pages/DummyVolunteerProfilePage';
+import DummyProfilePage from './pages/DummyProfilePage';
 import DummySearchVolunteerEvents from './pages/DummySearchVolunteerEvents';
 import DummySuccessfulLogin from './pages/DummySuccessfulLogin';
 import DummyStatsPage from './pages/DummyStatsPage';
@@ -29,17 +28,13 @@ import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
-const Layout = ({ volunteer = false }) => {
+const Layout = () => {
   return (
     <>
-      <Navbar isVolunteer={volunteer} />
+      <Navbar />
       <Outlet />
     </>
   );
-};
-
-Layout.propTypes = {
-  volunteer: PropTypes.bool,
 };
 
 import { theme } from './utils/chakraTheme';
@@ -193,8 +188,15 @@ const App = () => {
               />
 
               {/*--VOLUNTEER PAGES*/}
-              <Route element={<Layout volunteer={true} />}>
-                <Route path="/volunteer-profile" element={<DummyVolunteerProfilePage />} />
+              <Route element={<Layout />}>
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute pageType="settings">
+                      <DummyProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
 
               {/* PLAYGROUND */}

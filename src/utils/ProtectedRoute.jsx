@@ -37,6 +37,17 @@ const ProtectedRoute = ({ children, pageType }) => {
         }
       }
 
+      if (pageType === 'settings') {
+        if (role === 'admin') {
+          setLoading(false);
+        } else if (role === 'volunteer') {
+          setLoading(false);
+        } else if (role === 'unloggedIn') {
+          navigate('/loginv2');
+          setLoading(true);
+        }
+      }
+
       if (pageType === 'authentication') {
         if (role === 'admin') {
           navigate('/');
@@ -44,7 +55,7 @@ const ProtectedRoute = ({ children, pageType }) => {
         } else if (role === 'volunteer') {
           navigate('/playground');
           setLoading(true);
-        } else if (role === 'unloggedIn') {
+        } else {
           setLoading(false);
         }
       }

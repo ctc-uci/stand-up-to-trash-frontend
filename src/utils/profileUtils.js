@@ -31,7 +31,7 @@ const updateProfile = async (id, profile) => {
 };
 
 const getProfileByFirebaseUid = async uid => {
-  const response = await Backend.get(`/profiles/firebase/${uid}`);
+  const response = await Backend.get(`/firebase/${uid}`);
   return response.data;
 };
 

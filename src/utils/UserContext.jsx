@@ -28,11 +28,18 @@ export const UserProvider = ({ children }) => {
     return () => unsubscribe();
   }, [auth]);
 
+  const updateUser = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const res = await Backend.get(`/firebase/${user.uid}`);
+    setUser(res.data);
+  };
+
   if (loading) {
     return <Spinner />;
   }
 
-  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, setUser, updateUser }}>{children}</UserContext.Provider>;
 };
 
 UserProvider.propTypes = {

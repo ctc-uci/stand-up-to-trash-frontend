@@ -1,7 +1,7 @@
 import { Box, Text } from '@chakra-ui/react';
 import adminLogo from '../../Assets/navbar/stand_up_to_trash_logo.png';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import UserContext from '../../utils/UserContext';
 import RoleContext from '../../utils/RoleContext';
 // import { useLocation } from 'react-router-dom';
@@ -62,10 +62,18 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
 };
 
 const Navbar = () => {
-  const navigate = useNavigate();
   // const location = useLocation();
-  const { user } = useContext(UserContext);
+  const { user, updateUser } = useContext(UserContext);
   const { role } = useContext(RoleContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    updateUser();
+    // console.log(`Here is the user info:`);
+    // console.log(user);
+    // console.log(`The user's role is: ${role}`);
+    // console.log('Current route:', location.pathname);
+  }, [updateUser]);
 
   // Change the paths for each button since these might change
   const homePath = '/';
@@ -79,6 +87,12 @@ const Navbar = () => {
 
   // For logout in case it changes from /logoutv2
   const logoutPath = '/loginv2';
+
+  // For navigating to the user profile when you click on it
+  // at the bottom
+  // This will then conditionally route the user to the volunteer
+  // profile or to the admin profile
+  const profilePath = '/profile';
 
   return (
     <>
@@ -241,12 +255,18 @@ const Navbar = () => {
                 backgroundColor: '#FFF',
                 border: '1px',
               }}
+              onClick={e => {
+                e.preventDefault();
+                navigate(profilePath);
+              }}
+              as="a"
+              href="#"
             >
               {/* User image */}
               <Box style={{ borderRadius: '50%' }}>
                 <img
                   src={user?.image_url}
-                  style={{ width: '45px', height: '45px', borderRadius: '50%' }}
+                  style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover' }}
                 />
               </Box>
               <Box
@@ -260,7 +280,7 @@ const Navbar = () => {
                   style={{
                     fontWeight: '800',
                     color: '#000000',
-                    fontSize: '16px',
+                    fontSize: '14px',
                     lineHeight: '25px',
                     textAlign: 'left',
                     overflowY: 'auto',
@@ -282,9 +302,11 @@ const Navbar = () => {
                     padding: '2px 6px 2px 6px',
                     borderRadius: '4px',
                     gap: '10px',
+                    textTransform: 'capitalize',
                   }}
                 >
-                  Primary Admin
+                  {role}
+                  {/* Primary Admin */}
                 </Tag>
               </Box>
               {/* Logout button */}

@@ -23,13 +23,15 @@ import fbicon from '../Assets/fb.png';
 import { logInWithEmailAndPassWord } from '../utils/firebaseAuthUtils';
 import { createGoogleUserInFirebase } from '../utils/googleAuthUtils';
 import { createFacebookUserInFirebase } from '../utils/facebookAuthUtils';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+import RoleContext from '../utils/RoleContext';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getProfileByFirebaseUid, postProfile } from '../utils/profileUtils';
 
 const LoginV2 = () => {
   const auth = getAuth();
   const navigate = useNavigate();
+  const { setRole } = useContext(RoleContext);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
@@ -55,13 +57,14 @@ const LoginV2 = () => {
             firebase_uid: user.uid,
           };
 
+          await setRole('volunteer');
           console.log(profile);
           console.log('success');
 
           if (!(await getProfileByFirebaseUid(profile.firebase_uid))) {
             postProfile(profile);
           }
-          navigate('/successful-login');
+          navigate('/');
         } else {
           console.log('No one in');
         }
@@ -70,7 +73,7 @@ const LoginV2 = () => {
       }
     });
     return () => unsubscribe();
-  });
+  }, [auth, navigate, setRole]);
 
   return <LoginForm />;
 };
@@ -98,7 +101,7 @@ const LoginForm = () => {
 
   const handleLogin = async event => {
     try {
-      await logInWithEmailAndPassWord(event.email, event.password, '/successful-login', navigate);
+      await logInWithEmailAndPassWord(event.email, event.password, '/', navigate);
     } catch (err) {
       const errorCode = err.code;
       const firebaseErrorMsg = err.message;
@@ -134,11 +137,11 @@ const LoginForm = () => {
   };
 
   const handleGoogleLogin = () => {
-    createGoogleUserInFirebase('/successful-login', navigate);
+    createGoogleUserInFirebase('/loginv2', navigate);
   };
 
   const handleFacebookLogin = () => {
-    createFacebookUserInFirebase('/successful-login', navigate);
+    createFacebookUserInFirebase('/loginv2', navigate);
   };
 
   return (
