@@ -27,4 +27,3 @@ SettingsField.propTypes = {
 }
 
 export default SettingsField;
-

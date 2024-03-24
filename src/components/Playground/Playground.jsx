@@ -11,7 +11,8 @@ import { logGoogleUserOut } from '../../utils/googleAuthUtils.js';
 import CameraModal from '../CameraModal';
 import RegisterGuestModal from '../RegisterGuestModal/RegisterGuestModal.jsx';
 
-import Scanner from '../Scanner.jsx';
+// import Scanner from '../Scanner.jsx';
+import VolunteerCardModal from './VolunteerCardModal.tsx';
 
 const auth = getAuth();
 
@@ -44,8 +45,10 @@ const Playground = () => {
         LOGOUT
       </button>
 
-      <p>Scanner: </p>
-      <Scanner />
+      <VolunteerCardModal volunteerId={1} />
+
+      {/* <p>Scanner: </p>
+      <Scanner /> */}
 
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />

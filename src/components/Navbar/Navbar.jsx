@@ -48,7 +48,6 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       )}
       <Text
         style={{
-          fontFamily: 'Avenir',
           fontSize: location.pathname === path ? '18px' : '16px',
           fontWeight: '500',
           lineHeight: '25px',
@@ -78,7 +77,7 @@ const Navbar = () => {
 
   // Change the paths for each button since these might change
   const homePath = '/';
-  const eventsPath = '/';
+  const eventsPath = '/event';
   const archivedEventsPath = '/archived-events';
   const volunteersPath = '/playground';
 
@@ -126,7 +125,6 @@ const Navbar = () => {
               <img src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '16px',
                   fontWeight: '800',
                   lineHeight: '22px',
@@ -152,7 +150,7 @@ const Navbar = () => {
 
             {/* Events button */}
             <NavbarButton
-              buttonText={'Events'}
+              buttonText={'Current Events'}
               path={eventsPath}
               navigate={navigate}
               FocusedIcon={EventsIconBlue}
@@ -200,7 +198,6 @@ const Navbar = () => {
               <SupportIconGrey />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontWeight: '500',
                   fontSize: '16px',
                   lineHeight: '25px',
@@ -232,7 +229,6 @@ const Navbar = () => {
               <SettingsIconGrey />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '16px',
                   fontWeight: '500',
                   lineHeight: '25px',
@@ -282,7 +278,6 @@ const Navbar = () => {
                 {/* User name */}
                 <Text
                   style={{
-                    fontFamily: 'Avenir',
                     fontWeight: '800',
                     color: '#000000',
                     fontSize: '14px',
@@ -297,7 +292,6 @@ const Navbar = () => {
 
                 <Tag
                   style={{
-                    fontFamily: 'Avenir',
                     fontSize: '12px',
                     fontWeight: '500',
                     lineHeight: '16px',

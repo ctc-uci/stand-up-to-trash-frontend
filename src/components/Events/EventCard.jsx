@@ -43,12 +43,10 @@ const EventCard = ({
   description,
   location,
   date,
-  time,
   showSelect,
   image_url,
   isSelected,
   handleCheckboxChange,
-  getEvents,
 }) => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -67,17 +65,17 @@ const EventCard = ({
   return (
     <>
       <Box
-        width="293px"
-        height="250px"
-        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+        // width="293px"
+        // height="250px"
+        bg={'white'}
         display="flex"
         flexDir="column"
         cursor={'pointer'}
         justifyContent={'space-between'}
         borderRadius="30px"
         onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
-        background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
-        backgroundSize="cover"
+        // background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
+        // backgroundSize="cover"
       >
         {/* {showSelect ? (
           <Checkbox
@@ -110,7 +108,17 @@ const EventCard = ({
           ) : null}
         </Box>
 
-        <EditEvents
+        <Image
+          borderRadius={'xl'}
+          mt={5}
+          alignSelf={'center'}
+          maxW={'88%'}
+          h={'11vw'}
+          src={image_url}
+          objectFit="cover"
+        />
+
+        {/* <EditEvents
           id={id}
           name={name}
           description={description}
@@ -118,18 +126,21 @@ const EventCard = ({
           date={date}
           time={time}
           image_url={image_url}
-          parentClose={
-            onClose
-          } /* It's scuffed (opens EditModal AND EventModal due to being parent), but we close the Event modal when we open the EditEvent modal */
+          parentClose={onClose}
           getEvents={getEvents}
-        />
+        /> */}
 
-        <Box px="27px" py="20px" color="white">
-          {/* Bottom section for text, date/time, etc. */}
+        <Box px="27px" py="20px">
           <HappeningInChip date={dateObj} />
-          <Text fontWeight="700" fontSize="25px">
-            {name}
-          </Text>
+          {name.length > 20 ? (
+            <Text fontWeight="700" fontSize="25px">
+              {name.substring(0, 20)}...
+            </Text>
+          ) : (
+            <Text fontWeight="700" fontSize="25px">
+              {name}
+            </Text>
+          )}
           <Text fontSize="15px">{dateStr}</Text>
         </Box>
       </Box>

@@ -1,7 +1,8 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import EventsPage from './pages/EventsPage';
+import EventPage from './pages/EventPage';
+import HomePage from './pages/HomePage';
 import ArchivedEvents from './pages/ArchivedEvents';
 import DummyProfiles from './pages/DummyProfiles';
 import DummyProfilePage from './pages/DummyProfilePage';
@@ -37,6 +38,7 @@ const Layout = () => {
 };
 
 import { theme } from './utils/chakraTheme';
+import InputDataPage from './pages/InputDataPage';
 
 const App = () => {
   return (
@@ -51,7 +53,15 @@ const App = () => {
                   path="/"
                   element={
                     <ProtectedRoute pageType="admin">
-                      <EventsPage />
+                      <HomePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/event"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <EventPage />
                     </ProtectedRoute>
                   }
                 />
@@ -76,6 +86,14 @@ const App = () => {
                   element={
                     <ProtectedRoute pageType="admin">
                       <CheckinPage />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/input-data/:eventId"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <InputDataPage />{' '}
                     </ProtectedRoute>
                   }
                 />
