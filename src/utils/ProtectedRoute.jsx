@@ -55,7 +55,7 @@ const ProtectedRoute = ({ children, pageType }) => {
         } else if (role === 'volunteer') {
           navigate('/playground');
           setLoading(true);
-        } else if (role === 'unloggedIn') {
+        } else {
           setLoading(false);
         }
       }

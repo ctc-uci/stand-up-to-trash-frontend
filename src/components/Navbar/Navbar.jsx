@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import UserContext from '../../utils/UserContext';
 import RoleContext from '../../utils/RoleContext';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import {
   ArchivedEventsIconBlue,
   ArchivedEventsIconGrey,
@@ -63,17 +63,18 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
 };
 
 const Navbar = () => {
-  const location = useLocation();
-  const { user } = useContext(UserContext);
+  // const location = useLocation();
+  const { user, updateUser } = useContext(UserContext);
   const { role } = useContext(RoleContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(`Here is the user info:`);
-    console.log(user);
-    console.log(`The user's role is: ${role}`);
-    console.log('Current route:', location.pathname);
-  });
+    updateUser();
+    // console.log(`Here is the user info:`);
+    // console.log(user);
+    // console.log(`The user's role is: ${role}`);
+    // console.log('Current route:', location.pathname);
+  }, [updateUser]);
 
   // Change the paths for each button since these might change
   const homePath = '/';
@@ -133,7 +134,7 @@ const Navbar = () => {
                   color: '#000000BF',
                 }}
               >
-                {role.charAt(0).toUpperCase() + role.slice(1)}
+                {role?.charAt(0).toUpperCase() + role?.slice(1)}
               </Text>
             </Box>
             {/* Add break between role and logo at the top and the nav buttons */}
@@ -268,8 +269,8 @@ const Navbar = () => {
               {/* User image */}
               <Box style={{ borderRadius: '50%' }}>
                 <img
-                  src={user.image_url}
-                  style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: "cover" }}
+                  src={user?.image_url}
+                  style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover' }}
                 />
               </Box>
               <Box
