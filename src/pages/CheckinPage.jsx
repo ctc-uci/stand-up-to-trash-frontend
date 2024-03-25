@@ -101,19 +101,24 @@ const CheckinPage = () => {
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
   */
-  const changeIsCheckedIn = async event_data_id => {
-    try {
-      // send new checkin status to backend, set new data by retrieving the new backend data
-
-      const response = await Backend.put(`/data/checkin/${event_data_id}`).then(async () => {
-        await setData();
-      });
-      return response;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
+    const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
+      try {
+        const event_data_id = volunteer.event_data_new_id;
+        console.log('Number of participants:', numberOfParticipants);
+    
+        const response = await Backend.put(`/data/checkin/${event_data_id}`, {
+          number_in_party: numberOfParticipants
+        });
+        console.log('Response from server:', response);
+    
+        await setData();  // Refresh data
+      } catch (err) {
+        console.error('Error in changeIsCheckedIn:', err);
+      }
+    };
+    
+    
+    
   const handleCheckinButtonClick = (volunteer) => {
     console.log(volunteer);
     setSelectedVolunteer(volunteer); // `volunteer` is the volunteer object from the list

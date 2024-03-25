@@ -35,7 +35,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     event_id,
     role,
     id,
-    unusual_items,
+    unusual_items = '',
     pounds,
     ounces,
   } = volunteer;
@@ -53,6 +53,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
     statusColor = '#9BCB6C';
   }
 
+  const stringvolunteerId = volunteer_id.toString();
   return (
     <Tr key={id} bg="#FFFFFF" fontWeight={'medium'}>
       <Td>
@@ -120,17 +121,17 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn }) => {
                 profileImage={image_url}
                 firstName={first_name}
                 lastName={last_name}
-                volunteerId={volunteer_id}
+                volunteerId={stringvolunteerId}
                 numberInParty={number_in_party}
                 eventId={event_id}
-                unusualItems={unusual_items}
+                unusualItems={unusual_items || ''}
                 pounds={pounds}
                 ounces={ounces}
               />
             </>
           ) : (
             <Tag
-              onClick={() => changeIsCheckedIn(event_data_new_id)}
+              onClick={() => changeIsCheckedIn(volunteer)} 
               cursor={'pointer'}
               textColor={'gray'}
               borderRadius={10}
