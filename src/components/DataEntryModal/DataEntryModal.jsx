@@ -1,33 +1,39 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
+import './DataEntryModal.css';
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalBody,
+  ModalFooter,
   ModalCloseButton,
   Button,
   FormControl,
   FormLabel,
   Input,
-  Center,
   Textarea,
   HStack,
   InputGroup,
   InputRightElement,
   Flex,
   Text,
-  Stack,
   useToast,
   useDisclosure,
+  Image,
+  Tag,
+  TagLabel,
 } from '@chakra-ui/react';
-import { FiPaperclip } from 'react-icons/fi';
-import { FaCamera } from 'react-icons/fa';
+import { FaCamera } from 'react-icons/fa6';
 import Backend from '../../utils/utils';
 import CameraModal from '../CameraModal';
 import ImageTag from '../ImageTag';
+import { IoMdPerson } from 'react-icons/io';
+import TrashCard from './TrashCard';
+import { MdAdd } from 'react-icons/md';
+
 import {
   postImage,
   getImageID,
@@ -46,9 +52,11 @@ const DataEntryModal = ({
   volunteerId,
   numberInParty,
   eventId,
-  unusualItems,
   ounces,
   pounds,
+  image_url,
+  notes,
+  trashBags,
 }) => {
   const volunteerData = {
     id: id,
@@ -56,53 +64,38 @@ const DataEntryModal = ({
     number_in_party: numberInParty,
     pounds: pounds,
     ounces: ounces,
-    unusual_items: unusualItems,
     event_id: eventId,
+    notes: notes,
     is_checked_in: true,
   };
-  // const [other, setOther] = useState('');
-  // let [unusualItemsArray, setUnusualItemsArray] = useState([]);
 
-  // COMMENTED OUT BECAUSE DESIGN FLAW
-
-  // parses unusual items input - single entries come as strings, multiple entries come as strings of the form {item1, item2... itemn}
-  // useEffect(() => {
-  //   formatUnusualItems();
-  // }, []);
-  // useEffect(() => {}), [unusualItems];
-  // const formatUnusualItems = () => {
-  //   if (unusualItems.length != 0 && unusualItems[0] === '{') {
-  //     let trimmed = unusualItems.replace(/{|}/g, '').trim();
-  //     let unusualItemsList = trimmed.split(',');
-  //     unusualItemsList = unusualItemsList.map(item => item.replace(/"/g, ''));
-  //     setUnusualItemsArray(unusualItemsList);
-  //   } else {
-  //     setUnusualItemsArray([unusualItems]);
-  //   }
-  // };
-
-  //   const { register, handleSubmit } = useForm(volunteerData);
   const toast = useToast();
 
-  const { handleSubmit, control, getValues } = useForm(volunteerData);
+  const { getValues } = useForm(volunteerData);
 
   const { isOpen: cameraIsOpen, onOpen: cameraOnOpen, onClose: cameraOnClose } = useDisclosure();
   const [tags, setTags] = useState([]);
   const deletedImageIds = useRef([]);
   const uploadImages = useRef([]);
+  const [currentTrash, setCurrentTrash] = useState(trashBags);
+  const [trashWeight, setTrashWeight] = useState(0);
+  const [inputIsOn, setInputIsOn] = useState(false);
+  const [currentNotes, setCurrentNotes] = useState(notes);
 
   const putDataEntry = async () => {
     try {
-      const { pounds, ounces, unusual_items } = getValues();
-
       const dataToSend = {
         ...volunteerData,
-        pounds: pounds === '' ? 0 : parseInt(pounds),
-        ounces: ounces === '' ? 0 : parseInt(ounces),
-        unusual_items: unusual_items === '' ? null : unusual_items,
+        pounds:
+          currentTrash.length > 0 ? currentTrash.reduce((total, pounds) => total + pounds, 0) : 0,
+        notes: currentNotes === '' ? null : currentNotes,
       };
-      console.log(dataToSend);
 
+      const trashBagsToSend = {
+        trashBags: currentTrash,
+      };
+
+      await Backend.put(`/trashbags/${id}`, trashBagsToSend);
       await Backend.put(`/data/${id}`, dataToSend);
       toast({
         title: 'Data saved.',
@@ -138,11 +131,11 @@ const DataEntryModal = ({
     await deleteListImageByID(id, imageID);
   };
 
-  const noReload = (data, event) => {
+  const noReload = event => {
     // console.log(`deletedImageIds`, deletedImageIds);
     // console.log(`uploadImages`, uploadImages);
     event.preventDefault();
-    putDataEntry(data);
+    putDataEntry();
     // tags.forEach((image) => uploadImage(image));
     if (deletedImageIds.current.length != 0) {
       deletedImageIds.current.forEach(imageId => deleteImage(imageId));
@@ -155,36 +148,12 @@ const DataEntryModal = ({
     }
   };
 
-  // COMMENTED OUT BECAUSE DESIGN FLAW
-
-  // const addUnusualItem = (isChecked, newItem) => {
-  //   if (isChecked && newItem.trim() !== '') {
-  //     setVolunteerData(prevData => ({
-  //       ...prevData,
-  //       unusual_items: [...new Set([...prevData.unusual_items, newItem, other])].filter(Boolean), //FILTERS EMPTY STRING
-  //     }));
-  //   } else {
-  //     setVolunteerData(prevData => ({
-  //       ...prevData,
-  //       unusual_items: [...new Set(prevData.unusual_items.filter(item => item !== newItem))].filter(
-  //         Boolean,
-  //       ), //FILTERS EMPTY STRING
-  //     }));
-  //   }
-  // };
-  // control.getFieldState('pounds').setValue(pounds);
-
   const updateTags = async id => await getImagesByEventID(id);
   useEffect(() => {
     updateTags(id).then(data => setTags(data));
-    // console.log('Tags', tags);
   }, [id]);
 
-  // useEffect(() => console.log('Tags', tags), [tags]);
-
   const TrashWeightInputs = ({ parentControl }) => {
-    // const [inputPounds, setInputPounds] = useState('');
-    // const [inputOunces, setInputOunces] = useState('');
     const [totalWeight, setTotalWeight] = useState(pounds + ounces / 16);
 
     const updateTotalWeightPounds = () => {
@@ -194,31 +163,6 @@ const DataEntryModal = ({
     const updateTotalWeightOunces = () => {
       setTotalWeight(prev => prev + parseInt(getValues().ounces) / 16);
     };
-
-    // const [lastPounds, setLastPounds] = useState(0);
-    // const [lastOunces, setLastOunces] = useState(0);
-
-    // const addPoundsToTotal = () => {
-    //   setTotalWeight(prevWeight => prevWeight + lastPounds);
-    // };
-
-    // const addOuncesToTotal = () => {
-    //   setTotalWeight(prevWeight => prevWeight + lastOunces / 16);
-    // };
-
-    // const updateLastPounds = e => {
-    //   const newPounds = parseFloat(e.target.value) || 0;
-    //   setInputPounds(e.target.value); // Keep the input as string
-    //   setLastPounds(newPounds); // Convert to number for calculations
-    // };
-
-    // const updateLastOunces = e => {
-    //   const newOunces = parseFloat(e.target.value) || 0;
-    //   setInputOunces(e.target.value); // Keep the input as string
-    //   setLastOunces(newOunces); // Convert to number for calculations
-    // };
-
-    // console.log('volunteerData', volunteerData);
 
     return (
       <>
@@ -290,118 +234,217 @@ const DataEntryModal = ({
     parentControl: PropTypes.object.isRequired,
   };
 
+  const handleTrashInput = () => {
+    setCurrentTrash(prev => [...prev, trashWeight]);
+    setInputIsOn(false);
+
+    // no reload contains all the methods to put the data into the database
+    if (currentTrash.length === 1000000000) {
+      noReload();
+    }
+  };
+
+  const currentTrashCards = currentTrash.map((pounds, index) => {
+    return (
+      <>
+        <TrashCard
+          pounds={pounds}
+          setCurrentTrash={setCurrentTrash}
+          currentTrash={currentTrash}
+          id={index}
+        />
+      </>
+    );
+  });
+
+  const addVolunteerBox = (
+    <Flex
+      border="3.5px dashed #BABABA"
+      backgroundColor={'#EFEFEF'}
+      h={'5em'}
+      justify={'center'}
+      align={'center'}
+      mt="1em"
+      cursor={'pointer'}
+      onClick={() => setInputIsOn(true)}
+    >
+      <MdAdd size={'1.3em'} color={'#717171'} />
+      <Text as="b" color={'#717171'}>
+        Add a volunteer
+      </Text>
+    </Flex>
+  );
+
+  const trashInput = (
+    <Flex gap={'1em'} mt={'1em'}>
+      <InputGroup>
+        <Input
+          placeholder="ex: 18"
+          w={'16em'}
+          border={'3px solid'}
+          borderColor={'#EFEFEF'}
+          borderRadius={'lg'}
+          paddingRight={'7em'}
+          boxSizing={'border-box'}
+          onChange={e => {
+            setTrashWeight(parseInt(e.target.value));
+          }}
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              handleTrashInput();
+            }
+          }}
+          type="number"
+        />
+        <InputRightElement w={'6em'} marginRight={'0.5em'} as={'b'}>
+          Pounds (lb)
+        </InputRightElement>
+      </InputGroup>
+      <Button backgroundColor={'#0075FF'} color={'white'} w={'6em'} onClick={handleTrashInput}>
+        Enter
+      </Button>
+    </Flex>
+  );
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent borderRadius="30px">
-          <ModalCloseButton />
-          <ModalHeader fontSize="24px" alignSelf={'center'}>
-            {firstName} {lastName}
-          </ModalHeader>
-          {/* postVolunteerData(10, 5, 5, 5, 10, 10) */}
-          <form onSubmit={handleSubmit(noReload)}>
-            <FormControl>
-              <ModalBody>
-                <FormLabel fontSize="18px" fontWeight="bold">
-                  Trash Weight
-                </FormLabel>
-                <TrashWeightInputs parentControl={control} />
-                <FormControl>
-                  <FormLabel fontSize="16px" fontWeight="bold" paddingTop={'20px'}>
-                    Other Information
-                  </FormLabel>
-                  <Controller
-                    name="unusual_items"
-                    control={control}
-                    defaultValue={''}
-                    render={({ field }) => (
-                      <Textarea fontSize="14px" placeholder="Unusual items, etc..." {...field} />
-                    )}
-                  />
-                </FormControl>
+        <ModalContent
+          borderRadius="30px"
+          // h={'80vh'}
+          maxH={'80vh'}
+          // overflow={'hidden'}
+          overflowY={'scroll'}
+        >
+          <ModalCloseButton borderRadius={100} backgroundColor={'#EFEFEF'} />
+          <ModalBody paddingLeft={'2em'} paddingRight={'2em'}>
+            <ModalHeader padding={0}>
+              <ModalHeader
+                fontSize={'16px'}
+                justify={'center'}
+                align={'center'}
+                fontWeight={'700'}
+                lineHeight={'29.05px'}
+                marginBottom={'-2em'}
+                color={'gray'}
+              >
+                Trash weights
+              </ModalHeader>
+              <ModalHeader
+                fontSize={'24px'}
+                justify={'center'}
+                align={'center'}
+                fontWeight={'700'}
+                lineHeight={'29.05px'}
+              >
+                Add trash weights
+              </ModalHeader>
+            </ModalHeader>
+            {/* postVolunteerData(10, 5, 5, 5, 10, 10) */}
+            <Flex
+              backgroundColor={'#EFEFEF'}
+              w={'100%'}
+              h={'5em'}
+              align={'center'}
+              paddingLeft={'1em'}
+              borderRadius={'10px'}
+              marginBottom={'1em'}
+            >
+              <Image src={image_url} w={'3em'} h={'3em'} />
+              <Flex flexDir={'column'} marginLeft={'1em'}>
+                <Text fontSize={'18px'} fontWeight={'600'} color={'#2D3748'} marginBottom={'0.1em'}>
+                  {firstName} {lastName}
+                </Text>
+                <Tag backgroundColor="white" size={'sm'} w={'8em'}>
+                  <IoMdPerson color="green" />
+                  <TagLabel marginLeft={'0.5em'} fontSize={'12px'}>
+                    Individual
+                  </TagLabel>
+                </Tag>
+              </Flex>
+            </Flex>
 
-                {/* <Center>
-                  {unusualItemsArray.length === 0 ? (
-                    <div>No Unusual Items</div>
-                  ) : (
-                    <Flex gap={3}>
-                      {unusualItemsArray.map((item, index) => {
-                        return (
-                          <Button
-                            {...register(item)}
-                            onChange={e => addUnusualItem(e.target.checked, e.target.name)}
-                            key={index}
-                            colorScheme="gray"
-                            size="md"
-                          >
-                            {item}
-                          </Button>
-                        );
-                      })}
-                    </Flex>
-                  )}
-                </Center> */}
+            <Flex
+              border="3px solid"
+              borderColor="#EFEFEF"
+              padding={'1em'}
+              borderRadius="lg"
+              flexDir={'column'}
+              marginBottom={'1em'}
+            >
+              <FormLabel fontSize="17px" fontWeight="bold">
+                Trash Weight
+              </FormLabel>
 
-                <FormLabel paddingTop="10px" fontSize="12px" fontWeight={'bold'}>
-                  Add Images
-                </FormLabel>
-                <Stack spacing={4} direction="row" align="center">
-                  <Button
-                    borderRadius="15px"
-                    leftIcon={<FiPaperclip />}
-                    fontWeight="400"
-                    color="#D9D9D9"
-                    textColor="black"
-                    fontSize="12px"
-                    width="82px"
-                    height="28px"
-                  >
-                    Upload
-                  </Button>
-                  <Button
-                    borderRadius="15px"
-                    leftIcon={<FaCamera />}
-                    fontWeight="400"
-                    color="#D9D9D9"
-                    textColor="black"
-                    fontSize="12px"
-                    width="112px"
-                    height="28px"
-                    onClick={cameraOnOpen}
-                  >
-                    Take a picture
-                  </Button>
-                </Stack>
-                <Flex g={3} wrap="wrap" mt={2}>
-                  {tags &&
-                    tags.map(item => (
-                      <ImageTag
-                        key={item.id}
-                        image={item}
-                        eventID={eventId}
-                        setTags={setTags}
-                        deletedImages={deletedImageIds}
-                        uploadImages={uploadImages}
-                      />
-                    ))}
-                </Flex>
-              </ModalBody>
-              <Center paddingBottom={7} paddingTop={5}>
-                <Button
-                  type="submit"
-                  color="black"
-                  bg="#95D497"
-                  width="110px"
-                  height="37px"
-                  borderRadius="15px"
-                  fontSize="13px"
+              {currentTrash.length < 1 ? trashInput : currentTrashCards}
+              {currentTrash.length > 0 ? (inputIsOn ? trashInput : addVolunteerBox) : null}
+            </Flex>
+
+            <Flex flexDir={'column'} marginBottom={'1em'}>
+              <Text as={'b'}>Add Notes</Text>
+              <Textarea
+                placeholder="We found a cactus under the sea!"
+                border="3px solid"
+                borderColor="#EFEFEF"
+                minH={'8em'}
+                color={'#717171'}
+                value={currentNotes}
+                onChange={e => setCurrentNotes(e.target.value)}
+              />
+            </Flex>
+
+            <Flex flexDir={'column'} gap={'0.5em'}>
+              <Text as="b" fontSize={19}>
+                Add images
+              </Text>
+              <Flex gap={'1em'}>
+                <Flex
+                  border="3.5px dashed #BABABA"
+                  w={'7.3em'}
+                  h={'7.3em'}
+                  backgroundColor={'#EFEFEF'}
+                  borderRadius={'lg'}
+                  justify={'center'}
+                  align={'center'}
+                  cursor={'pointer'}
+                  onClick={cameraOnOpen}
                 >
-                  Save Data
-                </Button>
-              </Center>
-            </FormControl>
-          </form>
+                  <FaCamera size={'1.5em'} color="#717171" />
+                </Flex>
+                {tags &&
+                  tags.map(item => (
+                    <ImageTag
+                      key={item.id}
+                      image={item}
+                      eventID={eventId}
+                      setTags={setTags}
+                      deletedImages={deletedImageIds}
+                      uploadImages={uploadImages}
+                    />
+                  ))}
+              </Flex>
+            </Flex>
+          </ModalBody>
+          <ModalFooter
+            borderTop={'2px solid #EFEFEF'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            position={'sticky'}
+            bottom={'0'}
+            backgroundColor={'white'}
+            zIndex={2}
+          >
+            <Button
+              w={'20em'}
+              backgroundColor={'#0075FF'}
+              color={'white'}
+              isDisabled={currentTrash.length < 1}
+              onClick={noReload}
+            >
+              Save Data
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
       <CameraModal
@@ -427,6 +470,9 @@ DataEntryModal.propTypes = {
   unusualItems: PropTypes.string.isRequired,
   ounces: PropTypes.number.isRequired,
   pounds: PropTypes.number.isRequired,
+  image_url: PropTypes.string.isRequired,
+  notes: PropTypes.string.isRequired,
+  trashBags: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default DataEntryModal;

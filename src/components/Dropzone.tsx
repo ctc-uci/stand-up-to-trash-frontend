@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useMemo } from 'react';
 import Backend from '../utils/utils';
 import { useDropzone } from 'react-dropzone';
-import { Flex, IconButton } from '@chakra-ui/react';
+import { Flex, IconButton, Text } from '@chakra-ui/react';
 import { AttachmentIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { FileUploadIcon } from './Icons/EventsModalIcons';
 import { useEffect } from 'react';
@@ -60,6 +60,7 @@ const Dropzone = ({ setData, data, setIsLoading }) => {
   return (
     <Flex className="container">
       <Flex
+        flexDir={'column'}
         className={dropzoneBox}
         {...getRootProps()}
         backgroundColor="#D9D9D9"
@@ -73,6 +74,7 @@ const Dropzone = ({ setData, data, setIsLoading }) => {
         <input {...getInputProps()} />
         <IconButton
           icon={<FileUploadIcon height={'37px'} width={'37px'} />}
+          bgColor={'gray'}
           height={'62px'}
           width={'62px'}
           borderRadius={100}
@@ -80,6 +82,7 @@ const Dropzone = ({ setData, data, setIsLoading }) => {
           aria-label={''}
           opacity={0.9}
         />
+        <Text>Drag and drop an image</Text>
       </Flex>
 
       {/* <aside>

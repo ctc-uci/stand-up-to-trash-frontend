@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import UserContext from '../../utils/UserContext';
 import RoleContext from '../../utils/RoleContext';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import {
   ArchivedEventsIconBlue,
   ArchivedEventsIconGrey,
@@ -48,7 +48,6 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       )}
       <Text
         style={{
-          fontFamily: 'Avenir',
           fontSize: location.pathname === path ? '18px' : '16px',
           fontWeight: '500',
           lineHeight: '25px',
@@ -63,21 +62,22 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
 };
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useContext(UserContext);
+  // const location = useLocation();
+  const { user, updateUser } = useContext(UserContext);
   const { role } = useContext(RoleContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(`Here is the user info:`);
-    console.log(user);
-    console.log(`The user's role is: ${role}`);
-    console.log('Current route:', location.pathname);
-  });
+    updateUser();
+    // console.log(`Here is the user info:`);
+    // console.log(user);
+    // console.log(`The user's role is: ${role}`);
+    // console.log('Current route:', location.pathname);
+  }, [updateUser]);
 
   // Change the paths for each button since these might change
   const homePath = '/';
-  const eventsPath = '/';
+  const eventsPath = '/event';
   const archivedEventsPath = '/archived-events';
   const volunteersPath = '/volunteers';
 
@@ -87,6 +87,12 @@ const Navbar = () => {
 
   // For logout in case it changes from /logoutv2
   const logoutPath = '/loginv2';
+
+  // For navigating to the user profile when you click on it
+  // at the bottom
+  // This will then conditionally route the user to the volunteer
+  // profile or to the admin profile
+  const profilePath = '/profile';
 
   return (
     <>
@@ -119,7 +125,6 @@ const Navbar = () => {
               <img src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '16px',
                   fontWeight: '800',
                   lineHeight: '22px',
@@ -127,7 +132,7 @@ const Navbar = () => {
                   color: '#000000BF',
                 }}
               >
-                {role.charAt(0).toUpperCase() + role.slice(1)}
+                {role?.charAt(0).toUpperCase() + role?.slice(1)}
               </Text>
             </Box>
             {/* Add break between role and logo at the top and the nav buttons */}
@@ -145,7 +150,7 @@ const Navbar = () => {
 
             {/* Events button */}
             <NavbarButton
-              buttonText={'Events'}
+              buttonText={'Current Events'}
               path={eventsPath}
               navigate={navigate}
               FocusedIcon={EventsIconBlue}
@@ -193,7 +198,6 @@ const Navbar = () => {
               <SupportIconGrey />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontWeight: '500',
                   fontSize: '16px',
                   lineHeight: '25px',
@@ -225,7 +229,6 @@ const Navbar = () => {
               <SettingsIconGrey />
               <Text
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '16px',
                   fontWeight: '500',
                   lineHeight: '25px',
@@ -252,12 +255,18 @@ const Navbar = () => {
                 backgroundColor: '#FFF',
                 border: '1px',
               }}
+              onClick={e => {
+                e.preventDefault();
+                navigate(profilePath);
+              }}
+              as="a"
+              href="#"
             >
               {/* User image */}
               <Box style={{ borderRadius: '50%' }}>
                 <img
                   src={user?.image_url}
-                  style={{ width: '45px', height: '45px', borderRadius: '50%' }}
+                  style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover' }}
                 />
               </Box>
               <Box
@@ -269,10 +278,9 @@ const Navbar = () => {
                 {/* User name */}
                 <Text
                   style={{
-                    fontFamily: 'Avenir',
                     fontWeight: '800',
                     color: '#000000',
-                    fontSize: '16px',
+                    fontSize: '14px',
                     lineHeight: '25px',
                     textAlign: 'left',
                     overflowY: 'auto',
@@ -284,7 +292,6 @@ const Navbar = () => {
 
                 <Tag
                   style={{
-                    fontFamily: 'Avenir',
                     fontSize: '12px',
                     fontWeight: '500',
                     lineHeight: '16px',
@@ -295,9 +302,11 @@ const Navbar = () => {
                     padding: '2px 6px 2px 6px',
                     borderRadius: '4px',
                     gap: '10px',
+                    textTransform: 'capitalize',
                   }}
                 >
-                  Primary Admin
+                  {role}
+                  {/* Primary Admin */}
                 </Tag>
               </Box>
               {/* Logout button */}

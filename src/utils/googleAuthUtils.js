@@ -9,8 +9,8 @@ const provider = new GoogleAuthProvider();
  * @param {hook} navigate useNavigate hook
  */
 export async function createGoogleUserInFirebase(redirect, navigate) {
-  await signInWithRedirect(auth, provider)
-  navigate(redirect)
+  await signInWithRedirect(auth, provider);
+  navigate(redirect);
 }
 
 /**
