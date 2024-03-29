@@ -22,6 +22,7 @@ import Register from './pages/Register';
 import SelectEvent from './pages/SelectEvent';
 import DummyVolunteerQR from './pages/DummyVolunteerQR';
 import DummyAdminQR from './pages/DummyAdminQR';
+import Volunteers from './pages/Volunteers';
 import Navbar from './components/Navbar/Navbar';
 import AdminPage from './pages/AdminPage';
 import { RoleProvider } from './utils/RoleContext';
@@ -108,6 +109,14 @@ const App = () => {
                 {/* --ADMIN PAGES */}
 
                 <Route path="/playground" element={<Playground />} />
+                <Route
+                  path="/volunteers"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <Volunteers />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
 
               {/* AUTHENTICATION PAGES-- */}

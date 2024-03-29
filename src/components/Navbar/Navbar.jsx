@@ -79,7 +79,7 @@ const Navbar = () => {
   const homePath = '/';
   const eventsPath = '/event';
   const archivedEventsPath = '/archived-events';
-  const volunteersPath = '/playground';
+  const volunteersPath = '/volunteers';
 
   // For the support and settings button at the bottom above the user
   const supportPath = '/playground';
