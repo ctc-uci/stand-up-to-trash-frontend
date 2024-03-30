@@ -17,6 +17,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import { useContext } from 'react';
+import RoleContext from '../utils/RoleContext';
 // import logo from '../Assets/Logo.png'; // Ensure you have this asset
 import S2T_Logo from '../Assets/S2T_Logo.png';
 import { createUserInFirebase } from '../utils/firebaseAuthUtils';
@@ -71,13 +73,14 @@ const CreateAccount = () => {
 
   const toast = useToast();
   const navigate = useNavigate();
+  const { setRole } = useContext(RoleContext);
 
   const onSubmit = async event => {
     const { firstName, lastName, email, password } = event;
     const role = 'volunteer';
 
     try {
-      const newUser = await createUserInFirebase(email, password, '/successful-login', navigate);
+      const newUser = await createUserInFirebase(email, password, '/playground', navigate); // Flag: Update to new volunteer page route
       // add role, firebase_uid
       await createVolunteerRow({
         firstName,
@@ -87,6 +90,8 @@ const CreateAccount = () => {
         password,
         firebase_uid: newUser.uid,
       });
+
+      await setRole(role);
 
       toast.closeAll();
 
@@ -118,10 +123,30 @@ const CreateAccount = () => {
     <SimpleGrid columns={2} spacing={0} height={'100vh'} style={{ fontFamily: 'Poppins' }}>
       <Box backgroundColor="#2D558A" position="relative">
         <AbsoluteCenter>
-        <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
-          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center'}}>
-            <h1 style={{ color: 'white', fontSize: '40px', fontWeight: '600', marginTop: '52px', textAlign: 'center' }}>Stand Up To Trash</h1>
-            <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '600', marginTop: '20px', textAlign: 'center' }}>Making a Difference</h1>
+          <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
+          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center' }}>
+            <h1
+              style={{
+                color: 'white',
+                fontSize: '40px',
+                fontWeight: '600',
+                marginTop: '52px',
+                textAlign: 'center',
+              }}
+            >
+              Stand Up To Trash
+            </h1>
+            <h1
+              style={{
+                color: 'white',
+                fontSize: '32px',
+                fontWeight: '600',
+                marginTop: '20px',
+                textAlign: 'center',
+              }}
+            >
+              Making a Difference
+            </h1>
           </Box>
         </AbsoluteCenter>
       </Box>

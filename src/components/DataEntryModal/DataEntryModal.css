@@ -1,0 +1,8 @@
+.chakra-modal__content::-webkit-scrollbar {
+  display: none;
+}
+
+.chakra-modal__content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

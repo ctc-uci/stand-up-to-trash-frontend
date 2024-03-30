@@ -1,11 +1,11 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import EventsPage from './pages/EventsPage';
+import EventPage from './pages/EventPage';
+import HomePage from './pages/HomePage';
 import ArchivedEvents from './pages/ArchivedEvents';
 import DummyProfiles from './pages/DummyProfiles';
-import DummyVolunteerProfilePage from './pages/DummyVolunteerProfilePage';
+import DummyProfilePage from './pages/DummyProfilePage';
 import DummySearchVolunteerEvents from './pages/DummySearchVolunteerEvents';
 import DummySuccessfulLogin from './pages/DummySuccessfulLogin';
 import DummyStatsPage from './pages/DummyStatsPage';
@@ -22,26 +22,24 @@ import Register from './pages/Register';
 import SelectEvent from './pages/SelectEvent';
 import DummyVolunteerQR from './pages/DummyVolunteerQR';
 import DummyAdminQR from './pages/DummyAdminQR';
+import Volunteers from './pages/Volunteers';
 import Navbar from './components/Navbar/Navbar';
 import AdminPage from './pages/AdminPage';
 import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
-const Layout = ({ volunteer = false }) => {
+const Layout = () => {
   return (
     <>
-      <Navbar isVolunteer={volunteer} />
+      <Navbar />
       <Outlet />
     </>
   );
 };
 
-Layout.propTypes = {
-  volunteer: PropTypes.bool,
-};
-
 import { theme } from './utils/chakraTheme';
+import InputDataPage from './pages/InputDataPage';
 
 const App = () => {
   return (
@@ -56,7 +54,15 @@ const App = () => {
                   path="/"
                   element={
                     <ProtectedRoute pageType="admin">
-                      <EventsPage />
+                      <HomePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/event"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <EventPage />
                     </ProtectedRoute>
                   }
                 />
@@ -85,6 +91,14 @@ const App = () => {
                   }
                 />
                 <Route
+                  path="/input-data/:eventId"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <InputDataPage />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/admin-qr/"
                   element={
                     <ProtectedRoute pageType="admin">
@@ -95,6 +109,14 @@ const App = () => {
                 {/* --ADMIN PAGES */}
 
                 <Route path="/playground" element={<Playground />} />
+                <Route
+                  path="/volunteers"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <Volunteers />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
 
               {/* AUTHENTICATION PAGES-- */}
@@ -175,8 +197,15 @@ const App = () => {
               />
 
               {/*--VOLUNTEER PAGES*/}
-              <Route element={<Layout volunteer={true} />}>
-                <Route path="/volunteer-profile" element={<DummyVolunteerProfilePage />} />
+              <Route element={<Layout />}>
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute pageType="settings">
+                      <DummyProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
 
               {/* PLAYGROUND */}

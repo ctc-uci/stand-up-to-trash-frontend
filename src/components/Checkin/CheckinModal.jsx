@@ -19,7 +19,7 @@ import {
   InputLeftElement,
 } from '@chakra-ui/react';
 import { FaUserAlt } from 'react-icons/fa'; // Icon for when there is no picture
-import GroupIcon from '../../Assets/newGroupIcon.svg';
+import GroupIcon from '../../Assets/groupIcon.svg';
 
 const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
   const [numberOfParticipants, setNumberOfParticipants] = useState('');

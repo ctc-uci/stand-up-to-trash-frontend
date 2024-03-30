@@ -23,23 +23,28 @@ import fbicon from '../Assets/fb.png';
 import { logInWithEmailAndPassWord } from '../utils/firebaseAuthUtils';
 import { createGoogleUserInFirebase } from '../utils/googleAuthUtils';
 import { createFacebookUserInFirebase } from '../utils/facebookAuthUtils';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+import RoleContext from '../utils/RoleContext';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getProfileByFirebaseUid, postProfile } from '../utils/profileUtils';
 
 const LoginV2 = () => {
-
   const auth = getAuth();
   const navigate = useNavigate();
+  const { setRole } = useContext(RoleContext);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
-      console.log("inside useeffect")
+      console.log('inside useeffect');
       try {
-        if (user && (user.providerData[0].providerId == "google.com" || user.providerData[0].providerId == "facebook.com")) {
+        if (
+          user &&
+          (user.providerData[0].providerId == 'google.com' ||
+            user.providerData[0].providerId == 'facebook.com')
+        ) {
           // Keep in mind that if the user logs in with the plain email/password, they'll have no displayName attribute
           console.log(user);
-          console.log("firebase inside")
+          console.log('firebase inside');
           const userName = user.displayName.split(' ');
           const firstName = userName[0];
           const lastName = userName.length > 1 ? userName[1] : '';
@@ -52,13 +57,14 @@ const LoginV2 = () => {
             firebase_uid: user.uid,
           };
 
+          await setRole('volunteer');
           console.log(profile);
           console.log('success');
 
           if (!(await getProfileByFirebaseUid(profile.firebase_uid))) {
             postProfile(profile);
           }
-          navigate('/successful-login');
+          navigate('/');
         } else {
           console.log('No one in');
         }
@@ -67,7 +73,7 @@ const LoginV2 = () => {
       }
     });
     return () => unsubscribe();
-  });
+  }, [auth, navigate, setRole]);
 
   return <LoginForm />;
 };
@@ -95,7 +101,7 @@ const LoginForm = () => {
 
   const handleLogin = async event => {
     try {
-      await logInWithEmailAndPassWord(event.email, event.password, '/successful-login', navigate);
+      await logInWithEmailAndPassWord(event.email, event.password, '/', navigate);
     } catch (err) {
       const errorCode = err.code;
       const firebaseErrorMsg = err.message;
@@ -131,11 +137,11 @@ const LoginForm = () => {
   };
 
   const handleGoogleLogin = () => {
-    createGoogleUserInFirebase('/successful-login', navigate);
+    createGoogleUserInFirebase('/loginv2', navigate);
   };
 
   const handleFacebookLogin = () => {
-    createFacebookUserInFirebase('/successful-login', navigate);
+    createFacebookUserInFirebase('/loginv2', navigate);
   };
 
   return (
@@ -143,9 +149,29 @@ const LoginForm = () => {
       <Box backgroundColor="#2D558A" position="relative">
         <AbsoluteCenter>
           <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
-          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center'}}>
-            <h1 style={{ color: 'white', fontSize: '40px', fontWeight: '600', marginTop: '52px', textAlign: 'center' }}>Stand Up To Trash</h1>
-            <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '600', marginTop: '20px', textAlign: 'center' }}>Making a Difference</h1>
+          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center' }}>
+            <h1
+              style={{
+                color: 'white',
+                fontSize: '40px',
+                fontWeight: '600',
+                marginTop: '52px',
+                textAlign: 'center',
+              }}
+            >
+              Stand Up To Trash
+            </h1>
+            <h1
+              style={{
+                color: 'white',
+                fontSize: '32px',
+                fontWeight: '600',
+                marginTop: '20px',
+                textAlign: 'center',
+              }}
+            >
+              Making a Difference
+            </h1>
           </Box>
         </AbsoluteCenter>
       </Box>
@@ -204,11 +230,15 @@ const LoginForm = () => {
               >
                 Login
               </Button>
-              <Text marginTop={2} fontWeight="bold" style={{
-                fontFamily: 'Avenir',
-                fontSize: '20px',
-                fontWeight: '500'
-              }}>
+              <Text
+                marginTop={2}
+                fontWeight="bold"
+                style={{
+                  fontFamily: 'Avenir',
+                  fontSize: '20px',
+                  fontWeight: '500',
+                }}
+              >
                 Other ways to login
               </Text>
               <Button
@@ -236,39 +266,47 @@ const LoginForm = () => {
                 Login with Facebook
               </Button>
 
-              <Box style={{
-                fontFamily: 'Avenir',
-                fontSize: '18px',
-                fontWeight: '800',
-                textAlign: 'center',
-              }}>
-                <Button style={{
-                  background: 'none',
-                  height: '24px',
+              <Box
+                style={{
                   fontFamily: 'Avenir',
                   fontSize: '18px',
                   fontWeight: '800',
                   textAlign: 'center',
-                  paddingTop: '15px'
-                  }}
-                  onClick={() => navigate('/forgotpasswordv2')}
-                >Forgot Password?</Button>
-                {/* <Text paddingTop='15px'>Forgot Password?</Text> */}
-                <Box display='flex' flexDir='row' paddingTop='20px'>
-                  <Text lineHeight='24px'>Don’t have an account?</Text>
-
-                  <Button style={{
+                }}
+              >
+                <Button
+                  style={{
                     background: 'none',
                     height: '24px',
-                    color: '#478CB6',
                     fontFamily: 'Avenir',
                     fontSize: '18px',
                     fontWeight: '800',
                     textAlign: 'center',
-                    marginLeft: '-5px',
+                    paddingTop: '15px',
                   }}
-                  onClick={() => navigate('/signupv2')}
-                  ><u>Sign up</u></Button>
+                  onClick={() => navigate('/forgotpasswordv2')}
+                >
+                  Forgot Password?
+                </Button>
+                {/* <Text paddingTop='15px'>Forgot Password?</Text> */}
+                <Box display="flex" flexDir="row" paddingTop="20px">
+                  <Text lineHeight="24px">Don’t have an account?</Text>
+
+                  <Button
+                    style={{
+                      background: 'none',
+                      height: '24px',
+                      color: '#478CB6',
+                      fontFamily: 'Avenir',
+                      fontSize: '18px',
+                      fontWeight: '800',
+                      textAlign: 'center',
+                      marginLeft: '-5px',
+                    }}
+                    onClick={() => navigate('/signupv2')}
+                  >
+                    <u>Sign up</u>
+                  </Button>
                 </Box>
               </Box>
             </VStack>

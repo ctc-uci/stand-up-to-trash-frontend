@@ -5,62 +5,43 @@ import { getEventById } from '../utils/eventsUtils';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
-import CheckinStatsDashboard from '../components/Checkin/CheckinStatsDashboard';
-import VolunteerTabNavigation from '../components/Checkin/VolunteerTabNavigation';
+import InputDataDashboard from '../components/InputData/InputDataDashboard';
 import CheckinInputPageToggle from '../components/Checkin/CheckinInputPageToggle';
-import { ArrowBackIcon } from '@chakra-ui/icons';
-import CheckinModal from '../components/Checkin/CheckinModal';
+import { useNavigate } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import {
+  Button,
   Container,
   Flex,
-  Button,
   Box,
   Input,
-  useDisclosure,
-  Spacer,
   InputGroup,
   InputLeftElement,
   Alert,
 } from '@chakra-ui/react';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
-import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
 
-const CheckinPage = () => {
+const InputDataPage = () => {
   const [joinedData, setJoinedData] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
   const [event, setEvent] = useState('');
   const [registered, setRegistered] = useState('');
   const [checkin, setCheckin] = useState('');
+  const [trashCollected, setTrashCollected] = useState('');
   const { eventId } = useParams();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
-  const [tabIndex, setTabIndex] = useState(0);
-
   const navigate = useNavigate();
-  const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
-  const [selectedVolunteer, setSelectedVolunteer] = useState(null);
 
+  console.log(volunteerResults);
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
-    if (tabIndex === 0) setDisplayedVolunteers(volunteerResults);
-    else if (tabIndex === 1)
-      setDisplayedVolunteers(
-        volunteerResults.filter(volunteer => volunteer.is_checked_in === true),
-      );
-    else if (tabIndex === 2)
-      setDisplayedVolunteers(
-        volunteerResults.filter(volunteer => volunteer.is_checked_in === false),
-      );
-    else if (tabIndex === 3)
-      setDisplayedVolunteers(volunteerResults.filter(v => v.role === 'guest'));
-  }, [tabIndex, volunteerResults]);
+    setDisplayedVolunteers(volunteerResults.filter(volunteer => volunteer.is_checked_in === true));
+  }, [volunteerResults]);
 
-  
   const setData = async () => {
     try {
       const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
@@ -69,6 +50,7 @@ const CheckinPage = () => {
       setEvent(event);
       getRegistered(event.id);
       getCheckin(event.id);
+      getTrashCollected(event.id);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -106,35 +88,18 @@ const CheckinPage = () => {
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
   */
-    const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
-      try {
-        const event_data_id = volunteer.event_data_new_id;
-        console.log('Number of participants:', numberOfParticipants);
-    
-        const response = await Backend.put(`/data/checkin/${event_data_id}`, {
-          number_in_party: numberOfParticipants
-        });
-        console.log('Response from server:', response);
-    
-        await setData();  // Refresh data
-      } catch (err) {
-        console.error('Error in changeIsCheckedIn:', err);
-      }
-    };
-    
-    
-    
-  const handleCheckinButtonClick = (volunteer) => {
-    console.log(volunteer);
-    setSelectedVolunteer(volunteer); // `volunteer` is the volunteer object from the list
-    setIsCheckinModalOpen(true);
-};
-
-  
-  const closeCheckinModal = () => {
-    setIsCheckinModalOpen(false);
+  const changeIsCheckedIn = async event_data_id => {
+    try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
+      const response = await Backend.put(`/data/checkin/${event_data_id}`).then(async () => {
+        await setData();
+      });
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
   };
-  
+
   //gets the number of ppl that registered and checked in
   const getRegistered = async event_id => {
     try {
@@ -154,6 +119,18 @@ const CheckinPage = () => {
       // send new checkin status to backend, set new data by retrieving the new backend data
       const response = await Backend.get(`/stats/checkin/${event_id}`).then(data => {
         setCheckin(parseInt(data.data));
+      });
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getTrashCollected = async event_id => {
+    try {
+      // send new checkin status to backend, set new data by retrieving the new backend data
+      const response = await Backend.get(`/stats/event/${event_id}`).then(data => {
+        setTrashCollected(parseInt(data.data));
       });
       return response;
     } catch (err) {
@@ -181,12 +158,17 @@ const CheckinPage = () => {
           <ArrowBackIcon />
           Back to events
         </Button>
-        <CheckinInputPageToggle eventId={eventId} isCheckinPage={true} />
+        <CheckinInputPageToggle eventId={eventId} isCheckinPage={false} />
       </Flex>
-      <CheckinStatsDashboard event={event} registered={registered} checkin={checkin} />
+      <InputDataDashboard
+        event={event}
+        registered={registered}
+        checkin={checkin}
+        trashCollected={trashCollected}
+      />
       <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
         {/* SEARCH BAR---- */}
-        <Flex gap={3} mt={5}>
+        <Flex gap={3} mt={5} mb={5}>
           <InputGroup mt={10}>
             <InputLeftElement pointerEvents="none" top={'6px'} left={'5px'}>
               <GreyCustomSearchIcon w={'24px'} h={'18px'} />
@@ -205,31 +187,12 @@ const CheckinPage = () => {
             />
           </InputGroup>
         </Flex>
-        {/* ----SEARCH BAR*/}
-
-        <Flex mb={5} marginTop="4vh">
-          <VolunteerTabNavigation volunteerResults={volunteerResults} setTabIndex={setTabIndex} />
-
-          <Spacer />
-          <Button
-            style={{
-              borderRadius: '100px',
-            }}
-            marginLeft="1vw"
-            onClick={onOpen}
-            color={'#FFFFFF'}
-            background="#1873FB"
-          >
-            + Add Guest
-          </Button>
-        </Flex>
-        <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
 
         {displayedVolunteers.length != 0 ? (
           <VolunteerEventsTable
             volunteers={displayedVolunteers}
-            changeIsCheckedIn={handleCheckinButtonClick}
-            isCheckinPage={true}
+            changeIsCheckedIn={changeIsCheckedIn}
+            isCheckinPage={false}
           />
         ) : (
           <Alert status="warning" borderRadius={'8'} w="50%" mx="auto">
@@ -239,15 +202,8 @@ const CheckinPage = () => {
           </Alert>
         )}
       </Container>
-      <CheckinModal
-        isOpen={isCheckinModalOpen}
-        onClose={closeCheckinModal}
-        volunteer={selectedVolunteer}
-        onCheckInConfirm={changeIsCheckedIn}
-      />
-
     </Flex>
   );
 };
 
-export default CheckinPage;
+export default InputDataPage;
