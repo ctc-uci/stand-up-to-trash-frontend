@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { fetchJoinedEventsById } from '../utils/fuseUtils';
 import { getEventById } from '../utils/eventsUtils';
 import Backend from '../utils/utils';
@@ -8,8 +8,9 @@ import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
 import CheckinStatsDashboard from '../components/Checkin/CheckinStatsDashboard';
 import VolunteerTabNavigation from '../components/Checkin/VolunteerTabNavigation';
 import CheckinInputPageToggle from '../components/Checkin/CheckinInputPageToggle';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, HamburgerIcon } from '@chakra-ui/icons';
 import CheckinModal from '../components/Checkin/CheckinModal';
+import NavbarContext from '../utils/NavbarContext';
 
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -40,6 +41,7 @@ const CheckinPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
+  const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
   const navigate = useNavigate();
   const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
@@ -60,7 +62,6 @@ const CheckinPage = () => {
       setDisplayedVolunteers(volunteerResults.filter(v => v.role === 'guest'));
   }, [tabIndex, volunteerResults]);
 
-  
   const setData = async () => {
     try {
       const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
@@ -106,35 +107,32 @@ const CheckinPage = () => {
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
   */
-    const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
-      try {
-        const event_data_id = volunteer.event_data_new_id;
-        console.log('Number of participants:', numberOfParticipants);
-    
-        const response = await Backend.put(`/data/checkin/${event_data_id}`, {
-          number_in_party: numberOfParticipants
-        });
-        console.log('Response from server:', response);
-    
-        await setData();  // Refresh data
-      } catch (err) {
-        console.error('Error in changeIsCheckedIn:', err);
-      }
-    };
-    
-    
-    
-  const handleCheckinButtonClick = (volunteer) => {
+  const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
+    try {
+      const event_data_id = volunteer.event_data_new_id;
+      console.log('Number of participants:', numberOfParticipants);
+
+      const response = await Backend.put(`/data/checkin/${event_data_id}`, {
+        number_in_party: numberOfParticipants,
+      });
+      console.log('Response from server:', response);
+
+      await setData(); // Refresh data
+    } catch (err) {
+      console.error('Error in changeIsCheckedIn:', err);
+    }
+  };
+
+  const handleCheckinButtonClick = volunteer => {
     console.log(volunteer);
     setSelectedVolunteer(volunteer); // `volunteer` is the volunteer object from the list
     setIsCheckinModalOpen(true);
-};
+  };
 
-  
   const closeCheckinModal = () => {
     setIsCheckinModalOpen(false);
   };
-  
+
   //gets the number of ppl that registered and checked in
   const getRegistered = async event_id => {
     try {
@@ -164,23 +162,31 @@ const CheckinPage = () => {
   return (
     <Flex
       flexDir={'column'}
-      justifyContent={'center'}
       alignItems={'center'}
       bg="#E6EAEF"
       minH="100vh"
-      ml="15rem"
+      ml={{ base: '0', xl: '15rem' }}
     >
       <Flex minW="95%" justifyContent={'space-between'} mt={10} mb={5}>
-        <Button
-          gap={2}
-          alignItems={'center'}
-          onClick={() => {
-            navigate('/');
-          }}
-        >
-          <ArrowBackIcon />
-          Back to events
-        </Button>
+        <Flex alignItems={'center'} gap={3}>
+          <HamburgerIcon
+            color={'#717171'}
+            boxSize={16}
+            display={{ base: 'flex', xl: 'none' }}
+            onClick={onNavbarDrawerOpen}
+          />
+          <Button
+            gap={2}
+            alignItems={'center'}
+            onClick={() => {
+              navigate('/');
+            }}
+          >
+            <ArrowBackIcon />
+            Back to events
+          </Button>
+        </Flex>
+
         <CheckinInputPageToggle eventId={eventId} isCheckinPage={true} />
       </Flex>
       <CheckinStatsDashboard event={event} registered={registered} checkin={checkin} />
@@ -212,15 +218,17 @@ const CheckinPage = () => {
 
           <Spacer />
           <Button
-            style={{
-              borderRadius: '100px',
-            }}
             marginLeft="1vw"
             onClick={onOpen}
-            color={'#FFFFFF'}
-            background="#1873FB"
+            cursor={'pointer'}
+            borderRadius={'lg'}
+            py={6}
+            color={'#0075FF'}
+            bg={'white'}
+            border={'2px solid #0075FF'}
+            fontSize={'xl'}
           >
-            + Add Guest
+            Add guest
           </Button>
         </Flex>
         <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
@@ -245,7 +253,6 @@ const CheckinPage = () => {
         volunteer={selectedVolunteer}
         onCheckInConfirm={changeIsCheckedIn}
       />
-
     </Flex>
   );
 };

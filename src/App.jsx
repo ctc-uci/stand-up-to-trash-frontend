@@ -24,17 +24,34 @@ import DummyVolunteerQR from './pages/DummyVolunteerQR';
 import DummyAdminQR from './pages/DummyAdminQR';
 import Volunteers from './pages/Volunteers';
 import Navbar from './components/Navbar/Navbar';
+import NavbarDrawer from './components/Navbar/NavbarDrawer';
 import AdminPage from './pages/AdminPage';
 import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
+import NavbarContext from './utils/NavbarContext';
+
+import { useDisclosure, useBreakpointValue, Box } from '@chakra-ui/react';
 
 const Layout = () => {
+  const isLargerThan1200px = useBreakpointValue({ base: false, xl: true });
+  const {
+    isOpen: isNavbarDrawerOpen,
+    onOpen: onNavbarDrawerOpen,
+    onClose: onNavbarDrawerClose,
+  } = useDisclosure();
+
   return (
-    <>
-      <Navbar />
-      <Outlet />
-    </>
+    <NavbarContext.Provider value={{ isNavbarDrawerOpen, onNavbarDrawerOpen, onNavbarDrawerClose }}>
+      {isLargerThan1200px ? (
+        <Navbar />
+      ) : (
+        <NavbarDrawer isOpen={isNavbarDrawerOpen} onClose={onNavbarDrawerClose} />
+      )}
+      <Box as="main" ml={isLargerThan1200px ? 'var(--size-of-navbar)' : 0}>
+        <Outlet />
+      </Box>
+    </NavbarContext.Provider>
   );
 };
 

@@ -1,25 +1,26 @@
 /* eslint-disable react/prop-types */
-import 'react';
-import DataEntryModal from '../DataEntryModal/DataEntryModal';
 import {
-  Text,
   Box,
-  Flex,
-  Spacer,
   Center,
+  Flex,
   Image,
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   TableContainer,
   Tag,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
 } from '@chakra-ui/react';
+import 'react';
 import { FaUser } from 'react-icons/fa';
-import { MdInput, MdCheck } from 'react-icons/md';
+import { MdCheck, MdInput } from 'react-icons/md';
+import checked_in from '../../Assets/status_icon/checked_in.svg';
+import registered from '../../Assets/status_icon/registered.svg';
+import DataEntryModal from '../DataEntryModal/DataEntryModal';
 
 const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,16 +44,12 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
   } = volunteer;
 
   let status = 'Registered';
-  let statusColor = 'white';
   if (role === 'guest') {
     status = 'Guest';
-    statusColor = '#FF84B0';
   } else if (is_checked_in === false) {
     status = 'Registered';
-    statusColor = '#9188F2';
   } else if (is_checked_in === true) {
     status = 'Checked-in';
-    statusColor = '#9BCB6C';
   }
 
   // const stringvolunteerId = volunteer_id.toString();
@@ -82,41 +79,38 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
       </Td>
       <Td>
         <Flex>
-          <Flex borderRadius={'full'} padding={1} border={'solid 1px rgba(0, 0, 0, 0.3)'}>
-            <Box
-              ml={1}
-              borderRadius={'100%'}
-              backgroundColor={statusColor}
-              padding={2}
-              w="14px"
-              h="14px"
-              my="auto"
-            ></Box>
-            <Text fontSize="13" ml={2} mr={2}>
-              {status}
-            </Text>
+          <Flex
+            borderRadius={'lg'}
+            p={2}
+            border={'2px solid rgba(0, 0, 0, 0.10)'}
+            alignItems={'center'}
+            gap={1}
+            justifyContent={'center'}
+          >
+            <Image src={status === 'Checked-in' ? checked_in : registered} />
+            <Text fontSize="md">{status}</Text>
           </Flex>
         </Flex>
       </Td>
       <Td>{number_in_party}</Td>
       <Td>
-        <Flex gap={2}>
+        <Flex gap={2} justifyContent={'center'} alignItems={'center'}>
           {is_checked_in ? (
             <>
               {!isCheckinPage ? (
                 <>
                   <Tag
-                    cursor={'pointer'}
                     onClick={onOpen}
+                    cursor={'pointer'}
                     borderRadius={10}
-                    padding={2}
-                    color={'#7B7C7D'}
-                    bg={'#E2E4E5'}
+                    p={2}
+                    color={'#0075FF'}
+                    bg={'white'}
+                    border={'2px solid #0075FF'}
+                    gap={1}
                   >
-                    <Box mr="2">
-                      <MdInput />
-                    </Box>
-                    Input Data
+                    <MdInput />
+                    <Text fontSize={'md'}> Input Data</Text>
                   </Tag>
                   <DataEntryModal
                     isOpen={isOpen}
@@ -135,7 +129,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
                   />
                 </>
               ) : (
-                <Text color={'#717171'} fontWeight={400}>
+                <Text color={'#717171'} fontSize={'lg'} fontWeight={'semibold'}>
                   Checked-in
                 </Text>
               )}
@@ -144,19 +138,17 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
             <Tag
               onClick={() => changeIsCheckedIn(volunteer)}
               cursor={'pointer'}
-              textColor={'gray'}
               borderRadius={10}
-              padding={2}
-              color={'#7B7C7D'}
-              bg={'#E2E4E5'}
+              p={2}
+              color={'#0075FF'}
+              bg={'white'}
+              border={'2px solid #0075FF'}
+              gap={1}
             >
-              <Box mr="2">
-                <MdCheck />
-              </Box>
-              Check-In
+              <MdCheck />
+              <Text fontSize={'md'}>Check-In</Text>
             </Tag>
           )}
-          <Spacer marginRight={5} />
         </Flex>
       </Td>
     </Tr>
@@ -182,7 +174,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) 
       >
         <Thead bg="#F7FAFC">
           <Tr fontWeight={'medium'}>
-            <Th w="50%">
+            <Th>
               <Flex gap={2}>
                 <FaUser size="1rem" />
                 <Text color="#2D3748" fontWeight="650">
@@ -190,7 +182,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) 
                 </Text>
               </Flex>
             </Th>
-            <Th w="30%">
+            <Th>
               <Flex gap={2}>
                 <Text color="#2D3748" fontWeight="650">
                   Type
@@ -211,6 +203,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) 
                 </Text>
               </Flex>
             </Th>
+            <Th w={{ base: '25%', xl: '' }}></Th>
           </Tr>
         </Thead>
         <Tbody>

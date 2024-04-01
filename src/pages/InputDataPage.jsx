@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { fetchJoinedEventsById } from '../utils/fuseUtils';
 import { getEventById } from '../utils/eventsUtils';
 import Backend from '../utils/utils';
@@ -8,6 +8,8 @@ import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
 import InputDataDashboard from '../components/InputData/InputDataDashboard';
 import CheckinInputPageToggle from '../components/Checkin/CheckinInputPageToggle';
 import { useNavigate } from 'react-router-dom';
+import NavbarContext from '../utils/NavbarContext';
+import { HamburgerIcon } from '@chakra-ui/icons';
 
 import { useParams } from 'react-router-dom';
 import {
@@ -34,6 +36,7 @@ const InputDataPage = () => {
   const [trashCollected, setTrashCollected] = useState('');
   const { eventId } = useParams();
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
+  const { onNavbarDrawerOpen } = useContext(NavbarContext);
   const navigate = useNavigate();
 
   console.log(volunteerResults);
@@ -141,23 +144,30 @@ const InputDataPage = () => {
   return (
     <Flex
       flexDir={'column'}
-      justifyContent={'center'}
       alignItems={'center'}
       bg="#E6EAEF"
       minH="100vh"
-      ml="15rem"
+      ml={{ base: '0', xl: '15rem' }}
     >
       <Flex minW="95%" justifyContent={'space-between'} mt={10} mb={5}>
-        <Button
-          gap={2}
-          alignItems={'center'}
-          onClick={() => {
-            navigate('/');
-          }}
-        >
-          <ArrowBackIcon />
-          Back to events
-        </Button>
+        <Flex alignItems={'center'} gap={3}>
+          <HamburgerIcon
+            color={'#717171'}
+            boxSize={16}
+            display={{ base: 'flex', xl: 'none' }}
+            onClick={onNavbarDrawerOpen}
+          />
+          <Button
+            gap={2}
+            alignItems={'center'}
+            onClick={() => {
+              navigate('/');
+            }}
+          >
+            <ArrowBackIcon />
+            Back to events
+          </Button>
+        </Flex>
         <CheckinInputPageToggle eventId={eventId} isCheckinPage={false} />
       </Flex>
       <InputDataDashboard

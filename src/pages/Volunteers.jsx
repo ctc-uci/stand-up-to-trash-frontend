@@ -11,12 +11,13 @@ import {
 } from '@chakra-ui/react';
 import { IoDocumentText } from 'react-icons/io5';
 import VolunteersTable from '../components/VolunteersTable';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Backend from '../utils/utils';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import Fuse from 'fuse.js';
 import { TrophyIcon } from '../components/Icons/TrophyIcon';
+import NavbarContext from '../utils/NavbarContext';
 
 const Volunteers = () => {
   const [registered, setRegistered] = useState('');
@@ -25,6 +26,7 @@ const Volunteers = () => {
   const [volunteers, setVolunteers] = useState([]);
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
   const [input, setInput] = useState('');
+  const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
   const setData = async () => {
     try {
@@ -73,9 +75,15 @@ const Volunteers = () => {
   return (
     <>
       {/* Registered + Checked-In */}
-      <Flex direction="column" ml="15rem" bg="#E8EDF3" p="10" gap="10">
+      <Flex direction="column" ml={{ base: '0', xl: '15rem' }} bg="#E8EDF3" p="10" gap="10">
         <Box bg="#F8F8F8" p="1rem" borderRadius="md">
-          <Flex minW="95%" bg={'#F8F8F8'} borderRadius="lg">
+          <Flex minW="95%" bg={'#F8F8F8'} borderRadius="lg" flexDir={'column'}>
+            <HamburgerIcon
+              color={'#717171'}
+              boxSize={16}
+              display={{ base: 'flex', xl: 'none' }}
+              onClick={onNavbarDrawerOpen}
+            />
             <Flex
               direction={{ base: 'column', md: 'row' }}
               bg="F8F8F8"

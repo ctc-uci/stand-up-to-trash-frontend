@@ -9,8 +9,10 @@ import {
   Select,
   Flex,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { SearchIcon, CalendarIcon } from '@chakra-ui/icons';
+import { useEffect, useState, useContext } from 'react';
+import { SearchIcon, CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
+
+import NavbarContext from '../utils/NavbarContext';
 
 import EventCard from '../components/Events/EventCard';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
@@ -18,6 +20,7 @@ import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 
 const Events = () => {
+  const { onNavbarDrawerOpen } = useContext(NavbarContext);
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
 
@@ -145,7 +148,14 @@ const Events = () => {
   }, [name, location, date, fuse]);
 
   return (
-    <Flex flexDir={'column'} alignItems={'center'} bg="#E6EAEF" minH="100vh" ml="15rem" py={10}>
+    <Flex
+      flexDir={'column'}
+      alignItems={'center'}
+      bg="#E6EAEF"
+      minH="100vh"
+      ml={{ base: '0', xl: '15rem' }}
+      py={10}
+    >
       <Flex
         bgColor="#F8F8F8"
         width="95%"
@@ -158,7 +168,15 @@ const Events = () => {
         borderRadius={'xl'}
         flexDir={'column'}
       >
-        <Heading>All Upcoming Events</Heading>
+        <Flex align={'center'} gap={3}>
+          <HamburgerIcon
+            color={'#717171'}
+            boxSize={10}
+            display={{ base: 'flex', xl: 'none' }}
+            onClick={onNavbarDrawerOpen}
+          />
+          <Heading>All Upcoming Events</Heading>
+        </Flex>
         <Box display="flex">
           <Flex w={'100%'}>
             <Flex flexDir={'column'} gap={3} w={'100%'}>

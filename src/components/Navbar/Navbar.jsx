@@ -1,10 +1,11 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, Flex } from '@chakra-ui/react';
 import adminLogo from '../../Assets/navbar/stand_up_to_trash_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import UserContext from '../../utils/UserContext';
 import RoleContext from '../../utils/RoleContext';
-// import { useLocation } from 'react-router-dom';
+import NavbarContext from '../../utils/NavbarContext';
+
 import {
   ArchivedEventsIconBlue,
   ArchivedEventsIconGrey,
@@ -18,6 +19,8 @@ import {
   SettingsIconGrey,
   LogOutIcon,
 } from '../Icons/NavbarIcons';
+import { CloseIcon } from '@chakra-ui/icons';
+
 import { Tag } from '@chakra-ui/react';
 import { logout } from '../../utils/firebaseAuthUtils';
 
@@ -62,17 +65,14 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
 };
 
 const Navbar = () => {
-  // const location = useLocation();
   const { user, updateUser } = useContext(UserContext);
   const { role } = useContext(RoleContext);
+  const { onNavbarDrawerClose } = useContext(NavbarContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     updateUser();
-    // console.log(`Here is the user info:`);
-    // console.log(user);
-    // console.log(`The user's role is: ${role}`);
-    // console.log('Current route:', location.pathname);
   }, [updateUser]);
 
   // Change the paths for each button since these might change
@@ -97,7 +97,7 @@ const Navbar = () => {
   return (
     <>
       {/* Box for entire navbar */}
-      <Box position="fixed" top="0" w={'15rem'} float="left">
+      <Box position="fixed" top="0" w={{ base: 'full', xl: '15rem' }} float="left">
         {/* Box for entire nabar with coloring */}
         <Box
           h="100vh"
@@ -112,29 +112,40 @@ const Navbar = () => {
           {/* Box containing everything above "support" */}
           <Box display="flex" flexDir="column" width={'full'} as="a" href="/">
             {/* Box containing the logo and role title at the top */}
-            <Box
-              height="40px"
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              gap="10px"
-              paddingTop="35px"
-              paddingBottom="35px"
-              paddingLeft="20px"
-            >
-              <img src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
-              <Text
-                style={{
-                  fontSize: '16px',
-                  fontWeight: '800',
-                  lineHeight: '22px',
-                  textAlign: 'left',
-                  color: '#000000BF',
-                }}
+            <Flex align={'center'} justifyContent={'space-between'} pr={7}>
+              <Box
+                height="40px"
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                gap="10px"
+                paddingTop="35px"
+                paddingBottom="35px"
+                paddingLeft="20px"
               >
-                {role?.charAt(0).toUpperCase() + role?.slice(1)}
-              </Text>
-            </Box>
+                <img src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
+                <Text
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: '800',
+                    lineHeight: '22px',
+                    textAlign: 'left',
+                    color: '#000000BF',
+                  }}
+                >
+                  {role?.charAt(0).toUpperCase() + role?.slice(1)}
+                </Text>
+              </Box>
+              <CloseIcon
+                boxSize={6}
+                color={'gray'}
+                onClick={e => {
+                  e.preventDefault();
+                  onNavbarDrawerClose();
+                }}
+                display={{ base: 'flex', xl: 'none' }}
+              />
+            </Flex>
             {/* Add break between role and logo at the top and the nav buttons */}
             <hr style={{ color: 'black', marginLeft: '14px', marginRight: '14px' }} />
             <br></br>
