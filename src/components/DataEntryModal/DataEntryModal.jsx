@@ -25,6 +25,7 @@ import {
   Image,
   Tag,
   TagLabel,
+  Grid,
 } from '@chakra-ui/react';
 import { FaCamera } from 'react-icons/fa6';
 import Backend from '../../utils/utils';
@@ -398,7 +399,7 @@ const DataEntryModal = ({
               <Text as="b" fontSize={19}>
                 Add images
               </Text>
-              <Flex gap={'1em'}>
+              <Grid templateColumns="repeat(3, 1fr)" gap={3}>
                 <Flex
                   border="3.5px dashed #BABABA"
                   w={'7.3em'}
@@ -423,7 +424,7 @@ const DataEntryModal = ({
                       uploadImages={uploadImages}
                     />
                   ))}
-              </Flex>
+              </Grid>
             </Flex>
           </ModalBody>
           <ModalFooter
