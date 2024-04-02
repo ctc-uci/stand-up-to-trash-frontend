@@ -94,6 +94,7 @@ const DataEntryModal = ({
       const trashBagsToSend = {
         trashBags: currentTrash,
       };
+      console.log(trashBagsToSend);
 
       await Backend.put(`/trashbags/${id}`, trashBagsToSend);
       await Backend.put(`/data/${id}`, dataToSend);
@@ -107,6 +108,7 @@ const DataEntryModal = ({
       });
 
       onClose();
+      window.location.reload();
     } catch (error) {
       console.error(error.message);
       toast({

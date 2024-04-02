@@ -66,6 +66,7 @@ const AddEventsModal = () => {
         isClosable: true,
       });
       onClose();
+      window.location.reload();
     } catch (err) {
       console.log(err);
       toast({
@@ -282,6 +283,7 @@ const AddEventsModal = () => {
               borderRadius={'5px'}
               marginLeft={'10px'}
               paddingX={5}
+              color={'white'}
               onClick={handleSubmit}
               isDisabled={isSubmittable}
             >

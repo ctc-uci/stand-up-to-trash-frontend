@@ -132,9 +132,9 @@ const EventCard = ({
 
         <Box px="27px" py="20px">
           <HappeningInChip date={dateObj} />
-          {name.length > 20 ? (
+          {name.length > 14 ? (
             <Text fontWeight="700" fontSize="25px">
-              {name.substring(0, 20)}...
+              {name.substring(0, 14)}...
             </Text>
           ) : (
             <Text fontWeight="700" fontSize="25px">

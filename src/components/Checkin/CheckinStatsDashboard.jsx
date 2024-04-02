@@ -23,10 +23,10 @@ const CheckinStatsDashboard = ({ event, registered, checkin }) => {
   };
 
   const getTimeString = () => {
-    if (!event || !event.time) {
+    if (!event || !event.start_time) {
       return '';
     }
-    const time = event.time.substring(0, 5);
+    const time = event.start_time.substring(0, 5);
     const value = parseInt(time.substring(0, 2));
     if (value > 12) {
       return (value - 12).toString() + time.substring(2);
