@@ -125,7 +125,7 @@ export const DummyProfilePage = () => {
   };
 
   return (
-    <Box bg={'#E8EDF3'} minHeight="100vh" paddingLeft={'15rem'}>
+    <Box bg={'#E8EDF3'} minHeight="100vh" ml={{ base: '0', xl: '15rem' }}>
       {/* Profile Card and Account Information */}
       <Grid templateColumns="repeat(3, 1fr)" gap={4}>
         <GridItem colSpan={1}>
