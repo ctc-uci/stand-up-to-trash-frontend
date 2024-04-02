@@ -13,25 +13,21 @@ import {
   Heading,
   Flex,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { SearchIcon } from '@chakra-ui/icons';
+import { useEffect, useState, useContext } from 'react';
+import { SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 import PropTypes from 'prop-types';
-// import AllData from '../components/Events/AllData';
 import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
 import EventCard from '../components/Events/EventCard';
-// import DataCard from '../components/Events/DataCard';
-// import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
 import ImpactSummary from '../components/Events/ImpactSummary';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
+import NavbarContext from '../utils/NavbarContext';
 
 const Home = () => {
   const toast = useToast();
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
-  // const [eventId, setEventId] = useState('');
-  // const [showEvents, setShowEvents] = useState(true);
   const [showSelect, setShowSelect] = useState(false);
   const [isSelectButton, setIsSelectButton] = useState(true);
   const [isCreateButton, setIsCreateButton] = useState(true); // toggle between create event button and deselect button
@@ -40,6 +36,8 @@ const Home = () => {
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [fuse, setFuse] = useState();
+
+  const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
   const getEvents = async () => {
     try {
@@ -52,22 +50,12 @@ const Home = () => {
     }
   };
 
-  // const getEventId = async () => {
-  //   try {
-  //     const eventIdData = await Backend.get(`/events/${eventId}`);
-  //     console.log(eventIdData);
-  //     setSelectEvent(eventIdData.data);
-  //     console.log(events);
-  //   } catch (err) {
-  //     console.log(`Error getting event ${eventId}: `, err.message);
-  //   }
-  // };
-
   const {
     isOpen: isArchiveEventModalOpen,
     onOpen: onArchiveEventModalOpen,
     onClose: onArchiveEventModalClose,
   } = useDisclosure();
+
   const confirmArchive = async () => {
     for (const id of selectedEvents) {
       try {
@@ -91,13 +79,6 @@ const Home = () => {
     if (selectedEvents.length === 0) handleGoBackButton();
     else onArchiveEventModalOpen();
   };
-
-  // const showEvent = () => {
-  //   setShowEvents(true);
-  //   if (eventId) {
-  //     getEventId();
-  //   }
-  // };
 
   const handleCheckboxChange = id => {
     const newCheckedItems = [...selectedEvents];
@@ -222,10 +203,22 @@ const Home = () => {
       alignItems={'center'}
       bg="#E6EAEF"
       minH="100vh"
-      ml="15rem"
+      ml={{ base: '0', xl: '15rem' }}
       py={10}
     >
-      <ImpactSummary />
+      <Flex w={'95%'} flexDir={'column'}>
+        <Flex alignItems={'center'} mb="8" gap={4}>
+          <HamburgerIcon
+            color={'#717171'}
+            boxSize={16}
+            display={{ base: 'flex', xl: 'none' }}
+            onClick={onNavbarDrawerOpen}
+          />
+          <Heading>Impact Summary</Heading>
+        </Flex>
+
+        <ImpactSummary />
+      </Flex>
 
       <Flex justifyContent={'center'} flexDir={'column'} w={'95%'}>
         <Box justifyContent="space-between">

@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  Button,
-  Text,
-  Image,
   Box,
+  Button,
   Center,
+  Flex,
   FormControl,
   FormLabel,
+  Image,
   Input,
-  Flex,
   InputGroup,
   InputLeftElement,
+  Modal,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
 } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { FaUserAlt } from 'react-icons/fa'; // Icon for when there is no picture
 import GroupIcon from '../../Assets/groupIcon.svg';
 
@@ -27,7 +27,6 @@ const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
 
   const handleInput = e => {
     setNumberOfParticipants(e.target.value);
-    console.log(e.target.value);
     const numericRegex = /^[0-9]*$/;
     const isNumeric = numericRegex.test(e.target.value);
     setSubmittable(isNumeric && e.target.value.trim() !== '');
@@ -35,17 +34,12 @@ const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
 
   const handleCheckIn = async () => {
     if (volunteer && typeof volunteer === 'object' && volunteer.id) {
-      console.log('Volunteer:', volunteer);
       await onCheckInConfirm(volunteer, numberOfParticipants); // Pass the entire volunteer object
       onClose();
     } else {
       console.error('Invalid volunteer object:', volunteer);
     }
   };
-
-  useEffect(() => {
-    console.log(volunteer);
-  });
 
   return (
     <div>
@@ -133,7 +127,7 @@ CheckinModal.propTypes = {
     last_name: PropTypes.string,
     email: PropTypes.string,
     image_url: PropTypes.string,
-    number_in_party: PropTypes.number
+    number_in_party: PropTypes.number,
   }),
 };
 
