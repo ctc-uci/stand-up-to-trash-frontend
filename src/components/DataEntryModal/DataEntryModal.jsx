@@ -106,7 +106,6 @@ const DataEntryModal = ({
         duration: 9000,
         isClosable: true,
       });
-
       onClose();
     } catch (error) {
       console.error(error.message);
@@ -132,20 +131,26 @@ const DataEntryModal = ({
     await deleteListImageByID(id, imageID);
   };
 
-  const noReload = event => {
+  const noReload = async event => {
     // console.log(`deletedImageIds`, deletedImageIds);
     // console.log(`uploadImages`, uploadImages);
     event.preventDefault();
-    putDataEntry();
+
     // tags.forEach((image) => uploadImage(image));
-    if (deletedImageIds.current.length != 0) {
-      deletedImageIds.current.forEach(imageId => deleteImage(imageId));
-      deletedImageIds.current = [];
-    }
-    if (uploadImages.current.length != 0) {
-      // Problem is that this is currently always set to whatever is there so it will always get added
-      uploadImages.current.forEach(image => uploadImage(image));
-      uploadImages.current = [];
+    try {
+      await putDataEntry(); // Assuming putDataEntry() returns a promise
+      if (deletedImageIds.current.length !== 0) {
+        await Promise.all(deletedImageIds.current.map(imageId => deleteImage(imageId)));
+        deletedImageIds.current = [];
+      }
+      if (uploadImages.current.length !== 0) {
+        await Promise.all(uploadImages.current.map(image => uploadImage(image)));
+        uploadImages.current = [];
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error('An error occurred:', error);
+      // Handle error if necessary
     }
   };
 

@@ -30,7 +30,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
     image_url,
     is_checked_in,
     number_in_party,
-    event_data_new_id,
+    event_data_id,
     volunteer_id,
     event_id,
     role,
@@ -121,7 +121,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
                   <DataEntryModal
                     isOpen={isOpen}
                     onClose={onClose}
-                    id={event_data_new_id}
+                    id={event_data_id}
                     profileImage={image_url}
                     firstName={first_name}
                     lastName={last_name}

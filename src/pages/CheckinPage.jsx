@@ -60,7 +60,6 @@ const CheckinPage = () => {
       setDisplayedVolunteers(volunteerResults.filter(v => v.role === 'guest'));
   }, [tabIndex, volunteerResults]);
 
-  
   const setData = async () => {
     try {
       const data = await fetchJoinedEventsById(eventId); // joined data for table rendering
@@ -106,35 +105,32 @@ const CheckinPage = () => {
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
   */
-    const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
-      try {
-        const event_data_id = volunteer.event_data_new_id;
-        console.log('Number of participants:', numberOfParticipants);
-    
-        const response = await Backend.put(`/data/checkin/${event_data_id}`, {
-          number_in_party: numberOfParticipants
-        });
-        console.log('Response from server:', response);
-    
-        await setData();  // Refresh data
-      } catch (err) {
-        console.error('Error in changeIsCheckedIn:', err);
-      }
-    };
-    
-    
-    
-  const handleCheckinButtonClick = (volunteer) => {
+  const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
+    try {
+      const event_data_id = volunteer.event_data_id;
+      console.log('Number of participants:', numberOfParticipants);
+
+      const response = await Backend.put(`/data/checkin/${event_data_id}`, {
+        number_in_party: numberOfParticipants,
+      });
+      console.log('Response from server:', response);
+
+      await setData(); // Refresh data
+    } catch (err) {
+      console.error('Error in changeIsCheckedIn:', err);
+    }
+  };
+
+  const handleCheckinButtonClick = volunteer => {
     console.log(volunteer);
     setSelectedVolunteer(volunteer); // `volunteer` is the volunteer object from the list
     setIsCheckinModalOpen(true);
-};
+  };
 
-  
   const closeCheckinModal = () => {
     setIsCheckinModalOpen(false);
   };
-  
+
   //gets the number of ppl that registered and checked in
   const getRegistered = async event_id => {
     try {
@@ -245,7 +241,6 @@ const CheckinPage = () => {
         volunteer={selectedVolunteer}
         onCheckInConfirm={changeIsCheckedIn}
       />
-
     </Flex>
   );
 };
