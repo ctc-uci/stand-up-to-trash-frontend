@@ -159,7 +159,7 @@ const Navbar = () => {
               UnfocusedIcon={HomeIconGrey}
             />
 
-            {/* Events button */}
+            {/* Current Events button */}
             <NavbarButton
               buttonText={'Current Events'}
               path={eventsPath}
@@ -168,23 +168,28 @@ const Navbar = () => {
               UnfocusedIcon={EventsIconGrey}
             />
 
-            {/* Archived events button */}
-            <NavbarButton
-              buttonText={'Archived Events'}
-              path={archivedEventsPath}
-              navigate={navigate}
-              FocusedIcon={ArchivedEventsIconBlue}
-              UnfocusedIcon={ArchivedEventsIconGrey}
-            />
+            {/* Conditional rendering based on the role */}
+            {role === 'admin' && (
+              <>
+                {/* Archived Events button */}
+                <NavbarButton
+                  buttonText={'Archived Events'}
+                  path={archivedEventsPath}
+                  navigate={navigate}
+                  FocusedIcon={ArchivedEventsIconBlue}
+                  UnfocusedIcon={ArchivedEventsIconGrey}
+                />
 
-            {/* Volunteers button */}
-            <NavbarButton
-              buttonText={'Volunteers'}
-              path={volunteersPath}
-              navigate={navigate}
-              FocusedIcon={VolunteersIconBlue}
-              UnfocusedIcon={VolunteersIconGrey}
-            />
+                {/* Volunteers button */}
+                <NavbarButton
+                  buttonText={'Volunteers'}
+                  path={volunteersPath}
+                  navigate={navigate}
+                  FocusedIcon={VolunteersIconBlue}
+                  UnfocusedIcon={VolunteersIconGrey}
+                />
+              </>
+            )}
           </Box>
           {/* Bottom of navbar, support and below */}
           <Box>
