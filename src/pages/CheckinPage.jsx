@@ -11,6 +11,7 @@ import CheckinInputPageToggle from '../components/Checkin/CheckinInputPageToggle
 import { ArrowBackIcon, HamburgerIcon } from '@chakra-ui/icons';
 import CheckinModal from '../components/Checkin/CheckinModal';
 import NavbarContext from '../utils/NavbarContext';
+import Scanner from '../components/Scanner';
 
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +30,7 @@ import {
 
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
+import { FaCamera } from 'react-icons/fa';
 
 const CheckinPage = () => {
   const [joinedData, setJoinedData] = useState([]);
@@ -45,6 +47,7 @@ const CheckinPage = () => {
 
   const navigate = useNavigate();
   const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
+  const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
 
   useEffect(() => {
@@ -103,6 +106,12 @@ const CheckinPage = () => {
       setVolunteerResults(reduceResult);
     }
   }, [input, joinedData, eventId]);
+
+  const handleScannerSuccess = async (volunteer, eventId) => {
+    setSelectedVolunteer(volunteer);
+    setIsCheckinModalOpen(true);
+    await Backend.patch(`/data/checkin/${eventId}/${volunteer.id}`); // update backend with user
+  };
 
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
@@ -246,7 +255,31 @@ const CheckinPage = () => {
             </Box>
           </Alert>
         )}
+
+        <Button
+          position={'fixed'}
+          bottom={'3%'}
+          right={'3%'}
+          bg={'#0075FF'}
+          color={'white'}
+          display={'flex'}
+          gap={'.5rem'}
+          fontSize={'xl'}
+          _hover={{ bgColor: '#0075FFCC' }}
+          onClick={() => setIsScannerModalOpen(true)}
+          py={6}
+        >
+          <FaCamera /> Scan
+        </Button>
       </Container>
+
+      <Scanner
+        event_id={eventId}
+        isOpen={isScannerModalOpen}
+        onClose={setIsScannerModalOpen}
+        handleSuccess={handleScannerSuccess}
+      />
+
       <CheckinModal
         isOpen={isCheckinModalOpen}
         onClose={closeCheckinModal}

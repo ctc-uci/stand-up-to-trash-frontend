@@ -22,8 +22,8 @@ import { FaUserAlt } from 'react-icons/fa'; // Icon for when there is no picture
 import GroupIcon from '../../Assets/groupIcon.svg';
 
 const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
-  const [numberOfParticipants, setNumberOfParticipants] = useState('');
-  const [submittable, setSubmittable] = useState(false);
+  const [numberOfParticipants, setNumberOfParticipants] = useState(1);
+  const [submittable, setSubmittable] = useState(true);
 
   const handleInput = e => {
     setNumberOfParticipants(e.target.value);
@@ -76,7 +76,9 @@ const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
                 >
                   <FaUserAlt color="#49B164" />
                   <Text fontSize="xs" ml={1} fontWeight="bold">
-                    {volunteer.number_in_party === 1 ? 'Individual' : 'Group'}
+                    {!volunteer.number_in_party || volunteer.number_in_party == 1
+                      ? 'Individual'
+                      : 'Group'}
                   </Text>
                 </Flex>
               </Flex>
