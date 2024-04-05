@@ -26,6 +26,7 @@ import Volunteers from './pages/Volunteers';
 import Navbar from './components/Navbar/Navbar';
 import NavbarDrawer from './components/Navbar/NavbarDrawer';
 import AdminPage from './pages/AdminPage';
+import VolunteerEventPage from './pages/VolunteerEventPage';
 import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
@@ -220,6 +221,14 @@ const App = () => {
                   element={
                     <ProtectedRoute pageType="settings">
                       <DummyProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/volunteer-event"
+                  element={
+                    <ProtectedRoute pageType="volunteer">
+                      <VolunteerEventPage />
                     </ProtectedRoute>
                   }
                 />
