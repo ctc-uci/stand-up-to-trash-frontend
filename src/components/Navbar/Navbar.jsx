@@ -78,7 +78,7 @@ const Navbar = () => {
   // Change the paths for each button since these might change
   const homePath = '/';
   const eventsPath = '/event';
-  const archivedEventsPath = '/archived-events';
+  const archivedEventsPath = '/past-events';
   const volunteersPath = '/volunteers';
 
   // For the support and settings button at the bottom above the user
@@ -170,7 +170,7 @@ const Navbar = () => {
 
             {/* Archived events button */}
             <NavbarButton
-              buttonText={'Archived Events'}
+              buttonText={'Past Events'}
               path={archivedEventsPath}
               navigate={navigate}
               FocusedIcon={ArchivedEventsIconBlue}
