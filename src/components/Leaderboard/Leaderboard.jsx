@@ -37,9 +37,9 @@ const LeaderboardCard = ({ event_id }) => {
           alignContent="center"
           justifyContent="center"
           gap={{ base: '2px', xl: '5px' }}
-          h="100%"
+          h="80%"
         >
-          <Text fontSize={{ base: '22px', xl: '3xl' }} fontWeight="sm" textAlign="center">
+          <Text fontSize={{ base: '22px', xl: '22px' }} fontWeight="sm" textAlign="center">
             Leaderboard
           </Text>
 
@@ -52,7 +52,7 @@ const LeaderboardCard = ({ event_id }) => {
             py={2}
             alignItems={'center'}
             gap={3}
-            fontSize={{ base: '16px', xl: 'lg' }}
+            fontSize={{ base: '16px', xl: '16px' }}
           >
             <Flex gap={2} alignItems={'center'} w={'9rem'}>
               <Flex justifyContent={'center'} w={{ base: '12px', xl: '30px' }}>
@@ -60,7 +60,7 @@ const LeaderboardCard = ({ event_id }) => {
               </Flex>
               <Text
                 fontWeight="bold"
-                fontSize={{ base: '16px', xl: 'lg' }}
+                fontSize={{ base: '16px', xl: '16px' }}
                 w="auto"
                 textAlign="center"
               >
@@ -81,7 +81,7 @@ const LeaderboardCard = ({ event_id }) => {
             py={2}
             alignItems={'center'}
             gap={3}
-            fontSize={{ base: '16px', xl: 'lg' }}
+            fontSize={{ base: '16px', xl: '16px' }}
           >
             <Flex gap={{ base: '2', xl: '4' }} alignItems={'center'} w={'9rem'}>
               <Flex justifyContent={'center'} w={{ base: '14px', xl: '30px' }}>
@@ -89,12 +89,12 @@ const LeaderboardCard = ({ event_id }) => {
                   2
                 </Text>
               </Flex>
-              <Text fontWeight="medium" fontSize={{ base: '16px', xl: 'lg' }} textAlign="center">
+              <Text fontWeight="medium" fontSize={{ base: '16px', xl: '16px' }} textAlign="center">
                 {LeaderboardArray[1] && LeaderboardArray[1].volunteer_first_name}{' '}
                 {LeaderboardArray[1] && LeaderboardArray[1].volunteer_last_name}
               </Text>
             </Flex>
-            <Text fontWeight="medium" fontSize={{ base: '14px', xl: 'lg' }}>
+            <Text fontWeight="medium" fontSize={{ base: '14px', xl: '16px' }}>
               {LeaderboardArray[1] && truncate(LeaderboardArray[1].total_weight, 2)} lb
             </Text>
           </Flex>
@@ -114,7 +114,7 @@ const LeaderboardCard = ({ event_id }) => {
                   3
                 </Text>
               </Flex>
-              <Text fontWeight="semibold" fontSize={{ base: '16px', xl: 'lg' }} textAlign="center">
+              <Text fontWeight="semibold" fontSize={{ base: '16px', xl: '16px' }} textAlign="center">
                 {LeaderboardArray[2] && LeaderboardArray[2].volunteer_first_name}{' '}
                 {LeaderboardArray[2] && LeaderboardArray[2].volunteer_last_name}
               </Text>
@@ -140,11 +140,11 @@ const LeaderboardCard = ({ event_id }) => {
   return (
     <>
       <Card
-        borderRadius="medium"
+        borderRadius="lg"
         p={3}
         shadow={'none'}
-        w={{ base: '288px', xl: '25%' }}
-        h={{ base: '212px', xl: '100%' }}
+        w={{ base: '288px', xl: '100%' }}
+        h={{ base: '212px', xl: '80%' }}
       >
         <ActualLeaderboard LeaderboardArray={topThree} />
       </Card>

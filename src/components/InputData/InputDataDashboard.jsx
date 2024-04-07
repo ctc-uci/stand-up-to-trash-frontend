@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { Text, Flex, Button, Box } from '@chakra-ui/react';
+import { Text, Flex, Button, Box, Center } from '@chakra-ui/react';
 
 import { FaLocationDot, FaNewspaper, FaScaleBalanced } from 'react-icons/fa6';
 import { IoMdPeople } from 'react-icons/io';
@@ -40,15 +40,16 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
       minW="95%"
       bg={'#F8F8F8'}
       borderRadius="lg"
+      alignItems="center"
       p={10}
       w={{ base: '0em', xl: '15em' }}
       h={{ base: '30em' }}
     >
-      <Flex direction={{ base: 'column', xl: 'row' }} w={'full'}>
-        <Flex flexDir={'column'} w={{ base: '100%', xl: '35%' }}>
+      <Flex direction={{ base: 'column', xl: 'row' }} w={'full'} alignItems="center" h={'full'}>
+        <Flex flexDir={'column'} w={{ base: '100%', xl: '25%' }}>
           <Box>{event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}</Box>
           <Text
-            fontSize={{ base: '36px', xl: '40' }}
+            fontSize={{ base: '36px', xl: '30px' }}
             fontWeight="bold"
             color={'rgba(0, 0, 0, 0.75)'}
             w={{ base: '50%' }}
@@ -107,7 +108,8 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
         <Flex
           gap={{ base: '3', xl: '10' }}
           w={{ base: '100%', xl: '75%' }}
-          h={{ base: '10vh', xl: '80vh' }}
+          h={{ base: '10vh', xl: '100%' }}
+          marginTop="30px"
           justifyContent={'center'}
         >
           <Flex
@@ -115,8 +117,8 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             p={30}
             borderRadius="md"
             align="center"
-            w={{ base: '238px', xl: '25%' }}
-            h={{ base: '211px', xl: '23%' }}
+            w={{ base: '238px', xl: '70%' }}
+            h={{ base: '211px', xl: '80%' }}
             flexDir={'column'}
             gap={3}
             justifyContent={'center'}
@@ -125,11 +127,11 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
               <IoMdPeople w={{ base: '42.782px', xl: '42.782px' }} color="white" />
             </Flex>
-            <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '20' }}>
+            <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '22px' }}>
               Checked-In
             </Text>
             <Text
-              fontSize={{ base: '40px', xl: '50' }}
+              fontSize={{ base: '40px', xl: '50px' }}
               fontWeight={'bold'}
               color={'rgba(0, 0, 0, 0.75)'}
             >
@@ -141,8 +143,8 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             p={30}
             borderRadius="md"
             align="center"
-            w={{ base: '238px', xl: '25%' }}
-            h={{ base: '211px', xl: '23%' }}
+            w={{ base: '238px', xl: '70%' }}
+            h={{ base: '211px', xl: '80%' }}
             flexDir={'column'}
             gap={3}
             justifyContent={'center'}
@@ -151,16 +153,23 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             <Flex background={'#FF84B0'} p={2.5} borderRadius={'lg'}>
               <FaScaleBalanced w={{ base: '42.782px', xl: '42.782px' }} color="white" />
             </Flex>
-            <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '20' }}>
-              Trash Collected
-            </Text>
+            <Flex>
+            <Center>
+              <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '22px' }}>
+                Trash Collected
+              </Text>
+            </Center>
+            </Flex>
+
+            <Center>
             <Text
-              fontSize={{ base: '40px', xl: '50' }}
-              fontWeight={'bold'}
-              color={'rgba(0, 0, 0, 0.75)'}
-            >
-              {trashCollected} lb
-            </Text>
+                fontSize={{ base: '40px', xl: '50px' }}
+                fontWeight={'bold'}
+                color={'rgba(0, 0, 0, 0.75)'}
+              >
+                {trashCollected} lb
+              </Text>
+            </Center>
           </Flex>
 
           <Leaderboard event_id={event.id} />
