@@ -50,7 +50,7 @@ import {
 
     const getEvents = async () => {
       try {
-        const eventsData = await Backend.get('/events');
+        const eventsData = await Backend.get('/events/pastEvents');
         setEvents(eventsData.data);
         const options = { keys: ['name', 'date', 'location'], includeScore: true };
         setFuse(new Fuse(eventsData.data, options));
