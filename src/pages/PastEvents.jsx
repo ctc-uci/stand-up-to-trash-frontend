@@ -86,7 +86,7 @@ import {
       } else result = events;
       console.log(result);
       setDisplayEvents(result);
-    }, [name, location, date, fuse]);
+    }, [name, location, date, fuse, events]);
   
     return (
       <Flex
