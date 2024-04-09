@@ -92,7 +92,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isVie
           </Flex>
         </Flex>
       </Td>
-      <Td>{number_in_party}</Td>
+      <Td display={{ base: 'none', xl: 'block' }}>{number_in_party}</Td>
       <Td>
         <Flex gap={2} justifyContent={'center'} alignItems={'center'}>
           {is_checked_in ? (
@@ -213,7 +213,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) 
                 </Text>
               </Flex>
             </Th>
-            <Th>
+            <Th display={{ base: 'none', xl: 'block' }}>
               <Flex gap={2}>
                 <Text color="#2D3748" fontWeight="650">
                   Party Size
