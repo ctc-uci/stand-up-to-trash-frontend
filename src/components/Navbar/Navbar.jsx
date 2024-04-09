@@ -173,7 +173,7 @@ const Navbar = () => {
               <>
                 {/* Archived Events button */}
                 <NavbarButton
-                  buttonText={'Archived Events'}
+                  buttonText={'Past Events'}
                   path={archivedEventsPath}
                   navigate={navigate}
                   FocusedIcon={ArchivedEventsIconBlue}
