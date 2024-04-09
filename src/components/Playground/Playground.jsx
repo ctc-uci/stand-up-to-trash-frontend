@@ -13,6 +13,7 @@ import RegisterGuestModal from '../RegisterGuestModal/RegisterGuestModal.jsx';
 
 // import Scanner from '../Scanner.jsx';
 import VolunteerCardModal from './VolunteerCardModal.tsx';
+import VolunteerSideView from '../VolunteerSideView.jsx';
 
 const auth = getAuth();
 
@@ -62,6 +63,7 @@ const Playground = () => {
       <Button onClick={onOpen}>RegisterGuestModal</Button>
       <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={'4'} />
       <CameraModal isOpen={isOpen} onClose={onClose} eventID={3} />
+      <VolunteerSideView eventId={88}/>
     </Flex>
   );
 };

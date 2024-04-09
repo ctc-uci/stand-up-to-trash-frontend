@@ -76,7 +76,7 @@ const EditFirstNameModal = ({ isOpen, onClose, user }) => {
         <Modal isOpen={isOpen} onClose={handleCancel}>
             <ModalOverlay />
             <ModalContent
-            minW={'25%'}
+            minW={{base: '80%', md: '25%', lg: '25%'}}
             maxW={'30%'}
             borderRadius={'12px'}
             boxShadow={'0px 6.9760003089904785px 6.9760003089904785px 0px #00000080'}
@@ -246,7 +246,7 @@ const EditLastNameModal = ({ isOpen, onClose, user }) => {
         <Modal isOpen={isOpen} onClose={handleCancel}>
             <ModalOverlay />
             <ModalContent
-            minW={'25%'}
+            minW={{base: '80%', md: '25%', lg: '25%'}}
             maxW={'30%'}
             borderRadius={'12px'}
             boxShadow={'0px 6.9760003089904785px 6.9760003089904785px 0px #00000080'}
@@ -416,7 +416,7 @@ const EditEmailModal = ({ isOpen, onClose, user }) => {
         <Modal isOpen={isOpen} onClose={handleCancel}>
             <ModalOverlay />
             <ModalContent
-            minW={'25%'}
+            minW={{base: '80%', md: '25%', lg: '25%'}}
             maxW={'30%'}
             borderRadius={'12px'}
             boxShadow={'0px 6.9760003089904785px 6.9760003089904785px 0px #00000080'}
@@ -756,7 +756,7 @@ const EditPhoneNumberModal = ({ isOpen, onClose, user }) => {
         <Modal isOpen={isOpen} onClose={handleCancel}>
             <ModalOverlay />
             <ModalContent
-            minW={'25%'}
+            minW={{base: '80%', md: '25%', lg: '25%'}}
             maxW={'30%'}
             borderRadius={'12px'}
             boxShadow={'0px 6.9760003089904785px 6.9760003089904785px 0px #00000080'}
