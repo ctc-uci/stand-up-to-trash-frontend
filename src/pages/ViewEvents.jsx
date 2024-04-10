@@ -176,16 +176,18 @@ const ViewEvents = () => {
         </Flex>
         {/* Didn't want to paste in the whole CheckinStatsDashboard to add one line of code */}
         <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport></AiOutlineExport>} size="md">
-            Export {event.name} Data
-          </Button>
+          Export {event.name} Data
+        </Button>
       </Flex>
 
       <CheckinStatsDashboard event={event} registered={registered} checkin={checkin} />
-      
+
       <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
-      <Heading w={'full'} ml='3' mt='7'>Past Events</Heading>
+        <Heading w={'full'} ml="3" mt="7">
+          Past Events
+        </Heading>
         {/* SEARCH BAR---- */}
-        <Flex gap={3} mb='10'>
+        <Flex gap={3} mb="10">
           <InputGroup mt={10}>
             <InputLeftElement pointerEvents="none" top={'6px'} left={'5px'}>
               <GreyCustomSearchIcon w={'24px'} h={'18px'} />
@@ -205,7 +207,6 @@ const ViewEvents = () => {
           </InputGroup>
         </Flex>
         {/* ----SEARCH BAR*/}
-
 
         <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
 

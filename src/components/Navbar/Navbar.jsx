@@ -167,7 +167,7 @@ const Navbar = () => {
               FocusedIcon={EventsIconBlue}
               UnfocusedIcon={EventsIconGrey}
             />
-                
+
             {/* Conditional rendering based on the role */}
             {role === 'admin' && (
               <>
@@ -179,7 +179,6 @@ const Navbar = () => {
                   FocusedIcon={ArchivedEventsIconBlue}
                   UnfocusedIcon={ArchivedEventsIconGrey}
                 />
-
 
                 {/* Volunteers button */}
                 <NavbarButton

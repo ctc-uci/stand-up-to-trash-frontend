@@ -27,11 +27,7 @@ const VolunteerEventPage = () => {
           borderRadius={'xl'}
           flexDir={'column'}
         >
-          <HamburgerIcon
-            color={'#717171'}
-            boxSize={16}
-            onClick={onNavbarDrawerOpen}
-          />
+          <HamburgerIcon color={'#717171'} boxSize={16} onClick={onNavbarDrawerOpen} />
         </Flex>
       </Flex>
 

@@ -1,9 +1,4 @@
-import {
-  Heading,
-  Flex,
-  Grid,
-  GridItem,
-} from '@chakra-ui/react';
+import { Heading, Flex, Grid, GridItem } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import Backend from '../../utils/utils';
 import EventCard from './EventCard';

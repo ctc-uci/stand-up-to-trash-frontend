@@ -154,15 +154,15 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
               <FaScaleBalanced w={{ base: '42.782px', xl: '42.782px' }} color="white" />
             </Flex>
             <Flex>
-            <Center>
-              <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '22px' }}>
-                Trash Collected
-              </Text>
-            </Center>
+              <Center>
+                <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '22px' }}>
+                  Trash Collected
+                </Text>
+              </Center>
             </Flex>
 
             <Center>
-            <Text
+              <Text
                 fontSize={{ base: '40px', xl: '50px' }}
                 fontWeight={'bold'}
                 color={'rgba(0, 0, 0, 0.75)'}
