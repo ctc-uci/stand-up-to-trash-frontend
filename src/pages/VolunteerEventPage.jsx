@@ -1,43 +1,85 @@
 import EventFilteredGrid from '../components/Events/EventFilteredGrid';
 import FeaturedDashboard from '../components/Events/FeaturedDashboard';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { Box, Flex } from '@chakra-ui/react';
-import { useContext } from 'react';
+import {Box, Flex, IconButton, Spacer} from '@chakra-ui/react';
+import { useContext, useState } from 'react';
 import NavbarContext from '../utils/NavbarContext';
+import VolunteerSideView from '../components/VolunteerSideView.jsx';
+import {RxCaretLeft} from 'react-icons/rx';
 
 const VolunteerEventPage = () => {
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
+  // eslint-disable-next-line
+  const [currentEventId, setCurrentEventId] = useState(88); 
+
+  const onOpen = () => alert("clicked open, VolunteerEventPage.jsx")
+  const onClose = () => alert("clicked close, VolunteerEventPage.jsx")
+  const showOpenDrawerButton = true;
 
   return (
-    <Box bg="#E6EAEF">
-      <Flex
-        flexDir={'column'}
-        alignItems={'center'}
-        bg="#E6EAEF"
-        ml={{ base: '0', xl: '15rem' }}
-        pt={6}
-        display={{ base: 'flex', xl: 'none' }}
-      >
+    <Flex dir="column">
+      <Box bg="#E6EAEF" flexGrow={1} minW="1px"> 
         <Flex
-          width="95%"
-          flex-direction="column"
-          align-items="center"
-          gap="8px"
-          flex-shrink="0"
-          borderRadius={'xl'}
-          flexDir={'column'}
+          flexDir={'row'}
+          alignItems={'center'}
+          bg="#E6EAEF"
+          ml={{ base: '0', xl: '15rem' }}
+          pt={6}
+          px={6}
+          justifyContent={"space-between"}
+          display={{ base: 'flex', xl: 'none' }}
         >
-          <HamburgerIcon
-            color={'#717171'}
-            boxSize={16}
-            onClick={onNavbarDrawerOpen}
-          />
+          <Flex
+            width="95%"
+            flex-direction="column"
+            align-items="center"
+            gap="8px"
+            flex-shrink="0"
+            borderRadius={'xl'}
+            flexDir={'column'}
+          >
+            <HamburgerIcon
+              color={'#717171'}
+              boxSize={16}
+              onClick={onNavbarDrawerOpen}
+            />
+          </Flex>
+          <Flex>
+            <Spacer/>
+          </Flex>
+          <Flex
+            flex-direction="column"
+            justifySelf={"end"}
+            alignSelf={"end"}
+            gap="8px"
+            flex-shrink="0"
+            borderRadius={'xl'}
+            flexDir={'column'}
+            display={showOpenDrawerButton ? { base: 'flex', xl: 'none' } : 'none'}
+          >
+            <IconButton
+                    borderRadius="md"
+                    borderColor="#EFEFEF"
+                    bg="white"
+                    variant={"outline"}
+                    borderWidth={'0.2em'}
+                    h="64px"
+                    w="64px"
+                    icon={<RxCaretLeft size={40}/>}
+                    onClick={onOpen}
+        ></IconButton>
+          </Flex>
         </Flex>
-      </Flex>
 
-      <FeaturedDashboard />
-      <EventFilteredGrid />
-    </Box>
+        <FeaturedDashboard onOpen={onOpen} showOpenDrawerButton={showOpenDrawerButton}/>
+        <EventFilteredGrid />
+      </Box>
+      <Box w="456px" flexShrink={0}>
+        <Box pos={"fixed"} right={"0"} top={"0"}>
+          <VolunteerSideView eventId={currentEventId} onClose={onClose}/>
+        </Box>
+      </Box>
+    </Flex>
   );
 };
 

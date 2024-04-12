@@ -8,8 +8,9 @@ import logos_google_calendar from '../assets/logos_google-calendar.svg';
 import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
+import { RxCaretRight } from "react-icons/rx";
 
-const VolunteerSideView = ({ eventId }) => {
+const VolunteerSideView = ({ eventId, onClose }) => {
   const [eventData, setEventData] = useState([]);
   const [isReadMore, setIsReadMore] = useState(false);
   const [calendarSelected, setCalendarSelected] = useState(false);
@@ -17,7 +18,7 @@ const VolunteerSideView = ({ eventId }) => {
 
   useEffect(() => {
     getEventById(eventId).then(data => setEventData(data));
-  }, []);
+  }, [eventId]);
 
   console.log(eventData);
 
@@ -51,18 +52,19 @@ const VolunteerSideView = ({ eventId }) => {
     return `${month} ${day}, ${year} @ ${time}`;
   }
   return (
-    <Flex flexDir={'column'} w={'26em'} mt={'1em'}>
+    <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={"20px"} >
       <HStack justify={'center'} align={'center'}>
-        <Box
-          bg="white"
-          borderRadius="md"
-          px={'1em'}
-          py={'0.4em'}
-          borderColor="#EFEFEF"
-          borderWidth={'0.2em'}
-        >
-          <Text fontWeight={'bold'}>{'>'}</Text>
-        </Box>
+        <IconButton
+                    borderRadius="md"
+                    borderColor="#EFEFEF"
+                    bg="white"
+                    variant={"outline"}
+                    borderWidth={'0.2em'}
+                    h="40px"
+                    w="40px"
+                    icon={<RxCaretRight size={22}/>}
+                    onClick={onClose}
+        ></IconButton>
         <Flex
           bg="#EFEFEF"
           borderRadius="md"
@@ -137,8 +139,9 @@ const VolunteerSideView = ({ eventId }) => {
       </Box>
 
       <VStack mb={'0.5em'} gap={'0.6em'}>
-        <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'}>
-          <Image src={eventData.image_url} />
+        <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={"100%"}>
+          {/* <Image src={eventData.image_url} /> */}
+          <Image h="400px" w="100%" fit={"cover"} borderRadius="md" src="https://s3-alpha-sig.figma.com/img/4683/1e77/df1444c9bf86d4882d7252f8c2939d3f?Expires=1713744000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QOfbx~82-JPjL3fzevSp6hSRKcw-ES5Oo2qmAVy50WCRxRyDf2Hen89sXX1TgA07P0prYk3wxrK1TavoO9~A4MKvwPA0Ab4cS3zDDnMneY3CIKqqYcF3pVSGtVn7uoCatAc1ZVFZxspUZ5mYdIJPT6Y7FsK0PIC~V7~VkfylV6eZyV3KQnTH3o1239rwwQ-peU0F4DTrHEOCKA~ZfZAMkrgptC6MwJ1rNKWqg38XhxZBlBScL8Y0IOg3GgeJZ~lRwi1abbxq4Yos06iHu0M9Nc0VcKdqDW6kXHh7tEF8Cgv0KCkLq~kw7mYApc-sBaEEfTtzArn4papMNIPR77i9sA__"></Image>
         </Flex>
         <Text fontWeight={'bold'} fontSize={28} textAlign={'start'} width={'full'}>
           {eventData.name}
@@ -242,6 +245,7 @@ const VolunteerSideView = ({ eventId }) => {
 
 VolunteerSideView.propTypes = {
   eventId: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default VolunteerSideView;
