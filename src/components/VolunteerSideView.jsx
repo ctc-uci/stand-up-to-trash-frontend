@@ -140,8 +140,7 @@ const VolunteerSideView = ({ eventId, onClose }) => {
 
       <VStack mb={'0.5em'} gap={'0.6em'}>
         <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={"100%"}>
-          {/* <Image src={eventData.image_url} /> */}
-          <Image h="400px" w="100%" fit={"cover"} borderRadius="md" src="https://s3-alpha-sig.figma.com/img/4683/1e77/df1444c9bf86d4882d7252f8c2939d3f?Expires=1713744000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QOfbx~82-JPjL3fzevSp6hSRKcw-ES5Oo2qmAVy50WCRxRyDf2Hen89sXX1TgA07P0prYk3wxrK1TavoO9~A4MKvwPA0Ab4cS3zDDnMneY3CIKqqYcF3pVSGtVn7uoCatAc1ZVFZxspUZ5mYdIJPT6Y7FsK0PIC~V7~VkfylV6eZyV3KQnTH3o1239rwwQ-peU0F4DTrHEOCKA~ZfZAMkrgptC6MwJ1rNKWqg38XhxZBlBScL8Y0IOg3GgeJZ~lRwi1abbxq4Yos06iHu0M9Nc0VcKdqDW6kXHh7tEF8Cgv0KCkLq~kw7mYApc-sBaEEfTtzArn4papMNIPR77i9sA__"></Image>
+          <Image h="400px" w="100%" fit={"cover"} borderRadius="md" src={eventData.image_url}></Image>
         </Flex>
         <Text fontWeight={'bold'} fontSize={28} textAlign={'start'} width={'full'}>
           {eventData.name}
