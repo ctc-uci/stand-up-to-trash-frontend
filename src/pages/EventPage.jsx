@@ -7,12 +7,18 @@ import {
   InputLeftElement,
   Heading,
   Select,
+  useDisclosure,
+HStack,
   Flex,
+  useToast, 
+  Button,
 } from '@chakra-ui/react';
 import { useEffect, useState, useContext } from 'react';
 import { SearchIcon, CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 import NavbarContext from '../utils/NavbarContext';
+import PropTypes from 'prop-types';
+import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
 
 import EventCard from '../components/Events/EventCard';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
@@ -20,10 +26,14 @@ import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 
 const Events = () => {
+  const toast = useToast();
+
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
-
+  const [showSelect, setShowSelect] = useState(false);
+  const [isSelectButton, setIsSelectButton] = useState(true);
+  const [isCreateButton, setIsCreateButton] = useState(true); // toggle between create event button and deselect button
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [name, setName] = useState('');
   const [dates, setDates] = useState([]);
@@ -47,6 +57,50 @@ const Events = () => {
     }
   };
 
+  const {
+    isOpen: isArchiveEventModalOpen,
+    onOpen: onArchiveEventModalOpen,
+    onClose: onArchiveEventModalClose,
+  } = useDisclosure();
+
+  const confirmArchive = async () => {
+    for (const id of selectedEvents) {
+      try {
+        await Backend.put(`/events/archive/${id}`);
+        getEvents();
+      } catch (error) {
+        console.log(`Error archiving event: ${id}`, error.message);
+      }
+    }
+    onArchiveEventModalClose();
+    handleGoBackButton();
+    toast({
+      title: `Successfully archived ${selectedEvents.length} event(s)`,
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  const archiveEvents = () => {
+    if (selectedEvents.length === 0) handleGoBackButton();
+    else onArchiveEventModalOpen();
+  };
+
+  const handleCheckboxChange = id => {
+    const newCheckedItems = [...selectedEvents];
+    const index = newCheckedItems.indexOf(id);
+
+    if (index === -1) {
+      newCheckedItems.push(id);
+    } else {
+      newCheckedItems.splice(index, 1);
+    }
+
+    setSelectedEvents(newCheckedItems);
+    console.log(selectedEvents);
+  };
+
   const getLocation = data => {
     let location = [];
     for (let i in data) {
@@ -65,26 +119,12 @@ const Events = () => {
     return date;
   };
 
-  const handleCheckboxChange = id => {
-    const newCheckedItems = [...selectedEvents];
-    const index = newCheckedItems.indexOf(id);
-
-    if (index === -1) {
-      newCheckedItems.push(id);
-    } else {
-      newCheckedItems.splice(index, 1);
-    }
-
-    setSelectedEvents(newCheckedItems);
-    console.log(selectedEvents);
-  };
-
   const eventCards = displayEvents.map(element => (
     <GridItem key={element.id}>
       <EventCard
         {...element}
         isSelected={selectedEvents.includes(element.id)}
-        // showSelect={showSelect}
+        showSelect={showSelect}
         handleCheckboxChange={handleCheckboxChange}
         getEvents={getEvents}
       />
@@ -125,6 +165,68 @@ const Events = () => {
     ));
   };
 
+  const handleSelectButton = () => {
+    setShowSelect(true);
+    setIsSelectButton(false);
+    setIsCreateButton(false);
+  };
+
+  const handleGoBackButton = () => {
+    setShowSelect(false);
+    setIsCreateButton(true);
+    setIsSelectButton(true);
+    setSelectedEvents([]);
+  };
+
+  const SelectButton = () => {
+    return (
+      <>
+        <Button
+          style={{ backgroundColor: 'white' }}
+          onClick={() => handleSelectButton()}
+          fontSize="20px"
+          height={'50px'}
+        >
+          Select
+        </Button>
+      </>
+    );
+  };
+
+  const ArchiveButton = ({ id }) => {
+    return (
+      <>
+        <Button
+          style={{ backgroundColor: '#FFABAB', borderRadius: '30px' }}
+          onClick={() => archiveEvents(id)}
+        >
+          <Box padding={3} fontSize={'lg'} display="inline-flex" gap={10}>
+            Archive Event(s)
+          </Box>
+        </Button>
+      </>
+    );
+  };
+
+  ArchiveButton.propTypes = {
+    id: PropTypes.number,
+  };
+
+  const DeselectButton = () => {
+    return (
+      <>
+        <Button
+          style={{ backgroundColor: 'white', borderRadius: '0px' }}
+          fontSize="20px"
+          height={'50px'}
+          onClick={() => handleGoBackButton()}
+        >
+          Deselect All
+        </Button>
+      </>
+    );
+  };
+
   useEffect(() => {
     if (!fuse) {
       return;
@@ -161,12 +263,10 @@ const Events = () => {
         width="95%"
         height="237px"
         padding="32px"
-        flex-direction="column"
-        align-items="center"
+        flexDirection="column"
+        alignItems="center"
         gap="24px"
-        flex-shrink="0"
         borderRadius={'xl'}
-        flexDir={'column'}
       >
         <Flex align={'center'} gap={3}>
           <HamburgerIcon
@@ -179,8 +279,8 @@ const Events = () => {
         </Flex>
         <Box display="flex">
           <Flex w={'100%'}>
-            <Flex flexDir={'column'} gap={3} w={'100%'}>
-              <InputGroup align-items="left">
+            <Flex flexDirection={'column'} gap={3} w={'100%'}>
+              <InputGroup>
                 <InputLeftElement pointerEvents="none">
                   <SearchIcon color={'#7B7C7D'} />
                 </InputLeftElement>
@@ -193,7 +293,7 @@ const Events = () => {
                   placeholder='Search Event Name (e.g. "Festival of Whales")'
                 />
               </InputGroup>
-              <Flex flex-direction="row" justifyContent={'left'} gap={7}>
+              <Flex flexDirection="row" justifyContent={'left'} gap={7}>
                 <Select bg={'white'} placeholder="Location" onChange={handleLocationChange} w="10%">
                   {getLocationOptions()}
                 </Select>
@@ -202,7 +302,6 @@ const Events = () => {
                   icon={<CalendarIcon />}
                   onChange={handleDateChange}
                   placeholder="Select Date"
-                  gap={'5px'}
                   w="20%"
                 >
                   {getDateOptions()}
@@ -212,19 +311,76 @@ const Events = () => {
           </Flex>
         </Box>
       </Flex>
-
-      <Box display="flex" justifyContent={'center'} px={10} mt={5}>
-        <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
-          <Box marginTop="3vh">
-            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-              <AddEventsModal getEvents={getEvents} />
-              {eventCards}
-            </Grid>
+  
+      <Flex justifyContent={'center'} flexDirection={'column'} w={'95%'} mt={5}>
+        <Flex flexDirection={'column'} bgColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
+          <Heading w={'full'}>Upcoming Events</Heading>
+          <Box display="flex" flexDirection="row" justifyContent="space-between">
+            {isCreateButton ? <></> : <DeselectButton />}
+            <HStack>
+              <InputGroup w="50%">
+                <InputLeftElement pointerEvents="none">
+                  <SearchIcon />
+                </InputLeftElement>
+                <Input
+                  bg={'white'}
+                  value={name}
+                  onChange={event => {
+                    setName(event.target.value);
+                  }}
+                  placeholder='Search Event Name (e.g. "Festival of Whales")'
+                />
+              </InputGroup>
+              <InputGroup w="25%">
+                <InputLeftElement pointerEvents="none">
+                  <SearchIcon />
+                </InputLeftElement>
+                <Input
+                  bg={'white'}
+                  value={location}
+                  onChange={event => {
+                    setLocation(event.target.value);
+                  }}
+                  placeholder="Search Location"
+                />
+              </InputGroup>
+              <InputGroup w="25%">
+                <InputLeftElement pointerEvents="none">
+                  <SearchIcon />
+                </InputLeftElement>
+                <Input
+                  bg={'white'}
+                  value={date}
+                  placeholder="Search Date"
+                  onChange={event => {
+                    setDate(event.target.value);
+                  }}
+                />
+              </InputGroup>
+            </HStack>
+            {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
+            <ArchiveEventsModal
+              isOpen={isArchiveEventModalOpen}
+              onClose={onArchiveEventModalClose}
+              confirmArchive={confirmArchive}
+              events={events.filter(event => selectedEvents.includes(event.id))}
+            />
+          </Box>
+        </Flex>
+        <Box display="flex" justifyContent={'center'} px={10}>
+          <Box display="flex" flexDirection="space-between" justifyContent={'center'}>
+            <Box marginTop="3vh">
+              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                <AddEventsModal getEvents={getEvents} />
+                {eventCards}
+              </Grid>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </Flex>
     </Flex>
   );
+  
 };
 
 export default Events;
