@@ -12,13 +12,16 @@ HStack,
   Flex,
   useToast, 
   Button,
+  Spacer,
+  
 } from '@chakra-ui/react';
 import { useEffect, useState, useContext } from 'react';
-import { SearchIcon, CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { SearchIcon, CalendarIcon, HamburgerIcon, DeleteIcon } from '@chakra-ui/icons';
+
 
 import NavbarContext from '../utils/NavbarContext';
 import PropTypes from 'prop-types';
-import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
+import DeleteEventsModal from '../components/Events/DeleteEventsModal';
 
 import EventCard from '../components/Events/EventCard';
 import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
@@ -58,12 +61,12 @@ const Events = () => {
   };
 
   const {
-    isOpen: isArchiveEventModalOpen,
-    onOpen: onArchiveEventModalOpen,
-    onClose: onArchiveEventModalClose,
+    isOpen: isDeleteEventModalOpen,
+    onOpen: onDeleteEventModalOpen,
+    onClose: onDeleteEventModalClose,
   } = useDisclosure();
 
-  const confirmArchive = async () => {
+  const confirmDelete = async () => {
     for (const id of selectedEvents) {
       try {
         await Backend.put(`/events/archive/${id}`);
@@ -72,20 +75,16 @@ const Events = () => {
         console.log(`Error archiving event: ${id}`, error.message);
       }
     }
-    onArchiveEventModalClose();
+    onDeleteEventModalOpen();
     handleGoBackButton();
     toast({
-      title: `Successfully archived ${selectedEvents.length} event(s)`,
+      title: `Successfully deleted ${selectedEvents.length} event(s)`,
       status: 'success',
       duration: 3000,
       isClosable: true,
     });
   };
 
-  const archiveEvents = () => {
-    if (selectedEvents.length === 0) handleGoBackButton();
-    else onArchiveEventModalOpen();
-  };
 
   const handleCheckboxChange = id => {
     const newCheckedItems = [...selectedEvents];
@@ -165,6 +164,12 @@ const Events = () => {
     ));
   };
 
+  const deleteEvents = () => {
+    if (selectedEvents.length > 0) {
+      onDeleteEventModalOpen();
+    }
+  };
+
   const handleSelectButton = () => {
     setShowSelect(true);
     setIsSelectButton(false);
@@ -182,46 +187,46 @@ const Events = () => {
     return (
       <>
         <Button
-          style={{ backgroundColor: 'white' }}
+          style={{ backgroundColor: 'white', borderRadius: '5px', color:'#0075FF', border:'1px solid #0075FF'}}
           onClick={() => handleSelectButton()}
           fontSize="20px"
           height={'50px'}
         >
-          Select
+          Select Events
         </Button>
       </>
     );
   };
 
-  const ArchiveButton = ({ id }) => {
+  const DeleteButton = ({ id }) => {
     return (
       <>
         <Button
           style={{ backgroundColor: '#FFABAB', borderRadius: '30px' }}
-          onClick={() => archiveEvents(id)}
+          onClick={() => deleteEvents(id)}
         >
           <Box padding={3} fontSize={'lg'} display="inline-flex" gap={10}>
-            Archive Event(s)
+            Delete Event(s)
           </Box>
         </Button>
       </>
     );
   };
 
-  ArchiveButton.propTypes = {
+  DeleteButton.propTypes = {
     id: PropTypes.number,
   };
 
-  const DeselectButton = () => {
+  const CancelButton = () => {
     return (
       <>
         <Button
-          style={{ backgroundColor: 'white', borderRadius: '0px' }}
+          style={{ backgroundColor: 'white', borderRadius: '5px', color:'#0075FF', border:'1px solid #0075FF'}}
           fontSize="20px"
           height={'50px'}
           onClick={() => handleGoBackButton()}
         >
-          Deselect All
+          Cancel
         </Button>
       </>
     );
@@ -316,7 +321,7 @@ const Events = () => {
         <Flex flexDirection={'column'} bgColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
           <Heading w={'full'}>Upcoming Events</Heading>
           <Box display="flex" flexDirection="row" justifyContent="space-between">
-            {isCreateButton ? <></> : <DeselectButton />}
+            {isCreateButton }
             <HStack>
               <InputGroup w="50%">
                 <InputLeftElement pointerEvents="none">
@@ -358,25 +363,40 @@ const Events = () => {
                 />
               </InputGroup>
             </HStack>
-            {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
-            <ArchiveEventsModal
-              isOpen={isArchiveEventModalOpen}
-              onClose={onArchiveEventModalClose}
-              confirmArchive={confirmArchive}
-              events={events.filter(event => selectedEvents.includes(event.id))}
-            />
+            
           </Box>
         </Flex>
-        <Box display="flex" justifyContent={'center'} px={10}>
-          <Box display="flex" flexDirection="space-between" justifyContent={'center'}>
-            <Box marginTop="3vh">
-              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-                <AddEventsModal getEvents={getEvents} />
-                {eventCards}
-              </Grid>
-            </Box>
-          </Box>
-        </Box>
+        <Spacer>
+        <Flex justifyContent="flex-end" width="100%" paddingY="10px">
+        {isSelectButton ? <SelectButton /> : <CancelButton />}
+      </Flex>
+        </Spacer>
+{!isSelectButton && (
+  <Box position="fixed" bottom="20px" right="20px">
+    <Button colorScheme="red"onClick={deleteEvents}  disabled={selectedEvents.length === 0} leftIcon={<DeleteIcon />}>
+      Delete
+    </Button>
+  </Box>
+
+)}
+<DeleteEventsModal
+  isOpen={isDeleteEventModalOpen}
+  onClose={onDeleteEventModalClose}
+  confirmDelete={confirmDelete}
+  events={events.filter(event => selectedEvents.includes(event.id))}
+/>
+
+<Box display="flex" justifyContent={'center'} px={10}>
+  <Box display="flex" flexDirection="space-between" justifyContent={'center'}>
+  <Box marginTop="3vh">
+    <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+      <AddEventsModal getEvents={getEvents} />
+      {eventCards}
+    </Grid>
+  </Box>
+  </Box>
+</Box>
+
       </Flex>
     </Flex>
   );
