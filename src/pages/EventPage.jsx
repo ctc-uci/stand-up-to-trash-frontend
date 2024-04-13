@@ -15,7 +15,7 @@ import { SearchIcon, CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
 import NavbarContext from '../utils/NavbarContext';
 
 import EventCard from '../components/Events/EventCard';
-import AddEventsModal from '../components/AddEventsModal/AddEventsModal';
+import AddEventsModal from '../components/EventsModal/AddEventsModal';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 
