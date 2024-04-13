@@ -71,7 +71,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
         isClosable: true,
       });
       onClose();
-      // window.location.reload();
+      window.location.reload();
     } catch (err) {
       console.log(err);
       toast({
