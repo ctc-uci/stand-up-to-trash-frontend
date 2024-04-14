@@ -9,18 +9,25 @@ import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from "react-icons/rx";
+import HappeningInChip from "../components/HappeningInChip/HappeningInChip"
 
-const VolunteerSideView = ({ eventId, onClose }) => {
+
+const VolunteerSideView = ({ eventId, onClose}) => {
   const [eventData, setEventData] = useState([]);
   const [isReadMore, setIsReadMore] = useState(false);
   const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
+  // const [dateObj, setDateObj] = useState(new Date());
+  const dateObj = new Date(Date.parse(eventData.date))
+  // console.log(eventData);
 
   useEffect(() => {
     getEventById(eventId).then(data => setEventData(data));
+    // setDateObj(new Date(Date.parse(eventData.date)))
   }, [eventId]);
 
-  console.log(eventData);
+  // console.log('e', eventData);
+  // console.log('d', dateObj)
 
   function formatDate(dateString) {
     const months = [
@@ -37,22 +44,24 @@ const VolunteerSideView = ({ eventId, onClose }) => {
       'Nov',
       'Dec',
     ];
-
+    console.log('dateString', dateString);
     const date = new Date(dateString);
     const month = months[date.getUTCMonth()];
     const day = date.getUTCDate();
     const year = date.getUTCFullYear();
-    const hours = date.getUTCHours();
-    const time =
-      date.getUTCHours().toString().padStart(2, '0') +
-      ':' +
-      date.getUTCMinutes().toString().padStart(2, '0') +
-      (hours >= 12 ? ' PM' : ' AM');
+    const time = dateObj.toLocaleString(
+      'default',
+      { timeStyle: 'short' })
+    // const time =
+    //   date.getUTCHours().toString().padStart(2, '0') +
+    //   ':' +
+    //   date.getUTCMinutes().toString().padStart(2, '0') +
+    //   (hours >= 12 ? ' PM' : ' AM');
 
     return `${month} ${day}, ${year} @ ${time}`;
   }
   return (
-    <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={"20px"} >
+    <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={"20px"}>
       <HStack justify={'center'} align={'center'}>
         <IconButton
                     borderRadius="md"
@@ -81,7 +90,7 @@ const VolunteerSideView = ({ eventId, onClose }) => {
               />
             </Icon>
             <Text w={'100%'} fontWeight={600}>
-              Happening Now
+              <HappeningInChip date={dateObj}/>
             </Text>
           </HStack>
         </Flex>
@@ -146,12 +155,10 @@ const VolunteerSideView = ({ eventId, onClose }) => {
           {eventData.name}
         </Text>
         <Text fontWeight={'medium'} color={'gray'} fontSize={15} textAlign={'start'} width={'full'}>
-          {formatDate(eventData.date)}
+          {formatDate(dateObj)}
         </Text>
         <Text noOfLines={isReadMore ? null : 3}>
-          {eventData.description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae
-          facilis, autem pariatur hic nobis mollitia, illo labore aliquam doloremque, possimus
-          consequatur deserunt veniam quae officia? Omnis enim cum corrupti facere!
+          {eventData.description}
         </Text>
         <Flex w={'100%'}>
           {!isReadMore && (

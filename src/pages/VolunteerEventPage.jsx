@@ -10,11 +10,14 @@ import {RxCaretLeft} from 'react-icons/rx';
 const VolunteerEventPage = () => {
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
   // eslint-disable-next-line
-  const [currentEventId, setCurrentEventId] = useState(88); 
+  const [currentEventId, setCurrentEventId] = useState(-1); 
 
-  const onOpen = () => alert("clicked open, VolunteerEventPage.jsx")
-  const onClose = () => alert("clicked close, VolunteerEventPage.jsx")
-  const showOpenDrawerButton = true;
+  const [showOpenDrawerButton, setShowOpenDrawerButton] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const onOpen = () => setIsOpen(!isOpen)
+  const onClose = () => setIsOpen(!isOpen);
+
+  console.log('test'+ currentEventId)
 
   return (
     <Flex dir="column">
@@ -72,11 +75,11 @@ const VolunteerEventPage = () => {
         </Flex>
 
         <FeaturedDashboard onOpen={onOpen} showOpenDrawerButton={showOpenDrawerButton}/>
-        <EventFilteredGrid />
+        <EventFilteredGrid setCurrentEventId={setCurrentEventId} setIsOpen={setIsOpen} setShowOpenDrawerButton={setShowOpenDrawerButton}/>
       </Box>
-      <Box w="456px" flexShrink={0}>
+      <Box w={isOpen ? "456px" : 0} flexShrink={0}>
         <Box pos={"fixed"} right={"0"} top={"0"}>
-          <VolunteerSideView eventId={currentEventId} onClose={onClose}/>
+          {isOpen && <VolunteerSideView eventId={currentEventId} onClose={onClose}/>}
         </Box>
       </Box>
     </Flex>
