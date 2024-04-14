@@ -6,11 +6,13 @@ import { IoDocumentText } from 'react-icons/io5';
 import { MdPeopleAlt } from 'react-icons/md';
 import Backend from '../../utils/utils';
 import DataCard from './DataCard';
+import { CSVLink } from 'react-csv';
 
 const ImpactSummary = () => {
   const [registered, setRegistered] = useState(0);
   const [checkedIn, setCheckedIn] = useState(0);
   const [total, setTotal] = useState(0);
+  const [eventIdData, setEventIdData] = useState([]);
 
   useEffect(() => {
     getData();
@@ -29,6 +31,30 @@ const ImpactSummary = () => {
       console.log(`Error getting events: `, err.message);
     }
   };
+
+  const header = [
+    { key: 'event_id', label: 'EVENT_ID' },
+    { key: 'id', label: 'ID' },
+    { key: 'is_checked_in', label: 'IS_CHECKED_IN' },
+    { key: 'number_in_party', label: 'NUMBER_IN_PARTY' },
+    { key: 'ounces', label: 'OUNCES' },
+    { key: 'pounds', label: 'POUNDS' },
+    { key: 'unusual_items', label: 'UNUSUAL_ITEMS' },
+    { key: 'volunteer_id', label: 'VOLUNTEER_ID' },
+  ];
+
+  useEffect(() => {
+    const getEventId = async () => {
+      try {
+        const eventIdData = await Backend.get(`/data/`);
+        setEventIdData(eventIdData.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
+    getEventId();
+  }, []);
 
   return (
     <Box
@@ -72,7 +98,9 @@ const ImpactSummary = () => {
       <VStack gap={120}>
         <Box></Box>
         <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport></AiOutlineExport>} size="md">
-          Export Data
+          <CSVLink data={eventIdData} filename="./data.csv" headers={header}>
+            Export Data
+          </CSVLink>
         </Button>
       </VStack>
     </Box>
