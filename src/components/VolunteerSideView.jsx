@@ -8,17 +8,16 @@ import logos_google_calendar from '../assets/logos_google-calendar.svg';
 import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
-import { RxCaretRight } from "react-icons/rx";
-import HappeningInChip from "../components/HappeningInChip/HappeningInChip"
+import { RxCaretRight } from 'react-icons/rx';
+import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 
-
-const VolunteerSideView = ({ eventId, onClose}) => {
+const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
   const [isReadMore, setIsReadMore] = useState(false);
   const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
   // const [dateObj, setDateObj] = useState(new Date());
-  const dateObj = new Date(Date.parse(eventData.date))
+  const dateObj = new Date(Date.parse(eventData.date));
   // console.log(eventData);
 
   useEffect(() => {
@@ -49,9 +48,7 @@ const VolunteerSideView = ({ eventId, onClose}) => {
     const month = months[date.getUTCMonth()];
     const day = date.getUTCDate();
     const year = date.getUTCFullYear();
-    const time = dateObj.toLocaleString(
-      'default',
-      { timeStyle: 'short' })
+    const time = dateObj.toLocaleString('default', { timeStyle: 'short' });
     // const time =
     //   date.getUTCHours().toString().padStart(2, '0') +
     //   ':' +
@@ -61,18 +58,21 @@ const VolunteerSideView = ({ eventId, onClose}) => {
     return `${month} ${day}, ${year} @ ${time}`;
   }
   return (
-    <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={"20px"}>
+    <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={'20px'}>
       <HStack justify={'center'} align={'center'}>
         <IconButton
-                    borderRadius="md"
-                    borderColor="#EFEFEF"
-                    bg="white"
-                    variant={"outline"}
-                    borderWidth={'0.2em'}
-                    h="40px"
-                    w="40px"
-                    icon={<RxCaretRight size={22}/>}
-                    onClick={onClose}
+          borderRadius="md"
+          borderColor="#EFEFEF"
+          bg="white"
+          variant={'outline'}
+          borderWidth={'0.2em'}
+          h="40px"
+          w="40px"
+          icon={<RxCaretRight size={22} />}
+          onClick={() => {
+            onClose();
+            setShowOpenDrawerButton(true);
+          }}
         ></IconButton>
         <Flex
           bg="#EFEFEF"
@@ -90,7 +90,7 @@ const VolunteerSideView = ({ eventId, onClose}) => {
               />
             </Icon>
             <Text w={'100%'} fontWeight={600}>
-              <HappeningInChip date={dateObj}/>
+              <HappeningInChip date={dateObj} />
             </Text>
           </HStack>
         </Flex>
@@ -148,8 +148,14 @@ const VolunteerSideView = ({ eventId, onClose}) => {
       </Box>
 
       <VStack mb={'0.5em'} gap={'0.6em'}>
-        <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={"100%"}>
-          <Image h="400px" w="100%" fit={"cover"} borderRadius="md" src={eventData.image_url}></Image>
+        <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={'100%'}>
+          <Image
+            h="400px"
+            w="100%"
+            fit={'cover'}
+            borderRadius="md"
+            src={eventData.image_url}
+          ></Image>
         </Flex>
         <Text fontWeight={'bold'} fontSize={28} textAlign={'start'} width={'full'}>
           {eventData.name}
@@ -157,9 +163,7 @@ const VolunteerSideView = ({ eventId, onClose}) => {
         <Text fontWeight={'medium'} color={'gray'} fontSize={15} textAlign={'start'} width={'full'}>
           {formatDate(dateObj)}
         </Text>
-        <Text noOfLines={isReadMore ? null : 3}>
-          {eventData.description}
-        </Text>
+        <Text noOfLines={isReadMore ? null : 3}>{eventData.description}</Text>
         <Flex w={'100%'}>
           {!isReadMore && (
             <Text
@@ -252,6 +256,7 @@ const VolunteerSideView = ({ eventId, onClose}) => {
 VolunteerSideView.propTypes = {
   eventId: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
+  setShowOpenDrawerButton: PropTypes.func.isRequired,
 };
 
 export default VolunteerSideView;

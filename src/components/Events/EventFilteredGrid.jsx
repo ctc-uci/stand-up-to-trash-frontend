@@ -215,7 +215,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
                 onClick={() => {
                   setCurrentEventId(element.id);
                   setIsOpen(true);
-                  setShowOpenDrawerButton(true);
+                  setShowOpenDrawerButton(false);
                 }}
               >
                 <EventCard
