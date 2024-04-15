@@ -135,8 +135,8 @@ const EventCard = ({
             {name.length > 30 ? (
               <Text
                 fontWeight="800"
-                fontSize="32px"
-                lineHeight="44px"
+                fontSize="24px"
+                lineHeight="30px"
                 fontFamily="Avenir"
                 mt={2}
                 overflowWrap={'break-word'}
@@ -146,8 +146,8 @@ const EventCard = ({
             ) : (
               <Text
                 fontWeight="800"
-                fontSize="32px"
-                lineHeight="44px"
+                fontSize="24px"
+                lineHeight="30px"
                 fontFamily="Avenir"
                 mt={2}
                 overflowWrap={'break-word'}
@@ -155,7 +155,7 @@ const EventCard = ({
                 {name}
               </Text>
             )}
-            <Text fontFamily="Avenir" fontSize={sideBySideCard ? '18px' : '20px'} fontWeight={500} mt={1}>
+            <Text fontFamily="Avenir" fontSize={sideBySideCard ? '15px' : '16px'} fontWeight={300} mt={1}>
               {dateStr}
             </Text>
 

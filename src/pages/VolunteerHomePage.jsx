@@ -94,7 +94,11 @@ import {
               display={{ base: 'flex', xl: 'none' }}
               onClick={onNavbarDrawerOpen}
             />
-            <Heading>Impact Summary</Heading>
+            <Heading
+            fontFamily={'Avenir'}
+            fontSize={'36px'}
+            fontWeight={800}
+            >Impact Summary</Heading>
           </Flex>
   
           <VolunteerImpactSummary />
@@ -103,7 +107,12 @@ import {
         <Flex justifyContent={'center'} flexDir={'column'} w={'95%'}>
           <Box justifyContent="space-between">
             <Flex flexDir={'column'} backgroundColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
-              <Heading w={'full'}>Upcoming Events</Heading>
+              <Heading 
+              w={'full'}
+              fontFamily={'Avenir'}
+              fontSize={'36px'}
+              fontWeight={800}
+              >Upcoming Events</Heading>
               <Box display="flex" flex-direction="row" justifyContent="space-between">
                 <HStack width={'100%'}>
                   <InputGroup w="60%">
