@@ -14,15 +14,6 @@ const VolunteerImpactSummary = () => {
 
   const { user, updateUser } = useContext(UserContext);
 
-  // mock volunteer object so i can push for now; delete after
-  // const volunteer = {
-  //   id: '123',
-  //   name: 'John Doe',
-  //   email: 'johndoe@example.com',
-  //   ounces: '5',
-  //   pounds: '10'
-  // };
-
   useEffect(() => {
     updateUser();
     console.log(user);
@@ -33,24 +24,24 @@ const VolunteerImpactSummary = () => {
     try {
       let totalPounds = 0; 
       let allWeights = [];
-      // need to get and set the volunteer id here ???
       // let userId = 111; // For testing
       let userId = user?.id;
 
+      // Get the events which the user has attended, length = num events
       let eventResponse = await Backend.get(`/data/volunteer/${userId}/event`);
       setEvents(eventResponse.data.length);
-      console.log(eventResponse);
-    
+  
+      // Get all weight entries and calculate total weight in lbs
       let weightResponse = await Backend.get(`/data/volunteer/${userId}`);
       for (const { ounces, pounds } of weightResponse.data) { totalPounds += ounces / 16 + pounds; allWeights.push(ounces / 16 + pounds); }
       setTotalPounds(parseFloat(totalPounds));
 
+      // Largest value of all weights entered
       let largestItem = parseFloat(Math.max(...allWeights));
-      console.log(allWeights);
       if (isNaN(largestItem) || !isFinite(largestItem)) {
+        // NaN if invalid entry, -inf if empty
         largestItem = 0;
       }
-      console.log(largestItem)
       setLargestItem(largestItem);
     } catch (err) {
       console.log(`Error getting events: `, err.message);
