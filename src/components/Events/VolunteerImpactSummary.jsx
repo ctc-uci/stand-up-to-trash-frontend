@@ -75,7 +75,7 @@ const VolunteerImpactSummary = () => {
 
       />
       <DataCard
-        amount={total}
+        amount={total + ' lbs'}
         text={<Text
             fontSize={'18px'}
             fontFamily={'Avenir'}
@@ -90,8 +90,7 @@ const VolunteerImpactSummary = () => {
         }
       />
       <DataCard
-        height={'100%'}
-        amount={largestItem}
+        amount={largestItem + ' lbs'}
         text={<Text
           fontSize={'18px'}
           fontFamily={'Avenir'}
