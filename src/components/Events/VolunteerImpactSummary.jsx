@@ -22,8 +22,8 @@ const VolunteerImpactSummary = () => {
     try {
       let totalPounds = 0; 
       let allWeights = [];
-      let userId = 111; // For testing
-      // let userId = user?.id;
+      // let userId = 111; // For testing
+      let userId = user?.id;
 
       // Get the events which the user has attended, length = num events
       let eventResponse = await Backend.get(`/data/volunteer/${userId}/event`);
