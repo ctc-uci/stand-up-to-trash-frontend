@@ -1,11 +1,9 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect, useState, useContext } from 'react';
-import { FaTrashCan } from 'react-icons/fa6';
-import { IoDocumentText } from 'react-icons/io5';
-import { MdPeopleAlt } from 'react-icons/md';
 import UserContext from '../../utils/UserContext';
 import Backend from '../../utils/utils';
 import DataCard from './DataCard';
+import { TotalEventsIcon, TotalTrashIcon, LargestTrashIcon } from '../../Assets/impact_summary/ImpactSummaryIcons';
 
 const VolunteerImpactSummary = () => {
   const [events, setEvents] = useState(0);
@@ -55,35 +53,55 @@ const VolunteerImpactSummary = () => {
       flexDirection="row"
       gap="8"
       justifyContent="center"
-      alignItems={'center'}
+      alignItems={'stretch'}
       backgroundColor={'#F8F8F8'}
       borderRadius={'lg'}
       py={10}
     >
       <DataCard
         amount={events}
-        text={'Total Events Participated'}
+        text={<Text
+            fontSize={'18px'}
+            fontFamily={'Avenir'}
+            fontWeight={500}
+          >
+            Total Events Participated
+        </Text>}
         icon={
           <Flex background={'#96DB53'} p={2.5} borderRadius={'lg'}>
-            <IoDocumentText color="white" size={20}></IoDocumentText>
+            <TotalEventsIcon></TotalEventsIcon>
           </Flex>
         }
+
       />
       <DataCard
         amount={total}
-        text={'Total Trash Weight'}
+        text={<Text
+            fontSize={'18px'}
+            fontFamily={'Avenir'}
+            fontWeight={500}
+          >
+            Total Trash Weight
+          </Text>}
         icon={
-          <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
-            <MdPeopleAlt color="white" size={20}></MdPeopleAlt>
+          <Flex background={'#FF792E'} p={2.5} borderRadius={'lg'}>
+            <TotalTrashIcon></TotalTrashIcon>
           </Flex>
         }
       />
       <DataCard
+        height={'100%'}
         amount={largestItem}
-        text={'Largest Trash Item Collected'}
+        text={<Text
+          fontSize={'18px'}
+          fontFamily={'Avenir'}
+          fontWeight={500}
+        >
+          Largest Trash Item Collected
+        </Text>}
         icon={
-          <Flex background={'#FF792E'} p={2.5} borderRadius={'lg'}>
-            <FaTrashCan color="white" size={20} />
+          <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
+            <LargestTrashIcon></LargestTrashIcon>
           </Flex>
         }
       />

@@ -105,8 +105,8 @@ import {
             <Flex flexDir={'column'} backgroundColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
               <Heading w={'full'}>Upcoming Events</Heading>
               <Box display="flex" flex-direction="row" justifyContent="space-between">
-                <HStack>
-                  <InputGroup w="50%">
+                <HStack width={'100%'}>
+                  <InputGroup w="60%">
                     <InputLeftElement pointerEvents="none">
                       <SearchIcon />
                     </InputLeftElement>
@@ -119,7 +119,7 @@ import {
                       placeholder='Search Event Name (e.g. "Festival of Whales")'
                     />
                   </InputGroup>
-                  <InputGroup w="25%">
+                  <InputGroup w="20%">
                     <InputLeftElement pointerEvents="none">
                       <SearchIcon />
                     </InputLeftElement>
@@ -132,7 +132,7 @@ import {
                       placeholder="Search Location"
                     />
                   </InputGroup>
-                  <InputGroup w="25%">
+                  <InputGroup w="20%">
                     <InputLeftElement pointerEvents="none">
                       <SearchIcon />
                     </InputLeftElement>
