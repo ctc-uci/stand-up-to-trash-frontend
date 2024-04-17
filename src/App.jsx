@@ -30,6 +30,7 @@ import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 import NavbarContext from './utils/NavbarContext';
+import QRCodePage from './pages/QRCodePage';
 
 import { useDisclosure, useBreakpointValue, Box } from '@chakra-ui/react';
 
@@ -123,6 +124,8 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                {/* qr for volunteers */}
+                <Route path="/qr" element={<QRCodePage />} />
                 {/* --ADMIN PAGES */}
 
                 <Route path="/playground" element={<Playground />} />
@@ -213,7 +216,6 @@ const App = () => {
                 }
               />
 
-              {/*--VOLUNTEER PAGES*/}
               <Route element={<Layout />}>
                 <Route
                   path="/profile"
