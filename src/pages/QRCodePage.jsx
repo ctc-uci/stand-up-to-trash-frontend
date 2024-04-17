@@ -6,7 +6,8 @@ import lightbulb from './../Assets/lightbulb.svg';
 function QRCodePage() {
   const { user } = useContext(UserContext);
   const volunteerId = user.id;
-  const volunteerName = user.first_name;
+  const volunteerFirstName = user.first_name;
+  const volunteerLastName = user.last_name;
   const volunteerEmail = user.email;
 
   return (
@@ -40,7 +41,7 @@ function QRCodePage() {
 
         <Box>
           <Text fontSize="4xl" as="b" color={'3B3B3B'}>
-            {volunteerName}
+            {volunteerFirstName} {volunteerLastName}
           </Text>
         </Box>
         <Box>
