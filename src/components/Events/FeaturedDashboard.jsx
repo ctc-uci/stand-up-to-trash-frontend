@@ -1,9 +1,11 @@
-import { Heading, Flex, Grid, GridItem } from '@chakra-ui/react';
+import {Heading, Flex, Grid, GridItem, IconButton} from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import Backend from '../../utils/utils';
 import EventCard from './EventCard';
+import {RxCaretLeft} from 'react-icons/rx';
+import PropTypes from 'prop-types';
 
-const FeaturedDashboard = () => {
+const FeaturedDashboard = ({onOpen, showOpenDrawerButton}) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
 
   const getEvents = async () => {
@@ -25,21 +27,38 @@ const FeaturedDashboard = () => {
       alignItems={'center'}
       bg="#E6EAEF"
       ml={{ base: '0', xl: '15rem' }}
-      pt={10}
+      pt={4}
     >
       <Flex
         width="95%"
         pb="8px"
-        flex-direction="column"
         align-items="center"
+        justifyContent={"space-between"}
         gap="8px"
         flex-shrink="0"
         borderRadius={'xl'}
-        flexDir={'column'}
+        flexDir={'row'}
       >
-        <Heading fontWeight={900} fontSize={32} fontFamily={'Avenir'} color={'rgba(0, 0, 0, 0.75)'}>
-          Featured Events
-        </Heading>
+        <Flex w="70%">
+          <Heading fontWeight={900} fontSize={32} fontFamily={'Avenir'} color={'rgba(0, 0, 0, 0.75)'}>
+            Featured Events
+          </Heading>
+        </Flex>
+        <Flex w="40px">
+          <IconButton
+                borderRadius="md"
+                borderColor="#EFEFEF"
+                bg="white"
+                variant={"outline"}
+                borderWidth={'0.2em'}
+                h="40px"
+                w="40px"
+                icon={<RxCaretLeft size={22}/>}
+                onClick={onOpen}
+                display={showOpenDrawerButton ? { base: 'none', xl: 'flex' } : 'none'}
+
+          ></IconButton>
+        </Flex>
       </Flex>
       <Flex
         width="95%"
@@ -67,6 +86,11 @@ const FeaturedDashboard = () => {
       </Flex>
     </Flex>
   );
+};
+
+FeaturedDashboard.propTypes = {
+  onOpen: PropTypes.func,
+  showOpenDrawerButton: PropTypes.bool,
 };
 
 export default FeaturedDashboard;

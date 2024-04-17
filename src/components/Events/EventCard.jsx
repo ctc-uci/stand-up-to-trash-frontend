@@ -2,14 +2,11 @@ import {
   Box,
   Button,
   Checkbox,
-  Heading,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalOverlay,
   Image,
-  Stack,
   Text,
   useDisclosure,
   ModalHeader,
@@ -26,22 +23,16 @@ import {
 import { AttachmentIcon } from '@chakra-ui/icons';
 import pencil_icon from '../../Assets/pencil_icon.png';
 import PropTypes from 'prop-types';
-import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import { CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
 import { useState, useRef, useEffect } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
-import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
-import ExportButton from '../ExportCSVButton/ExportButton';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
 
-import { useNavigate } from 'react-router-dom';
 
 const EventCard = ({
   id,
   name,
-  description,
-  location,
   date,
   showSelect,
   image_url,
@@ -50,8 +41,7 @@ const EventCard = ({
   hasBorder = false,
   isFeatured = false,
 }) => {
-  const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen } = useDisclosure();
 
   // Placeholder for testing a high-res image
   // image_url =
@@ -194,7 +184,7 @@ const EventCard = ({
         </Flex>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent maxH="660px" maxW="800px" borderRadius="0">
           <ModalBody p="0">
@@ -261,7 +251,7 @@ const EventCard = ({
             </Box>
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   );
 };
