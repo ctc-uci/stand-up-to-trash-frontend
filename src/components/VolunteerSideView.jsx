@@ -224,7 +224,11 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             align={'center'}
             borderRadius={'0.5em'}
             justify={'space-between'}
-            onClick={() => setMapSelected(prev => !prev)}
+            onClick={async () => {
+              setMapSelected(prev => !prev);
+              const { location } = await getEventById(eventId);
+              window.open(`https://www.google.com/maps/dir/?api=1&destination=${location}`);
+            }}
             borderColor={mapSelected ? 'blue.200' : '#EFEFEF'}
             borderWidth={2}
           >
