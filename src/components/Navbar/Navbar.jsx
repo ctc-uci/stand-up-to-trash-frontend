@@ -172,17 +172,8 @@ const Navbar = () => {
               UnfocusedIcon={EventsIconGrey}
             />
 
-            {/* Qr scan button */}
-            <NavbarButton
-              buttonText={'Scan QR'}
-              path={qrPath}
-              navigate={navigate}
-              FocusedIcon={QRCodeIconBlue}
-              UnfocusedIcon={QRCodeIconGrey}
-            />
-
             {/* Conditional rendering based on the role */}
-            {role === 'admin' && (
+            {role === 'admin' ? (
               <>
                 {/* Archived Events button */}
                 <NavbarButton
@@ -202,6 +193,14 @@ const Navbar = () => {
                   UnfocusedIcon={VolunteersIconGrey}
                 />
               </>
+            ) : (
+              <NavbarButton
+                buttonText={'Scan QR'}
+                path={qrPath}
+                navigate={navigate}
+                FocusedIcon={QRCodeIconBlue}
+                UnfocusedIcon={QRCodeIconGrey}
+              />
             )}
           </Box>
           {/* Bottom of navbar, support and below */}

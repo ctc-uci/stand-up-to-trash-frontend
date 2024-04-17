@@ -1,14 +1,22 @@
 import QRCode from 'qrcode.react';
 import UserContext from '../utils/UserContext';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Text, Box, Image } from '@chakra-ui/react';
 import lightbulb from './../Assets/lightbulb.svg';
 function QRCodePage() {
   const { user } = useContext(UserContext);
-  const volunteerId = user.id;
-  const volunteerFirstName = user.first_name;
-  const volunteerLastName = user.last_name;
-  const volunteerEmail = user.email;
+  const [volunteerId, setVolunteerId] = useState('');
+  const [volunteerFirstName, setVolunteerFirstName] = useState('');
+  const [volunteerLastName, setVolunteerLastName] = useState('');
+  const [volunteerEmail, setVolunteerEmail] = useState('');
+
+  useEffect(() => {
+    setVolunteerId(user.id.toString());
+    setVolunteerFirstName(user.first_name);
+    setVolunteerLastName(user.last_name);
+    setVolunteerEmail(user.email);
+  }, [user]);
+
 
   return (
     <Box
