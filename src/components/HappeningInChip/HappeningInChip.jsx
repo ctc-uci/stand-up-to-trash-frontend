@@ -28,6 +28,10 @@ const relativeTimeFromDates = (relative, pivot = new Date()) => {
  * @param elapsed   - the elapsed time in milliseconds
  */
 const relativeTimeFromElapsed = elapsed => {
+  if (!Number.isFinite(elapsed)) {
+    return ''; // Return an empty string if elapsed is not a finite number
+  }
+
   for (const { unit, ms } of units) {
     if (Math.abs(elapsed) >= ms || unit === 'second') {
       return rtf.format(Math.round(elapsed / ms), unit);
@@ -39,6 +43,7 @@ const relativeTimeFromElapsed = elapsed => {
 // const HOUR_IN_MS = 1000 * 60 * 60;
 
 const HappeningInChip = ({ date }) => {
+  console.log("dateu", date)
   // READ THIS! REUSE THIS WHEN WORKING ON HAPPENING NOW
 
   // let color = '#5BD260';

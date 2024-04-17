@@ -136,34 +136,33 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isVie
             </>
           ) : (
             <>
-            {
-              isViewEventPage ?
-              <Tag
-              onClick={() => changeIsCheckedIn(volunteer)}
-              cursor={'pointer'}
-              borderRadius={10}
-              p={2}
-              color={'#0075FF'}
-              bg={'white'}
-              border={'2px solid #0075FF'}
-              gap={1}
-              >
-              <MdCheck />
-              <Text fontSize={'md'}>Check-In</Text>
-            </Tag> 
-            :
-            <Tag
-            borderRadius={10}
-            p={2}
-            color={'#0075FF'}
-            bg={'white'}
-            border={'2px solid #0075FF'}
-            gap={1}
-            >
-            <MdCheck />
-            <Text fontSize={'md'}>Check-In</Text>
-            </Tag> 
-            }
+              {isViewEventPage ? (
+                <Tag
+                  borderRadius={10}
+                  p={2}
+                  color={'#0075FF'}
+                  bg={'white'}
+                  border={'2px solid #0075FF'}
+                  gap={1}
+                >
+                  <MdCheck />
+                  <Text fontSize={'md'}>Check-In</Text>
+                </Tag>
+              ) : (
+                <Tag
+                  onClick={() => changeIsCheckedIn(volunteer)}
+                  cursor={'pointer'}
+                  borderRadius={10}
+                  p={2}
+                  color={'#0075FF'}
+                  bg={'white'}
+                  border={'2px solid #0075FF'}
+                  gap={1}
+                >
+                  <MdCheck />
+                  <Text fontSize={'md'}>Check-In</Text>
+                </Tag>
+              )}
             </>
           )}
         </Flex>
@@ -172,7 +171,12 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isVie
   );
 };
 
-const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) => {
+const VolunteerEventsTable = ({
+  volunteers,
+  changeIsCheckedIn,
+  isCheckinPage,
+  isViewEventPage,
+}) => {
   return (
     <TableContainer border={'2px solid #E2E8F0'} borderRadius={'15px'}>
       <Table
@@ -230,6 +234,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) 
               volunteer={volunteer}
               changeIsCheckedIn={changeIsCheckedIn}
               isCheckinPage={isCheckinPage}
+              isViewEventPage={isViewEventPage}
             />
           ))}
         </Tbody>

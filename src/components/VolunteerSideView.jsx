@@ -8,18 +8,25 @@ import logos_google_calendar from '../assets/logos_google-calendar.svg';
 import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
+import { RxCaretRight } from 'react-icons/rx';
+import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 
-const VolunteerSideView = ({ eventId }) => {
+const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
   const [isReadMore, setIsReadMore] = useState(false);
   const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
+  // const [dateObj, setDateObj] = useState(new Date());
+  const dateObj = new Date(Date.parse(eventData.date));
+  // console.log(eventData);
 
   useEffect(() => {
     getEventById(eventId).then(data => setEventData(data));
-  }, []);
+    // setDateObj(new Date(Date.parse(eventData.date)))
+  }, [eventId]);
 
-  console.log(eventData);
+  // console.log('e', eventData);
+  // console.log('d', dateObj)
 
   function formatDate(dateString) {
     const months = [
@@ -36,33 +43,37 @@ const VolunteerSideView = ({ eventId }) => {
       'Nov',
       'Dec',
     ];
-
+    console.log('dateString', dateString);
     const date = new Date(dateString);
     const month = months[date.getUTCMonth()];
     const day = date.getUTCDate();
     const year = date.getUTCFullYear();
-    const hours = date.getUTCHours();
-    const time =
-      date.getUTCHours().toString().padStart(2, '0') +
-      ':' +
-      date.getUTCMinutes().toString().padStart(2, '0') +
-      (hours >= 12 ? ' PM' : ' AM');
+    const time = dateObj.toLocaleString('default', { timeStyle: 'short' });
+    // const time =
+    //   date.getUTCHours().toString().padStart(2, '0') +
+    //   ':' +
+    //   date.getUTCMinutes().toString().padStart(2, '0') +
+    //   (hours >= 12 ? ' PM' : ' AM');
 
     return `${month} ${day}, ${year} @ ${time}`;
   }
   return (
-    <Flex flexDir={'column'} w={'26em'} mt={'1em'}>
+    <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={'20px'}>
       <HStack justify={'center'} align={'center'}>
-        <Box
-          bg="white"
+        <IconButton
           borderRadius="md"
-          px={'1em'}
-          py={'0.4em'}
           borderColor="#EFEFEF"
+          bg="white"
+          variant={'outline'}
           borderWidth={'0.2em'}
-        >
-          <Text fontWeight={'bold'}>{'>'}</Text>
-        </Box>
+          h="40px"
+          w="40px"
+          icon={<RxCaretRight size={22} />}
+          onClick={() => {
+            onClose();
+            setShowOpenDrawerButton(true);
+          }}
+        ></IconButton>
         <Flex
           bg="#EFEFEF"
           borderRadius="md"
@@ -79,7 +90,7 @@ const VolunteerSideView = ({ eventId }) => {
               />
             </Icon>
             <Text w={'100%'} fontWeight={600}>
-              Happening Now
+              <HappeningInChip date={dateObj} />
             </Text>
           </HStack>
         </Flex>
@@ -137,20 +148,22 @@ const VolunteerSideView = ({ eventId }) => {
       </Box>
 
       <VStack mb={'0.5em'} gap={'0.6em'}>
-        <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'}>
-          <Image src={eventData.image_url} />
+        <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={'100%'}>
+          <Image
+            h="400px"
+            w="100%"
+            fit={'cover'}
+            borderRadius="md"
+            src={eventData.image_url}
+          ></Image>
         </Flex>
         <Text fontWeight={'bold'} fontSize={28} textAlign={'start'} width={'full'}>
           {eventData.name}
         </Text>
         <Text fontWeight={'medium'} color={'gray'} fontSize={15} textAlign={'start'} width={'full'}>
-          {formatDate(eventData.date)}
+          {formatDate(dateObj)}
         </Text>
-        <Text noOfLines={isReadMore ? null : 3}>
-          {eventData.description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae
-          facilis, autem pariatur hic nobis mollitia, illo labore aliquam doloremque, possimus
-          consequatur deserunt veniam quae officia? Omnis enim cum corrupti facere!
-        </Text>
+        <Text noOfLines={isReadMore ? null : 3}>{eventData.description}</Text>
         <Flex w={'100%'}>
           {!isReadMore && (
             <Text
@@ -211,7 +224,11 @@ const VolunteerSideView = ({ eventId }) => {
             align={'center'}
             borderRadius={'0.5em'}
             justify={'space-between'}
-            onClick={() => setMapSelected(prev => !prev)}
+            onClick={async () => {
+              setMapSelected(prev => !prev);
+              const { location } = await getEventById(eventId);
+              window.open(`https://www.google.com/maps/dir/?api=1&destination=${location}`);
+            }}
             borderColor={mapSelected ? 'blue.200' : '#EFEFEF'}
             borderWidth={2}
           >
@@ -242,6 +259,8 @@ const VolunteerSideView = ({ eventId }) => {
 
 VolunteerSideView.propTypes = {
   eventId: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  setShowOpenDrawerButton: PropTypes.func.isRequired,
 };
 
 export default VolunteerSideView;

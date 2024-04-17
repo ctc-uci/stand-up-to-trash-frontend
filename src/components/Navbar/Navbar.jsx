@@ -39,6 +39,7 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       marginBottom="6px"
       backgroundColor={location.pathname === path ? '#D4E4F9' : 'transparent'}
       borderRadius="4px"
+      cursor="pointer"
       onClick={e => {
         e.preventDefault();
         navigate(path);
@@ -110,7 +111,7 @@ const Navbar = () => {
           alignItems="start"
         >
           {/* Box containing everything above "support" */}
-          <Box display="flex" flexDir="column" width={'full'} as="a" href="/">
+          <Box display="flex" flexDir="column" width={'full'}>
             {/* Box containing the logo and role title at the top */}
             <Flex align={'center'} justifyContent={'space-between'} pr={7}>
               <Box
@@ -167,7 +168,7 @@ const Navbar = () => {
               FocusedIcon={EventsIconBlue}
               UnfocusedIcon={EventsIconGrey}
             />
-                
+
             {/* Conditional rendering based on the role */}
             {role === 'admin' && (
               <>
@@ -179,7 +180,6 @@ const Navbar = () => {
                   FocusedIcon={ArchivedEventsIconBlue}
                   UnfocusedIcon={ArchivedEventsIconGrey}
                 />
-
 
                 {/* Volunteers button */}
                 <NavbarButton
