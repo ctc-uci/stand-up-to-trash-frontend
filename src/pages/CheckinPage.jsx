@@ -238,6 +238,7 @@ const CheckinPage = () => {
             volunteers={displayedVolunteers}
             changeIsCheckedIn={handleCheckinButtonClick}
             isCheckinPage={true}
+            isViewEventPage={false}
           />
         ) : (
           <Alert status="warning" borderRadius={'8'} w="50%" mx="auto">
