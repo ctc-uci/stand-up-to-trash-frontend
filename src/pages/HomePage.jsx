@@ -1,12 +1,9 @@
 import {
   Box,
-  Button,
   Grid,
   GridItem,
   Spacer,
   HStack,
-  useDisclosure,
-  useToast,
   Input,
   InputGroup,
   InputLeftElement,
@@ -16,8 +13,6 @@ import {
 import { useEffect, useState, useContext } from 'react';
 import { SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
 
-import PropTypes from 'prop-types';
-import ArchiveEventsModal from '../components/Events/ArchiveEventsModal';
 import EventCard from '../components/Events/EventCard';
 import ImpactSummary from '../components/Events/ImpactSummary';
 import Backend from '../utils/utils';
@@ -25,12 +20,9 @@ import Fuse from 'fuse.js';
 import NavbarContext from '../utils/NavbarContext';
 
 const Home = () => {
-  const toast = useToast();
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
-  const [showSelect, setShowSelect] = useState(false);
-  const [isSelectButton, setIsSelectButton] = useState(true);
-  const [isCreateButton, setIsCreateButton] = useState(true); // toggle between create event button and deselect button
+  const [showSelect] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
@@ -48,36 +40,6 @@ const Home = () => {
     } catch (err) {
       console.log(`Error getting events: `, err.message);
     }
-  };
-
-  const {
-    isOpen: isArchiveEventModalOpen,
-    onOpen: onArchiveEventModalOpen,
-    onClose: onArchiveEventModalClose,
-  } = useDisclosure();
-
-  const confirmArchive = async () => {
-    for (const id of selectedEvents) {
-      try {
-        await Backend.put(`/events/archive/${id}`);
-        getEvents();
-      } catch (error) {
-        console.log(`Error archiving event: ${id}`, error.message);
-      }
-    }
-    onArchiveEventModalClose();
-    handleGoBackButton();
-    toast({
-      title: `Successfully archived ${selectedEvents.length} event(s)`,
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-  };
-
-  const archiveEvents = () => {
-    if (selectedEvents.length === 0) handleGoBackButton();
-    else onArchiveEventModalOpen();
   };
 
   const handleCheckboxChange = id => {
@@ -112,67 +74,9 @@ const Home = () => {
     // getEventId(eventId);
   }, []);
 
-  const handleSelectButton = () => {
-    setShowSelect(true);
-    setIsSelectButton(false);
-    setIsCreateButton(false);
-  };
 
-  const handleGoBackButton = () => {
-    setShowSelect(false);
-    setIsCreateButton(true);
-    setIsSelectButton(true);
-    setSelectedEvents([]);
-  };
 
-  const SelectButton = () => {
-    return (
-      <>
-        <Button
-          style={{ backgroundColor: 'white' }}
-          onClick={() => handleSelectButton()}
-          fontSize="20px"
-          height={'50px'}
-        >
-          Select
-        </Button>
-      </>
-    );
-  };
 
-  const ArchiveButton = ({ id }) => {
-    return (
-      <>
-        <Button
-          style={{ backgroundColor: '#FFABAB', borderRadius: '30px' }}
-          onClick={() => archiveEvents(id)}
-        >
-          <Box padding={3} fontSize={'lg'} display="inline-flex" gap={10}>
-            Archive Event(s)
-          </Box>
-        </Button>
-      </>
-    );
-  };
-
-  ArchiveButton.propTypes = {
-    id: PropTypes.number,
-  };
-
-  const DeselectButton = () => {
-    return (
-      <>
-        <Button
-          style={{ backgroundColor: 'white', borderRadius: '0px' }}
-          fontSize="20px"
-          height={'50px'}
-          onClick={() => handleGoBackButton()}
-        >
-          Deselect All
-        </Button>
-      </>
-    );
-  };
 
   useEffect(() => {
     if (!fuse) {
@@ -225,7 +129,7 @@ const Home = () => {
           <Flex flexDir={'column'} backgroundColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
             <Heading w={'full'}>Upcoming Events</Heading>
             <Box display="flex" flex-direction="row" justifyContent="space-between">
-              {isCreateButton ? <></> : <DeselectButton />}
+          
               <HStack>
                 <InputGroup w="50%">
                   <InputLeftElement pointerEvents="none">
@@ -268,13 +172,7 @@ const Home = () => {
                 </InputGroup>
               </HStack>
 
-              {isSelectButton ? <SelectButton /> : <ArchiveButton id={32} />}
-              <ArchiveEventsModal
-                isOpen={isArchiveEventModalOpen}
-                onClose={onArchiveEventModalClose}
-                confirmArchive={confirmArchive}
-                events={events.filter(event => selectedEvents.includes(event.id))}
-              />
+              
             </Box>
           </Flex>
           <Spacer />
