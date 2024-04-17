@@ -54,9 +54,12 @@ function QRCodePage() {
         display={'flex'}
         flexDir={'row'}
         border={'4px solid #EFEFEF'}
-        gap={'8px'}
-        p={'8px'}
+        gap={'12px'}
+        p={'12px'}
         borderRadius={'12px'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        alignContent={'center'}
       >
         <Image src={lightbulb}></Image>
         <Text fontSize="20px" fontWeight={'600'} color={'#3B3B3B'}>
