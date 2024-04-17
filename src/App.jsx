@@ -59,6 +59,7 @@ const Layout = () => {
 
 import { theme } from './utils/chakraTheme';
 import InputDataPage from './pages/InputDataPage';
+import VolunteerHomePage from './pages/VolunteerHomePage';
 
 const App = () => {
   return (
@@ -238,6 +239,14 @@ const App = () => {
                   element={
                     <ProtectedRoute pageType="volunteer">
                       <VolunteerEventPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/volunteer-home"
+                  element={
+                    <ProtectedRoute pageType="volunteer">
+                      <VolunteerHomePage />
                     </ProtectedRoute>
                   }
                 />
