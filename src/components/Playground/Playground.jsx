@@ -1,5 +1,5 @@
 import ExportButton from '../ExportCSVButton/ExportButton';
-import AddEventsModal from '../AddEventsModal/AddEventsModal';
+import AddEventsModal from '../EventsModal/AddEventsModal';
 import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import Dropzone from '../Dropzone.tsx';
 import { Flex, useDisclosure, Button } from '@chakra-ui/react';
