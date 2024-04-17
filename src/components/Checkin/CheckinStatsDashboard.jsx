@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
 
-import { Text, Flex, Button, Box, VStack } from '@chakra-ui/react';
-
-import { FaLocationDot, FaNewspaper } from 'react-icons/fa6';
+import { Text, Flex, Button, Box, VStack, HStack, useDisclosure } from '@chakra-ui/react';
+import { FaPen } from 'react-icons/fa';
+import { FaLocationDot } from 'react-icons/fa6';
 import { IoDocumentText } from 'react-icons/io5';
 import { IoMdPeople } from 'react-icons/io';
 import { CalendarIcon, TimeIcon } from '@chakra-ui/icons';
 import HappeningInChip from '../HappeningInChip/HappeningInChip';
+import EditEventModal from '../EventsModal/EditEventModal';
 
 const CheckinStatsDashboard = ({ event, registered, checkin }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   // formats dbms date into Month Day, Year
   const getDateString = () => {
     const dateObject = new Date(Date.parse(event['date']));
@@ -19,6 +22,7 @@ const CheckinStatsDashboard = ({ event, registered, checkin }) => {
       // on page load, prevents displaying "Undefined" as date
       return '';
     }
+
     return dateString;
   };
 
@@ -31,6 +35,7 @@ const CheckinStatsDashboard = ({ event, registered, checkin }) => {
     if (value > 12) {
       return (value - 12).toString() + time.substring(2);
     }
+
     return time;
   };
 
@@ -39,9 +44,22 @@ const CheckinStatsDashboard = ({ event, registered, checkin }) => {
       <Flex direction={{ base: 'column', md: 'row' }} w={'full'}>
         <Flex flexDir={'column'} w={'50%'}>
           <Box>{event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}</Box>
-          <Text fontSize={40} fontWeight="bold" color={'rgba(0, 0, 0, 0.75)'}>
-            {event?.name}
-          </Text>
+          <HStack>
+            <Text fontSize={40} fontWeight="bold" color={'rgba(0, 0, 0, 0.75)'}>
+              {event?.name}
+            </Text>
+            <Button
+              leftIcon={<FaPen />}
+              onClick={onOpen}
+              size="sm"
+              ml="3"
+              variant="outline"
+              colorScheme="blue"
+            >
+              Edit
+            </Button>
+            <EditEventModal event={event} isOpen={isOpen} onClose={onClose} />
+          </HStack>
           <Flex mt={3} w="70%" justify={'space-between'}>
             <Flex flexDir={'column'} gap={3}>
               <Flex alignItems={'center'} gap={2}>
@@ -71,18 +89,6 @@ const CheckinStatsDashboard = ({ event, registered, checkin }) => {
                 </Text>
               </Flex>
             </Flex>
-            <Button
-              variant="outline"
-              fontSize={'lg'}
-              fontWeight={'medium'}
-              size="sm"
-              bg={'rgba(170, 170, 170, 0.25)'}
-              color={'#7B7C7D'}
-              gap={2}
-            >
-              <FaNewspaper />
-              Event flyer
-            </Button>
           </Flex>
         </Flex>
 

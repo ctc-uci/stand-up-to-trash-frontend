@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import PropTypes from 'prop-types';
 
-
 import EventCard from '../../components/Events/EventCard';
 import Backend from '../../utils/utils';
 import Fuse from 'fuse.js';

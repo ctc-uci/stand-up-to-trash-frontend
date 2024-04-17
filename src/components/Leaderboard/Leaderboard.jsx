@@ -114,7 +114,11 @@ const LeaderboardCard = ({ event_id }) => {
                   3
                 </Text>
               </Flex>
-              <Text fontWeight="semibold" fontSize={{ base: '16px', xl: '16px' }} textAlign="center">
+              <Text
+                fontWeight="semibold"
+                fontSize={{ base: '16px', xl: '16px' }}
+                textAlign="center"
+              >
                 {LeaderboardArray[2] && LeaderboardArray[2].volunteer_first_name}{' '}
                 {LeaderboardArray[2] && LeaderboardArray[2].volunteer_last_name}
               </Text>

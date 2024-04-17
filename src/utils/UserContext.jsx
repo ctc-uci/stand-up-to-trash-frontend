@@ -39,7 +39,9 @@ export const UserProvider = ({ children }) => {
     return <Spinner />;
   }
 
-  return <UserContext.Provider value={{ user, setUser, updateUser }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user, setUser, updateUser }}>{children}</UserContext.Provider>
+  );
 };
 
 UserProvider.propTypes = {
