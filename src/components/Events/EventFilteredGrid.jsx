@@ -11,7 +11,6 @@ import {
 import { useEffect, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 
-
 import EventCard from '../../components/Events/EventCard';
 import Backend from '../../utils/utils';
 import Fuse from 'fuse.js';
@@ -183,14 +182,14 @@ const EventFilteredGrid = () => {
                   size="lg"
                   maxW="20%"
                   minW="200px"
-                //   py="22px"
-                //   pl="45px"
+                  //   py="22px"
+                  //   pl="45px"
                 >
                   {getLocationOptions()}
                 </Select>
                 <Select
                   bg={'white'}
-                //   icon={<Icon as={CalendarIcon}/>}
+                  //   icon={<Icon as={CalendarIcon}/>}
                   onChange={handleDateChange}
                   placeholder="Select Date"
                   border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
@@ -201,10 +200,8 @@ const EventFilteredGrid = () => {
                 >
                   {getDateOptions()}
                 </Select>
-
               </Flex>
-              <Flex flex-direction="row" justifyContent={'left'} gap={7}>
-              </Flex>
+              <Flex flex-direction="row" justifyContent={'left'} gap={7}></Flex>
             </Flex>
           </Flex>
         </Box>

@@ -1,10 +1,5 @@
 /* eslint-disable react/prop-types */
-import {
-  CloseButton,
-  Flex,
-  useDisclosure,
-  Image,
-} from '@chakra-ui/react';
+import { CloseButton, Flex, useDisclosure, Image } from '@chakra-ui/react';
 import ImageModal from './ImageModal';
 
 const ImageTag = ({ image, setTags, deletedImages, uploadImages }) => {
