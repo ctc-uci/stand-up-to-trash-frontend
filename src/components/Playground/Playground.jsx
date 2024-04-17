@@ -14,6 +14,7 @@ import RegisterGuestModal from '../RegisterGuestModal/RegisterGuestModal.jsx';
 // import Scanner from '../Scanner.jsx';
 import VolunteerCardModal from './VolunteerCardModal.tsx';
 import VolunteerSideView from '../VolunteerSideView.jsx';
+import QRCodePage from '../../pages/QRCodePage';
 
 const auth = getAuth();
 
@@ -53,6 +54,7 @@ const Playground = () => {
 
       <ExportButton eventId={19} />
       <ExportButton eventId={-1} />
+      <QRCodePage />
 
       <GetMapDirectionsButton eventId={88} />
 

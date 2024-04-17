@@ -18,6 +18,8 @@ import {
   SupportIconGrey,
   SettingsIconGrey,
   LogOutIcon,
+  QRCodeIconGrey,
+  QRCodeIconBlue,
 } from '../Icons/NavbarIcons';
 import { CloseIcon } from '@chakra-ui/icons';
 
@@ -88,6 +90,8 @@ const Navbar = () => {
 
   // For logout in case it changes from /logoutv2
   const logoutPath = '/loginv2';
+  // QR code path
+  const qrPath = '/qr';
 
   // For navigating to the user profile when you click on it
   // at the bottom
@@ -170,7 +174,7 @@ const Navbar = () => {
             />
 
             {/* Conditional rendering based on the role */}
-            {role === 'admin' && (
+            {role === 'admin' ? (
               <>
                 {/* Archived Events button */}
                 <NavbarButton
@@ -190,6 +194,14 @@ const Navbar = () => {
                   UnfocusedIcon={VolunteersIconGrey}
                 />
               </>
+            ) : (
+              <NavbarButton
+                buttonText={'Scan QR'}
+                path={qrPath}
+                navigate={navigate}
+                FocusedIcon={QRCodeIconBlue}
+                UnfocusedIcon={QRCodeIconGrey}
+              />
             )}
           </Box>
           {/* Bottom of navbar, support and below */}
