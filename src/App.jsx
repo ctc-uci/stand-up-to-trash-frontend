@@ -3,7 +3,6 @@ import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom
 import './App.css';
 import EventPage from './pages/EventPage';
 import HomePage from './pages/HomePage';
-import ArchivedEvents from './pages/ArchivedEvents';
 import DummyProfiles from './pages/DummyProfiles';
 import DummyProfilePage from './pages/DummyProfilePage';
 import DummySearchVolunteerEvents from './pages/DummySearchVolunteerEvents';
@@ -26,11 +25,14 @@ import Volunteers from './pages/Volunteers';
 import Navbar from './components/Navbar/Navbar';
 import NavbarDrawer from './components/Navbar/NavbarDrawer';
 import AdminPage from './pages/AdminPage';
+import VolunteerEventPage from './pages/VolunteerEventPage';
 import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 import NavbarContext from './utils/NavbarContext';
 import QRCodePage from './pages/QRCodePage';
+import PastEvents from './pages/PastEvents';
+import ViewEvents from './pages/ViewEvents';
 
 import { useDisclosure, useBreakpointValue, Box } from '@chakra-ui/react';
 
@@ -93,10 +95,18 @@ const App = () => {
                   }
                 />
                 <Route
-                  path="/archived-events"
+                  path="/past-events"
                   element={
                     <ProtectedRoute pageType="admin">
-                      <ArchivedEvents />{' '}
+                      <PastEvents />{' '}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/past-events/:eventId"
+                  element={
+                    <ProtectedRoute pageType="admin">
+                      <ViewEvents />{' '}
                     </ProtectedRoute>
                   }
                 />
@@ -222,6 +232,14 @@ const App = () => {
                   element={
                     <ProtectedRoute pageType="settings">
                       <DummyProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/volunteer-event"
+                  element={
+                    <ProtectedRoute pageType="volunteer">
+                      <VolunteerEventPage />
                     </ProtectedRoute>
                   }
                 />

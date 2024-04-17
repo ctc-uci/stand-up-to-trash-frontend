@@ -41,6 +41,7 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       marginBottom="6px"
       backgroundColor={location.pathname === path ? '#D4E4F9' : 'transparent'}
       borderRadius="4px"
+      cursor="pointer"
       onClick={e => {
         e.preventDefault();
         navigate(path);
@@ -80,7 +81,7 @@ const Navbar = () => {
   // Change the paths for each button since these might change
   const homePath = '/';
   const eventsPath = '/event';
-  const archivedEventsPath = '/archived-events';
+  const archivedEventsPath = '/past-events';
   const volunteersPath = '/volunteers';
 
   // For the support and settings button at the bottom above the user
@@ -114,7 +115,7 @@ const Navbar = () => {
           alignItems="start"
         >
           {/* Box containing everything above "support" */}
-          <Box display="flex" flexDir="column" width={'full'} as="a" href="/">
+          <Box display="flex" flexDir="column" width={'full'}>
             {/* Box containing the logo and role title at the top */}
             <Flex align={'center'} justifyContent={'space-between'} pr={7}>
               <Box
@@ -177,7 +178,7 @@ const Navbar = () => {
               <>
                 {/* Archived Events button */}
                 <NavbarButton
-                  buttonText={'Archived Events'}
+                  buttonText={'Past Events'}
                   path={archivedEventsPath}
                   navigate={navigate}
                   FocusedIcon={ArchivedEventsIconBlue}

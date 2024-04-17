@@ -28,7 +28,7 @@ import pencil_icon from '../../Assets/pencil_icon.png';
 import PropTypes from 'prop-types';
 import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import { CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
 import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
@@ -47,12 +47,15 @@ const EventCard = ({
   image_url,
   isSelected,
   handleCheckboxChange,
+  hasBorder = false,
+  isFeatured = false,
 }) => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Placeholder for testing a high-res image
-  // image_url = "https://s3-alpha-sig.figma.com/img/925a/d6ba/98e5fc832087ccc9eb019a8562418d70?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hmVTqMVJanXYQRLkiQ91N0JuEs6HSNy3zmb28YJAdYA4ZaA7hJpZEvoc5jQwIPEqcVV4msa8S4Azw49FqP6jBPiSQyE-Q5u41YMTPge1HaDhA2eQ7me21XG1hlJ~qeOQ3se7sk35~qVkkdaRruV7tBRDsc-Y980XKneuEAfggh35IQJqIn3~HvVb0WogiqR8SYsVOy2FQhlStCRojrOgzhO5YmwdKuwWozhmBuqYNEl6sm45YfLTCfinIci8E8fflDlTtlUhDwUlBpGu0k5ojol7GP2Czwv-ggac6Yijbj~rkDzdWfmj0Vs-7FqgyFtRsSaAvChFPn0yVcaZjrWS1g__";
+  // image_url =
+  //   'https://s3-alpha-sig.figma.com/img/4683/1e77/df1444c9bf86d4882d7252f8c2939d3f?Expires=1713139200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=o5biccW0iouIqgojcte5OMBpWeqQBhdUheAzCF5dUsHGLEYO8lWMb9df75l8NeItiYS93QbY-ZMSRTotplxK2OkExz9nI1Iwy8~HBEZp3cVR9j16wsLAXgB8Vb7GwMCK9d4eFILp6yydgRfr8~Dhd7SwwjCYSgGx94czHpMdLTC231Ss1WmOJiy5PsvfnytNOE3FxumVN95mZ5s-tB5ywvh3h8zqj6-d8FBI2NZG5vd0KqJeiahVxBJQtHxoxmJk1MXrBaQiXuG8aNlUwjGl~wdsqzQ7Aq2~A0x6BfrZUNbVsmmFowD4cdmTPuRTyex4Gc1IjR7AtrAdp2P48iSBTQ__';
   const dateObj = new Date(Date.parse(date));
   const dateStr = `${dateObj.toLocaleString('default', {
     month: 'long',
@@ -62,37 +65,37 @@ const EventCard = ({
     { timeStyle: 'short' },
   )}`;
 
+  let ref = useRef();
+
+  const breakpoint = 400;
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(entries => {
+      setContainerWidth(entries[0].contentRect.width);
+    });
+    observer.observe(ref.current);
+    return () => ref.current && observer.unobserve(ref.current);
+  }, []);
+
+  const sideBySideCard = containerWidth >= breakpoint && isFeatured;
+
   return (
     <>
       <Box
-        // width="293px"
-        // height="250px"
         bg={'white'}
         display="flex"
         flexDir="column"
         cursor={'pointer'}
-        justifyContent={'space-between'}
-        borderRadius="30px"
+        justifyContent={sideBySideCard ? 'center' : 'start'}
         onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
-        // background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
-        // backgroundSize="cover"
+        border={hasBorder ? '2px solid var(--Secondary-Button-Color, #EFEFEF)' : ''}
+        borderRadius="18px"
+        width={'Fill (674px)'}
+        minHeight="260px"
+        height="100%"
+        ref={ref}
       >
-        {/* {showSelect ? (
-          <Checkbox
-            id={id}
-            marginLeft="10px"
-            marginBottom="200px"
-            style={{ borderRadius: '100px' }}
-            isChecked={isSelected}
-            onChange={() => handleCheckboxChange(id)}
-          />
-        ) : null}
-        <Spacer />
-        <Text fontSize={18} fontWeight={'bold'} textAlign={'center'} m="4">
-          {name}
-        </Text>
-        <Spacer /> */}
-
         <Box w={'100%'} display="flex" pointerEvents={'none'} position={'relative'} zIndex={30}>
           {/* Top section, for things like select and edit icons */}
           {showSelect ? (
@@ -108,41 +111,87 @@ const EventCard = ({
           ) : null}
         </Box>
 
-        <Image
-          borderRadius={'xl'}
-          mt={5}
-          alignSelf={'center'}
-          maxW={'88%'}
-          h={'11vw'}
-          src={image_url}
-          objectFit="cover"
-        />
+        <Flex
+          flexDir={sideBySideCard ? 'row' : 'column'}
+          mx={sideBySideCard ? '1rem' : undefined}
+          gap={sideBySideCard ? 6 : undefined}
+        >
+          <Image
+            borderRadius={'xl'}
+            mt={sideBySideCard ? 0 : 5}
+            ml={sideBySideCard ? 5 : undefined}
+            alignSelf={'center'}
+            maxW={sideBySideCard ? '100%' : '88%'}
+            width={sideBySideCard ? '188px' : '100%'}
+            src={image_url}
+            objectFit={'cover'}
+            height="188px"
+          />
 
-        {/* <EditEvents
-          id={id}
-          name={name}
-          description={description}
-          location={location}
-          date={date}
-          time={time}
-          image_url={image_url}
-          parentClose={onClose}
-          getEvents={getEvents}
-        /> */}
+          <Box
+            width={sideBySideCard ? undefined : '100%'}
+            maxW={'88%'}
+            alignSelf={'center'}
+            justifySelf={'center'}
+            gap={'18px'}
+            mt={sideBySideCard ? 0 : 5}
+            mb={sideBySideCard ? 0 : 5}
+          >
+            <HappeningInChip date={dateObj} mb={5} />
 
-        <Box px="27px" py="20px">
-          <HappeningInChip date={dateObj} />
-          {name.length > 14 ? (
-            <Text fontWeight="700" fontSize="25px">
-              {name.substring(0, 14)}...
+            {name.length > 30 ? (
+              <Text
+                fontWeight="800"
+                fontSize="32px"
+                lineHeight="44px"
+                fontFamily="Avenir"
+                mt={2}
+                overflowWrap={'break-word'}
+              >
+                {name.substring(0, 30)}...
+              </Text>
+            ) : (
+              <Text
+                fontWeight="800"
+                fontSize="32px"
+                lineHeight="44px"
+                fontFamily="Avenir"
+                mt={2}
+                overflowWrap={'break-word'}
+              >
+                {name}
+              </Text>
+            )}
+            <Text
+              fontFamily="Avenir"
+              fontSize={sideBySideCard ? '18px' : '20px'}
+              fontWeight={500}
+              mt={1}
+            >
+              {dateStr}
             </Text>
-          ) : (
-            <Text fontWeight="700" fontSize="25px">
-              {name}
-            </Text>
-          )}
-          <Text fontSize="15px">{dateStr}</Text>
-        </Box>
+
+            {isFeatured ? (
+              <Button
+                width={sideBySideCard ? '164px' : '100%'}
+                height={'50px'}
+                padding={'12 16 12 16'}
+                borderRadius={'8px'}
+                backgroundColor={'#0075FF'}
+                color={'#FFFFFF'}
+                mt={4}
+                _hover={{
+                  background: '#dbdbdb',
+                  color: '#0075FF',
+                }}
+              >
+                Register
+              </Button>
+            ) : (
+              ''
+            )}
+          </Box>
+        </Flex>
       </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -156,7 +205,7 @@ const EventCard = ({
                   background={`linear-gradient(0deg, rgba(0, 0, 0, 0.36) 0%, rgba(0, 0, 0, 0.36) 100%), url(${image_url})`}
                   backgroundSize="cover"
                   display="flex"
-                  alignItems="end"
+                  height="188px"
                   p="2"
                 >
                   <Stack mx="6">
@@ -229,6 +278,8 @@ EventCard.propTypes = {
   isSelected: PropTypes.bool,
   handleCheckboxChange: PropTypes.func,
   getEvents: PropTypes.func,
+  hasBorder: PropTypes.bool,
+  isFeatured: PropTypes.bool,
 };
 
 export default EventCard;

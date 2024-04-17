@@ -1,29 +1,25 @@
 import {
   Box,
-  Grid,
-  GridItem,
-  Spacer,
   HStack,
   Input,
   InputGroup,
   InputLeftElement,
   Heading,
   Flex,
+  Stack,
 } from '@chakra-ui/react';
 import { useEffect, useState, useContext } from 'react';
 import { SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
 
-import EventCard from '../components/Events/EventCard';
-import ImpactSummary from '../components/Events/ImpactSummary';
+import PastEventsImpactSummary from '../components/Events/PastEventsImpactSummary';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import NavbarContext from '../utils/NavbarContext';
+import EventsTable from '../components/EventsTable';
 
-const Home = () => {
+const PastEvents = () => {
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
-  const [showSelect] = useState(false);
-  const [selectedEvents, setSelectedEvents] = useState([]);
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
@@ -31,9 +27,30 @@ const Home = () => {
 
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
+  useEffect(() => {
+    console.log('!');
+    console.log(displayEvents);
+  }, [displayEvents]);
+
+  // useEffect(() => {
+  //   // If input is empty, display all volunteers, else conduct the search
+  //   if (input.trim() === '') {
+  //     setDisplayedVolunteers(volunteers);
+  //   } else {
+  //     const options = {
+  //       keys: ['first_name', 'last_name'],
+  //     };
+  //     const fuse = new Fuse(volunteers, options);
+  //     const searchResult = fuse.search(input);
+  //     console.log('search result', searchResult);
+  //     const reduceResult = searchResult.map(result => result.item);
+  //     setDisplayedVolunteers(reduceResult);
+  //   }
+  // }, [input, volunteers]);
+
   const getEvents = async () => {
     try {
-      const eventsData = await Backend.get('/events');
+      const eventsData = await Backend.get('/events/pastEvents');
       setEvents(eventsData.data);
       const options = { keys: ['name', 'date', 'location'], includeScore: true };
       setFuse(new Fuse(eventsData.data, options));
@@ -42,41 +59,11 @@ const Home = () => {
     }
   };
 
-  const handleCheckboxChange = id => {
-    const newCheckedItems = [...selectedEvents];
-    const index = newCheckedItems.indexOf(id);
-
-    if (index === -1) {
-      newCheckedItems.push(id);
-    } else {
-      newCheckedItems.splice(index, 1);
-    }
-
-    setSelectedEvents(newCheckedItems);
-    console.log(selectedEvents);
-  };
-
-  const eventCards = displayEvents.map(element => (
-    <GridItem key={element.id}>
-      <EventCard
-        {...element}
-        isSelected={selectedEvents.includes(element.id)}
-        showSelect={showSelect}
-        handleCheckboxChange={handleCheckboxChange}
-        getEvents={getEvents}
-      />
-    </GridItem>
-  ));
-
   useEffect(() => {
     getEvents();
 
     // getEventId(eventId);
   }, []);
-
-
-
-
 
   useEffect(() => {
     if (!fuse) {
@@ -98,7 +85,7 @@ const Home = () => {
     } else result = events;
     console.log(result);
     setDisplayEvents(result);
-  }, [name, location, date, fuse]);
+  }, [name, location, date, fuse, events]);
 
   return (
     <Flex
@@ -121,17 +108,16 @@ const Home = () => {
           <Heading>Impact Summary</Heading>
         </Flex>
 
-        <ImpactSummary />
+        <PastEventsImpactSummary />
       </Flex>
 
       <Flex justifyContent={'center'} flexDir={'column'} w={'95%'}>
         <Box justifyContent="space-between">
           <Flex flexDir={'column'} backgroundColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
-            <Heading w={'full'}>Upcoming Events</Heading>
-            <Box display="flex" flex-direction="row" justifyContent="space-between">
-          
+            <Heading w={'full'}>Past Events</Heading>
+            <Stack w="auto">
               <HStack>
-                <InputGroup w="50%">
+                <InputGroup w="100%">
                   <InputLeftElement pointerEvents="none">
                     <SearchIcon />
                   </InputLeftElement>
@@ -144,6 +130,8 @@ const Home = () => {
                     placeholder='Search Event Name (e.g. "Festival of Whales")'
                   />
                 </InputGroup>
+              </HStack>
+              <HStack>
                 <InputGroup w="25%">
                   <InputLeftElement pointerEvents="none">
                     <SearchIcon />
@@ -165,24 +153,17 @@ const Home = () => {
                     bg={'white'}
                     value={date}
                     placeholder="Search Date"
+                    type="date"
                     onChange={event => {
                       setDate(event.target.value);
                     }}
                   />
                 </InputGroup>
               </HStack>
-
-              
-            </Box>
+            </Stack>
           </Flex>
-          <Spacer />
-          <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
-            <Box marginTop="3vh">
-              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-                {/* <AddEventsModal getEvents={getEvents} /> */}
-                {eventCards}
-              </Grid>
-            </Box>
+          <Box mt="1rem" backgroundColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
+            <EventsTable events={displayEvents} />
           </Box>
         </Box>
       </Flex>
@@ -190,4 +171,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default PastEvents;

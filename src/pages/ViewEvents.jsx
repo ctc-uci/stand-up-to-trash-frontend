@@ -6,8 +6,6 @@ import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import VolunteerEventsTable from '../components/Checkin/VolunteerEventsTable';
 import CheckinStatsDashboard from '../components/Checkin/CheckinStatsDashboard';
-import VolunteerTabNavigation from '../components/Checkin/VolunteerTabNavigation';
-import CheckinInputPageToggle from '../components/Checkin/CheckinInputPageToggle';
 import { ArrowBackIcon, HamburgerIcon } from '@chakra-ui/icons';
 import CheckinModal from '../components/Checkin/CheckinModal';
 import NavbarContext from '../utils/NavbarContext';
@@ -21,16 +19,17 @@ import {
   Box,
   Input,
   useDisclosure,
-  Spacer,
   InputGroup,
   InputLeftElement,
   Alert,
+  Heading,
 } from '@chakra-ui/react';
 
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
+import { AiOutlineExport } from 'react-icons/ai';
 
-const CheckinPage = () => {
+const ViewEvents = () => {
   const [joinedData, setJoinedData] = useState([]);
   const [volunteerResults, setVolunteerResults] = useState([]);
   const [input, setInput] = useState('');
@@ -38,9 +37,8 @@ const CheckinPage = () => {
   const [registered, setRegistered] = useState('');
   const [checkin, setCheckin] = useState('');
   const { eventId } = useParams();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDisclosure();
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
-  const [tabIndex, setTabIndex] = useState(0);
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
   const navigate = useNavigate();
@@ -49,18 +47,8 @@ const CheckinPage = () => {
 
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
-    if (tabIndex === 0) setDisplayedVolunteers(volunteerResults);
-    else if (tabIndex === 1)
-      setDisplayedVolunteers(
-        volunteerResults.filter(volunteer => volunteer.is_checked_in === true),
-      );
-    else if (tabIndex === 2)
-      setDisplayedVolunteers(
-        volunteerResults.filter(volunteer => volunteer.is_checked_in === false),
-      );
-    else if (tabIndex === 3)
-      setDisplayedVolunteers(volunteerResults.filter(v => v.role === 'guest'));
-  }, [tabIndex, volunteerResults]);
+    setDisplayedVolunteers(volunteerResults);
+  }, [volunteerResults]);
 
   const setData = async () => {
     try {
@@ -179,20 +167,27 @@ const CheckinPage = () => {
             gap={2}
             alignItems={'center'}
             onClick={() => {
-              navigate('/');
+              navigate('/past-events');
             }}
           >
             <ArrowBackIcon />
-            Back to events
+            Back to Past Events
           </Button>
         </Flex>
-
-        <CheckinInputPageToggle eventId={eventId} isCheckinPage={true} />
+        {/* Didn't want to paste in the whole CheckinStatsDashboard to add one line of code */}
+        <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport></AiOutlineExport>} size="md">
+          Export {event.name} Data
+        </Button>
       </Flex>
+
       <CheckinStatsDashboard event={event} registered={registered} checkin={checkin} />
+
       <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
+        <Heading w={'full'} ml="3" mt="7">
+          Past Events
+        </Heading>
         {/* SEARCH BAR---- */}
-        <Flex gap={3} mt={5}>
+        <Flex gap={3} mb="10">
           <InputGroup mt={10}>
             <InputLeftElement pointerEvents="none" top={'6px'} left={'5px'}>
               <GreyCustomSearchIcon w={'24px'} h={'18px'} />
@@ -213,24 +208,6 @@ const CheckinPage = () => {
         </Flex>
         {/* ----SEARCH BAR*/}
 
-        <Flex mb={5} marginTop="4vh">
-          <VolunteerTabNavigation volunteerResults={volunteerResults} setTabIndex={setTabIndex} />
-
-          <Spacer />
-          <Button
-            marginLeft="1vw"
-            onClick={onOpen}
-            cursor={'pointer'}
-            borderRadius={'lg'}
-            py={6}
-            color={'#0075FF'}
-            bg={'white'}
-            border={'2px solid #0075FF'}
-            fontSize={'xl'}
-          >
-            Add guest
-          </Button>
-        </Flex>
         <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
 
         {displayedVolunteers.length != 0 ? (
@@ -238,7 +215,7 @@ const CheckinPage = () => {
             volunteers={displayedVolunteers}
             changeIsCheckedIn={handleCheckinButtonClick}
             isCheckinPage={true}
-            isViewEventPage={false}
+            isViewEventPage={true}
           />
         ) : (
           <Alert status="warning" borderRadius={'8'} w="50%" mx="auto">
@@ -258,4 +235,4 @@ const CheckinPage = () => {
   );
 };
 
-export default CheckinPage;
+export default ViewEvents;
