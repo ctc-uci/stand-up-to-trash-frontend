@@ -47,7 +47,7 @@ const Events = () => {
 
   const getEvents = async () => {
     try {
-      const eventsData = await Backend.get('/events');
+      const eventsData = await Backend.get('/events/currentEvents');
       setEvents(eventsData.data);
       console.log(eventsData.data);
       // setDates();
@@ -69,13 +69,13 @@ const Events = () => {
   const confirmDelete = async () => {
     for (const id of selectedEvents) {
       try {
-        await Backend.put(`/events/archive/${id}`);
+        await Backend.delete(`/events/${id}`);
         getEvents();
       } catch (error) {
         console.log(`Error archiving event: ${id}`, error.message);
       }
     }
-    onDeleteEventModalOpen();
+    onDeleteEventModalClose();
     handleGoBackButton();
     toast({
       title: `Successfully deleted ${selectedEvents.length} event(s)`,
