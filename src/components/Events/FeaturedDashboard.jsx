@@ -1,4 +1,4 @@
-import {Heading, Flex, Grid, GridItem, IconButton} from '@chakra-ui/react';
+import {Heading, Flex, Grid, GridItem, IconButton, useBreakpointValue} from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import Backend from '../../utils/utils';
 import EventCard from './EventCard';
@@ -7,11 +7,12 @@ import PropTypes from 'prop-types';
 
 const FeaturedDashboard = ({onOpen, showOpenDrawerButton}) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
+  const numEvents = useBreakpointValue({ base: 1, xl: 2 });
 
   const getEvents = async () => {
     try {
       const eventsData = await Backend.get('/events');
-      setFeaturedEvents(eventsData.data.slice(0, 2));
+      setFeaturedEvents(eventsData.data.slice(0, numEvents));
     } catch (err) {
       console.log(`Error getting events: `, err.message);
     }
@@ -70,7 +71,7 @@ const FeaturedDashboard = ({onOpen, showOpenDrawerButton}) => {
         borderRadius={'xl'}
         flexDir={'column'}
       >
-        <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+        <Grid templateColumns={{base:"repeat(1, 1fr)", xl:"repeat(2, 1fr)"}} gap={6}>
           {featuredEvents.map(element => (
             <GridItem key={element.id}>
               <EventCard
