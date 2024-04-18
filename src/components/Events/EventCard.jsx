@@ -2,14 +2,11 @@ import {
   Box,
   Button,
   Checkbox,
-  Heading,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalOverlay,
   Image,
-  Stack,
   Text,
   useDisclosure,
   ModalHeader,
@@ -26,22 +23,16 @@ import {
 import { AttachmentIcon } from '@chakra-ui/icons';
 import pencil_icon from '../../Assets/pencil_icon.png';
 import PropTypes from 'prop-types';
-import Leaderboard from '../Leaderboard/Leaderboard.jsx';
 import { CreateEventIcon, CancelIcon } from '../Icons/EventsModalIcons.jsx';
 import { useState, useRef, useEffect } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
-import GetMapDirectionsButton from '../GetMapDirectionsButton/GetMapDirectionsButton.jsx';
-import ExportButton from '../ExportCSVButton/ExportButton';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
 
-import { useNavigate } from 'react-router-dom';
 
 const EventCard = ({
   id,
   name,
-  description,
-  location,
   date,
   showSelect,
   image_url,
@@ -50,8 +41,7 @@ const EventCard = ({
   hasBorder = false,
   isFeatured = false,
 }) => {
-  const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen } = useDisclosure();
 
   // Placeholder for testing a high-res image
   // image_url =
@@ -112,11 +102,10 @@ const EventCard = ({
         </Box>
 
         <Flex
-          flexDir={sideBySideCard ? "row" : "column"}
-          mx={sideBySideCard ? "1rem" : undefined}
+          flexDir={sideBySideCard ? 'row' : 'column'}
+          mx={sideBySideCard ? '1rem' : undefined}
           gap={sideBySideCard ? 6 : undefined}
-
-          >
+        >
           <Image
             borderRadius={'xl'}
             mt={sideBySideCard ? 0 : 5}
@@ -129,14 +118,22 @@ const EventCard = ({
             height="188px"
           />
 
-          <Box width={sideBySideCard ? undefined : '100%'} maxW={'88%'} alignSelf={'center'} justifySelf={'center'} gap={'18px'} mt={sideBySideCard ? 0 : 5} mb={sideBySideCard ? 0 : 5}>
+          <Box
+            width={sideBySideCard ? undefined : '100%'}
+            maxW={'88%'}
+            alignSelf={'center'}
+            justifySelf={'center'}
+            gap={'18px'}
+            mt={sideBySideCard ? 0 : 5}
+            mb={sideBySideCard ? 0 : 5}
+          >
             <HappeningInChip date={dateObj} mb={5} />
 
             {name.length > 30 ? (
               <Text
                 fontWeight="800"
-                fontSize="32px"
-                lineHeight="44px"
+                fontSize="24px"
+                lineHeight="30px"
                 fontFamily="Avenir"
                 mt={2}
                 overflowWrap={'break-word'}
@@ -146,8 +143,8 @@ const EventCard = ({
             ) : (
               <Text
                 fontWeight="800"
-                fontSize="32px"
-                lineHeight="44px"
+                fontSize="24px"
+                lineHeight="30px"
                 fontFamily="Avenir"
                 mt={2}
                 overflowWrap={'break-word'}
@@ -155,7 +152,7 @@ const EventCard = ({
                 {name}
               </Text>
             )}
-            <Text fontFamily="Avenir" fontSize={sideBySideCard ? '18px' : '20px'} fontWeight={500} mt={1}>
+            <Text fontFamily="Avenir" fontSize={sideBySideCard ? '15px' : '16px'} fontWeight={300} mt={1}>
               {dateStr}
             </Text>
 
@@ -182,7 +179,7 @@ const EventCard = ({
         </Flex>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent maxH="660px" maxW="800px" borderRadius="0">
           <ModalBody p="0">
@@ -249,7 +246,7 @@ const EventCard = ({
             </Box>
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

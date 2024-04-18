@@ -10,13 +10,13 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
-
+import PropTypes from 'prop-types';
 
 import EventCard from '../../components/Events/EventCard';
 import Backend from '../../utils/utils';
 import Fuse from 'fuse.js';
 
-const EventFilteredGrid = () => {
+const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton }) => {
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
 
@@ -183,14 +183,14 @@ const EventFilteredGrid = () => {
                   size="lg"
                   maxW="20%"
                   minW="200px"
-                //   py="22px"
-                //   pl="45px"
+                  //   py="22px"
+                  //   pl="45px"
                 >
                   {getLocationOptions()}
                 </Select>
                 <Select
                   bg={'white'}
-                //   icon={<Icon as={CalendarIcon}/>}
+                  //   icon={<Icon as={CalendarIcon}/>}
                   onChange={handleDateChange}
                   placeholder="Select Date"
                   border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
@@ -201,17 +201,22 @@ const EventFilteredGrid = () => {
                 >
                   {getDateOptions()}
                 </Select>
-
               </Flex>
-              <Flex flex-direction="row" justifyContent={'left'} gap={7}>
-              </Flex>
+              <Flex flex-direction="row" justifyContent={'left'} gap={7}></Flex>
             </Flex>
           </Flex>
         </Box>
         <Box>
           <Grid templateColumns="repeat(3, 1fr)" gap={6}>
             {displayEvents.map(element => (
-              <GridItem key={element.id}>
+              <GridItem
+                key={element.id}
+                onClick={() => {
+                  setCurrentEventId(element.id);
+                  setIsOpen(true);
+                  setShowOpenDrawerButton(false);
+                }}
+              >
                 <EventCard
                   {...element}
                   isSelected={selectedEvents.includes(element.id)}
@@ -227,6 +232,12 @@ const EventFilteredGrid = () => {
       </Flex>
     </Flex>
   );
+};
+
+EventFilteredGrid.propTypes = {
+  setCurrentEventId: PropTypes.func.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  setShowOpenDrawerButton: PropTypes.func.isRequired,
 };
 
 export default EventFilteredGrid;

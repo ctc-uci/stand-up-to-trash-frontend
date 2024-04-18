@@ -30,6 +30,7 @@ import { RoleProvider } from './utils/RoleContext';
 import { UserProvider } from './utils/UserContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 import NavbarContext from './utils/NavbarContext';
+import QRCodePage from './pages/QRCodePage';
 import PastEvents from './pages/PastEvents';
 import ViewEvents from './pages/ViewEvents';
 
@@ -59,6 +60,7 @@ const Layout = () => {
 
 import { theme } from './utils/chakraTheme';
 import InputDataPage from './pages/InputDataPage';
+import VolunteerHomePage from './pages/VolunteerHomePage';
 
 const App = () => {
   return (
@@ -133,6 +135,8 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                {/* qr for volunteers */}
+                <Route path="/qr" element={<QRCodePage />} />
                 {/* --ADMIN PAGES */}
 
                 <Route path="/playground" element={<Playground />} />
@@ -223,7 +227,6 @@ const App = () => {
                 }
               />
 
-              {/*--VOLUNTEER PAGES*/}
               <Route element={<Layout />}>
                 <Route
                   path="/profile"
@@ -238,6 +241,14 @@ const App = () => {
                   element={
                     <ProtectedRoute pageType="volunteer">
                       <VolunteerEventPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/volunteer-home"
+                  element={
+                    <ProtectedRoute pageType="volunteer">
+                      <VolunteerHomePage />
                     </ProtectedRoute>
                   }
                 />

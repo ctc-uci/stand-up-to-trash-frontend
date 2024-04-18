@@ -138,7 +138,6 @@ const RenderVolunteerRow = ({ volunteer }) => {
 };
 
 const VolunteersTable = ({ volunteers }) => {
-
   return (
     <TableContainer border={'2px solid #E2E8F0'} borderRadius={'15px'}>
       <Table mb={5} colorScheme="gray">
