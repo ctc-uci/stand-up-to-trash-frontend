@@ -80,7 +80,7 @@ const CreateAccount = () => {
     const role = 'volunteer';
 
     try {
-      const newUser = await createUserInFirebase(email, password, '/playground', navigate); // Flag: Update to new volunteer page route
+      const newUser = await createUserInFirebase(email, password, '/', navigate);
       // add role, firebase_uid
       await createVolunteerRow({
         firstName,

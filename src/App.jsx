@@ -70,23 +70,24 @@ const App = () => {
           <UserProvider>
             <Routes>
               <Route element={<Layout />}>
-                {/* ADMIN PAGES-- */}
+                {/* Admin and Volunteer Pages */}
                 <Route
                   path="/"
                   element={
-                    <ProtectedRoute pageType="admin">
-                      <HomePage />
+                    <ProtectedRoute pageType="volunteer">
+                      {RoleProvider.role == "admin" ? <HomePage /> : <VolunteerHomePage /> }
                     </ProtectedRoute>
                   }
                 />
                 <Route
                   path="/event"
                   element={
-                    <ProtectedRoute pageType="admin">
-                      <EventPage />
+                    <ProtectedRoute pageType="volunteer">
+                      {RoleProvider.role == "admin" ? <EventPage /> : <VolunteerEventPage /> }
                     </ProtectedRoute>
                   }
                 />
+                {/* ADMIN PAGES-- */}
                 <Route
                   path="/admin"
                   element={

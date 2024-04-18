@@ -30,7 +30,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
 
   const getEvents = async () => {
     try {
-      const eventsData = await Backend.get('/events');
+      const eventsData = await Backend.get('/events/currentEvents');
       setEvents(eventsData.data);
       console.log(eventsData.data);
       // setDates();
