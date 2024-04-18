@@ -18,7 +18,6 @@ import {
   Checkbox,
   Grid,
   GridItem,
-  Link,
   useDisclosure,
   Text,
   InputGroup,
@@ -60,7 +59,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
 
   const {
     isOpen: isAgreementOpen,
-    onOpen: onAgreementOpen,
+    // onOpen: onAgreementOpen,
     onClose: onAgreementClose,
   } = useDisclosure();
 
@@ -314,10 +313,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
                           }))
                         }
                       >
-                        I agree to the{' '}
-                        <Link color="#003FE3" onClick={onAgreementOpen}>
-                          terms and conditions
-                        </Link>
+                        I agree to the terms and conditions
                       </Checkbox>
                       {errors.waiver && <Text color="red">{errors.waiver.message}</Text>}
                     </GridItem>
