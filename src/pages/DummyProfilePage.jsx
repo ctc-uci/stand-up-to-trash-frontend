@@ -25,6 +25,7 @@ import { BsPersonFill } from 'react-icons/bs';
 import { RiErrorWarningFill } from 'react-icons/ri';
 import SettingsCard from '../components/DummyVolunteerProfile/SettingsCard';
 import SettingsField from '../components/DummyVolunteerProfile/SettingsField';
+import EditProfilePictureModal from '../components/EditProfilePictureModal';
 import { useContext, useEffect, useRef, useState } from 'react';
 import RoleContext from '../utils/RoleContext';
 import UserContext from '../utils/UserContext';
@@ -54,6 +55,7 @@ export const DummyProfilePage = () => {
   const { user, updateUser } = useContext(UserContext);
   const { role, setRole } = useContext(RoleContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure();
   const [confirmed, setConfirmed] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
@@ -123,6 +125,7 @@ export const DummyProfilePage = () => {
       }, 250);
     }
   };
+
 
   return (
     <Box
@@ -219,16 +222,19 @@ export const DummyProfilePage = () => {
             display={{ base: 'none', md: 'block', lg: 'block' }}
           >
             <Center>
-              <Image
-                src={user.image_url}
-                objectFit={'cover'}
-                alt="Green double couch with wooden legs"
-                mt={5}
-                mb={5}
-                borderRadius="full"
-                boxSize="150px"
-                border={'solid black 1px'}
-              />
+                <Image
+                  src={user.image_url}
+                  objectFit={'cover'}
+                  onClick={onProfileOpen}
+                  alt="Green double couch with wooden legs"
+                  mt={5}
+                  mb={5}
+                  borderRadius="full"
+                  boxSize="150px"
+                  border={'solid black 1px'}
+                />
+                <EditProfilePictureModal isOpen={isProfileOpen} onClose={onProfileClose} userInfo={user}/>
+
               <Box
                 backgroundColor={'#EFEFEF'}
                 width={'36px'}
