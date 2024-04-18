@@ -33,21 +33,22 @@ const ImpactSummary = () => {
   };
 
   const header = [
-    { key: 'event_id', label: 'EVENT_ID' },
     { key: 'id', label: 'ID' },
-    { key: 'is_checked_in', label: 'IS_CHECKED_IN' },
+    { key: 'volunteer_name', label: 'VOLUNTEER_NAME' },
     { key: 'number_in_party', label: 'NUMBER_IN_PARTY' },
-    { key: 'ounces', label: 'OUNCES' },
     { key: 'pounds', label: 'POUNDS' },
-    { key: 'unusual_items', label: 'UNUSUAL_ITEMS' },
-    { key: 'volunteer_id', label: 'VOLUNTEER_ID' },
+    { key: 'ounces', label: 'OUNCES' },
+    { key: 'notes', label: 'NOTES' },
+    { key: 'event_name', label: 'EVENT_NAME' },
+    { key: 'is_checked_in', label: 'IS_CHECKED_IN' },
+    { key: 'image_array', label: 'IMAGE_ARRAY' },
   ];
 
   useEffect(() => {
     const getEventId = async () => {
       try {
-        const eventIdData = await Backend.get(`/data/`);
-        setEventIdData(eventIdData.data);
+        const eventIdData = await Backend.get(`/stats/export/data`);
+        setEventIdData(eventIdData.data.data);
       } catch (err) {
         console.log(err.message);
       }
@@ -98,7 +99,11 @@ const ImpactSummary = () => {
       <VStack gap={120}>
         <Box></Box>
         <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport></AiOutlineExport>} size="md">
-          <CSVLink data={eventIdData} filename="./data.csv" headers={header}>
+          <CSVLink
+            data={eventIdData.length ? eventIdData : []}
+            filename="./data.csv"
+            headers={header}
+          >
             Export Data
           </CSVLink>
         </Button>
