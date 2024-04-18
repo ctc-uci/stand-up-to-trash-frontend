@@ -35,6 +35,11 @@ const getProfileByFirebaseUid = async uid => {
   return response.data;
 };
 
+const updateProfileImage = async (id, profile) => {
+  const response = await Backend.put(`/profiles/imageURL/${id}`, profile);
+  return response.data;
+};
+
 export {
   getProfile,
   getAdminProfile,
@@ -43,4 +48,5 @@ export {
   getProfileById,
   updateProfile,
   getProfileByFirebaseUid,
+  updateProfileImage,
 };

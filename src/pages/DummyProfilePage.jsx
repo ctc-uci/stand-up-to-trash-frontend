@@ -126,7 +126,6 @@ export const DummyProfilePage = () => {
     }
   };
 
-
   return (
     <Box
       bg={{ base: 'white', md: '#E8EDF3', lg: '#E8EDF3' }}
@@ -222,18 +221,22 @@ export const DummyProfilePage = () => {
             display={{ base: 'none', md: 'block', lg: 'block' }}
           >
             <Center>
-                <Image
-                  src={user.image_url}
-                  objectFit={'cover'}
-                  onClick={onProfileOpen}
-                  alt="Green double couch with wooden legs"
-                  mt={5}
-                  mb={5}
-                  borderRadius="full"
-                  boxSize="150px"
-                  border={'solid black 1px'}
-                />
-                <EditProfilePictureModal isOpen={isProfileOpen} onClose={onProfileClose} userInfo={user}/>
+              <Image
+                src={user.image_url}
+                objectFit={'cover'}
+                onClick={onProfileOpen}
+                alt="Green double couch with wooden legs"
+                mt={5}
+                mb={5}
+                borderRadius="full"
+                boxSize="150px"
+                border={'solid black 1px'}
+              />
+              <EditProfilePictureModal
+                isOpen={isProfileOpen}
+                onClose={onProfileClose}
+                userInfo={user}
+              />
 
               <Box
                 backgroundColor={'#EFEFEF'}

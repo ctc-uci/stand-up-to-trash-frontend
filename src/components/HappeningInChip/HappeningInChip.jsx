@@ -43,7 +43,7 @@ const relativeTimeFromElapsed = elapsed => {
 // const HOUR_IN_MS = 1000 * 60 * 60;
 
 const HappeningInChip = ({ date }) => {
-  console.log("dateu", date)
+  console.log('dateu', date);
   // READ THIS! REUSE THIS WHEN WORKING ON HAPPENING NOW
 
   // let color = '#5BD260';

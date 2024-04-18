@@ -74,10 +74,6 @@ const Home = () => {
     // getEventId(eventId);
   }, []);
 
-
-
-
-
   useEffect(() => {
     if (!fuse) {
       return;
@@ -129,7 +125,6 @@ const Home = () => {
           <Flex flexDir={'column'} backgroundColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
             <Heading w={'full'}>Upcoming Events</Heading>
             <Box display="flex" flex-direction="row" justifyContent="space-between">
-          
               <HStack>
                 <InputGroup w="50%">
                   <InputLeftElement pointerEvents="none">
@@ -171,8 +166,6 @@ const Home = () => {
                   />
                 </InputGroup>
               </HStack>
-
-              
             </Box>
           </Flex>
           <Spacer />

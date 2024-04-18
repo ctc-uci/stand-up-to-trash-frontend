@@ -3,7 +3,11 @@ import { useEffect, useState, useContext } from 'react';
 import UserContext from '../../utils/UserContext';
 import Backend from '../../utils/utils';
 import DataCard from './DataCard';
-import { TotalEventsIcon, TotalTrashIcon, LargestTrashIcon } from '../../Assets/impact_summary/ImpactSummaryIcons';
+import {
+  TotalEventsIcon,
+  TotalTrashIcon,
+  LargestTrashIcon,
+} from '../../Assets/impact_summary/ImpactSummaryIcons';
 
 const VolunteerImpactSummary = () => {
   const [events, setEvents] = useState(0);
@@ -20,7 +24,7 @@ const VolunteerImpactSummary = () => {
 
   const getData = async () => {
     try {
-      let totalPounds = 0; 
+      let totalPounds = 0;
       let allWeights = [];
       // let userId = 111; // For testing
       let userId = user?.id;
@@ -28,10 +32,13 @@ const VolunteerImpactSummary = () => {
       // Get the events which the user has attended, length = num events
       let eventResponse = await Backend.get(`/data/volunteer/${userId}/event`);
       setEvents(eventResponse.data.length);
-  
+
       // Get all weight entries and calculate total weight in lbs
       let weightResponse = await Backend.get(`/data/volunteer/${userId}`);
-      for (const { ounces, pounds } of weightResponse.data) { totalPounds += ounces / 16 + pounds; allWeights.push(ounces / 16 + pounds); }
+      for (const { ounces, pounds } of weightResponse.data) {
+        totalPounds += ounces / 16 + pounds;
+        allWeights.push(ounces / 16 + pounds);
+      }
       setTotalPounds(parseFloat(totalPounds));
 
       // Largest value of all weights entered
@@ -60,29 +67,24 @@ const VolunteerImpactSummary = () => {
     >
       <DataCard
         amount={events}
-        text={<Text
-            fontSize={'18px'}
-            fontFamily={'Avenir'}
-            fontWeight={500}
-          >
+        text={
+          <Text fontSize={'18px'} fontFamily={'Avenir'} fontWeight={500}>
             Total Events Participated
-        </Text>}
+          </Text>
+        }
         icon={
           <Flex background={'#96DB53'} p={2.5} borderRadius={'lg'}>
             <TotalEventsIcon></TotalEventsIcon>
           </Flex>
         }
-
       />
       <DataCard
         amount={total + ' lbs'}
-        text={<Text
-            fontSize={'18px'}
-            fontFamily={'Avenir'}
-            fontWeight={500}
-          >
+        text={
+          <Text fontSize={'18px'} fontFamily={'Avenir'} fontWeight={500}>
             Total Trash Weight
-          </Text>}
+          </Text>
+        }
         icon={
           <Flex background={'#FF792E'} p={2.5} borderRadius={'lg'}>
             <TotalTrashIcon></TotalTrashIcon>
@@ -91,13 +93,11 @@ const VolunteerImpactSummary = () => {
       />
       <DataCard
         amount={largestItem + ' lbs'}
-        text={<Text
-          fontSize={'18px'}
-          fontFamily={'Avenir'}
-          fontWeight={500}
-        >
-          Largest Trash Item Collected
-        </Text>}
+        text={
+          <Text fontSize={'18px'} fontFamily={'Avenir'} fontWeight={500}>
+            Largest Trash Item Collected
+          </Text>
+        }
         icon={
           <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
             <LargestTrashIcon></LargestTrashIcon>

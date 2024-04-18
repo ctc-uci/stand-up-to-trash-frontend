@@ -8,16 +8,14 @@ import {
   Heading,
   Select,
   useDisclosure,
-HStack,
+  HStack,
   Flex,
-  useToast, 
+  useToast,
   Button,
   Spacer,
-  
 } from '@chakra-ui/react';
 import { useEffect, useState, useContext } from 'react';
 import { SearchIcon, CalendarIcon, HamburgerIcon, DeleteIcon } from '@chakra-ui/icons';
-
 
 import NavbarContext from '../utils/NavbarContext';
 import PropTypes from 'prop-types';
@@ -84,7 +82,6 @@ const Events = () => {
       isClosable: true,
     });
   };
-
 
   const handleCheckboxChange = id => {
     const newCheckedItems = [...selectedEvents];
@@ -187,7 +184,12 @@ const Events = () => {
     return (
       <>
         <Button
-          style={{ backgroundColor: 'white', borderRadius: '5px', color:'#0075FF', border:'1px solid #0075FF'}}
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '5px',
+            color: '#0075FF',
+            border: '1px solid #0075FF',
+          }}
           onClick={() => handleSelectButton()}
           fontSize="20px"
           height={'50px'}
@@ -221,7 +223,12 @@ const Events = () => {
     return (
       <>
         <Button
-          style={{ backgroundColor: 'white', borderRadius: '5px', color:'#0075FF', border:'1px solid #0075FF'}}
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '5px',
+            color: '#0075FF',
+            border: '1px solid #0075FF',
+          }}
           fontSize="20px"
           height={'50px'}
           onClick={() => handleGoBackButton()}
@@ -316,12 +323,12 @@ const Events = () => {
           </Flex>
         </Box>
       </Flex>
-  
+
       <Flex justifyContent={'center'} flexDirection={'column'} w={'95%'} mt={5}>
         <Flex flexDirection={'column'} bgColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
           <Heading w={'full'}>Upcoming Events</Heading>
           <Box display="flex" flexDirection="row" justifyContent="space-between">
-            {isCreateButton }
+            {isCreateButton}
             <HStack>
               <InputGroup w="50%">
                 <InputLeftElement pointerEvents="none">
@@ -363,44 +370,45 @@ const Events = () => {
                 />
               </InputGroup>
             </HStack>
-            
           </Box>
         </Flex>
         <Spacer>
-        <Flex justifyContent="flex-end" width="100%" paddingY="10px">
-        {isSelectButton ? <SelectButton /> : <CancelButton />}
-      </Flex>
+          <Flex justifyContent="flex-end" width="100%" paddingY="10px">
+            {isSelectButton ? <SelectButton /> : <CancelButton />}
+          </Flex>
         </Spacer>
-{!isSelectButton && (
-  <Box position="fixed" bottom="20px" right="20px">
-    <Button colorScheme="red"onClick={deleteEvents}  disabled={selectedEvents.length === 0} leftIcon={<DeleteIcon />}>
-      Delete
-    </Button>
-  </Box>
+        {!isSelectButton && (
+          <Box position="fixed" bottom="20px" right="20px">
+            <Button
+              colorScheme="red"
+              onClick={deleteEvents}
+              disabled={selectedEvents.length === 0}
+              leftIcon={<DeleteIcon />}
+            >
+              Delete
+            </Button>
+          </Box>
+        )}
+        <DeleteEventsModal
+          isOpen={isDeleteEventModalOpen}
+          onClose={onDeleteEventModalClose}
+          confirmDelete={confirmDelete}
+          events={events.filter(event => selectedEvents.includes(event.id))}
+        />
 
-)}
-<DeleteEventsModal
-  isOpen={isDeleteEventModalOpen}
-  onClose={onDeleteEventModalClose}
-  confirmDelete={confirmDelete}
-  events={events.filter(event => selectedEvents.includes(event.id))}
-/>
-
-<Box display="flex" justifyContent={'center'} px={10}>
-  <Box display="flex" flexDirection="space-between" justifyContent={'center'}>
-  <Box marginTop="3vh">
-    <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-      <AddEventsModal getEvents={getEvents} />
-      {eventCards}
-    </Grid>
-  </Box>
-  </Box>
-</Box>
-
+        <Box display="flex" justifyContent={'center'} px={10}>
+          <Box display="flex" flexDirection="space-between" justifyContent={'center'}>
+            <Box marginTop="3vh">
+              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                <AddEventsModal getEvents={getEvents} />
+                {eventCards}
+              </Grid>
+            </Box>
+          </Box>
+        </Box>
       </Flex>
     </Flex>
   );
-  
 };
 
 export default Events;
