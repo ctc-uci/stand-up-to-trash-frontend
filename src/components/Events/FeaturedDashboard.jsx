@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 const FeaturedDashboard = ({onOpen, showOpenDrawerButton}) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
-  const numEvents = useBreakpointValue({ base: 1, xl: 2 });
+  const numEvents = useBreakpointValue({ base: 1, md: 2, xl: 2 });
 
   const getEvents = async () => {
     try {
@@ -20,7 +20,7 @@ const FeaturedDashboard = ({onOpen, showOpenDrawerButton}) => {
 
   useEffect(() => {
     getEvents();
-  }, []);
+  }, [numEvents]);
 
   return (
     <Flex
@@ -71,7 +71,7 @@ const FeaturedDashboard = ({onOpen, showOpenDrawerButton}) => {
         borderRadius={'xl'}
         flexDir={'column'}
       >
-        <Grid templateColumns={{base:"repeat(1, 1fr)", xl:"repeat(2, 1fr)"}} gap={6}>
+        <Grid templateColumns={{base:"repeat(1, 1fr)", md: "repeat(2, 1fr)", xl:"repeat(2, 1fr)"}} gap={6}>
           {featuredEvents.map(element => (
             <GridItem key={element.id}>
               <EventCard

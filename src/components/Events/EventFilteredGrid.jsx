@@ -207,7 +207,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
           </Flex>
         </Box>
         <Box>
-          <Grid templateColumns={{base:"repeat(1, 1fr)", xl:"repeat(3, 1fr)"}} gap={6}>
+          <Grid templateColumns={{base:"repeat(1, 1fr)", xl:"repeat(4, 1fr)"}} gap={6}>
             {displayEvents.map(element => (
               <GridItem
                 key={element.id}
