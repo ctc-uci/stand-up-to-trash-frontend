@@ -79,15 +79,20 @@ const VolunteerHomePage = () => {
       ml={{ base: '0', xl: '15rem' }}
       py={10}
     >
-      <Flex w={'95%'} flexDir={'column'}>
-        <Flex alignItems={'center'} mb="8" gap={4}>
+      <Flex w={{base : '85%', md : '95%'}} flexDir={'column'}>
+        <Flex alignItems={{base : 'left', md : 'center'}} mb="8" gap={{base: 22, md : 4}} flexDir={{base : 'column', md : 'row'}}>
           <HamburgerIcon
             color={'#717171'}
-            boxSize={16}
+            boxSize={31}
             display={{ base: 'flex', xl: 'none' }}
             onClick={onNavbarDrawerOpen}
           />
-          <Heading fontFamily={'Avenir'} fontSize={'36px'} fontWeight={800}>
+          <Heading 
+            fontSize={{base : '20px', md : '36px'}}
+            fontWeight={{base : 500, md : 800}}
+            w={'full'} 
+            fontFamily={'Avenir'}
+          >
             Impact Summary
           </Heading>
         </Flex>
