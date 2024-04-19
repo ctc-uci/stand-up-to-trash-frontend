@@ -8,6 +8,7 @@ import {
   ModalCloseButton,
   Text,
   Button,
+  Box,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 
@@ -25,25 +26,29 @@ const RegistrationModal = ({
     <Modal isOpen={true} size="xl" motionPreset={animate ? 'scale' : 'none'}>
       <ModalOverlay />
       <ModalContent borderRadius={'18px'}>
-        <ModalHeader justify={'center'} align={'center'} paddingTop="3rem">
-          <Text
-            color={'#717171'}
-            fontSize={'20px'}
-            align={'center'}
-            fontFamily={'Avenir'}
-            fontWeight={800}
-            mb={'-6px'}
-          >
-            Volunteer registration
-          </Text>
-          <Text fontFamily={'Avenir'} fontSize={'32px'} align={'center'} fontWeight={800}>
-            {title}
-          </Text>
-        </ModalHeader>
+        {title !== undefined && (
+          <ModalHeader justify={'center'} align={'center'} paddingTop="3rem">
+            <Text
+              color={'#717171'}
+              fontSize={'20px'}
+              align={'center'}
+              fontFamily={'Avenir'}
+              fontWeight={800}
+              mb={'-6px'}
+            >
+              Volunteer registration
+            </Text>
+            <Text fontFamily={'Avenir'} fontSize={'32px'} align={'center'} fontWeight={800}>
+              {title}
+            </Text>
+          </ModalHeader>
+        )}
         <ModalCloseButton
           borderRadius={'100px'}
           background="#EFEFEF"
           color="#717171"
+          m="2"
+          mt="3"
           onClick={e => {
             e.preventDefault();
             registrationFlowState.onCloseFlowModal();
@@ -51,33 +56,38 @@ const RegistrationModal = ({
         />
         <ModalBody>
           {/* insert children (includes the title in here) for different steps */}
-          {children}
-          {buttons ? (
-            buttons
-          ) : (
-            <Flex justify={'flex-end'} w={'100%'} gap={'1rem'}>
-              <Button
-                w={'7rem'}
-                backgroundColor={'#FFFFFF'}
-                color={'#0075FF'}
-                border={'0.1rem solid #0075FF'}
-                onClick={registrationFlowState.onPrevious}
-                isDisabled={!registrationFlowState.previousActive}
-              >
-                Back
-              </Button>
-              <Button
-                w={'7rem'}
-                backgroundColor={'#0075FF'}
-                color={'white'}
-                _hover={{ bg: '#7eb5f7' }}
-                onClick={registrationFlowState.onContinue}
-                isDisabled={!registrationFlowState.continueActive}
-              >
-                {continueText}
-              </Button>
-            </Flex>
-          )}
+          <Box px="38px" pb="8">
+            {children}
+          </Box>
+          <Box pb="28px" px="8px">
+            {buttons ? (
+              buttons
+            ) : (
+              <Flex justify={'flex-end'} w={'100%'} gap={'1rem'}>
+                <Button
+                  w={'7rem'}
+                  backgroundColor={'#FFFFFF'}
+                  color={'#0075FF'}
+                  _hover={{ bg: 'rgba(74, 158, 255, 0.14)' }}
+                  border={'0.1rem solid #0075FF'}
+                  onClick={registrationFlowState.onPrevious}
+                  isDisabled={!registrationFlowState.previousActive}
+                >
+                  Back
+                </Button>
+                <Button
+                  w={'7rem'}
+                  backgroundColor={'#0075FF'}
+                  color={'white'}
+                  _hover={{ bg: '#0058bd' }}
+                  onClick={registrationFlowState.onContinue}
+                  isDisabled={!registrationFlowState.continueActive}
+                >
+                  {continueText}
+                </Button>
+              </Flex>
+            )}
+          </Box>
         </ModalBody>
       </ModalContent>
     </Modal>

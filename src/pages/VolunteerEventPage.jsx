@@ -25,7 +25,7 @@ const VolunteerEventPage = () => {
     isOpen: isRegistrationFlowOpen,
     onOpen: onRegistrationFlowOpen,
     onClose: onRegistrationFlowClose,
-  } = useDisclosure();
+  } = useDisclosure({ defaultIsOpen: true });
 
   return (
     <Flex dir="column">
@@ -35,6 +35,7 @@ const VolunteerEventPage = () => {
         <RegistrationFlowController
           isOpen={isRegistrationFlowOpen}
           onClose={onRegistrationFlowClose}
+          eventId={currentEventId}
         />
       )}
       {/* <RegistrationModal /> */}
