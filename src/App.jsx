@@ -75,7 +75,7 @@ const App = () => {
                   path="/"
                   element={
                     <ProtectedRoute pageType="volunteer">
-                      {RoleProvider.role == "admin" ? <HomePage /> : <VolunteerHomePage /> }
+                      {RoleProvider.role == 'admin' ? <HomePage /> : <VolunteerHomePage />}
                     </ProtectedRoute>
                   }
                 />
@@ -83,7 +83,7 @@ const App = () => {
                   path="/event"
                   element={
                     <ProtectedRoute pageType="volunteer">
-                      {RoleProvider.role == "admin" ? <EventPage /> : <VolunteerEventPage /> }
+                      {RoleProvider.role == 'admin' ? <EventPage /> : <VolunteerEventPage />}
                     </ProtectedRoute>
                   }
                 />
