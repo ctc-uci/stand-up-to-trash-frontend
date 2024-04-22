@@ -127,7 +127,6 @@ const QRCodeIconGrey = createIcon({
   ),
 });
 
-
 const VolunteersIconGrey = createIcon({
   displayName: 'VolunteersIconBlue',
   viewBox: '0 0 18 19',

@@ -29,7 +29,6 @@ import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
 
-
 const EventCard = ({
   id,
   name,
@@ -152,7 +151,12 @@ const EventCard = ({
                 {name}
               </Text>
             )}
-            <Text fontFamily="Avenir" fontSize={sideBySideCard ? '15px' : '16px'} fontWeight={300} mt={1}>
+            <Text
+              fontFamily="Avenir"
+              fontSize={sideBySideCard ? '15px' : '16px'}
+              fontWeight={300}
+              mt={1}
+            >
               {dateStr}
             </Text>
 
