@@ -18,7 +18,6 @@ const VolunteerImpactSummary = () => {
 
   useEffect(() => {
     updateUser();
-    console.log(user);
     getData();
   }, []);
 

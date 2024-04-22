@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children, pageType }) => {
         if (role === 'admin') {
           setLoading(false);
         } else if (role === 'volunteer') {
-          navigate('/playground');
+          navigate('/');
           setLoading(true);
         } else if (role === 'unloggedIn') {
           navigate('/loginv2');
@@ -53,7 +53,7 @@ const ProtectedRoute = ({ children, pageType }) => {
           navigate('/');
           setLoading(true);
         } else if (role === 'volunteer') {
-          navigate('/playground');
+          navigate('/');
           setLoading(true);
         } else {
           setLoading(false);

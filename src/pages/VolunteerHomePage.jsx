@@ -54,7 +54,6 @@ const VolunteerHomePage = () => {
     if (!fuse) {
       return;
     }
-    console.log(name);
     let ands = [];
     if (name) ands.push({ name: name });
     if (location) ands.push({ location: location });
@@ -63,12 +62,10 @@ const VolunteerHomePage = () => {
     let result;
     if (ands.length > 0) {
       const fuseResult = fuse.search({ $and: ands });
-      console.log(fuseResult);
       // If we want to filter by score:
       // result = fuseResult.filter(item => item.score <= 0.5).map(item => item.item);
       result = fuseResult.map(item => item.item);
     } else result = events;
-    console.log(result);
     setDisplayEvents(result);
   }, [name, location, date, fuse]);
 

@@ -18,10 +18,12 @@ import {
   Checkbox,
   Grid,
   GridItem,
-  Link,
   useDisclosure,
   Text,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react';
+import { IoMdPeople } from 'react-icons/io';
 
 const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
   const [waiverText, setWaiverText] = useState('');
@@ -37,7 +39,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
   const volunteerObject = yup.object().shape({
     first_name: yup.string().required('First name is required'),
     last_name: yup.string().required('Last name is required'),
-    email: yup.string().email('Invalid email format').nullable(),
+    email: yup.string().email('Invalid email format').nullable().notRequired(),
     waiver: yup
       .boolean()
       .oneOf([true], 'You must accept the terms and conditions')
@@ -57,7 +59,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
 
   const {
     isOpen: isAgreementOpen,
-    onOpen: onAgreementOpen,
+    // onOpen: onAgreementOpen,
     onClose: onAgreementClose,
   } = useDisclosure();
 
@@ -67,12 +69,11 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
     formState: { errors },
   } = useForm({ defaultValues: volunteerData, resolver: yupResolver(volunteerObject) });
 
-  const isFormFilled = () => {
+  const isFormIncomplete = () => {
     return (
-      volunteerData.first_name == '' ||
-      volunteerData.last_name == '' ||
-      volunteerData.waiver == false ||
-      volunteerData.email === null // Considering email can be null
+      volunteerData.first_name === '' ||
+      volunteerData.last_name === '' ||
+      volunteerData.waiver === false
     );
   };
 
@@ -190,19 +191,24 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
                       <Text fontWeight={'medium'} fontSize={'14px'} color={'#717171'}>
                         Party size
                       </Text>
-                      <Input
-                        marginTop={1}
-                        placeholder="1"
-                        alignItems={'center'}
-                        {...register('party_number')}
-                        type="string"
-                        onChange={e =>
-                          setVolunteerData(prevState => ({
-                            ...prevState,
-                            party_number: e.target.value,
-                          }))
-                        }
-                      />
+                      <InputGroup>
+                        <InputLeftElement paddingTop="0.5em">
+                          <IoMdPeople size={'1.7em'} color="gray" />
+                        </InputLeftElement>
+                        <Input
+                          marginTop={1}
+                          placeholder="1"
+                          alignItems={'center'}
+                          {...register('party_number')}
+                          type="string"
+                          onChange={e =>
+                            setVolunteerData(prevState => ({
+                              ...prevState,
+                              party_number: e.target.value,
+                            }))
+                          }
+                        />
+                      </InputGroup>
                     </GridItem>
                     <GridItem colSpan={1}>
                       <Text fontWeight={'medium'} fontSize={'14px'} color={'#717171'}>
@@ -307,10 +313,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
                           }))
                         }
                       >
-                        I agree to the{' '}
-                        <Link color="#003FE3" onClick={onAgreementOpen}>
-                          terms and conditions
-                        </Link>
+                        I agree to the terms and conditions
                       </Checkbox>
                       {errors.waiver && <Text color="red">{errors.waiver.message}</Text>}
                     </GridItem>
@@ -337,7 +340,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
                   h="50px"
                   style={{ borderRadius: '12px' }}
                   _hover={{ bg: '#002B99' }}
-                  isDisabled={isFormFilled()}
+                  isDisabled={isFormIncomplete()}
                 >
                   Add Volunteer
                 </Button>
