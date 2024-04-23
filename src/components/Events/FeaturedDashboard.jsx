@@ -1,11 +1,11 @@
-import {Heading, Flex, Grid, GridItem, IconButton} from '@chakra-ui/react';
+import { Heading, Flex, Grid, GridItem, IconButton } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import Backend from '../../utils/utils';
 import EventCard from './EventCard';
-import {RxCaretLeft} from 'react-icons/rx';
+import { RxCaretLeft } from 'react-icons/rx';
 import PropTypes from 'prop-types';
 
-const FeaturedDashboard = ({onOpen, showOpenDrawerButton}) => {
+const FeaturedDashboard = ({ onOpen, showOpenDrawerButton }) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
 
   const getEvents = async () => {
@@ -33,30 +33,34 @@ const FeaturedDashboard = ({onOpen, showOpenDrawerButton}) => {
         width="95%"
         pb="8px"
         align-items="center"
-        justifyContent={"space-between"}
+        justifyContent={'space-between'}
         gap="8px"
         flex-shrink="0"
         borderRadius={'xl'}
         flexDir={'row'}
       >
         <Flex w="70%">
-          <Heading fontWeight={900} fontSize={32} fontFamily={'Avenir'} color={'rgba(0, 0, 0, 0.75)'}>
+          <Heading
+            fontWeight={900}
+            fontSize={32}
+            fontFamily={'Avenir'}
+            color={'rgba(0, 0, 0, 0.75)'}
+          >
             Featured Events
           </Heading>
         </Flex>
         <Flex w="40px">
           <IconButton
-                borderRadius="md"
-                borderColor="#EFEFEF"
-                bg="white"
-                variant={"outline"}
-                borderWidth={'0.2em'}
-                h="40px"
-                w="40px"
-                icon={<RxCaretLeft size={22}/>}
-                onClick={onOpen}
-                display={showOpenDrawerButton ? { base: 'none', xl: 'flex' } : 'none'}
-
+            borderRadius="md"
+            borderColor="#EFEFEF"
+            bg="white"
+            variant={'outline'}
+            borderWidth={'0.2em'}
+            h="40px"
+            w="40px"
+            icon={<RxCaretLeft size={22} />}
+            onClick={onOpen}
+            display={showOpenDrawerButton ? { base: 'none', xl: 'flex' } : 'none'}
           ></IconButton>
         </Flex>
       </Flex>

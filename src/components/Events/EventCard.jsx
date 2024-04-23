@@ -29,7 +29,6 @@ import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
 
-
 const EventCard = ({
   id,
   name,
