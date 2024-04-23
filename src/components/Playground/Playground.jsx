@@ -15,6 +15,7 @@ import RegisterGuestModal from '../RegisterGuestModal/RegisterGuestModal.jsx';
 import VolunteerCardModal from './VolunteerCardModal.tsx';
 import VolunteerSideView from '../VolunteerSideView.jsx';
 import QRCodePage from '../../pages/QRCodePage';
+import ExportCsvComponent from '../Events/CSVExample.jsx';
 
 const auth = getAuth();
 
@@ -67,6 +68,7 @@ const Playground = () => {
       <RegisterGuestModal isOpen={isOpen} onClose={onClose} eventId={'4'} />
       <CameraModal isOpen={isOpen} onClose={onClose} eventID={3} />
       <VolunteerSideView eventId={88} />
+      <ExportCsvComponent />
     </Flex>
   );
 };

@@ -21,7 +21,7 @@ const ImpactSummary = () => {
   const getData = async () => {
     try {
       let response = await Backend.get('/stats/registered');
-      console.log(response.data);
+      // console.log(response.data);
       setRegistered(parseFloat(response.data));
       response = await Backend.get('/stats/checkedIn');
       setCheckedIn(parseFloat(response.data));
@@ -48,7 +48,9 @@ const ImpactSummary = () => {
     const getEventId = async () => {
       try {
         const eventIdData = await Backend.get(`/stats/export/data`);
-        setEventIdData(eventIdData.data.data);
+        console.log("Look here");
+        console.log(eventIdData);
+        setEventIdData(eventIdData.data);
       } catch (err) {
         console.log(err.message);
       }
@@ -98,7 +100,7 @@ const ImpactSummary = () => {
       />
       <VStack gap={120}>
         <Box></Box>
-        <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport></AiOutlineExport>} size="md">
+        <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport></AiOutlineExport>} size="md" mr={3}>
           <CSVLink
             data={eventIdData.length ? eventIdData : []}
             filename="./data.csv"
