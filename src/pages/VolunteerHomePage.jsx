@@ -79,15 +79,20 @@ const VolunteerHomePage = () => {
       ml={{ base: '0', xl: '15rem' }}
       py={10}
     >
-      <Flex w={'95%'} flexDir={'column'}>
-        <Flex alignItems={'center'} mb="8" gap={4}>
+      <Flex w={{base : '85%', md : '95%'}} flexDir={'column'}>
+        <Flex alignItems={{base : 'left', md : 'center'}} mb="8" gap={{base: 22, md : 4}} flexDir={{base : 'column', md : 'row'}}>
           <HamburgerIcon
             color={'#717171'}
-            boxSize={16}
+            boxSize={31}
             display={{ base: 'flex', xl: 'none' }}
             onClick={onNavbarDrawerOpen}
           />
-          <Heading fontFamily={'Avenir'} fontSize={'36px'} fontWeight={800}>
+          <Heading 
+            fontSize={{base : '20px', md : '36px'}}
+            fontWeight={{base : 500, md : 800}}
+            w={'full'} 
+            fontFamily={'Avenir'}
+          >
             Impact Summary
           </Heading>
         </Flex>
@@ -95,15 +100,20 @@ const VolunteerHomePage = () => {
         <VolunteerImpactSummary />
       </Flex>
 
-      <Flex justifyContent={'center'} flexDir={'column'} w={'95%'}>
+      <Flex justifyContent={'center'} flexDir={'column'} w={{base : '85%', md : '95%'}}>
         <Box justifyContent="space-between">
-          <Flex flexDir={'column'} backgroundColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
-            <Heading w={'full'} fontFamily={'Avenir'} fontSize={'36px'} fontWeight={800}>
+          <Flex flexDir={'column'} backgroundColor={{base : 'none', md: '#F8F8F8'}} p={{base : 0, md : 8}} borderRadius={'lg'} gap={{base : 6, md : 8}}>
+            <Heading 
+              fontSize={{base : '20px', md : '36px'}}
+              fontWeight={{base : 500, md : 800}}
+              w={'full'} 
+              fontFamily={'Avenir'}
+            >
               Upcoming Events
             </Heading>
             <Box display="flex" flex-direction="row" justifyContent="space-between">
               <HStack width={'100%'}>
-                <InputGroup w="60%">
+                <InputGroup w={{base : '100%', md : '60%'}}>
                   <InputLeftElement pointerEvents="none">
                     <SearchIcon />
                   </InputLeftElement>
@@ -113,10 +123,11 @@ const VolunteerHomePage = () => {
                     onChange={event => {
                       setName(event.target.value);
                     }}
-                    placeholder='Search Event Name (e.g. "Festival of Whales")'
+
+                    placeholder='Search name'
                   />
                 </InputGroup>
-                <InputGroup w="20%">
+                <InputGroup w="20%" display={{ base : 'none', md : 'initial'}}>
                   <InputLeftElement pointerEvents="none">
                     <SearchIcon />
                   </InputLeftElement>
@@ -129,7 +140,7 @@ const VolunteerHomePage = () => {
                     placeholder="Search Location"
                   />
                 </InputGroup>
-                <InputGroup w="20%">
+                <InputGroup w="20%" display={{ base : 'none', md : 'initial'}}>
                   <InputLeftElement pointerEvents="none">
                     <SearchIcon />
                   </InputLeftElement>
@@ -148,8 +159,13 @@ const VolunteerHomePage = () => {
           <Spacer />
           <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
             <Box marginTop="3vh">
-              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-                {/* <AddEventsModal getEvents={getEvents} /> */}
+              <Grid 
+                templateColumns={{
+                  base : 'repeat(1, 85vw)',
+                  md : 'repeat(4, 1fr)'
+                }}
+                gap={6}
+              >
                 {eventCards}
               </Grid>
             </Box>
