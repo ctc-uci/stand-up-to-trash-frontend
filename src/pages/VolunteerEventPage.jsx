@@ -44,7 +44,11 @@ const VolunteerEventPage = () => {
             borderRadius={'xl'}
             flexDir={'column'}
           >
-            <HamburgerIcon color={'#717171'} boxSize={16} onClick={onNavbarDrawerOpen} />
+            <HamburgerIcon
+              color={'#717171'}
+              boxSize={{ base: 10, md: 16 }}
+              onClick={onNavbarDrawerOpen}
+            />
           </Flex>
           <Flex>
             <Spacer />
@@ -72,9 +76,13 @@ const VolunteerEventPage = () => {
             ></IconButton>
           </Flex>
         </Flex>
-
-        <FeaturedDashboard onOpen={onOpen} showOpenDrawerButton={showOpenDrawerButton} />
+        <FeaturedDashboard
+          width={{ base: '90%' }}
+          onOpen={onOpen}
+          showOpenDrawerButton={showOpenDrawerButton}
+        />
         <EventFilteredGrid
+          width={{ base: '90%' }}
           setCurrentEventId={setCurrentEventId}
           setIsOpen={setIsOpen}
           setShowOpenDrawerButton={setShowOpenDrawerButton}

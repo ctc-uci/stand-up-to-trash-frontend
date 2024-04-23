@@ -7,6 +7,8 @@ import {
   InputLeftElement,
   Select,
   Flex,
+  Heading,
+  HStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
@@ -133,104 +135,122 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
   }, [name, location, date, fuse]);
 
   return (
-    <Flex
-      flexDir={'column'}
-      alignItems={'center'}
-      bg="#E6EAEF"
-      minH="100vh"
-      ml={{ base: '0', xl: '15rem' }}
-      pt={8}
-      pb={10}
-    >
+    <>
       <Flex
-        bgColor="#FFF"
-        width="95%"
-        p="32px"
-        flex-direction="column"
-        align-items="center"
-        gap="8px"
-        flex-shrink="0"
-        borderRadius={'xl'}
         flexDir={'column'}
+        alignItems={'center'}
+        bg="#E6EAEF"
+        ml={{ base: '2vw', xl: '15rem' }}
+        mr={{ base: '2vw' }}
+        pt={4}
+        mb="32px"
       >
-        <Box display="flex">
-          <Flex w={'100%'}>
-            <Flex flexDir={'column'} gap={3} w={'100%'}>
-              <Flex flexDir={'row'} gap={3}>
-                <InputGroup align-items="left" justifyContent={'center'}>
-                  <InputLeftElement pointerEvents="none" py="24px" pl="15px">
-                    <SearchIcon color={'#7B7C7D'} />
-                  </InputLeftElement>
-                  <Input
-                    bg={'white'}
-                    value={name}
-                    onChange={event => {
-                      setName(event.target.value);
-                    }}
-                    border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
-                    borderRadius={12}
-                    size="lg"
-                    fontSize={18}
-                    placeholder='Search Event Name (e.g. "Festival of Whales")'
-                  />
-                </InputGroup>
-                <Select
-                  bg={'white'}
-                  placeholder="Select Location"
-                  onChange={handleLocationChange}
-                  border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
-                  borderRadius={12}
-                  size="lg"
-                  maxW="20%"
-                  minW="200px"
-                  //   py="22px"
-                  //   pl="45px"
-                >
-                  {getLocationOptions()}
-                </Select>
-                <Select
-                  bg={'white'}
-                  //   icon={<Icon as={CalendarIcon}/>}
-                  onChange={handleDateChange}
-                  placeholder="Select Date"
-                  border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
-                  borderRadius={12}
-                  size="lg"
-                  maxW="20%"
-                  minW="200px"
-                >
-                  {getDateOptions()}
-                </Select>
-              </Flex>
-              <Flex flex-direction="row" justifyContent={'left'} gap={7}></Flex>
-            </Flex>
+        <Flex
+          width={{ base: '100%', xl: '95%' }}
+          p={{ base: '20px' }}
+          pb={4}
+          bgColor={{ xl: '#FFF' }}
+          align-items="center"
+          justifyContent={'space-between'}
+          gap="8px"
+          flex-shrink="0"
+          borderRadius={'xl'}
+          flexDir={'column'}
+        >
+          <Flex w="80%">
+            <Heading
+              fontWeight={{ base: 600, xl: 900 }}
+              lineHeight="normal"
+              fontStyle="normal"
+              fontSize={{ base: '18px', xl: '32px' }}
+              fontFamily={'Avenir'}
+              color={'rgba(0, 0, 0, 0.75)'}
+            >
+              All Upcoming Events
+            </Heading>
           </Flex>
-        </Box>
-        <Box>
-          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-            {displayEvents.map(element => (
-              <GridItem
-                key={element.id}
-                onClick={() => {
-                  setCurrentEventId(element.id);
-                  setIsOpen(true);
-                  setShowOpenDrawerButton(false);
-                }}
-              >
-                <EventCard
-                  {...element}
-                  isSelected={selectedEvents.includes(element.id)}
-                  // showSelect={showSelect}
-                  handleCheckboxChange={handleCheckboxChange}
-                  getEvents={getEvents}
-                  hasBorder={true}
-                />
-              </GridItem>
-            ))}
-          </Grid>
-        </Box>
+          {/* Search/Input Boxes */}
+          <Box display="flex">
+            <Flex w={'100%'}>
+              <Flex flexDir={'column'} gap={3} w={'100%'}>
+                <Flex flexDir={{ base: 'column', xl: 'row' }} gap={3}>
+                  <InputGroup align-items="left" justifyContent={'center'}>
+                    <InputLeftElement pointerEvents="none" py="24px" pl="15px">
+                      <SearchIcon color={'#7B7C7D'} />
+                    </InputLeftElement>
+                    <Input
+                      bg={'white'}
+                      value={name}
+                      onChange={event => {
+                        setName(event.target.value);
+                      }}
+                      border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
+                      borderRadius={12}
+                      size="lg"
+                      fontSize={18}
+                      placeholder="Search Name"
+                    />
+                  </InputGroup>
+                  <HStack flexDir="row">
+                    <Select
+                      bg={'white'}
+                      placeholder="Select Location"
+                      onChange={handleLocationChange}
+                      border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
+                      borderRadius={12}
+                      size="lg"
+                      maxW="20%"
+                      minW={{ base: '49%', xl: '200px' }}
+                      //   py="22px"
+                      //   pl="45px"
+                    >
+                      {getLocationOptions()}
+                    </Select>
+                    <Select
+                      bg={'white'}
+                      //   icon={<Icon as={CalendarIcon}/>}
+                      onChange={handleDateChange}
+                      placeholder="Select Date"
+                      border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
+                      borderRadius={12}
+                      size="lg"
+                      maxW="20%"
+                      minW={{ base: '48%', xl: '200px' }}
+                    >
+                      {getDateOptions()}
+                    </Select>
+                  </HStack>
+                </Flex>
+                <Flex flex-direction="row" justifyContent={'left'} gap={7}></Flex>
+              </Flex>
+            </Flex>
+          </Box>
+          <Box>
+            <Grid templateColumns={{ base: 'repeat(1, 1fr)', xl: 'repeat(4, 1fr)' }} gap={6}>
+              {displayEvents.map(element => (
+                <GridItem
+                  key={element.id}
+                  onClick={() => {
+                    setCurrentEventId(element.id);
+                    setIsOpen(true);
+                    setShowOpenDrawerButton(false);
+                  }}
+                >
+                  <EventCard
+                    {...element}
+                    isSelected={selectedEvents.includes(element.id)}
+                    // showSelect={showSelect}
+                    handleCheckboxChange={handleCheckboxChange}
+                    getEvents={getEvents}
+                    hasBorder={true}
+                  />
+                </GridItem>
+              ))}
+            </Grid>
+          </Box>
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   );
 };
 
