@@ -29,7 +29,6 @@ import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
 
-
 const EventCard = ({
   id,
   name,
@@ -115,7 +114,7 @@ const EventCard = ({
             width={sideBySideCard ? '188px' : '100%'}
             src={image_url}
             objectFit={'cover'}
-            height="188px"
+            height={{base : '116px', md : '188px'}}
           />
 
           <Box
@@ -127,7 +126,7 @@ const EventCard = ({
             mt={sideBySideCard ? 0 : 5}
             mb={sideBySideCard ? 0 : 5}
           >
-            <HappeningInChip date={dateObj} mb={5} />
+            <HappeningInChip date={dateObj} mb={5}/>
 
             {name.length > 30 ? (
               <Text
@@ -143,7 +142,7 @@ const EventCard = ({
             ) : (
               <Text
                 fontWeight="800"
-                fontSize="24px"
+                fontSize={{base : "20px", md : "24px"}}
                 lineHeight="30px"
                 fontFamily="Avenir"
                 mt={2}
@@ -152,7 +151,10 @@ const EventCard = ({
                 {name}
               </Text>
             )}
-            <Text fontFamily="Avenir" fontSize={sideBySideCard ? '15px' : '16px'} fontWeight={300} mt={1}>
+            <Text fontFamily="Avenir" fontSize={sideBySideCard ? {base : '12px', md : '15px'} : '16px'} 
+                  fontWeight={{base : 500, md :300}} 
+                  mt={1}
+                >
               {dateStr}
             </Text>
 

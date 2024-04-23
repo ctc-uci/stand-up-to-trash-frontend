@@ -33,7 +33,6 @@ import NavbarContext from './utils/NavbarContext';
 import QRCodePage from './pages/QRCodePage';
 import PastEvents from './pages/PastEvents';
 import ViewEvents from './pages/ViewEvents';
-
 import { useDisclosure, useBreakpointValue, Box } from '@chakra-ui/react';
 
 const Layout = () => {
@@ -61,13 +60,18 @@ const Layout = () => {
 import { theme } from './utils/chakraTheme';
 import InputDataPage from './pages/InputDataPage';
 import VolunteerHomePage from './pages/VolunteerHomePage';
+import RoleConsumer from './components/RoleConsumer';
+
 
 const App = () => {
+
   return (
     <ChakraProvider theme={theme}>
       <Router>
         <RoleProvider>
           <UserProvider>
+            <RoleConsumer>
+            {role => (
             <Routes>
               <Route element={<Layout />}>
                 {/* Admin and Volunteer Pages */}
@@ -75,15 +79,16 @@ const App = () => {
                   path="/"
                   element={
                     <ProtectedRoute pageType="volunteer">
-                      {RoleProvider.role == "admin" ? <HomePage /> : <VolunteerHomePage /> }
+                      {role == 'admin' ? <HomePage /> : <VolunteerHomePage />}
                     </ProtectedRoute>
                   }
                 />
+                
                 <Route
                   path="/event"
                   element={
-                    <ProtectedRoute pageType="volunteer">
-                      {RoleProvider.role == "admin" ? <EventPage /> : <VolunteerEventPage /> }
+                    <ProtectedRoute pageType="volunteer" >
+                      {role == 'admin' ? <EventPage /> : <VolunteerEventPage />}
                     </ProtectedRoute>
                   }
                 />
@@ -265,6 +270,8 @@ const App = () => {
               <Route path="/profiles" element={<DummyProfiles />} />
               <Route path="/select-event" element={<SelectEvent />} />
             </Routes>
+            )}
+            </RoleConsumer>
           </UserProvider>
         </RoleProvider>
       </Router>
