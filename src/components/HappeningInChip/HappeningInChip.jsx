@@ -84,9 +84,7 @@ const HappeningInChip = ({ date }) => {
             />
           </g>
         </svg>
-        <Text
-          fontSize={{base : '12px', md : '14px'}}
-        >
+        <Text fontSize={{ base: '12px', md: '14px' }}>
           {/* {inThePast ? 'happened' : 'happening'}  */}
           {relativeTimeFromDates(date)}
         </Text>

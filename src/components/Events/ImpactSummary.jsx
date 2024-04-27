@@ -20,7 +20,7 @@ const ImpactSummary = () => {
 
   useEffect(() => {
     console.log('iddata=', eventIdData);
-  }, [eventIdData])
+  }, [eventIdData]);
 
   const getData = async () => {
     try {
@@ -48,25 +48,22 @@ const ImpactSummary = () => {
   //   { key: 'image_array', label: 'IMAGE_ARRAY' },
   // ];
   const header = [
-    {key: 'eventName', label: 'event_name'},
-    { key: 'eventDatid', label: 'ID' },
-    { key: 'eventData.volunteer_name', label: 'VOLUNTEER_NAME' },
-    { key: 'eventData.number_in_party', label: 'NUMBER_IN_PARTY' },
-    { key: 'eventData.pounds', label: 'POUNDS' },
-    { key: 'eventData.ounces', label: 'OUNCES' },
-    { key: 'eventData.notes', label: 'NOTES' },
-    { key: 'eventData.event_name', label: 'EVENT_NAME' },
-    { key: 'eventData.is_checked_in', label: 'IS_CHECKED_IN' },
-    { key: 'eventData.image_array', label: 'IMAGE_ARRAY' },
-    {key: 'totalOunces', label: 'totalOunces'},
-    {key: 'totalPounds', label: 'totalPounds'}
-  ]
+    { key: 'eventName', label: 'event_name' },
+    { key: 'id', label: 'ID' },
+    { key: 'volunteer_name', label: 'VOLUNTEER_NAME' },
+    { key: 'number_in_party', label: 'NUMBER_IN_PARTY' },
+    { key: 'pounds', label: 'POUNDS' },
+    { key: 'ounces', label: 'OUNCES' },
+    { key: 'notes', label: 'NOTES' },
+    { key: 'is_checked_in', label: 'IS_CHECKED_IN' },
+    { key: 'image_array', label: 'IMAGE_ARRAY' },
+  ];
 
   useEffect(() => {
     const getEventId = async () => {
       try {
         const eventIdData = await Backend.get(`/stats/export/data`);
-        console.log("Look here");
+        console.log('Look here');
         console.log(eventIdData);
         setEventIdData(eventIdData.data);
       } catch (err) {
@@ -77,15 +74,6 @@ const ImpactSummary = () => {
     getEventId();
   }, []);
 
-  const handleCsv = () => {
-    eventIdData.map((eventData) => <CSVLink
-            data={eventData ? [eventData] : ''}
-            filename="./data.csv"
-            headers={header}
-          >
-    </CSVLink>)
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-  }
 
   return (
     <Box
@@ -128,7 +116,7 @@ const ImpactSummary = () => {
       />
       <VStack gap={120}>
         <Box></Box>
-        <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport/>} size="md" mr={3}>
+        <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport />} size="md" mr={3}>
           <CSVLink
             data={eventIdData.length ? eventIdData : []}
             filename="./data.csv"
