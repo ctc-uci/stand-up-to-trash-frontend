@@ -85,18 +85,16 @@ const VolunteerEventPage = () => {
         />
       </Box>
       {/* Drawer Component */}
-      <Drawer placement="right" onClose={onClose} isOpen={isOpen} size="lg">
+      <Drawer placement="right" onClose={onClose} isOpen={isOpen} size="s">
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent minWidth="320px"> {/* Setting a minimum width */}
           <DrawerCloseButton />
           <DrawerHeader>Event Details</DrawerHeader>
           <DrawerBody>
-            {/* Conditional rendering based on `currentEventId` */}
             {isOpen && (
-              <VolunteerSideView
-                eventId={currentEventId}
-                onClose={onClose}
-              />
+              <div style={{ width: '100%', overflow: 'auto' }}> {/* Ensure content fits and is scrollable if needed */}
+                <VolunteerSideView eventId={currentEventId} onClose={onClose} />
+              </div>
             )}
           </DrawerBody>
         </DrawerContent>

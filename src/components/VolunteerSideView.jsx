@@ -58,22 +58,20 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     return `${month} ${day}, ${year} @ ${time}`;
   }
   return (
-    <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={'20px'}>
+    <Flex flexDir={'column'} w={'100%'} maxW={'26em'} mt={'1em'} px={{ base: '10px', md: '20px' }}>
       <HStack justify={'center'} align={'center'}>
         <IconButton
           borderRadius="md"
           borderColor="#EFEFEF"
           bg="white"
           variant={'outline'}
-          borderWidth={'0.2em'}
-          h="40px"
-          w="40px"
+          borderWidth={'2px'}
           icon={<RxCaretRight size={22} />}
           onClick={() => {
             onClose();
             setShowOpenDrawerButton(true);
           }}
-        ></IconButton>
+        />
         <Flex
           bg="#EFEFEF"
           borderRadius="md"
@@ -100,12 +98,12 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         p={'0.8em'}
         borderWidth={'0.2em'}
         borderRadius="lg"
-        marginY={'0.8em'}
+        my={'0.8em'}
         borderColor={'#EFEFEF'}
       >
         <Flex justify={'space-between'} alignItems={'center'}>
           <Text fontWeight={'bold'}>Your event status</Text>
-          <Box px={'0.4em'} borderRadius={'md'} bg="gray.200" mb={'0.3em'}>
+          <Box px={'0.4em'} borderRadius={'md'} bg="gray.200">
             <EditIcon />
           </Box>
         </Flex>
@@ -116,7 +114,6 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             px={'0.4em'}
             borderRadius={'md'}
             bg="gray.200"
-            mb={'0.3em'}
             justifyContent={'center'}
             alignItems={'center'}
             gap={'0.3em'}
@@ -132,7 +129,6 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             px={'0.4em'}
             borderRadius={'md'}
             borderWidth={'0.15em'}
-            mb={'0.3em'}
             justifyContent={'center'}
             alignItems={'center'}
             gap={'0.3em'}
@@ -144,113 +140,92 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         <Flex justify={'space-between'} alignItems={'center'}>
           <Text>Party size</Text>
           <Text fontWeight={'bold'}>12 people</Text>
-        </Flex>
+          </Flex>
       </Box>
 
-      <VStack mb={'0.5em'} gap={'0.6em'}>
-        <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={'100%'}>
-          <Image
-            h="400px"
-            w="100%"
-            fit={'cover'}
-            borderRadius="md"
-            src={eventData.image_url}
-          ></Image>
-        </Flex>
-        <Text fontWeight={'bold'} fontSize={28} textAlign={'start'} width={'full'}>
+      <VStack spacing={4} mb={'0.5em'}>
+        <Image
+          h={{ base: "200px", md: "400px" }} 
+          w="100%"
+          fit={'cover'}
+          borderRadius="md"
+          src={eventData.image_url}
+        />
+        <Text fontWeight={'bold'} fontSize={{ base: "24px", md: "28px" }} textAlign={'start'} w={'100%'}>
           {eventData.name}
         </Text>
-        <Text fontWeight={'medium'} color={'gray'} fontSize={15} textAlign={'start'} width={'full'}>
-          {formatDate(dateObj)}
+        <Text fontWeight={'medium'} color={'gray.500'} fontSize={{ base: "14px", md: "15px" }} textAlign={'start'} w={'100%'}>
+          {formatDate(eventData.date)}
         </Text>
-        <Text noOfLines={isReadMore ? null : 3}>{eventData.description}</Text>
-        <Flex w={'100%'}>
-          {!isReadMore && (
-            <Text
-              color={'#0075FF'}
-              fontWeight={600}
-              textAlign={'start'}
-              _hover={{
-                cursor: 'pointer',
-              }}
-              onClick={() => setIsReadMore(true)}
-            >
-              Read more...
-            </Text>
-          )}
-        </Flex>
+        <Text noOfLines={isReadMore ? null : 3} w={'100%'}>
+          {eventData.description}
+        </Text>
+        <Button
+          size="sm"
+          variant="link"
+          colorScheme="blue"
+          onClick={() => setIsReadMore(!isReadMore)}
+        >
+          {isReadMore ? 'Read less...' : 'Read more...'}
+        </Button>
       </VStack>
 
       <Flex
-        border={'0.3em solid #EFEFEF'}
+        border={'0.2em solid #EFEFEF'}
         borderRadius={'0.5em'}
-        padding={'1em'}
-        flexDir={'column'}
+        p={'1em'}
+        flexDirection={'column'}
         gap={'1em'}
         mb={'1.5em'}
       >
-        <Text as="b" textAlign={'left'}>
-          Add this event
+        <Text as="b" textAlign={'left'} fontSize={'lg'}>
+          Add this event to:
         </Text>
-        <Flex gap={'1em'}>
-          <Flex
-            backgroundColor={'#EFEFEF'}
-            w={'12.5em'}
-            padding={'0.8em'}
-            borderRadius={'0.5em'}
-            justify={'space-between'}
-            align={'center'}
-            onClick={() => setCalendarSelected(prev => !prev)}
-            borderColor={calendarSelected ? 'blue.200' : '#EFEFEF'}
-            borderWidth={2}
-          >
-            <Flex justify={'center'} align={'center'}>
-              <Image src={logos_google_calendar} h={'1.3em'} w={'1.3em'} mr={'9%'} />
-              <Text fontWeight={600}>Calendar</Text>
-            </Flex>
-            <Flex justify={'center'} align={'center'}>
-              <IconButton
-                as={IoMdLink}
-                h={'1.3em'}
-                w={'1.3em'}
-                backgroundColor={calendarSelected ? 'blue.200' : '#EFEFEF'}
-              />
-            </Flex>
-          </Flex>
-          <Flex
-            backgroundColor={'#EFEFEF'}
-            w={'12.5em'}
-            padding={'0.8em'}
-            align={'center'}
-            borderRadius={'0.5em'}
-            justify={'space-between'}
-            onClick={async () => {
-              setMapSelected(prev => !prev);
-              const { location } = await getEventById(eventId);
-              window.open(`https://www.google.com/maps/dir/?api=1&destination=${location}`);
-            }}
-            borderColor={mapSelected ? 'blue.200' : '#EFEFEF'}
-            borderWidth={2}
-          >
-            <Flex justify={'center'} align={'center'}>
-              <Image src={logos_google_maps} h={'1.3em'} w={'1.3em'} mr={'9%'} />
-              <Text fontWeight={600} w={'8em'}>
-                Google Map
-              </Text>
-            </Flex>
-            <Flex justify={'center'} align={'center'} h={'1.3em'} w={'1.3em'}>
-              <IconButton
-                as={IoMdLink}
-                h={'1.3em'}
-                w={'1.3em'}
-                backgroundColor={mapSelected ? 'blue.200' : '#EFEFEF'}
-              />
-            </Flex>
-          </Flex>
-        </Flex>
+        <HStack spacing={3}>
+        <Button
+          onClick={() => setCalendarSelected(prev => !prev)}
+          bg={calendarSelected ? 'blue.300' : 'gray.200'}
+          leftIcon={<Image src={logos_google_calendar} h="1em" w="1em" />}
+          rightIcon={<IoMdLink size="18px" color={calendarSelected ? 'white' : 'blue.500'} />}
+          size="sm"
+          px={2}
+          borderColor={calendarSelected ? '#0075FF' : 'transparent'}
+          borderWidth="2px"
+          _active={{
+            borderColor: '#0075FF'
+          }}
+        >
+          Calendar
+        </Button>
+        <Button
+          onClick={async () => {
+            setMapSelected(prev => !prev);
+            const { location } = await getEventById(eventId);
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location)}`);
+          }}
+          bg={mapSelected ? 'blue.300' : 'gray.200'}
+          leftIcon={<Image src={logos_google_maps} h="1em" w="1em" />}
+          rightIcon={<IoMdLink size="18px" color={mapSelected ? 'white' : 'blue.500'} />}
+          size="sm"
+          px={2}
+          borderColor={mapSelected ? '#0075FF' : 'transparent'}
+          borderWidth="2px"
+          _active={{
+            borderColor: '#0075FF'
+          }}
+        >
+          Google Maps
+        </Button>
+      </HStack>
       </Flex>
 
-      <Button backgroundColor={'#0075FF'} color={'white'}>
+      <Button
+        w="full"
+        backgroundColor={'#0075FF'}
+        color={'white'}
+        _hover={{ bg: 'blue.500' }}
+        size="lg"
+      >
         Check-In
       </Button>
     </Flex>
