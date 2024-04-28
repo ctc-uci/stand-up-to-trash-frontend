@@ -18,7 +18,7 @@ import EventCard from '../../components/Events/EventCard';
 import Backend from '../../utils/utils';
 import Fuse from 'fuse.js';
 
-const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton }) => {
+const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton, isOpen }) => {
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
 
@@ -215,7 +215,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
                       borderRadius={12}
                       size="lg"
                       maxW="20%"
-                      minW={{ base: '48%', xl: '200px' }}
+                      minW={{ base: '48%', xl: '10em' }}
                     >
                       {getDateOptions()}
                     </Select>
@@ -226,7 +226,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
             </Flex>
           </Box>
           <Box>
-            <Grid templateColumns={{ base: 'repeat(1, 1fr)', xl: 'repeat(4, 1fr)' }} gap={6}>
+            <Grid templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(2, 1fr)', xl: isOpen ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)' }} gap={6}>
               {displayEvents.map(element => (
                 <GridItem
                   key={element.id}
@@ -254,10 +254,13 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
   );
 };
 
+
 EventFilteredGrid.propTypes = {
   setCurrentEventId: PropTypes.func.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
+
 
 export default EventFilteredGrid;
