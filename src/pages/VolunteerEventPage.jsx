@@ -24,7 +24,7 @@ const VolunteerEventPage = () => {
 
   return (
     <Flex dir="column">
-      <Box bg="#E6EAEF" flexGrow={1} minW="1px">
+      <Box bg="#E6EAEF" flexGrow={1} minW="1px" minH={'100vh'}>
         <Flex
           flexDir={'row'}
           alignItems={'center'}
