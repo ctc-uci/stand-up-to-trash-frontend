@@ -59,7 +59,7 @@ const RegistrationModal = ({
           <Box px="38px" pb="8">
             {children}
           </Box>
-          <Box pb="28px" px="8px">
+          <Box pb="28px" px="3em">
             {buttons ? (
               buttons
             ) : (
