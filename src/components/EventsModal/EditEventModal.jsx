@@ -100,15 +100,15 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
     });
   };
 
-
   const manipulateDate = () => {
     const dateObject = new Date(Date.parse(event['date']));
     var year = dateObject.getFullYear();
     var month = dateObject.getMonth() + 1;
     var day = dateObject.getDate();
-    var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+    var formattedDate =
+      year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
     setEventDate(formattedDate);
-  }
+  };
 
   const manipulateStartTime = () => {
     if (!eventData || !eventData.start_time) {
@@ -117,7 +117,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
     const time = eventData.start_time.substring(0, 5);
     const hour = parseInt(time.substring(0, 2));
     const minute = time.substring(3);
-    
+
     // Format hour and minute with leading zeros
     const formattedHour = (hour < 10 ? '0' : '') + hour;
     const formattedMinute = (minute < 10 ? '0' : '') + minute;
@@ -132,7 +132,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
     const time = eventData.end_time.substring(0, 5);
     const hour = parseInt(time.substring(0, 2));
     const minute = time.substring(3);
-    
+
     // Format hour and minute with leading zeros
     const formattedHour = (hour < 10 ? '0' : '') + hour;
     const formattedMinute = (minute < 10 ? '0' : '') + minute;
@@ -141,20 +141,19 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
   };
 
   useEffect(() => {
-  //  setEventDate(date);
-  //  setEventStartTime(startTime);
-  //  setEventEndTime(endTime);
-   setEventData(event);
-   manipulateDate();
+    //  setEventDate(date);
+    //  setEventStartTime(startTime);
+    //  setEventEndTime(endTime);
+    setEventData(event);
+    manipulateDate();
   }, [isOpen]);
 
   useEffect(() => {
     if (eventData) {
-        manipulateStartTime();
-        manipulateEndTime();
+      manipulateStartTime();
+      manipulateEndTime();
     }
- }, [eventData]);
-  
+  }, [eventData]);
 
   return (
     <ChakraProvider theme={extendTheme(theme)}>

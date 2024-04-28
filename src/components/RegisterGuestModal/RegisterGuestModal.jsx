@@ -323,12 +323,12 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
 
               <Center p={8} style={{ gap: '12px' }}>
                 <Button
-                  type="submit"
                   color="#3B3B3B"
                   bg="#EFEFEF"
                   w="70%"
                   h="50px"
                   style={{ borderRadius: '12px' }}
+                  onClick={onClose}
                 >
                   Cancel
                 </Button>

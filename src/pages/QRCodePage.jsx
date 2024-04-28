@@ -17,7 +17,6 @@ function QRCodePage() {
     setVolunteerEmail(user.email);
   }, [user]);
 
-
   return (
     <Box
       display={'flex'}
