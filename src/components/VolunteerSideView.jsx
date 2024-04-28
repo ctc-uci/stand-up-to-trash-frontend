@@ -1,4 +1,4 @@
-import { Flex, Button, Image, Text, HStack, Box, VStack, IconButton } from '@chakra-ui/react';
+import { Flex, Button, Image, Text, HStack, Box, VStack, IconButton, useDisclosure } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Icon } from '@chakra-ui/react';
@@ -10,6 +10,8 @@ import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
+import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+
 
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
@@ -20,6 +22,12 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const dateObj = new Date(Date.parse(eventData.date));
   // console.log(eventData);
 
+  const {
+    isOpen: isRegistrationFlowOpen,
+    onOpen: onRegistrationFlowOpen,
+    onClose: onRegistrationFlowClose,
+  } = useDisclosure();
+
   useEffect(() => {
     getEventById(eventId).then(data => setEventData(data));
     // setDateObj(new Date(Date.parse(eventData.date)))
@@ -27,7 +35,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
 
   // console.log('e', eventData);
   // console.log('d', dateObj)
-
+  // console.log(eventId)
   function formatDate(dateString) {
     const months = [
       'Jan',
@@ -250,9 +258,16 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         </Flex>
       </Flex>
 
-      <Button backgroundColor={'#0075FF'} color={'white'}>
+      <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
         Check-In
       </Button>
+      {isRegistrationFlowOpen && (
+        <RegistrationFlowController
+          isOpen={isRegistrationFlowOpen}
+          onClose={onRegistrationFlowClose}
+          eventId={eventId}
+        />
+      )}
     </Flex>
   );
 };
