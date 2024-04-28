@@ -6,19 +6,19 @@ import { useContext, useState } from 'react';
 import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
 import { RxCaretLeft } from 'react-icons/rx';
+import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, useDisclosure } from '@chakra-ui/react';
 
 const VolunteerEventPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
-  // eslint-disable-next-line
   const [currentEventId, setCurrentEventId] = useState(-1);
 
-  const [showOpenDrawerButton, setShowOpenDrawerButton] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const onOpen = () => {
-    setIsOpen(!isOpen);
-    setShowOpenDrawerButton(false);
+  const openEventDrawer = (eventId) => {
+    setCurrentEventId(eventId);
+    onOpen();
   };
-  const onClose = () => setIsOpen(!isOpen);
+
+
 
   console.log('test' + currentEventId);
 
@@ -61,7 +61,6 @@ const VolunteerEventPage = () => {
             flex-shrink="0"
             borderRadius={'xl'}
             flexDir={'column'}
-            display={showOpenDrawerButton ? { base: 'flex', xl: 'none' } : 'none'}
           >
             <IconButton
               borderRadius="md"
@@ -79,28 +78,30 @@ const VolunteerEventPage = () => {
         <FeaturedDashboard
           width={{ base: '90%' }}
           onOpen={onOpen}
-          showOpenDrawerButton={showOpenDrawerButton}
         />
         <EventFilteredGrid
           width={{ base: '90%' }}
-          setCurrentEventId={setCurrentEventId}
-          setIsOpen={setIsOpen}
-          setShowOpenDrawerButton={setShowOpenDrawerButton}
+          setCurrentEventId={openEventDrawer} // Adjusted to call `openEventDrawer`
         />
       </Box>
-      <Box w={isOpen ? '480px' : 0} flexShrink={0}>
-        <Box pos={'fixed'} right={'0'} top={'0'} h={'100%'} overflowY={'auto'} paddingBottom={10}>
-          {isOpen && (
-            <VolunteerSideView
-              eventId={currentEventId}
-              onClose={onClose}
-              setShowOpenDrawerButton={setShowOpenDrawerButton}
-            />
-          )}
-        </Box>
-      </Box>
+      {/* Drawer Component */}
+      <Drawer placement="right" onClose={onClose} isOpen={isOpen} size="lg">
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Event Details</DrawerHeader>
+          <DrawerBody>
+            {/* Conditional rendering based on `currentEventId` */}
+            {isOpen && (
+              <VolunteerSideView
+                eventId={currentEventId}
+                onClose={onClose}
+              />
+            )}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </Flex>
   );
 };
-
 export default VolunteerEventPage;
