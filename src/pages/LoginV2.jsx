@@ -33,7 +33,6 @@ const LoginV2 = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
-      console.log('inside useeffect');
       try {
         if (
           user &&
@@ -41,8 +40,7 @@ const LoginV2 = () => {
             user.providerData[0].providerId == 'facebook.com')
         ) {
           // Keep in mind that if the user logs in with the plain email/password, they'll have no displayName attribute
-          console.log(user);
-          console.log('firebase inside');
+
           const userName = user.displayName.split(' ');
           const firstName = userName[0];
           const lastName = userName.length > 1 ? userName[1] : '';
@@ -56,8 +54,6 @@ const LoginV2 = () => {
           };
 
           await setRole('volunteer');
-          console.log(profile);
-          console.log('success');
 
           if (!(await getProfileByFirebaseUid(profile.firebase_uid))) {
             postProfile(profile);

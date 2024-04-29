@@ -63,7 +63,6 @@ const CreateAccount = () => {
       email: email,
       firebase_uid: firebase_uid,
     });
-    // console.log(response);
     return response;
   };
 

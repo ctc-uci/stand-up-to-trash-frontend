@@ -28,7 +28,6 @@ const auth = getAuth(app);
  * @param {hook} navigate useNavigate hook
  */
 export const createUserInFirebase = async (email, password, redirect, navigate) => {
-  console.log(email, password);
   try {
     const user = await createUserWithEmailAndPassword(auth, email, password);
     navigate(redirect);

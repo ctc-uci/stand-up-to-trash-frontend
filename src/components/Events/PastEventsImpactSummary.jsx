@@ -31,7 +31,6 @@ const PastEventsImpactSummary = () => {
   const getData = async () => {
     try {
       let response = await Backend.get('/stats/registered/past');
-      console.log(response.data);
       setRegistered(parseFloat(response.data));
       response = await Backend.get('/stats/checkedIn/past');
       setCheckedIn(parseFloat(response.data));
@@ -46,8 +45,6 @@ const PastEventsImpactSummary = () => {
     const getEventId = async () => {
       try {
         const eventIdData = await Backend.get(`/stats/export/data`);
-        console.log('Look here');
-        console.log(eventIdData);
         setEventIdData(eventIdData.data);
       } catch (err) {
         console.log(err.message);

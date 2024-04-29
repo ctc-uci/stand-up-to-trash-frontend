@@ -5,8 +5,6 @@ export const postImage = async (name, s3_url) => {
     s3_url: s3_url,
     name: name,
   });
-  console.log('name', name);
-
   return response.data;
 };
 

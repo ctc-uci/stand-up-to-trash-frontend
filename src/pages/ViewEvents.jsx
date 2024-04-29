@@ -68,8 +68,6 @@ const ViewEvents = () => {
     const getEventId = async () => {
       try {
         const eventIdData = await Backend.get(`/stats/export/data/${eventId}`);
-        console.log('Look here');
-        console.log(eventIdData);
         setEventIdData(eventIdData.data);
       } catch (err) {
         console.log(err.message);
@@ -126,12 +124,12 @@ const ViewEvents = () => {
   const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
     try {
       const event_data_id = volunteer.event_data_id;
-      console.log('Number of participants:', numberOfParticipants);
+      console.log(event_data_id);
 
-      const response = await Backend.put(`/data/checkin/${event_data_id}`, {
-        number_in_party: numberOfParticipants,
-      });
-      console.log('Response from server:', response);
+      // const response = await Backend.put(`/data/checkin/${event_data_id}`, {
+      //   number_in_party: numberOfParticipants,
+      // });
+      console.log(numberOfParticipants);
 
       await setData(); // Refresh data
     } catch (err) {
@@ -140,7 +138,6 @@ const ViewEvents = () => {
   };
 
   const handleCheckinButtonClick = volunteer => {
-    console.log(volunteer);
     setSelectedVolunteer(volunteer); // `volunteer` is the volunteer object from the list
     setIsCheckinModalOpen(true);
   };
@@ -153,7 +150,6 @@ const ViewEvents = () => {
   const getRegistered = async event_id => {
     try {
       // send new checkin status to backend, set new data by retrieving the new backend data
-      //console.log(event_id);
       const response = await Backend.get(`/stats/register/${event_id}`).then(data => {
         setRegistered(parseInt(data.data));
       });

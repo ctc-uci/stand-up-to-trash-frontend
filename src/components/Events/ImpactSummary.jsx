@@ -18,14 +18,10 @@ const ImpactSummary = () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    console.log('iddata=', eventIdData);
-  }, [eventIdData]);
 
   const getData = async () => {
     try {
       let response = await Backend.get('/stats/registered');
-      // console.log(response.data);
       setRegistered(parseFloat(response.data));
       response = await Backend.get('/stats/checkedIn');
       setCheckedIn(parseFloat(response.data));
@@ -63,8 +59,6 @@ const ImpactSummary = () => {
     const getEventId = async () => {
       try {
         const eventIdData = await Backend.get(`/stats/export/data`);
-        console.log('Look here');
-        console.log(eventIdData);
         setEventIdData(eventIdData.data);
       } catch (err) {
         console.log(err.message);

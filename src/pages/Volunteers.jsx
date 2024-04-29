@@ -54,10 +54,6 @@ const Volunteers = () => {
   }, []);
 
   useEffect(() => {
-    console.log('>', volunteers);
-  }, [volunteers]);
-
-  useEffect(() => {
     // If input is empty, display all volunteers, else conduct the search
     if (input.trim() === '') {
       setDisplayedVolunteers(volunteers);
