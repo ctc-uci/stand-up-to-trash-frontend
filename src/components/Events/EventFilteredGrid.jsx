@@ -34,7 +34,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     try {
       const eventsData = await Backend.get('/events/currentEvents');
       setEvents(eventsData.data);
-      console.log(eventsData.data);
       // setDates();
       setLocations(getLocation(eventsData.data));
       setDates(getDate(eventsData.data));
@@ -50,7 +49,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     for (let i in data) {
       location.push(data[i].location);
     }
-    console.log(location.length);
     return location;
   };
 
@@ -59,7 +57,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     for (let i in data) {
       date.push(data[i].date.substring(0, 10));
     }
-    console.log(date.length);
     return date;
   };
 
@@ -74,18 +71,14 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     }
 
     setSelectedEvents(newCheckedItems);
-    console.log(selectedEvents);
   };
 
   useEffect(() => {
     getEvents();
-    console.log(locations);
-    // getEventId(eventId);
   }, []);
 
   const handleLocationChange = event => {
     const selectedLocation = event.target.value;
-    console.log(selectedLocation);
     setLocation(selectedLocation);
   };
 

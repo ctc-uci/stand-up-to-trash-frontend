@@ -13,7 +13,6 @@ const PartySizeModal = ({ registrationFlowState, ...props }) => {
     registrationFlowState.partySize <= 100;
 
   const [partySize, setPartySize] = useState(registrationFlowState.partySize);
-  console.log(partySize);
   return (
     <RegistrationModal
       title="How many people are in your party?"

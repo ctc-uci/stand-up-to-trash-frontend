@@ -26,7 +26,6 @@ const EditProfilePictureModal = ({ isOpen, onClose, userInfo }) => {
   } = useDisclosure();
   const uploadPhoto = id => {
     updateProfileImage(id, photos['imageUrl']);
-    console.log('chagned photo');
     setIsLoading(false);
   };
   const deletePhoto = id => {
@@ -35,12 +34,9 @@ const EditProfilePictureModal = ({ isOpen, onClose, userInfo }) => {
       'https://i.pinimg.com/originals/a4/af/12/a4af1288eab8714320fa8453f72d79fd.jpg',
     );
     console.log(res);
-    console.log('deleted');
   };
 
-  useEffect(() => {
-    console.log(photos);
-  }, [photos]);
+  useEffect(() => {}, [photos]);
 
   // closes dropzone modal when loading finished
   useEffect(() => {

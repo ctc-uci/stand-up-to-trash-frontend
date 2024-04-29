@@ -1,4 +1,14 @@
-import { Flex, Button, Image, Text, HStack, Box, VStack, IconButton, useDisclosure } from '@chakra-ui/react';
+import {
+  Flex,
+  Button,
+  Image,
+  Text,
+  HStack,
+  Box,
+  VStack,
+  IconButton,
+  useDisclosure,
+} from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Icon } from '@chakra-ui/react';
@@ -11,7 +21,6 @@ import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
-
 
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
@@ -51,7 +60,6 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
       'Nov',
       'Dec',
     ];
-    console.log('dateString', dateString);
     const date = new Date(dateString);
     const month = months[date.getUTCMonth()];
     const day = date.getUTCDate();

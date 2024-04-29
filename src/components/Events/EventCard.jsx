@@ -56,7 +56,6 @@ const EventCard = ({
   )}`;
 
   let ref = useRef();
-  console.log('eveneeet', id)
   const breakpoint = 400;
   const [containerWidth, setContainerWidth] = useState(0);
 
@@ -346,7 +345,6 @@ const EditEvents = ({
         position: 'bottom-right',
         isClosable: true,
       });
-      console.log(eventData);
       await putEvent(eventData);
       getEvents();
 

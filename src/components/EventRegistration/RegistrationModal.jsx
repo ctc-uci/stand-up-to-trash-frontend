@@ -20,8 +20,6 @@ const RegistrationModal = ({
   buttons,
   continueText = 'Continue',
 }) => {
-  console.log(registrationFlowState);
-
   return (
     <Modal isOpen={true} size="xl" motionPreset={animate ? 'scale' : 'none'}>
       <ModalOverlay />
