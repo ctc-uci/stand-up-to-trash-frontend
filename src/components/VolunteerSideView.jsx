@@ -259,7 +259,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
       </Flex>
 
       <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
-        Check-In
+        Register
       </Button>
       {isRegistrationFlowOpen && (
         <RegistrationFlowController
