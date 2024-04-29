@@ -56,11 +56,11 @@ const VolunteerImpactSummary = () => {
   };
 
   const handleNextClick = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
+    setCurrentIndex(prevIndex => (prevIndex + 1) % totalItems);
   };
 
   const handlePrevClick = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
+    setCurrentIndex(prevIndex => (prevIndex - 1 + totalItems) % totalItems);
   };
 
   return (
@@ -72,7 +72,7 @@ const VolunteerImpactSummary = () => {
       gap={{ base: 0, md: 8 }}
       justifyContent="center"
       alignItems={'stretch'}
-      backgroundColor={{base: '#FFFFFF', md: '#F8F8F8'}}
+      backgroundColor={{ base: '#FFFFFF', md: '#F8F8F8' }}
       borderRadius={'lg'}
       py={10}
       px={25}

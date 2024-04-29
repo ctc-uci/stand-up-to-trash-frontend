@@ -9,6 +9,7 @@ import CheckinStatsDashboard from '../components/Checkin/CheckinStatsDashboard';
 import { ArrowBackIcon, HamburgerIcon } from '@chakra-ui/icons';
 import CheckinModal from '../components/Checkin/CheckinModal';
 import NavbarContext from '../utils/NavbarContext';
+import { CSVLink } from 'react-csv';
 
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -45,10 +46,37 @@ const ViewEvents = () => {
   const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
 
+  const [eventIdData, setEventIdData] = useState([]);
+  const header = [
+    { key: 'eventName', label: 'event_name' },
+    { key: 'id', label: 'ID' },
+    { key: 'volunteer_name', label: 'VOLUNTEER_NAME' },
+    { key: 'number_in_party', label: 'NUMBER_IN_PARTY' },
+    { key: 'pounds', label: 'POUNDS' },
+    { key: 'ounces', label: 'OUNCES' },
+    { key: 'notes', label: 'NOTES' },
+    { key: 'is_checked_in', label: 'IS_CHECKED_IN' },
+    { key: 'image_array', label: 'IMAGE_ARRAY' },
+  ];
+
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
     setDisplayedVolunteers(volunteerResults);
   }, [volunteerResults]);
+
+  useEffect(() => {
+    const getEventId = async () => {
+      try {
+        const eventIdData = await Backend.get(`/stats/export/data/${eventId}`);
+        console.log('Look here');
+        console.log(eventIdData);
+        setEventIdData(eventIdData.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    getEventId();
+  });
 
   const setData = async () => {
     try {
@@ -176,7 +204,13 @@ const ViewEvents = () => {
         </Flex>
         {/* Didn't want to paste in the whole CheckinStatsDashboard to add one line of code */}
         <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport></AiOutlineExport>} size="md">
-          Export {event.name} Data
+          <CSVLink
+            data={eventIdData.length ? eventIdData : []}
+            filename="./data.csv"
+            headers={header}
+          >
+            Export {event.name} Data
+          </CSVLink>
         </Button>
       </Flex>
 
