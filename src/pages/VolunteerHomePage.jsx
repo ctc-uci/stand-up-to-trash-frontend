@@ -172,7 +172,7 @@ const VolunteerHomePage = () => {
               <Grid
                 templateColumns={{
                   base: 'repeat(1, 85vw)',
-                  md: 'repeat(4, 1fr)',
+                  md: 'repeat(3, 1fr)',
                 }}
                 gap={6}
               >

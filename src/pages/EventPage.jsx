@@ -395,15 +395,11 @@ const Events = () => {
           events={events.filter(event => selectedEvents.includes(event.id))}
         />
 
-        <Box display="flex" justifyContent={'center'} px={10}>
-          <Box display="flex" flexDirection="space-between" justifyContent={'center'}>
-            <Box marginTop="3vh">
-              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-                <AddEventsModal getEvents={getEvents} />
-                {eventCards}
-              </Grid>
-            </Box>
-          </Box>
+        <Box marginTop="3vh">
+          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+            <AddEventsModal getEvents={getEvents} />
+            {eventCards}
+          </Grid>
         </Box>
       </Flex>
     </Flex>

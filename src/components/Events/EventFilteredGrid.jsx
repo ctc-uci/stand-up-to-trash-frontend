@@ -226,7 +226,16 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
             </Flex>
           </Box>
           <Box>
-            <Grid templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(2, 1fr)', xl: isOpen ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)' }} gap={6}>
+            <Grid
+              templateColumns={{
+                base: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(2, 1fr)',
+                lg: 'repeat(2, 1fr)',
+                xl: isOpen ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+              }}
+              gap={6}
+            >
               {displayEvents.map(element => (
                 <GridItem
                   key={element.id}
@@ -254,13 +263,11 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
   );
 };
 
-
 EventFilteredGrid.propTypes = {
   setCurrentEventId: PropTypes.func.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
 };
-
 
 export default EventFilteredGrid;

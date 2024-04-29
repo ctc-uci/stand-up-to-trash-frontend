@@ -171,7 +171,7 @@ const Home = () => {
           <Spacer />
           <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
             <Box marginTop="3vh">
-              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+              <Grid templateColumns="repeat(3, 1fr)" gap={6}>
                 {/* <AddEventsModal getEvents={getEvents} /> */}
                 {eventCards}
               </Grid>
