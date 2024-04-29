@@ -76,7 +76,7 @@ const Navbar = () => {
 
   useEffect(() => {
     updateUser();
-  }, [updateUser]);
+  }, []);
 
   // Change the paths for each button since these might change
   const homePath = '/';

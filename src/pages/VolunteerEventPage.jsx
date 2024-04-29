@@ -6,6 +6,7 @@ import { useContext, useState } from 'react';
 import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
 import { RxCaretLeft } from 'react-icons/rx';
+// import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
 
 const VolunteerEventPage = () => {
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
@@ -20,11 +21,25 @@ const VolunteerEventPage = () => {
   };
   const onClose = () => setIsOpen(!isOpen);
 
-  console.log('test' + currentEventId);
+  // const {
+  //   isOpen: isRegistrationFlowOpen,
+  //   onOpen: onRegistrationFlowOpen,
+  //   onClose: onRegistrationFlowClose,
+  // } = useDisclosure({ defaultIsOpen: false });
 
   return (
     <Flex dir="column">
-      <Box bg="#E6EAEF" flexGrow={1} minW="1px" minH={'100vh'}>
+      {/* controller */}
+      {/* <Button onClick={onRegistrationFlowOpen}>Open!</Button>
+      {isRegistrationFlowOpen && (
+        <RegistrationFlowController
+          isOpen={isRegistrationFlowOpen}
+          onClose={onRegistrationFlowClose}
+          eventId={currentEventId}
+        />
+      )} */}
+      {/* <RegistrationModal /> */}
+      <Box bg="#E6EAEF" flexGrow={1} minW="1px">
         <Flex
           flexDir={'row'}
           alignItems={'center'}

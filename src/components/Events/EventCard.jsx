@@ -28,6 +28,7 @@ import { useState, useRef, useEffect } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
+import RegistrationFlowController from '../EventRegistration/RegistrationFlowController.jsx';
 
 const EventCard = ({
   id,
@@ -55,9 +56,15 @@ const EventCard = ({
   )}`;
 
   let ref = useRef();
-
+  console.log('eveneeet', id)
   const breakpoint = 400;
   const [containerWidth, setContainerWidth] = useState(0);
+
+  const {
+    isOpen: isRegistrationFlowOpen,
+    onOpen: onRegistrationFlowOpen,
+    onClose: onRegistrationFlowClose,
+  } = useDisclosure();
 
   useEffect(() => {
     const observer = new ResizeObserver(entries => {
@@ -171,11 +178,19 @@ const EventCard = ({
                   background: '#dbdbdb',
                   color: '#0075FF',
                 }}
+                onClick={onRegistrationFlowOpen}
               >
                 Register
               </Button>
             ) : (
               ''
+            )}
+            {isRegistrationFlowOpen && (
+              <RegistrationFlowController
+                isOpen={isRegistrationFlowOpen}
+                onClose={onRegistrationFlowClose}
+                eventId={id}
+              />
             )}
           </Box>
         </Flex>
