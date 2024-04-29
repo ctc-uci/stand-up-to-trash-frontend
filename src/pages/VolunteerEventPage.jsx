@@ -101,6 +101,7 @@ const VolunteerEventPage = () => {
           setCurrentEventId={setCurrentEventId}
           setIsOpen={setIsOpen}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
+          isOpen={isOpen}
         />
       </Box>
       <Box w={isOpen ? '480px' : 0} flexShrink={0}>
