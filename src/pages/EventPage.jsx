@@ -276,7 +276,6 @@ const Events = () => {
         height="237px"
         padding="32px"
         flexDirection="column"
-        alignItems="center"
         gap="24px"
         borderRadius={'xl'}
       >

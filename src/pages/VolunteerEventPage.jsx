@@ -24,7 +24,7 @@ const VolunteerEventPage = () => {
 
   return (
     <Flex dir="column">
-      <Box bg="#E6EAEF" flexGrow={1} minW="1px">
+      <Box bg="#E6EAEF" flexGrow={1} minW="1px" minH={'100vh'}>
         <Flex
           flexDir={'row'}
           alignItems={'center'}
@@ -86,6 +86,7 @@ const VolunteerEventPage = () => {
           setCurrentEventId={setCurrentEventId}
           setIsOpen={setIsOpen}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
+          isOpen={isOpen}
         />
       </Box>
       <Box w={isOpen ? '480px' : 0} flexShrink={0}>

@@ -6,18 +6,15 @@ import {
   FormErrorMessage,
   Heading,
   Input,
-  SimpleGrid,
   Text,
   useToast,
   Image,
   VStack,
-  AbsoluteCenter,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import S2T_Logo from '../Assets/S2T_Logo.png';
 import ggicon from '../Assets/google.png';
 import fbicon from '../Assets/fb.png';
 import { logInWithEmailAndPassWord } from '../utils/firebaseAuthUtils';
@@ -27,6 +24,7 @@ import { useEffect, useContext } from 'react';
 import RoleContext from '../utils/RoleContext';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getProfileByFirebaseUid, postProfile } from '../utils/profileUtils';
+import AuthPage from '../components/Auth/AuthPage';
 
 const LoginV2 = () => {
   const auth = getAuth();
@@ -145,46 +143,17 @@ const LoginForm = () => {
   };
 
   return (
-    <SimpleGrid columns={2} spacing={0} height={'100vh'} style={{ fontFamily: 'Poppins' }}>
-      <Box backgroundColor="#2D558A" position="relative">
-        <AbsoluteCenter>
-          <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
-          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center' }}>
-            <h1
-              style={{
-                color: 'white',
-                fontSize: '40px',
-                fontWeight: '600',
-                marginTop: '52px',
-                textAlign: 'center',
-              }}
-            >
-              Stand Up To Trash
-            </h1>
-            <h1
-              style={{
-                color: 'white',
-                fontSize: '32px',
-                fontWeight: '600',
-                marginTop: '20px',
-                textAlign: 'center',
-              }}
-            >
-              Making a Difference
-            </h1>
-          </Box>
-        </AbsoluteCenter>
-      </Box>
-      <Box marginTop={40}>
+    <AuthPage>
+      <Box style={{ width: '100%' }} height={'fit-content'} mt={'auto'} mb="auto">
         <form onSubmit={handleSubmit(handleLogin)}>
           <Center>
             <Heading marginTop={10}>Log In</Heading>
           </Center>
-          <FormControl isInvalid={errors.email}>
+          <FormControl isInvalid={errors.email} w={'100%'} d="block">
             {/* <FormLabel>Email address</FormLabel> */}
             <Center>
               <Input
-                width={'40%'}
+                maxW={'20rem'}
                 marginTop={30}
                 borderRadius={8}
                 fontFamily={'Avenir'}
@@ -202,7 +171,7 @@ const LoginForm = () => {
             {/* <FormLabel>Password</FormLabel> */}
             <Center>
               <Input
-                width={'40%'}
+                maxW={'20rem'}
                 marginTop={30}
                 borderRadius={8}
                 fontFamily={'Avenir'}
@@ -226,7 +195,8 @@ const LoginForm = () => {
                 textColor={'white'}
                 size={'lg'}
                 borderRadius={'10'}
-                width={'80%'}
+                w={'100%'}
+                maxW={'16rem'}
               >
                 Login
               </Button>
@@ -245,7 +215,8 @@ const LoginForm = () => {
                 leftIcon={<Image src={ggicon} alt="Google Icon" />}
                 size="md"
                 // width={'36.82vh'}
-                width={'115%'}
+                width={'100%'}
+                maxW={'20rem'}
                 marginTop={2}
                 border="1px solid black"
                 backgroundColor={'transparent'}
@@ -257,7 +228,8 @@ const LoginForm = () => {
                 leftIcon={<Image src={fbicon} alt="Facebook Icon" />}
                 size="md"
                 // width={'36.82vh'}
-                width={'115%'}
+                width={'100%'}
+                maxW={'20rem'}
                 marginTop={3}
                 border="1px solid black"
                 backgroundColor={'transparent'}
@@ -284,36 +256,39 @@ const LoginForm = () => {
                     textAlign: 'center',
                     paddingTop: '15px',
                   }}
+                  color={'#478CB6'}
+                  textDecoration={'underline'}
                   onClick={() => navigate('/forgotpasswordv2')}
                 >
                   Forgot Password?
                 </Button>
                 {/* <Text paddingTop='15px'>Forgot Password?</Text> */}
                 <Box display="flex" flexDir="row" paddingTop="20px">
-                  <Text lineHeight="24px">Don’t have an account?</Text>
-
-                  <Button
-                    style={{
-                      background: 'none',
-                      height: '24px',
-                      color: '#478CB6',
-                      fontFamily: 'Avenir',
-                      fontSize: '18px',
-                      fontWeight: '800',
-                      textAlign: 'center',
-                      marginLeft: '-5px',
-                    }}
-                    onClick={() => navigate('/signupv2')}
-                  >
-                    <u>Sign up</u>
-                  </Button>
+                  <Text lineHeight="24px">
+                    Don{`'`}t have an account?{' '}
+                    <Button
+                      style={{
+                        background: 'none',
+                        height: '24px',
+                        color: '#478CB6',
+                        fontFamily: 'Avenir',
+                        fontSize: '18px',
+                        fontWeight: '800',
+                        textAlign: 'center',
+                        marginLeft: '-5px',
+                      }}
+                      onClick={() => navigate('/signupv2')}
+                    >
+                      <u>Sign up</u>
+                    </Button>
+                  </Text>
                 </Box>
               </Box>
             </VStack>
           </Center>
         </form>
       </Box>
-    </SimpleGrid>
+    </AuthPage>
   );
 };
 

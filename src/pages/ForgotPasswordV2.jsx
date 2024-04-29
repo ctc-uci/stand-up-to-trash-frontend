@@ -1,5 +1,4 @@
 import {
-  AbsoluteCenter,
   Box,
   Button,
   Center,
@@ -7,8 +6,6 @@ import {
   Heading,
   Input,
   Link,
-  SimpleGrid,
-  Image,
   Text,
   useToast,
 } from '@chakra-ui/react';
@@ -19,44 +16,13 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { sendResetPasswordPrompt } from '../utils/firebaseAuthUtils';
 // import logo from '../Assets/Logo.png'; // Make sure you have this logo or replace it with your own
-import S2T_Logo from '../Assets/S2T_Logo.png';
+import AuthPage from '../components/Auth/AuthPage';
 
 const ForgotPasswordV2 = () => {
   return (
-    <SimpleGrid columns={2} spacing={0} height={'100vh'} style={{ fontFamily: 'Poppins' }}>
-      <Box backgroundColor="#2D558A" position="relative">
-        <AbsoluteCenter>
-          <Image borderRadius="full" width={357} height={430} src={S2T_Logo} alt="Logo" />
-          <Box sytle={{ display: 'flex', flexDir: 'column', justifyContent: 'center' }}>
-            <h1
-              style={{
-                color: 'white',
-                fontSize: '40px',
-                fontWeight: '600',
-                marginTop: '52px',
-                textAlign: 'center',
-              }}
-            >
-              Stand Up To Trash
-            </h1>
-            <h1
-              style={{
-                color: 'white',
-                fontSize: '32px',
-                fontWeight: '600',
-                marginTop: '20px',
-                textAlign: 'center',
-              }}
-            >
-              Making a Difference
-            </h1>
-          </Box>
-        </AbsoluteCenter>
-      </Box>
-      <Box marginTop={40}>
-        <ForgotPasswordForm />
-      </Box>
-    </SimpleGrid>
+    <AuthPage>
+      <ForgotPasswordForm />
+    </AuthPage>
   );
 };
 
@@ -115,14 +81,15 @@ const ForgotPasswordForm = () => {
       </Center>
       <Center>
         <Text marginTop={5} fontSize={18}>
-          No worries, we’ll send you reset instructions.
+          No worries, we{`'`}ll send you reset instructions.
         </Text>
       </Center>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl isInvalid={errors.email}>
           <Center>
             <Input
-              width={'40%'}
+              width={'100%'}
+              maxW={'30rem'}
               marginTop={30}
               borderRadius={8}
               placeholder="Email"
@@ -145,7 +112,8 @@ const ForgotPasswordForm = () => {
             textColor={'white'}
             size={'lg'}
             borderRadius={'10'}
-            width={'22%'}
+            width={'100%'}
+            maxW={'16rem'}
           >
             Reset Password
           </Button>
