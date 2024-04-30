@@ -174,18 +174,16 @@ const VolunteerHomePage = () => {
             </Box>
           </Flex>
           <Spacer />
-          <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
-            <Box marginTop="3vh">
-              <Grid
-                templateColumns={{
-                  base: 'repeat(1, 85vw)',
-                  md: 'repeat(3, 1fr)',
-                }}
-                gap={6}
-              >
-                {eventCards}
-              </Grid>
-            </Box>
+          <Box marginTop="3vh">
+            <Grid
+              templateColumns={{
+                base: 'repeat(1, 85vw)',
+                md: 'repeat(3, 1fr)',
+              }}
+              gap={6}
+            >
+              {eventCards}
+            </Grid>
           </Box>
         </Box>
       </Flex>
