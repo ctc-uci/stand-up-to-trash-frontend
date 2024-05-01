@@ -6,20 +6,25 @@ import { useContext, useState } from 'react';
 import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
 import { RxCaretLeft } from 'react-icons/rx';
-import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, useDisclosure } from '@chakra-ui/react';
-
+import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, useMediaQuery, DrawerBody, useDisclosure } from '@chakra-ui/react';
+import VolunteerSideViewMobile from '../components/VolunteerSideViewMobile';
 const VolunteerEventPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
-  const [currentEventId, setCurrentEventId] = useState(-1);
+  const [currentEventId, setCurrentEventId] = useState(null);  // Initial state is null to indicate no event selected
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const [setShowOpenDrawerButton] = useState(false);
 
+  
   const openEventDrawer = (eventId) => {
-    setCurrentEventId(eventId);
+    setCurrentEventId(eventId); // Set the current event ID, which triggers the side view to display
     onOpen();
   };
 
-
-
+  const handleClose = () => {
+    onClose();
+    setCurrentEventId(null); // Clear the current event ID on close
+  };
   console.log('test' + currentEventId);
 
   return (
@@ -85,20 +90,23 @@ const VolunteerEventPage = () => {
         />
       </Box>
       {/* Drawer Component */}
-      <Drawer placement="right" onClose={onClose} isOpen={isOpen} size="s">
-        <DrawerOverlay />
-        <DrawerContent minWidth="320px"> {/* Setting a minimum width */}
-          <DrawerCloseButton />
-          <DrawerHeader>Event Details</DrawerHeader>
-          <DrawerBody>
-            {isOpen && (
-              <div style={{ width: '100%', overflow: 'auto' }}> {/* Ensure content fits and is scrollable if needed */}
-                <VolunteerSideView eventId={currentEventId} onClose={onClose} />
-              </div>
-            )}
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      {isMobile ? (
+        <Drawer isOpen={isOpen} placement="right" onClose={handleClose} size="full">
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerBody>
+              <VolunteerSideViewMobile eventId={currentEventId} onClose={onClose} />
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <VolunteerSideView
+        eventId={currentEventId}
+        onClose={handleClose}
+        setShowOpenDrawerButton={setShowOpenDrawerButton}
+      />
+      )}
     </Flex>
   );
 };
