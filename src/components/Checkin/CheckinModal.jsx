@@ -33,7 +33,8 @@ const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
   };
 
   const handleCheckIn = async () => {
-    if (volunteer && typeof volunteer === 'object' && volunteer.id) {
+    console.log('handle checkin', volunteer);
+    if (volunteer && typeof volunteer === 'object' && volunteer.id && volunteer.event_data_id) {
       await onCheckInConfirm(volunteer, numberOfParticipants); // Pass the entire volunteer object
       onClose();
     } else {
@@ -130,6 +131,7 @@ CheckinModal.propTypes = {
     email: PropTypes.string,
     image_url: PropTypes.string,
     number_in_party: PropTypes.number,
+    event_data_id: PropTypes.number,
   }),
 };
 
