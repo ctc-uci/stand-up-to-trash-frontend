@@ -6,17 +6,16 @@ import { useContext, useState } from 'react';
 import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
 import { RxCaretLeft } from 'react-icons/rx';
-import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, useMediaQuery, DrawerBody, useDisclosure } from '@chakra-ui/react';
-import VolunteerSideViewMobile from '../components/VolunteerSideViewDrawer.jsx';
+import { useBreakpoint, useDisclosure } from '@chakra-ui/react';
+import VolunteerSideViewDrawer from '../components/VolunteerSideViewDrawer.jsx';
 const VolunteerEventPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
-  const [currentEventId, setCurrentEventId] = useState(null);  // Initial state is null to indicate no event selected
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const [currentEventId, setCurrentEventId] = useState(null); // Initial state is null to indicate no event selected
+  const breakpoint = useBreakpoint();
   const [setShowOpenDrawerButton] = useState(false);
 
-
-  const openEventDrawer = (eventId) => {
+  const openEventDrawer = eventId => {
     setCurrentEventId(eventId); // Set the current event ID, which triggers the side view to display
     onOpen();
   };
@@ -80,33 +79,27 @@ const VolunteerEventPage = () => {
             ></IconButton>
           </Flex>
         </Flex>
-        <FeaturedDashboard
-          width={{ base: '90%' }}
-          onOpen={onOpen}
-        />
+        <FeaturedDashboard width={{ base: '90%' }} onOpen={onOpen} />
         <EventFilteredGrid
           width={{ base: '90%' }}
           setCurrentEventId={openEventDrawer} // Adjusted to call `openEventDrawer`
         />
       </Box>
       {/* Drawer Component */}
-      {isMobile ? (
-        <Drawer isOpen={isOpen} placement="right" onClose={handleClose} size="full">
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerBody>
-              <VolunteerSideViewMobile eventId={currentEventId} onClose={onClose} />
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
+      {breakpoint == 'base' ? (
+        <VolunteerSideViewDrawer
+          eventId={currentEventId}
+          isOpen={isOpen}
+          onClose={handleClose}
+          setShowOpenDrawerButton={setShowOpenDrawerButton}
+        />
       ) : null}
       {isOpen ? (
         <VolunteerSideView
-        eventId={currentEventId}
-        onClose={handleClose}
-        setShowOpenDrawerButton={setShowOpenDrawerButton}
-      />
+          eventId={currentEventId}
+          onClose={handleClose}
+          setShowOpenDrawerButton={setShowOpenDrawerButton}
+        />
       ) : null}
     </Flex>
   );
