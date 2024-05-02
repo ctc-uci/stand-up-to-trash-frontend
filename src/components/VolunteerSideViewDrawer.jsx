@@ -9,7 +9,7 @@ import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
-import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
+import HappeningInChip from './HappeningInChip/HappeningInChip';
 
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
@@ -145,7 +145,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
 
       <VStack spacing={4} mb={'0.5em'}>
         <Image
-          h={{ base: "200px", md: "400px" }} 
+          h={{ base: "200px", md: "400px" }}
           w="100%"
           fit={'cover'}
           borderRadius="md"

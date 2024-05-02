@@ -7,7 +7,7 @@ import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
 import { RxCaretLeft } from 'react-icons/rx';
 import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, useMediaQuery, DrawerBody, useDisclosure } from '@chakra-ui/react';
-import VolunteerSideViewMobile from '../components/VolunteerSideViewMobile';
+import VolunteerSideViewMobile from '../components/VolunteerSideViewDrawer.jsx';
 const VolunteerEventPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
@@ -15,7 +15,7 @@ const VolunteerEventPage = () => {
   const [isMobile] = useMediaQuery("(max-width: 768px)");
   const [setShowOpenDrawerButton] = useState(false);
 
-  
+
   const openEventDrawer = (eventId) => {
     setCurrentEventId(eventId); // Set the current event ID, which triggers the side view to display
     onOpen();
@@ -100,13 +100,14 @@ const VolunteerEventPage = () => {
             </DrawerBody>
           </DrawerContent>
         </Drawer>
-      ) : (
+      ) : null}
+      {isOpen ? (
         <VolunteerSideView
         eventId={currentEventId}
         onClose={handleClose}
         setShowOpenDrawerButton={setShowOpenDrawerButton}
       />
-      )}
+      ) : null}
     </Flex>
   );
 };
