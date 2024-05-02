@@ -121,7 +121,7 @@ const CheckinPage = () => {
       const event_data_id = volunteer.event_data_id;
       console.log('Number of participants:', numberOfParticipants);
 
-      const response = await Backend.put(`/data/checkin/${event_data_id}`, {
+      const response = await Backend.put(`/data/checkin/${event_data_id}/${volunteer.id}`, {
         number_in_party: numberOfParticipants,
       });
       console.log('Response from server:', response);
