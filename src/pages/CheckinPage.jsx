@@ -118,9 +118,7 @@ const CheckinPage = () => {
   */
   const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
     try {
-      console.log('volunteer', volunteer);
       const event_data_id = volunteer.event_data_id;
-      console.log('event_data_id:', volunteer.event_data_id);
       console.log('Number of participants:', numberOfParticipants);
 
       const response = await Backend.put(`/data/checkin/${event_data_id}`, {

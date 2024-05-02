@@ -33,7 +33,6 @@ const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
   };
 
   const handleCheckIn = async () => {
-    console.log('handle checkin', volunteer);
     if (volunteer && typeof volunteer === 'object' && volunteer.id && volunteer.event_data_id) {
       await onCheckInConfirm(volunteer, numberOfParticipants); // Pass the entire volunteer object
       onClose();
