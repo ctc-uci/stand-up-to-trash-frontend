@@ -1,4 +1,14 @@
-import { Flex, Button, Image, Text, HStack, Box, VStack, IconButton, useDisclosure } from '@chakra-ui/react';
+import {
+  Flex,
+  Button,
+  Image,
+  Text,
+  HStack,
+  Box,
+  VStack,
+  IconButton,
+  useDisclosure,
+} from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Icon } from '@chakra-ui/react';
@@ -11,16 +21,22 @@ import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
-
+import ical, { ICalCalendarMethod } from 'ical-generator';
 
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
-  const [eventData, setEventData] = useState([]);
+  const [eventData, setEventData] = useState();
   const [isReadMore, setIsReadMore] = useState(false);
-  const [calendarSelected, setCalendarSelected] = useState(false);
+  // const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
-  // const [dateObj, setDateObj] = useState(new Date());
-  const dateObj = new Date(Date.parse(eventData.date));
-  // console.log(eventData);
+  const [dateObj, setDateObj] = useState(new Date());
+  const [icsURL, setICSURL] = useState();
+
+  // only parse the date if eventData has been retrieved
+  useEffect(() => {
+    if (eventData) {
+      setDateObj(new Date(Date.parse(eventData.date)));
+    }
+  }, [eventData]);
 
   const {
     isOpen: isRegistrationFlowOpen,
@@ -28,14 +44,58 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     onClose: onRegistrationFlowClose,
   } = useDisclosure();
 
+  // At the top of your component
+
   useEffect(() => {
-    getEventById(eventId).then(data => setEventData(data));
-    // setDateObj(new Date(Date.parse(eventData.date)))
+    if (eventId) {
+      getEventById(eventId)
+        .then(data => {
+          setEventData(data); // Make sure data is an object with the properties you expect
+        })
+        .catch(error => {
+          console.error('Failed to fetch event data:', error);
+        });
+    }
   }, [eventId]);
 
-  // console.log('e', eventData);
+  // console.log('this is the event id:', eventId);
+  console.log('this is the', eventData);
   // console.log('d', dateObj)
-  // console.log(eventId)
+  //* download ics file by calling backend
+  // Assuming `eventData` is part of the state as shown previously
+  const calendar = ical({ name: 'my first iCal' });
+  calendar.method(ICalCalendarMethod.REQUEST);
+
+  const handleDownloadICS = async () => {
+    // TODO: using eventData.date, eventData.start_time, eventData.end_time
+    // format a start time that looks like eventData.date
+    // extract the date from the eventData
+    const datePart = eventData.date.split('T')[0];
+    // TODO: I'm not sure if the time zone in the data is aligned to the pst timezone so I will leave it as is for now.
+    const formatted_start_time = `${datePart}T${eventData.start_time.substring(0, 8)}`;
+
+    const formatted_end_time = `${datePart}T${eventData.end_time.substring(0, 8)}`;
+
+    // test the dates are correct
+    console.log('the is date', eventData.date, 'but the part we want is', datePart);
+    console.log('ICS start time:', formatted_start_time, 'ICS End time:', formatted_end_time);
+    console.log('real start time:', eventData.start_time, 'real end time:', eventData.end_time);
+
+    calendar.createEvent({
+      start: formatted_start_time,
+      end: formatted_end_time,
+      summary: 'Example Event',
+      description: 'It works ;)',
+      location: 'my room',
+      url: 'http://sebbo.net/',
+    });
+
+    const calendarFile = new File([calendar.toString()], 'event.ics', { type: 'text/calendar' });
+    const url = URL.createObjectURL(calendarFile);
+    console.log(url);
+    setICSURL(url);
+  };
+
   function formatDate(dateString) {
     const months = [
       'Jan',
@@ -65,7 +125,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
 
     return `${month} ${day}, ${year} @ ${time}`;
   }
-  return (
+  return eventData ? (
     <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={'20px'}>
       <HStack justify={'center'} align={'center'}>
         <IconButton
@@ -208,10 +268,10 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             borderRadius={'0.5em'}
             justify={'space-between'}
             align={'center'}
-            onClick={() => setCalendarSelected(prev => !prev)}
-            borderColor={calendarSelected ? 'blue.200' : '#EFEFEF'}
+            onClick={handleDownloadICS} // Directly attach the event handler here
             borderWidth={2}
           >
+            <a href={icsURL}>download test</a>
             <Flex justify={'center'} align={'center'}>
               <Image src={logos_google_calendar} h={'1.3em'} w={'1.3em'} mr={'9%'} />
               <Text fontWeight={600}>Calendar</Text>
@@ -221,10 +281,11 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
                 as={IoMdLink}
                 h={'1.3em'}
                 w={'1.3em'}
-                backgroundColor={calendarSelected ? 'blue.200' : '#EFEFEF'}
+                backgroundColor={'#EFEFEF'} // Adjust based on state if necessary
               />
             </Flex>
           </Flex>
+
           <Flex
             backgroundColor={'#EFEFEF'}
             w={'12.5em'}
@@ -269,6 +330,8 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         />
       )}
     </Flex>
+  ) : (
+    <Text>Loading Event...</Text>
   );
 };
 
@@ -277,5 +340,4 @@ VolunteerSideView.propTypes = {
   onClose: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
 };
-
 export default VolunteerSideView;
