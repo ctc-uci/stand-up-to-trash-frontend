@@ -31,8 +31,11 @@ const Scanner = ({ event_id, isOpen, onClose, handleSuccess }: ScannerProps) => 
   const checkinVolunteer = async (volunteer_id: number) => {
     const volunteer = await Backend.get(`/profiles/${volunteer_id}`); // get Volunteer object
 
+    handleSuccess(
+      { ...volunteer.data, number_in_party: 1, event_data_id: Number(event_id) },
+      Number(event_id),
+    );
     handleClose();
-    handleSuccess({ ...volunteer.data, number_in_party: 1, event_data_id: Number(event_id) }, 1);
   };
 
   const handleClose = () => {
@@ -49,7 +52,7 @@ const Scanner = ({ event_id, isOpen, onClose, handleSuccess }: ScannerProps) => 
         <ModalContent padding={5}>
           <ModalCloseButton backgroundColor={'#EFEFEF'} borderRadius={'100px'} />
 
-          <Button onClick={() => checkinVolunteer(121)}>Success</Button>
+          <Button onClick={() => checkinVolunteer(227)}>Success</Button>
 
           <QrReader
             scanDelay={1000}
@@ -84,7 +87,7 @@ const Scanner = ({ event_id, isOpen, onClose, handleSuccess }: ScannerProps) => 
               <Text display={'flex'} justifyContent={'center'} paddingY={4}>
                 Volunteer: {data?.first_name} {data?.last_name}
               </Text>
-              <Button onClick={() => checkinVolunteer(121)} disabled={!data}>
+              <Button onClick={() => checkinVolunteer(data?.id)} disabled={!data?.id}>
                 Sign In
               </Button>
             </>
