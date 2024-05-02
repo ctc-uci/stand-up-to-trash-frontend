@@ -36,7 +36,6 @@ const ArchivedEvents = () => {
 
   const eventRows = events.map(event => (
     <>
-      {console.log(event)}
       <Tr key={event.id}>
         <Td>
           <Flex>

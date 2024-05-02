@@ -54,8 +54,6 @@ const Register = () => {
   } = useForm({ resolver: yupResolver(schema), defaultValues });
 
   const postVolunteerData = async formData => {
-    console.log(formData);
-
     const submitData = {
       volunteer_id: formData.volunteer_id,
       number_in_party: formData.number_in_party,

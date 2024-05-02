@@ -119,7 +119,7 @@ const CheckinPage = () => {
   const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
     try {
       const event_data_id = volunteer.event_data_id;
-      console.log('Number of participants:', numberOfParticipants);
+      console.log(event_data_id, numberOfParticipants);
 
       const response = await Backend.put(`/data/checkin/${event_data_id}/${volunteer.id}`, {
         number_in_party: numberOfParticipants,
@@ -133,7 +133,6 @@ const CheckinPage = () => {
   };
 
   const handleCheckinButtonClick = volunteer => {
-    console.log(volunteer);
     setSelectedVolunteer(volunteer); // `volunteer` is the volunteer object from the list
     setIsCheckinModalOpen(true);
   };
@@ -146,7 +145,6 @@ const CheckinPage = () => {
   const getRegistered = async event_id => {
     try {
       // send new checkin status to backend, set new data by retrieving the new backend data
-      //console.log(event_id);
       const response = await Backend.get(`/stats/register/${event_id}`).then(data => {
         setRegistered(parseInt(data.data));
       });
@@ -247,6 +245,7 @@ const CheckinPage = () => {
             volunteers={displayedVolunteers}
             changeIsCheckedIn={handleCheckinButtonClick}
             isCheckinPage={true}
+            isViewEventPage={false}
           />
         ) : (
           <Alert status="warning" borderRadius={'8'} w="50%" mx="auto">

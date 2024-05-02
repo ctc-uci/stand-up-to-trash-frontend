@@ -22,7 +22,7 @@ import checked_in from '../../Assets/status_icon/checked_in.svg';
 import registered from '../../Assets/status_icon/registered.svg';
 import DataEntryModal from '../DataEntryModal/DataEntryModal';
 
-const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => {
+const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isViewEventPage }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     first_name,
@@ -92,7 +92,11 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
           </Flex>
         </Flex>
       </Td>
-      <Td>{number_in_party}</Td>
+      <Td>
+        <Flex alignItems={'start'} justifyContent={'start'}>
+          <Text fontSize="md">{number_in_party}</Text>
+        </Flex>
+      </Td>
       <Td>
         <Flex gap={2} justifyContent={'center'} alignItems={'center'}>
           {is_checked_in ? (
@@ -135,19 +139,35 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
               )}
             </>
           ) : (
-            <Tag
-              onClick={() => changeIsCheckedIn(volunteer)}
-              cursor={'pointer'}
-              borderRadius={10}
-              p={2}
-              color={'#0075FF'}
-              bg={'white'}
-              border={'2px solid #0075FF'}
-              gap={1}
-            >
-              <MdCheck />
-              <Text fontSize={'md'}>Check-In</Text>
-            </Tag>
+            <>
+              {isViewEventPage ? (
+                <Tag
+                  borderRadius={10}
+                  p={2}
+                  color={'#0075FF'}
+                  bg={'white'}
+                  border={'2px solid #0075FF'}
+                  gap={1}
+                >
+                  <MdCheck />
+                  <Text fontSize={'md'}>Check-In</Text>
+                </Tag>
+              ) : (
+                <Tag
+                  onClick={() => changeIsCheckedIn(volunteer)}
+                  cursor={'pointer'}
+                  borderRadius={10}
+                  p={2}
+                  color={'#0075FF'}
+                  bg={'white'}
+                  border={'2px solid #0075FF'}
+                  gap={1}
+                >
+                  <MdCheck />
+                  <Text fontSize={'md'}>Check-In</Text>
+                </Tag>
+              )}
+            </>
           )}
         </Flex>
       </Td>
@@ -155,7 +175,12 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage }) => 
   );
 };
 
-const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) => {
+const VolunteerEventsTable = ({
+  volunteers,
+  changeIsCheckedIn,
+  isCheckinPage,
+  isViewEventPage,
+}) => {
   return (
     <TableContainer border={'2px solid #E2E8F0'} borderRadius={'15px'}>
       <Table
@@ -196,8 +221,8 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) 
                 </Text>
               </Flex>
             </Th>
-            <Th>
-              <Flex gap={2}>
+            <Th display={{ base: 'none', xl: 'block' }}>
+              <Flex>
                 <Text color="#2D3748" fontWeight="650">
                   Party Size
                 </Text>
@@ -213,6 +238,7 @@ const VolunteerEventsTable = ({ volunteers, changeIsCheckedIn, isCheckinPage }) 
               volunteer={volunteer}
               changeIsCheckedIn={changeIsCheckedIn}
               isCheckinPage={isCheckinPage}
+              isViewEventPage={isViewEventPage}
             />
           ))}
         </Tbody>

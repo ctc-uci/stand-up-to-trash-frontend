@@ -1,4 +1,4 @@
-import { Box, Text, Flex } from '@chakra-ui/react';
+import { Box, Text, Flex, Image } from '@chakra-ui/react';
 import adminLogo from '../../Assets/navbar/stand_up_to_trash_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
@@ -18,6 +18,8 @@ import {
   SupportIconGrey,
   SettingsIconGrey,
   LogOutIcon,
+  QRCodeIconGrey,
+  QRCodeIconBlue,
 } from '../Icons/NavbarIcons';
 import { CloseIcon } from '@chakra-ui/icons';
 
@@ -39,6 +41,7 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       marginBottom="6px"
       backgroundColor={location.pathname === path ? '#D4E4F9' : 'transparent'}
       borderRadius="4px"
+      cursor="pointer"
       onClick={e => {
         e.preventDefault();
         navigate(path);
@@ -73,12 +76,12 @@ const Navbar = () => {
 
   useEffect(() => {
     updateUser();
-  }, [updateUser]);
+  }, []);
 
   // Change the paths for each button since these might change
   const homePath = '/';
   const eventsPath = '/event';
-  const archivedEventsPath = '/archived-events';
+  const archivedEventsPath = '/past-events';
   const volunteersPath = '/volunteers';
 
   // For the support and settings button at the bottom above the user
@@ -87,6 +90,8 @@ const Navbar = () => {
 
   // For logout in case it changes from /logoutv2
   const logoutPath = '/loginv2';
+  // QR code path
+  const qrPath = '/qr';
 
   // For navigating to the user profile when you click on it
   // at the bottom
@@ -110,7 +115,7 @@ const Navbar = () => {
           alignItems="start"
         >
           {/* Box containing everything above "support" */}
-          <Box display="flex" flexDir="column" width={'full'} as="a" href="/">
+          <Box display="flex" flexDir="column" width={'full'}>
             {/* Box containing the logo and role title at the top */}
             <Flex align={'center'} justifyContent={'space-between'} pr={7}>
               <Box
@@ -123,7 +128,7 @@ const Navbar = () => {
                 paddingBottom="35px"
                 paddingLeft="20px"
               >
-                <img src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
+                <Image src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
                 <Text
                   style={{
                     fontSize: '16px',
@@ -159,7 +164,7 @@ const Navbar = () => {
               UnfocusedIcon={HomeIconGrey}
             />
 
-            {/* Events button */}
+            {/* Current Events button */}
             <NavbarButton
               buttonText={'Current Events'}
               path={eventsPath}
@@ -168,23 +173,36 @@ const Navbar = () => {
               UnfocusedIcon={EventsIconGrey}
             />
 
-            {/* Archived events button */}
-            <NavbarButton
-              buttonText={'Archived Events'}
-              path={archivedEventsPath}
-              navigate={navigate}
-              FocusedIcon={ArchivedEventsIconBlue}
-              UnfocusedIcon={ArchivedEventsIconGrey}
-            />
+            {/* Conditional rendering based on the role */}
+            {role === 'admin' ? (
+              <>
+                {/* Archived Events button */}
+                <NavbarButton
+                  buttonText={'Past Events'}
+                  path={archivedEventsPath}
+                  navigate={navigate}
+                  FocusedIcon={ArchivedEventsIconBlue}
+                  UnfocusedIcon={ArchivedEventsIconGrey}
+                />
 
-            {/* Volunteers button */}
-            <NavbarButton
-              buttonText={'Volunteers'}
-              path={volunteersPath}
-              navigate={navigate}
-              FocusedIcon={VolunteersIconBlue}
-              UnfocusedIcon={VolunteersIconGrey}
-            />
+                {/* Volunteers button */}
+                <NavbarButton
+                  buttonText={'Volunteers'}
+                  path={volunteersPath}
+                  navigate={navigate}
+                  FocusedIcon={VolunteersIconBlue}
+                  UnfocusedIcon={VolunteersIconGrey}
+                />
+              </>
+            ) : (
+              <NavbarButton
+                buttonText={'Scan QR'}
+                path={qrPath}
+                navigate={navigate}
+                FocusedIcon={QRCodeIconBlue}
+                UnfocusedIcon={QRCodeIconGrey}
+              />
+            )}
           </Box>
           {/* Bottom of navbar, support and below */}
           <Box>
@@ -275,9 +293,12 @@ const Navbar = () => {
             >
               {/* User image */}
               <Box style={{ borderRadius: '50%' }}>
-                <img
+                <Image
                   src={user?.image_url}
-                  style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover' }}
+                  width="45px"
+                  height="45px"
+                  borderRadius="full"
+                  objectFit="cover"
                 />
               </Box>
               <Box

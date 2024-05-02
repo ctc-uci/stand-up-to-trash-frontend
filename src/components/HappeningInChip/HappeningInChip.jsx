@@ -28,6 +28,10 @@ const relativeTimeFromDates = (relative, pivot = new Date()) => {
  * @param elapsed   - the elapsed time in milliseconds
  */
 const relativeTimeFromElapsed = elapsed => {
+  if (!Number.isFinite(elapsed)) {
+    return ''; // Return an empty string if elapsed is not a finite number
+  }
+
   for (const { unit, ms } of units) {
     if (Math.abs(elapsed) >= ms || unit === 'second') {
       return rtf.format(Math.round(elapsed / ms), unit);
@@ -80,7 +84,7 @@ const HappeningInChip = ({ date }) => {
             />
           </g>
         </svg>
-        <Text>
+        <Text fontSize={{ base: '12px', md: '14px' }}>
           {/* {inThePast ? 'happened' : 'happening'}  */}
           {relativeTimeFromDates(date)}
         </Text>

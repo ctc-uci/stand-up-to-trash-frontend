@@ -95,6 +95,37 @@ const EventsIconBlue = createIcon({
     />
   ),
 });
+const QRCodeIconBlue = createIcon({
+  displayName: 'QRCodeIconBlue',
+  viewBox: '0 0 14 15',
+  width: '14',
+  height: '15',
+  fill: 'none',
+  xmlns: 'http://www.w3.org/2000/svg',
+
+  path: (
+    <path
+      d="M1,1 h3 v3 h-3 Z M4,4 h3 v3 h-3 Z M1,4 h3 v3 h-3 Z M10,1 h3 v3 h-3 Z M10,10 h3 v3 h-3 Z M10,4 h3 v3 h-3 Z M4,10 h3 v3 h-3 Z M1,10 h3 v3 h-3 Z M4,1 h3 v3 h-3 Z"
+      fill="#1873FB"
+    />
+  ),
+});
+
+const QRCodeIconGrey = createIcon({
+  displayName: 'QRCodeIconGrey',
+  viewBox: '0 0 19 19',
+  width: '19',
+  height: '19',
+  fill: 'none',
+  xmlns: 'http://www.w3.org/2000/svg',
+
+  path: (
+    <path
+      d="M3,3 h4 v4 h-4 Z M3,10 h4 v4 h-4 Z M3,16 h4 v2 h-4 Z M10,3 h4 v4 h-4 Z M10,10 h4 v4 h-4 Z M10,16 h4 v2 h-4 Z M16,3 h2 v4 h-2 Z M16,10 h2 v4 h-2 Z M16,16 h2 v2 h-2 Z"
+      fill="#717171"
+    />
+  ),
+});
 
 const VolunteersIconGrey = createIcon({
   displayName: 'VolunteersIconBlue',
@@ -222,4 +253,6 @@ export {
   SettingsIconGrey,
   SettingsIconBlue,
   LogOutIcon,
+  QRCodeIconGrey,
+  QRCodeIconBlue,
 };

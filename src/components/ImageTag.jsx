@@ -1,16 +1,10 @@
 /* eslint-disable react/prop-types */
-import {
-  CloseButton,
-  Flex,
-  useDisclosure,
-  Image,
-} from '@chakra-ui/react';
+import { CloseButton, Flex, useDisclosure, Image } from '@chakra-ui/react';
 import ImageModal from './ImageModal';
 
 const ImageTag = ({ image, setTags, deletedImages, uploadImages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name: imageName, id: imageID, s3_url: imageUrl } = image;
-  console.log(image);
   const handleClick = async () => {
     // remove tag from render and database
     // await deleteImageByID(imageID);

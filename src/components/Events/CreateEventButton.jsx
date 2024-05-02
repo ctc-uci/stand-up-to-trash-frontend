@@ -39,10 +39,8 @@ const CreateEventButton = ({ getEvents }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log('FORM DATA: ', formData);
     try {
       await Backend.post('/events', formData);
-      console.log('Submitted');
       setFormData({ name: '', description: '', location: '' });
       getEvents();
     } catch (e) {
