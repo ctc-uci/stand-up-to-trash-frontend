@@ -7,7 +7,6 @@ const Scanner = () => {
 
   const checkinVolunteer = async ({ event_id, volunteer_id }) => {
     const resp = await Backend.patch(`/data/checkin/${event_id}/${volunteer_id}`);
-    console.log(resp.data);
     return resp.data;
   };
 
@@ -17,7 +16,6 @@ const Scanner = () => {
         scanDelay={1000}
         onResult={result => {
           if (result) {
-            // console.log('scanned');
             setData(result.getText()); // Displays the link obtained
             checkinVolunteer(result.event_id, result.volunteer_id);
 

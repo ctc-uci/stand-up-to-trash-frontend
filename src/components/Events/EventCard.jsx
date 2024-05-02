@@ -28,6 +28,7 @@ import { useState, useRef, useEffect } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
+import RegistrationFlowController from '../EventRegistration/RegistrationFlowController.jsx';
 
 const EventCard = ({
   id,
@@ -55,9 +56,14 @@ const EventCard = ({
   )}`;
 
   let ref = useRef();
-
   const breakpoint = 400;
   const [containerWidth, setContainerWidth] = useState(0);
+
+  const {
+    isOpen: isRegistrationFlowOpen,
+    onOpen: onRegistrationFlowOpen,
+    onClose: onRegistrationFlowClose,
+  } = useDisclosure();
 
   useEffect(() => {
     const observer = new ResizeObserver(entries => {
@@ -114,7 +120,7 @@ const EventCard = ({
             width={sideBySideCard ? '188px' : '100%'}
             src={image_url}
             objectFit={'cover'}
-            height={{base : '116px', md : '188px'}}
+            height={{ base: '116px', md: '188px' }}
           />
 
           <Box
@@ -126,7 +132,7 @@ const EventCard = ({
             mt={sideBySideCard ? 0 : 5}
             mb={sideBySideCard ? 0 : 5}
           >
-            <HappeningInChip date={dateObj} mb={5}/>
+            <HappeningInChip date={dateObj} mb={5} />
 
             {name.length > 30 ? (
               <Text
@@ -142,7 +148,7 @@ const EventCard = ({
             ) : (
               <Text
                 fontWeight="800"
-                fontSize={{base : "20px", md : "24px"}}
+                fontSize={{ base: '20px', md: '24px' }}
                 lineHeight="30px"
                 fontFamily="Avenir"
                 mt={2}
@@ -151,10 +157,12 @@ const EventCard = ({
                 {name}
               </Text>
             )}
-            <Text fontFamily="Avenir" fontSize={sideBySideCard ? {base : '12px', md : '15px'} : '16px'} 
-                  fontWeight={{base : 500, md :300}} 
-                  mt={1}
-                >
+            <Text
+              fontFamily="Avenir"
+              fontSize={sideBySideCard ? { base: '12px', md: '15px' } : '16px'}
+              fontWeight={{ base: 500, md: 300 }}
+              mt={1}
+            >
               {dateStr}
             </Text>
 
@@ -171,11 +179,19 @@ const EventCard = ({
                   background: '#dbdbdb',
                   color: '#0075FF',
                 }}
+                onClick={onRegistrationFlowOpen}
               >
                 Register
               </Button>
             ) : (
               ''
+            )}
+            {isRegistrationFlowOpen && (
+              <RegistrationFlowController
+                isOpen={isRegistrationFlowOpen}
+                onClose={onRegistrationFlowClose}
+                eventId={id}
+              />
             )}
           </Box>
         </Flex>
@@ -329,7 +345,6 @@ const EditEvents = ({
         position: 'bottom-right',
         isClosable: true,
       });
-      console.log(eventData);
       await putEvent(eventData);
       getEvents();
 

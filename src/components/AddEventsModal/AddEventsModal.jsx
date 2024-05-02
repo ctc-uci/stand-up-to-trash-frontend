@@ -55,7 +55,6 @@ const AddEventsModal = () => {
       });
       // TODO: API request is comment out for now due to form change
       await postEvent(eventData);
-      console.log(eventData);
       toast.close(toastIdRef.current);
       toast({
         title: 'Event Created.',

@@ -39,7 +39,6 @@ const InputDataPage = () => {
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
   const navigate = useNavigate();
 
-  console.log(volunteerResults);
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
     setDisplayedVolunteers(volunteerResults.filter(volunteer => volunteer.is_checked_in === true));

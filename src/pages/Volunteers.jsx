@@ -18,6 +18,7 @@ import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import Fuse from 'fuse.js';
 import { TrophyIcon } from '../components/Icons/TrophyIcon';
 import NavbarContext from '../utils/NavbarContext';
+import { MdPeopleAlt } from 'react-icons/md';
 
 const Volunteers = () => {
   const [registered, setRegistered] = useState('');
@@ -53,10 +54,6 @@ const Volunteers = () => {
   }, []);
 
   useEffect(() => {
-    console.log('>', volunteers);
-  }, [volunteers]);
-
-  useEffect(() => {
     // If input is empty, display all volunteers, else conduct the search
     if (input.trim() === '') {
       setDisplayedVolunteers(volunteers);
@@ -85,15 +82,28 @@ const Volunteers = () => {
               onClick={onNavbarDrawerOpen}
             />
             <Flex
-              direction={{ base: 'column', md: 'row' }}
+              direction={{ base: 'column', lg: 'row' }}
               bg="F8F8F8"
               w="100%"
               gap={5}
-              justifyContent="center"
+              // pl={"15em"}
+              // pr={"15em"}
+              justifyContent={'center'}
               mt={5}
             >
               {/* Total Registered */}
-              <VStack bg="white" p={30} align="center" w="70%">
+              <Flex
+                bg="white"
+                p={'2em'}
+                align="center"
+                h={'14em'}
+                maxW={{ base: '100%', lg: '20rem' }}
+                w={'100%'}
+                flexGrow={1}
+                flexDir={'column'}
+                justify={'center'}
+                borderRadius={'12px'}
+              >
                 <Flex background={'#96DB53'} p={2.5} borderRadius={'lg'}>
                   <IoDocumentText size={30} color="white" />
                 </Flex>
@@ -103,12 +113,23 @@ const Volunteers = () => {
                 <Text fontSize={50} fontWeight={'bold'} color={'rgba(0, 0, 0, 0.75)'}>
                   {Math.floor(registered)}
                 </Text>
-              </VStack>
+              </Flex>
 
               {/* Total Checked-In Card */}
-              <VStack bg="white" p={30} align="center" w="70%">
-                <Flex background={'#96DB53'} p={2.5} borderRadius={'lg'}>
-                  <IoDocumentText size={30} color="white" />
+              <VStack
+                bg="white"
+                p={'2em'}
+                align="center"
+                h={'14em'}
+                flexDir={'column'}
+                justify={'center'}
+                borderRadius={'12px'}
+                maxW={{ base: '100%', lg: '20rem' }}
+                w={'100%'}
+                flexGrow={1}
+              >
+                <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
+                  <MdPeopleAlt size={30} color="white" />
                 </Flex>
                 <Text fontWeight={'medium'} fontSize={20} textAlign={'center'}>
                   Total Checked-In Volunteers
@@ -119,11 +140,23 @@ const Volunteers = () => {
               </VStack>
 
               {/* Leaderboard Card */}
-              <VStack bg="white" p={30} align="center" w="80vw" spacing={5}>
+              <VStack
+                bg="white"
+                p={'1em'}
+                align="center"
+                h={'14em'}
+                flexDir={'column'}
+                justify={'center'}
+                borderRadius={'12px'}
+                minW={'18rem'}
+                maxW={{ base: '100%', lg: '18rem' }}
+                flexGrow={1}
+                flexBasis={0}
+              >
                 <Text fontWeight={'medium'} fontSize={24}>
                   Leaderboard
                 </Text>
-                <Text
+                <Flex
                   textColor="#0075FF"
                   as="b"
                   bg="#D4E4F9"
@@ -132,10 +165,11 @@ const Volunteers = () => {
                   display="flex"
                   justifyContent="space-between"
                   alignItems="center"
-                  w="20vw"
+                  w="100%"
+                  borderRadius={'4.541px'}
                 >
                   <Flex alignItems="center">
-                    <TrophyIcon marginRight="5" />
+                    <TrophyIcon marginRight="5" boxSize={'1.25em'} />
                     <Box
                       overflow="hidden"
                       whiteSpace="nowrap"
@@ -148,19 +182,19 @@ const Volunteers = () => {
                   </Flex>
                   {/* <Spacer /> */}
                   <Flex>{topThree[0] && truncate(topThree[0].total_weight, 2)} lbs</Flex>
-                </Text>
-                <Text display="flex" justifyContent="space-between" w="15vw">
-                  <Text color="#0075FF" fontWeight="bold">
-                    2{' '}
-                  </Text>{' '}
+                </Flex>
+                <Flex display="flex" pl={'2em'} gap={'1em'} w="100%" align={'center'}>
+                  <Text color="#0075FF" fontWeight="bold" fontSize={'1.1em'}>
+                    2
+                  </Text>
                   <Flex>
                     {topThree[1] && topThree[1].volunteer_first_name}{' '}
                     {topThree[1] && topThree[1].volunteer_last_name}{' '}
                   </Flex>
                   <Flex>{topThree[1] && truncate(topThree[1].total_weight, 2)} lbs</Flex>
-                </Text>
-                <Text display="flex" justifyContent="space-between" w="15vw">
-                  <Text color="#0075FF" fontWeight="bold">
+                </Flex>
+                <Flex display="flex" pl={'2em'} gap={'1em'} w="100%" align={'center'}>
+                  <Text color="#0075FF" fontWeight="bold" fontSize={'1.1em'}>
                     3{' '}
                   </Text>{' '}
                   <Flex>
@@ -168,11 +202,26 @@ const Volunteers = () => {
                     {topThree[2] && topThree[2].volunteer_last_name}{' '}
                   </Flex>
                   <Flex>{topThree[2] && truncate(topThree[2].total_weight, 2)} lbs</Flex>
-                </Text>
+                </Flex>
               </VStack>
-              <Box mt="18%" width="60%">
-                <Button colorScheme={'blue'} fontSize="lg">
-                  <ExternalLinkIcon marginRight="2" boxSize="6" /> Export All Volunteer Data
+              <Box
+                display={'flex'}
+                justifyContent={{ base: 'center', lg: 'start' }}
+                alignItems={'end'}
+              >
+                <Button
+                  backgroundColor={'#0075FF'}
+                  fontSize="lg"
+                  style={{
+                    whiteSpace: 'normal',
+                    wordWrap: 'break-word',
+                  }}
+                  height={'fit-content'}
+                >
+                  <ExternalLinkIcon marginRight="2" boxSize="6" color={'white'} />{' '}
+                  <Text color={'white'} my="3">
+                    Export All Volunteer Data
+                  </Text>
                 </Button>
               </Box>
             </Flex>

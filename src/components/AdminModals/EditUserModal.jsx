@@ -97,8 +97,6 @@ export default function EditUserModal({ isOpen, onClose, selectedAdmin, setAdmin
     }
   };
 
-  console.log('currentUserData:', currentUserData);
-
   return (
     <Flex>
       <Modal isOpen={isOpen} onClose={onClose}>

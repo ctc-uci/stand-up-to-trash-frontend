@@ -18,7 +18,7 @@ import EventCard from '../../components/Events/EventCard';
 import Backend from '../../utils/utils';
 import Fuse from 'fuse.js';
 
-const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton }) => {
+const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton, isOpen }) => {
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
 
@@ -34,7 +34,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     try {
       const eventsData = await Backend.get('/events/currentEvents');
       setEvents(eventsData.data);
-      console.log(eventsData.data);
       // setDates();
       setLocations(getLocation(eventsData.data));
       setDates(getDate(eventsData.data));
@@ -50,7 +49,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     for (let i in data) {
       location.push(data[i].location);
     }
-    console.log(location.length);
     return location;
   };
 
@@ -59,7 +57,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     for (let i in data) {
       date.push(data[i].date.substring(0, 10));
     }
-    console.log(date.length);
     return date;
   };
 
@@ -74,24 +71,19 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     }
 
     setSelectedEvents(newCheckedItems);
-    console.log(selectedEvents);
   };
 
   useEffect(() => {
     getEvents();
-    console.log(locations);
-    // getEventId(eventId);
   }, []);
 
   const handleLocationChange = event => {
     const selectedLocation = event.target.value;
-    console.log(selectedLocation);
     setLocation(selectedLocation);
   };
 
   const handleDateChange = event => {
     const selectedDate = event.target.value;
-    console.log(selectedDate);
     setDate(selectedDate);
   };
 
@@ -115,7 +107,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     if (!fuse) {
       return;
     }
-    console.log(name);
     let ands = [];
     if (name) ands.push({ name: name });
     if (location) ands.push({ location: location });
@@ -124,12 +115,10 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     let result;
     if (ands.length > 0) {
       const fuseResult = fuse.search({ $and: ands });
-      console.log(fuseResult);
       // If we want to filter by score:
       // result = fuseResult.filter(item => item.score <= 0.5).map(item => item.item);
       result = fuseResult.map(item => item.item);
     } else result = events;
-    console.log(result);
     // result.map((e) -> e.)
     setDisplayEvents(result);
   }, [name, location, date, fuse]);
@@ -215,7 +204,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
                       borderRadius={12}
                       size="lg"
                       maxW="20%"
-                      minW={{ base: '48%', xl: '200px' }}
+                      minW={{ base: '48%', xl: '10em' }}
                     >
                       {getDateOptions()}
                     </Select>
@@ -226,7 +215,16 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
             </Flex>
           </Box>
           <Box>
-            <Grid templateColumns={{ base: 'repeat(1, 1fr)', xl: 'repeat(4, 1fr)' }} gap={6}>
+            <Grid
+              templateColumns={{
+                base: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(2, 1fr)',
+                lg: 'repeat(2, 1fr)',
+                xl: isOpen ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+              }}
+              gap={6}
+            >
               {displayEvents.map(element => (
                 <GridItem
                   key={element.id}
@@ -258,6 +256,7 @@ EventFilteredGrid.propTypes = {
   setCurrentEventId: PropTypes.func.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default EventFilteredGrid;

@@ -1,4 +1,4 @@
-import { Box, Text, Flex } from '@chakra-ui/react';
+import { Box, Text, Flex, Image } from '@chakra-ui/react';
 import adminLogo from '../../Assets/navbar/stand_up_to_trash_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
@@ -76,7 +76,7 @@ const Navbar = () => {
 
   useEffect(() => {
     updateUser();
-  }, [updateUser]);
+  }, []);
 
   // Change the paths for each button since these might change
   const homePath = '/';
@@ -128,7 +128,7 @@ const Navbar = () => {
                 paddingBottom="35px"
                 paddingLeft="20px"
               >
-                <img src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
+                <Image src={adminLogo} style={{ width: '27px', height: '26.308px' }} />
                 <Text
                   style={{
                     fontSize: '16px',
@@ -293,9 +293,12 @@ const Navbar = () => {
             >
               {/* User image */}
               <Box style={{ borderRadius: '50%' }}>
-                <img
+                <Image
                   src={user?.image_url}
-                  style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover' }}
+                  width="45px"
+                  height="45px"
+                  borderRadius="full"
+                  objectFit="cover"
                 />
               </Box>
               <Box
