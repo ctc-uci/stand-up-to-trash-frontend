@@ -18,16 +18,18 @@ import ImpactSummary from '../components/Events/ImpactSummary';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import NavbarContext from '../utils/NavbarContext';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
   const [showSelect] = useState(false);
-  const [selectedEvents, setSelectedEvents] = useState([]);
+  const [selectedEvents] = useState([]);
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [fuse, setFuse] = useState();
+  const navigate = useNavigate();
 
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
@@ -35,7 +37,8 @@ const Home = () => {
     try {
       const eventsData = await Backend.get('/events');
       setEvents(eventsData.data);
-      const options = { keys: ['name', 'date', 'location'], includeScore: true };
+      console.log(events);
+      const options = { keys: ['name', 'date', 'location', 'end_time', 'start_time'], includeScore: true };
       setFuse(new Fuse(eventsData.data, options));
     } catch (err) {
       console.log(`Error getting events: `, err.message);
@@ -43,16 +46,19 @@ const Home = () => {
   };
 
   const handleCheckboxChange = id => {
-    const newCheckedItems = [...selectedEvents];
-    const index = newCheckedItems.indexOf(id);
+    navigate(`/checkin/${id}`);
+    console.log(`POOPY2: ${id}`);
+    
+    // const newCheckedItems = [...selectedEvents];
+    // const index = newCheckedItems.indexOf(id);
 
-    if (index === -1) {
-      newCheckedItems.push(id);
-    } else {
-      newCheckedItems.splice(index, 1);
-    }
+    // if (index === -1) {
+    //   newCheckedItems.push(id);
+    // } else {
+    //   newCheckedItems.splice(index, 1);
+    // }
 
-    setSelectedEvents(newCheckedItems);
+    // setSelectedEvents(newCheckedItems);
   };
 
   const eventCards = displayEvents.map(element => (

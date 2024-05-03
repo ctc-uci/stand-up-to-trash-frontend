@@ -28,11 +28,14 @@ import { useState, useRef, useEffect } from 'react';
 import { putEvent } from '../../utils/eventsUtils.js';
 import Dropzone from '../Dropzone.tsx';
 import HappeningInChip from '../HappeningInChip/HappeningInChip.jsx';
+import HappeningNowChip from '../HappeningNowChip/HappeningNowChip.jsx';
 import RegistrationFlowController from '../EventRegistration/RegistrationFlowController.jsx';
 
 const EventCard = ({
   id,
   name,
+  end_time,
+  start_time,
   date,
   showSelect,
   image_url,
@@ -41,7 +44,9 @@ const EventCard = ({
   hasBorder = false,
   isFeatured = false,
 }) => {
-  const { onOpen } = useDisclosure();
+  // const { onOpen } = useDisclosure();
+
+  
 
   // Placeholder for testing a high-res image
   // image_url =
@@ -75,6 +80,22 @@ const EventCard = ({
 
   const sideBySideCard = containerWidth >= breakpoint && isFeatured;
 
+  const checkDate = () => {
+    const todayDate = new Date();
+    console.log(`TODAY DATE HOURS: ${todayDate.getHours()} MINUTE: ${todayDate.getMinutes()}`);
+
+    // Convert start_time, end_time, and eventDate to Date objects
+    const eventStartHour = start_time.split(':')[0];
+    const eventStartMin = start_time.split(':')[1];
+
+    const eventEndHour = end_time.split(':')[0];
+    const eventEndMin = end_time.split(':')[1];
+
+
+
+    return todayDate.getHours() >=  eventStartHour && todayDate.getHours() <= eventEndHour && todayDate.getMinutes() >= eventStartMin && todayDate.getMinutes() <= eventEndMin
+}
+
   return (
     <>
       <Box
@@ -83,7 +104,8 @@ const EventCard = ({
         flexDir="column"
         cursor={'pointer'}
         justifyContent={sideBySideCard ? 'center' : 'start'}
-        onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
+        // onClick={() => (showSelect ? handleCheckboxChange(id): onOpen())} we don't know why onOpen is here, we remove!
+        onClick={() => (handleCheckboxChange(id))}
         border={hasBorder ? '2px solid var(--Secondary-Button-Color, #EFEFEF)' : ''}
         borderRadius="18px"
         width={'Fill (674px)'}
@@ -132,8 +154,8 @@ const EventCard = ({
             mt={sideBySideCard ? 0 : 5}
             mb={sideBySideCard ? 0 : 5}
           >
-            <HappeningInChip date={dateObj} mb={5} />
-
+            {checkDate() ? <HappeningNowChip mb={5} /> : <HappeningInChip date={dateObj} mb={5} /> }
+          
             {name.length > 30 ? (
               <Text
                 fontWeight="800"
@@ -283,6 +305,8 @@ EventCard.propTypes = {
   getEvents: PropTypes.func,
   hasBorder: PropTypes.bool,
   isFeatured: PropTypes.bool,
+  start_time: PropTypes.string,
+  end_time: PropTypes.string
 };
 
 export default EventCard;
