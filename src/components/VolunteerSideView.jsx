@@ -94,7 +94,9 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
       location: eventData.location,
       url: window.location.href,
     });
+
     const calendarData = calendar.toString();
+    console.log(eventData.description, eventData.name, eventData.location, window.location.href);
     const blob = new Blob([calendarData], { type: 'text/calendar;charset=utf-8' });
     const url = URL.createObjectURL(blob);
 
