@@ -29,7 +29,6 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   // const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
   const [dateObj, setDateObj] = useState(new Date());
-  const [icsURL, setICSURL] = useState();
 
   // only parse the date if eventData has been retrieved
   useEffect(() => {
@@ -67,6 +66,8 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   calendar.method(ICalCalendarMethod.REQUEST);
 
   const handleDownloadICS = async () => {
+    // const baseURL = window.location.origin;
+    // const eventURL = `${baseURL}/events/${eventId}`;
     // TODO: using eventData.date, eventData.start_time, eventData.end_time
     // format a start time that looks like eventData.date
     // extract the date from the eventData
@@ -80,20 +81,30 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     console.log('the is date', eventData.date, 'but the part we want is', datePart);
     console.log('ICS start time:', formatted_start_time, 'ICS End time:', formatted_end_time);
     console.log('real start time:', eventData.start_time, 'real end time:', eventData.end_time);
+    // const calendarFile = new File([calendar.toString()], 'event.ics', { type: 'text/calendar' });
+    // const url = URL.createObjectURL(calendarFile);
+    // setICSURL(url);
+    // TODO: please check that the url is correct
 
     calendar.createEvent({
       start: formatted_start_time,
       end: formatted_end_time,
-      summary: 'Example Event',
-      description: 'It works ;)',
-      location: 'my room',
-      url: 'http://sebbo.net/',
+      summary: eventData.name,
+      description: eventData.description,
+      location: eventData.location,
+      url: window.location.href,
     });
+    const calendarData = calendar.toString();
+    const blob = new Blob([calendarData], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
 
-    const calendarFile = new File([calendar.toString()], 'event.ics', { type: 'text/calendar' });
-    const url = URL.createObjectURL(calendarFile);
-    console.log(url);
-    setICSURL(url);
+    // Create and trigger a download link
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'event.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   function formatDate(dateString) {
@@ -271,7 +282,6 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             onClick={handleDownloadICS} // Directly attach the event handler here
             borderWidth={2}
           >
-            <a href={icsURL}>download test</a>
             <Flex justify={'center'} align={'center'}>
               <Image src={logos_google_calendar} h={'1.3em'} w={'1.3em'} mr={'9%'} />
               <Text fontWeight={600}>Calendar</Text>
