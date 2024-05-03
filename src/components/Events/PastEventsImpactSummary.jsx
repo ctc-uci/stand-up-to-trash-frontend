@@ -1,4 +1,4 @@
-import { Box, Button, Flex, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, VStack, useBreakpointValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { AiOutlineExport } from 'react-icons/ai';
 import { FaTrashCan } from 'react-icons/fa6';
@@ -24,6 +24,29 @@ const PastEventsImpactSummary = () => {
     { key: 'is_checked_in', label: 'IS_CHECKED_IN' },
     { key: 'image_array', label: 'IMAGE_ARRAY' },
   ];
+
+  const flexDirectionBreakpoint = useBreakpointValue(
+    {
+      base: 'column',
+      sm: 'column',
+      md: 'row',
+    },
+    {
+      fallback: 'row',
+    },
+  );
+
+  const gapBreakpoint = useBreakpointValue(
+    {
+      base: 0,
+      sm: 0,
+      md: 120,
+    },
+    {
+      fallback: 120,
+    },
+  );
+
   useEffect(() => {
     getData();
   }, []);
@@ -57,7 +80,7 @@ const PastEventsImpactSummary = () => {
     <Box
       mb="5"
       display="flex"
-      flexDirection="row"
+      flexDirection={flexDirectionBreakpoint}
       gap="8"
       justifyContent="center"
       alignItems={'center'}
@@ -92,7 +115,7 @@ const PastEventsImpactSummary = () => {
           </Flex>
         }
       />
-      <VStack gap={120}>
+      <VStack gap={gapBreakpoint}>
         <Box></Box>
         <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport></AiOutlineExport>} size="md">
           <CSVLink

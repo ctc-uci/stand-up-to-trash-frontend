@@ -1,4 +1,4 @@
-import { Box, Button, Flex, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, VStack, useBreakpointValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { AiOutlineExport } from 'react-icons/ai';
 import { FaTrashCan } from 'react-icons/fa6';
@@ -17,7 +17,6 @@ const ImpactSummary = () => {
   useEffect(() => {
     getData();
   }, []);
-
 
   const getData = async () => {
     try {
@@ -55,6 +54,28 @@ const ImpactSummary = () => {
     { key: 'image_array', label: 'IMAGE_ARRAY' },
   ];
 
+  const flexDirectionBreakpoint = useBreakpointValue(
+    {
+      base: 'column',
+      sm: 'column',
+      md: 'row',
+    },
+    {
+      fallback: 'row',
+    },
+  );
+
+  const gapBreakpoint = useBreakpointValue(
+    {
+      base: 0,
+      sm: 0,
+      md: 120,
+    },
+    {
+      fallback: 120,
+    },
+  );
+
   useEffect(() => {
     const getEventId = async () => {
       try {
@@ -68,13 +89,12 @@ const ImpactSummary = () => {
     getEventId();
   }, []);
 
-
   return (
     <Box
       mb="5"
-      display="flex"
-      flexDirection="row"
       gap="8"
+      display="flex"
+      flexDirection={flexDirectionBreakpoint}
       justifyContent="center"
       alignItems={'center'}
       backgroundColor={'#F8F8F8'}
@@ -108,7 +128,7 @@ const ImpactSummary = () => {
           </Flex>
         }
       />
-      <VStack gap={120}>
+      <VStack gap={gapBreakpoint}>
         <Box></Box>
         <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport />} size="md" mr={3}>
           <CSVLink
