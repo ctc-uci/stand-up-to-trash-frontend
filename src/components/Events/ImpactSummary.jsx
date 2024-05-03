@@ -18,6 +18,7 @@ const ImpactSummary = () => {
     getData();
   }, []);
 
+
   const getData = async () => {
     try {
       let response = await Backend.get('/stats/registered');
@@ -56,24 +57,24 @@ const ImpactSummary = () => {
 
   const flexDirectionBreakpoint = useBreakpointValue(
     {
-      base: 'column',
-      sm: 'column',
-      md: 'row',
+        base: "column",
+        sm: "column",
+        md: "row"
     },
     {
-      fallback: 'row',
-    },
+        fallback: "row"
+    }
   );
 
-  const gapBreakpoint = useBreakpointValue(
-    {
-      base: 0,
-      sm: 0,
-      md: 120,
-    },
-    {
-      fallback: 120,
-    },
+const gapBreakpoint = useBreakpointValue(
+  {
+    base: 0,
+    sm: 0,
+    md: 120
+  },
+  {
+    fallback: 120
+  }
   );
 
   useEffect(() => {
@@ -89,6 +90,7 @@ const ImpactSummary = () => {
     getEventId();
   }, []);
 
+
   return (
     <Box
       mb="5"
@@ -101,6 +103,7 @@ const ImpactSummary = () => {
       borderRadius={'lg'}
       py={10}
     >
+
       <DataCard
         amount={registered}
         text={'Total Registered Volunteers'}
@@ -147,6 +150,7 @@ const ImpactSummary = () => {
           {/* Export Data */}
         </Button>
       </VStack>
+
     </Box>
   );
 };
