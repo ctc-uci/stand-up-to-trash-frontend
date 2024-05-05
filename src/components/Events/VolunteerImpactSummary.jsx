@@ -9,8 +9,9 @@ import {
   TotalTrashIcon,
   LargestTrashIcon,
 } from '../../Assets/impact_summary/ImpactSummaryIcons';
+import PropTypes from 'prop-types';
 
-const VolunteerImpactSummary = () => {
+const VolunteerImpactSummary = ({ showLargestItemCollected }) => {
   const [events, setEvents] = useState(0);
   const [total, setTotalPounds] = useState(0);
   const [largestItem, setLargestItem] = useState(0);
@@ -114,7 +115,14 @@ const VolunteerImpactSummary = () => {
           }
         />
       </Flex>
-      <Flex display={{ base: currentIndex === 2 ? 'block' : 'none', md: 'block' }} width="100%">
+      <Flex
+        display={
+          showLargestItemCollected
+            ? { base: currentIndex === 2 ? 'block' : 'none', md: 'block' }
+            : 'none'
+        }
+        width="100%"
+      >
         <DataCard
           index={3}
           amount={largestItem + ' lbs'}
@@ -137,6 +145,10 @@ const VolunteerImpactSummary = () => {
       </Box>
     </Box>
   );
+};
+
+VolunteerImpactSummary.propTypes = {
+  showLargestItemCollected: PropTypes.bool.isRequired,
 };
 
 export default VolunteerImpactSummary;

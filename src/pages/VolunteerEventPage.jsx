@@ -39,7 +39,7 @@ const VolunteerEventPage = () => {
         />
       )} */}
       {/* <RegistrationModal /> */}
-      <Box bg="#E6EAEF" flexGrow={1} minW="1px">
+      <Box bg="#E6EAEF" flexGrow={1} minW="1px" minH={'100vh'}>
         <Flex
           flexDir={'row'}
           alignItems={'center'}
@@ -94,6 +94,9 @@ const VolunteerEventPage = () => {
         <FeaturedDashboard
           width={{ base: '90%' }}
           onOpen={onOpen}
+          setCurrentEventId={setCurrentEventId}
+          setIsOpen={setIsOpen}
+          setShowOpenDrawerButton={setShowOpenDrawerButton}
           showOpenDrawerButton={showOpenDrawerButton}
         />
         <EventFilteredGrid
