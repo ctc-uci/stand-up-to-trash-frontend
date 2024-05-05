@@ -5,7 +5,13 @@ import EventCard from './EventCard';
 import { RxCaretLeft } from 'react-icons/rx';
 import PropTypes from 'prop-types';
 
-const FeaturedDashboard = ({ onOpen, showOpenDrawerButton }) => {
+const FeaturedDashboard = ({
+  setCurrentEventId,
+  setIsOpen,
+  setShowOpenDrawerButton,
+  onOpen,
+  showOpenDrawerButton,
+}) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
   const numEvents = useBreakpointValue({ base: 1, md: 2, xl: 2 });
 
@@ -86,7 +92,14 @@ const FeaturedDashboard = ({ onOpen, showOpenDrawerButton }) => {
           gap={6}
         >
           {featuredEvents.map(element => (
-            <GridItem key={element.id}>
+            <GridItem
+              key={element.id}
+              onClick={() => {
+                setCurrentEventId(element.id);
+                setIsOpen(true);
+                setShowOpenDrawerButton(false);
+              }}
+            >
               <EventCard
                 {...element}
                 isSelected={false}
@@ -105,6 +118,9 @@ const FeaturedDashboard = ({ onOpen, showOpenDrawerButton }) => {
 FeaturedDashboard.propTypes = {
   onOpen: PropTypes.func,
   showOpenDrawerButton: PropTypes.bool,
+  setCurrentEventId: PropTypes.func.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  setShowOpenDrawerButton: PropTypes.func.isRequired,
 };
 
 export default FeaturedDashboard;
