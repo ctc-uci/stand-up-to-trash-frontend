@@ -96,7 +96,7 @@ export default function AdminPage() {
   return (
     <Flex ml="15rem" flexDir={'column'} padding={'2%'} gap={'1em'} backgroundColor={'#C8E6FF'}>
       <Flex justify={'space-between'}>
-        <Text fontFamily={'Poppins'} fontSize={'2.3rem'} fontWeight={500}>
+        <Text fontSize={'2.3rem'} fontWeight={500}>
           Administrators
         </Text>
         <Button borderRadius={20} onClick={openAddModal} backgroundColor={'#EFEFEF'}>

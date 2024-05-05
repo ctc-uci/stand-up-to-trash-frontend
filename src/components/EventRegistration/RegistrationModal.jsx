@@ -30,13 +30,12 @@ const RegistrationModal = ({
               color={'#717171'}
               fontSize={'20px'}
               align={'center'}
-              fontFamily={'Avenir'}
               fontWeight={800}
               mb={'-6px'}
             >
               Volunteer registration
             </Text>
-            <Text fontFamily={'Avenir'} fontSize={'32px'} align={'center'} fontWeight={800}>
+            <Text fontSize={'32px'} align={'center'} fontWeight={800}>
               {title}
             </Text>
           </ModalHeader>
