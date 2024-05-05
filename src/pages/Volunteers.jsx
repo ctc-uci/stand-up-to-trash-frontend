@@ -174,7 +174,7 @@ const Volunteers = () => {
                       overflow="hidden"
                       whiteSpace="nowrap"
                       textOverflow="ellipsis"
-                      maxWidth="10vw" // Adjust the width based on your design
+                      maxWidth={{ base: '100px', md: '600px', xl: '100px' }}
                     >
                       {topThree[0] && topThree[0].volunteer_first_name}{' '}
                       {topThree[0] && topThree[0].volunteer_last_name}{' '}
@@ -187,7 +187,12 @@ const Volunteers = () => {
                   <Text color="#0075FF" fontWeight="bold" fontSize={'1.1em'}>
                     2
                   </Text>
-                  <Flex>
+                  <Flex
+                    overflow="hidden"
+                    whiteSpace="nowrap"
+                    textOverflow="ellipsis"
+                    maxWidth={{ base: '100px', md: '600px', xl: '100px' }}
+                  >
                     {topThree[1] && topThree[1].volunteer_first_name}{' '}
                     {topThree[1] && topThree[1].volunteer_last_name}{' '}
                   </Flex>
@@ -197,7 +202,12 @@ const Volunteers = () => {
                   <Text color="#0075FF" fontWeight="bold" fontSize={'1.1em'}>
                     3{' '}
                   </Text>{' '}
-                  <Flex>
+                  <Flex
+                    overflow="hidden"
+                    whiteSpace="nowrap"
+                    textOverflow="ellipsis"
+                    maxWidth={{ base: '100px', md: '600px', xl: '100px' }}
+                  >
                     {topThree[2] && topThree[2].volunteer_first_name}{' '}
                     {topThree[2] && topThree[2].volunteer_last_name}{' '}
                   </Flex>
