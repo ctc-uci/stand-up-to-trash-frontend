@@ -42,9 +42,15 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     // setDateObj(new Date(Date.parse(eventData.date)))
   }, [eventId]);
 
+  // const handleClose = () => {
+  //   onClose(); // Ensure onClose is always called to close the view
+  //   setShowOpenDrawerButton(true);
+  // };
+
   // console.log('e', eventData);
   // console.log('d', dateObj)
   // console.log(eventId)
+
   function formatDate(dateString) {
     const months = [
       'Jan',
