@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const AuthPage = ({ children }) => {
   return (
-    <SimpleGrid columns={2} spacing={0} minH={'100vh'} style={{ fontFamily: 'Poppins' }}>
+    <SimpleGrid columns={2} spacing={0} minH={'100vh'}>
       <Box
         backgroundColor="#2D558A"
         position="relative"

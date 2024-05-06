@@ -87,7 +87,7 @@ const VolunteerImpactSummary = () => {
           index={1}
           amount={events}
           text={
-            <Text fontSize={'18px'} fontFamily={'Avenir'} fontWeight={500}>
+            <Text fontSize={'18px'} fontWeight={500}>
               Total Events Participated
             </Text>
           }
@@ -103,7 +103,7 @@ const VolunteerImpactSummary = () => {
           index={2}
           amount={total + ' lbs'}
           text={
-            <Text fontSize={'18px'} fontFamily={'Avenir'} fontWeight={500}>
+            <Text fontSize={'18px'} fontWeight={500}>
               Total Trash Weight
             </Text>
           }
@@ -119,7 +119,7 @@ const VolunteerImpactSummary = () => {
           index={3}
           amount={largestItem + ' lbs'}
           text={
-            <Text fontSize={'18px'} fontFamily={'Avenir'} fontWeight={500}>
+            <Text fontSize={'18px'} fontWeight={500}>
               Largest Trash Item Collected
             </Text>
           }

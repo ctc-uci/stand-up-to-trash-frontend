@@ -103,7 +103,6 @@ const VolunteerHomePage = () => {
             fontSize={{ base: '20px', md: '36px' }}
             fontWeight={{ base: 500, md: 800 }}
             w={'full'}
-            fontFamily={'Avenir'}
           >
             Impact Summary
           </Heading>
@@ -125,7 +124,6 @@ const VolunteerHomePage = () => {
               fontSize={{ base: '20px', md: '36px' }}
               fontWeight={{ base: 500, md: 800 }}
               w={'full'}
-              fontFamily={'Avenir'}
             >
               Upcoming Events
             </Heading>

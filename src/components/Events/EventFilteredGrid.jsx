@@ -152,7 +152,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
               lineHeight="normal"
               fontStyle="normal"
               fontSize={{ base: '18px', xl: '32px' }}
-              fontFamily={'Avenir'}
               color={'rgba(0, 0, 0, 0.75)'}
             >
               All Upcoming Events
