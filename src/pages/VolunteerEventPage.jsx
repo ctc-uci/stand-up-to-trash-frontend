@@ -6,21 +6,27 @@ import { useContext, useState } from 'react';
 import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
 import { RxCaretLeft } from 'react-icons/rx';
+import { useBreakpoint, useDisclosure } from '@chakra-ui/react';
+import VolunteerSideViewDrawer from '../components/VolunteerSideViewDrawer.jsx';
 // import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
 
 const VolunteerEventPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
-  // eslint-disable-next-line
-  const [currentEventId, setCurrentEventId] = useState(-1);
-
+  const [currentEventId, setCurrentEventId] = useState(null); // Initial state is null to indicate no event selected
+  const breakpoint = useBreakpoint();
   const [showOpenDrawerButton, setShowOpenDrawerButton] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const onOpen = () => {
-    setIsOpen(!isOpen);
-    setShowOpenDrawerButton(false);
-  };
-  const onClose = () => setIsOpen(!isOpen);
 
+  const openEventDrawer = eventId => {
+    setCurrentEventId(eventId); // Set the current event ID, which triggers the side view to display
+    setShowOpenDrawerButton(false);
+    onOpen();
+  };
+
+  const handleClose = () => {
+    onClose();
+  };
+  console.log('test' + currentEventId);
   // const {
   //   isOpen: isRegistrationFlowOpen,
   //   onOpen: onRegistrationFlowOpen,
@@ -76,7 +82,7 @@ const VolunteerEventPage = () => {
             flex-shrink="0"
             borderRadius={'xl'}
             flexDir={'column'}
-            display={showOpenDrawerButton ? { base: 'flex', xl: 'none' } : 'none'}
+            display={showOpenDrawerButton && !isOpen ? { base: 'flex', xl: 'none' } : 'none'}
           >
             <IconButton
               borderRadius="md"
@@ -87,7 +93,9 @@ const VolunteerEventPage = () => {
               h="64px"
               w="64px"
               icon={<RxCaretLeft size={40} />}
-              onClick={onOpen}
+              onClick={() => {
+                onOpen();
+              }}
             ></IconButton>
           </Flex>
         </Flex>
@@ -95,28 +103,34 @@ const VolunteerEventPage = () => {
           width={{ base: '90%' }}
           onOpen={onOpen}
           showOpenDrawerButton={showOpenDrawerButton}
+          isOpen={isOpen}
         />
         <EventFilteredGrid
           width={{ base: '90%' }}
-          setCurrentEventId={setCurrentEventId}
-          setIsOpen={setIsOpen}
+          setCurrentEventId={openEventDrawer} // Adjusted to call `openEventDrawer`
+          // setIsOpen={setIsOpen}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
           isOpen={isOpen}
         />
       </Box>
-      <Box w={isOpen ? '480px' : 0} flexShrink={0}>
-        <Box pos={'fixed'} right={'0'} top={'0'} h={'100%'} overflowY={'auto'} paddingBottom={10}>
-          {isOpen && (
-            <VolunteerSideView
-              eventId={currentEventId}
-              onClose={onClose}
-              setShowOpenDrawerButton={setShowOpenDrawerButton}
-            />
-          )}
-        </Box>
-      </Box>
+      {/* Drawer Component */}
+      {breakpoint == 'base' ? (
+        <VolunteerSideViewDrawer
+          eventId={currentEventId}
+          isOpen={isOpen}
+          onClose={handleClose}
+          setShowOpenDrawerButton={setShowOpenDrawerButton}
+        />
+      ) : (
+        isOpen && (
+          <VolunteerSideView
+            eventId={currentEventId}
+            onClose={handleClose}
+            setShowOpenDrawerButton={setShowOpenDrawerButton}
+          />
+        )
+      )}
     </Flex>
   );
 };
-
 export default VolunteerEventPage;
