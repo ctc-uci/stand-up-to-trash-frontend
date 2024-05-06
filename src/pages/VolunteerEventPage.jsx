@@ -19,12 +19,12 @@ const VolunteerEventPage = () => {
 
   const openEventDrawer = eventId => {
     setCurrentEventId(eventId); // Set the current event ID, which triggers the side view to display
+    setShowOpenDrawerButton(false);
     onOpen();
   };
 
   const handleClose = () => {
     onClose();
-    setCurrentEventId(null); // Clear the current event ID on close
   };
   console.log('test' + currentEventId);
   // const {
@@ -82,7 +82,7 @@ const VolunteerEventPage = () => {
             flex-shrink="0"
             borderRadius={'xl'}
             flexDir={'column'}
-            display={showOpenDrawerButton ? { base: 'flex', xl: 'none' } : 'none'}
+            display={showOpenDrawerButton && !isOpen ? { base: 'flex', xl: 'none' } : 'none'}
           >
             <IconButton
               borderRadius="md"
@@ -93,11 +93,18 @@ const VolunteerEventPage = () => {
               h="64px"
               w="64px"
               icon={<RxCaretLeft size={40} />}
-              onClick={onOpen}
+              onClick={() => {
+                onOpen();
+              }}
             ></IconButton>
           </Flex>
         </Flex>
-        <FeaturedDashboard width={{ base: '90%' }} onOpen={onOpen} />
+        <FeaturedDashboard
+          width={{ base: '90%' }}
+          onOpen={onOpen}
+          showOpenDrawerButton={showOpenDrawerButton}
+          isOpen={isOpen}
+        />
         <EventFilteredGrid
           width={{ base: '90%' }}
           setCurrentEventId={openEventDrawer} // Adjusted to call `openEventDrawer`
@@ -123,7 +130,6 @@ const VolunteerEventPage = () => {
           />
         )
       )}
-      {/* { : null} */}
     </Flex>
   );
 };

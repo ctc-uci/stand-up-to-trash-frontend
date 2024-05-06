@@ -42,12 +42,10 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     // setDateObj(new Date(Date.parse(eventData.date)))
   }, [eventId]);
 
-  const handleClose = () => {
-    if (setShowOpenDrawerButton) {
-      setShowOpenDrawerButton(false);
-    }
-    onClose();  // Ensure onClose is always called to close the view
-  };
+  // const handleClose = () => {
+  //   onClose(); // Ensure onClose is always called to close the view
+  //   setShowOpenDrawerButton(true);
+  // };
 
   // console.log('e', eventData);
   // console.log('d', dateObj)
@@ -93,7 +91,10 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
           h="40px"
           w="40px"
           icon={<RxCaretRight size={22} />}
-          onClick={handleClose}
+          onClick={() => {
+            onClose();
+            setShowOpenDrawerButton(true);
+          }}
         ></IconButton>
         <Flex
           bg="#EFEFEF"

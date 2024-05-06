@@ -5,7 +5,7 @@ import EventCard from './EventCard';
 import { RxCaretLeft } from 'react-icons/rx';
 import PropTypes from 'prop-types';
 
-const FeaturedDashboard = ({ onOpen, showOpenDrawerButton }) => {
+const FeaturedDashboard = ({ onOpen, showOpenDrawerButton, isOpen }) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
   const numEvents = useBreakpointValue({ base: 1, md: 2, xl: 2 });
 
@@ -66,7 +66,7 @@ const FeaturedDashboard = ({ onOpen, showOpenDrawerButton }) => {
             w="40px"
             icon={<RxCaretLeft size={22} />}
             onClick={onOpen}
-            display={showOpenDrawerButton ? { base: 'none', xl: 'flex' } : 'none'}
+            display={showOpenDrawerButton && !isOpen ? { base: 'none', xl: 'flex' } : 'none'}
           ></IconButton>
         </Flex>
       </Flex>
@@ -103,6 +103,7 @@ const FeaturedDashboard = ({ onOpen, showOpenDrawerButton }) => {
 };
 
 FeaturedDashboard.propTypes = {
+  isOpen: PropTypes.bool,
   onOpen: PropTypes.func,
   showOpenDrawerButton: PropTypes.bool,
 };
