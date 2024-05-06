@@ -201,7 +201,7 @@ export const DummyProfilePage = () => {
                   size="sm"
                   mt={2}
                   mb={1}
-                  maxW={{ base: '100px', md: '150px', xl: '150px' }}
+                  maxW={{ base: '150px', md: '200px', xl: '225px' }}
                   textOverflow="ellipsis"
                   overflow="hidden"
                   whiteSpace="nowrap"
@@ -273,7 +273,7 @@ export const DummyProfilePage = () => {
                   size="md"
                   mt={2}
                   mb={1}
-                  maxW={{ base: '100px', md: '150px', xl: '150px' }}
+                  maxW={{ base: '150px', md: '200px', xl: '225px' }}
                   overflow="hidden"
                   whiteSpace="nowrap"
                   textOverflow="ellipsis"

@@ -309,20 +309,18 @@ const Navbar = () => {
               >
                 {/* User name */}
                 <Text
-                  maxWidth={{ base: '219px', md: '150px', xl: '150px' }}
+                  maxWidth={{ base: '219px', md: '150px', xl: '100px' }}
                   overflow="hidden"
-                  style={{
-                    fontWeight: '800',
-                    color: '#000000',
-                    fontSize: '14px',
-                    lineHeight: '25px',
-                    textAlign: 'left',
-                    marginTop: '-1px',
-                    whiteSpace: 'nowrap',
-                  }}
+                  textOverflow="ellipsis"
+                  fontWeight='800'
+                  color='#000000'
+                  fontSize='14px'
+                  lineHeight='25px'
+                  textAlign='left'
+                  marginTop='-1px'
+                  whiteSpace='nowrap'
                 >
                   {user?.first_name} {user?.last_name}
-                  supercalifragilisticexpialidocious
                 </Text>
 
                 <Tag

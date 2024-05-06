@@ -31,7 +31,7 @@ const RenderEventRow = ({ event }) => {
                 textOverflow="ellipsis"
                 maxWidth={{ base: '100px', xl: '300px' }}
               >
-                {name} asdfasdfasdflkajsdlfkjasldkfjalsdkfjalsdkjf
+                {name}
               </Text>
             </Flex>
           </Flex>
