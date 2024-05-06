@@ -137,7 +137,6 @@ const EventCard = ({
               fontWeight="800"
               fontSize={{ base: '20px', md: '24px' }}
               lineHeight="30px"
-              fontFamily="Avenir"
               mt={2}
               overflowWrap={'break-word'}
               overflow="hidden"
