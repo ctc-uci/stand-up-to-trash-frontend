@@ -87,6 +87,7 @@ const PastEventsImpactSummary = () => {
       backgroundColor={'#F8F8F8'}
       borderRadius={'lg'}
       py={10}
+      p={3}
     >
       <DataCard
         amount={registered}
