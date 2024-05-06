@@ -15,7 +15,7 @@ const VolunteerEventPage = () => {
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
   const [currentEventId, setCurrentEventId] = useState(null); // Initial state is null to indicate no event selected
   const breakpoint = useBreakpoint();
-  const [setShowOpenDrawerButton] = useState(false);
+  const [showOpenDrawerButton, setShowOpenDrawerButton] = useState(false);
 
   const openEventDrawer = eventId => {
     setCurrentEventId(eventId); // Set the current event ID, which triggers the side view to display
@@ -82,6 +82,7 @@ const VolunteerEventPage = () => {
             flex-shrink="0"
             borderRadius={'xl'}
             flexDir={'column'}
+            display={showOpenDrawerButton ? { base: 'flex', xl: 'none' } : 'none'}
           >
             <IconButton
               borderRadius="md"
@@ -100,8 +101,7 @@ const VolunteerEventPage = () => {
         <EventFilteredGrid
           width={{ base: '90%' }}
           setCurrentEventId={openEventDrawer} // Adjusted to call `openEventDrawer`
-          setCurrentEventId={setCurrentEventId}
-          setIsOpen={setIsOpen}
+          // setIsOpen={setIsOpen}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
           isOpen={isOpen}
         />
@@ -114,14 +114,16 @@ const VolunteerEventPage = () => {
           onClose={handleClose}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
         />
-      ) : null}
-      {isOpen ? (
-        <VolunteerSideView
-          eventId={currentEventId}
-          onClose={handleClose}
-          setShowOpenDrawerButton={setShowOpenDrawerButton}
-        />
-      ) : null}
+      ) : (
+        isOpen && (
+          <VolunteerSideView
+            eventId={currentEventId}
+            onClose={handleClose}
+            setShowOpenDrawerButton={setShowOpenDrawerButton}
+          />
+        )
+      )}
+      {/* { : null} */}
     </Flex>
   );
 };
