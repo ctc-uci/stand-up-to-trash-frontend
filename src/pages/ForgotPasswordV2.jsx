@@ -75,7 +75,7 @@ const ForgotPasswordForm = () => {
   return (
     <Box>
       <Center>
-        <Heading marginTop={10} fontFamily={'Poppins'} fontSize={32}>
+        <Heading marginTop={10} fontSize={32}>
           Forgot Password?
         </Heading>
       </Center>
@@ -93,7 +93,6 @@ const ForgotPasswordForm = () => {
               marginTop={30}
               borderRadius={8}
               placeholder="Email"
-              fontFamily={'Avenir'}
               boxShadow={'0 4px 2px -2px gray'}
               type="email"
               size={'lg'}

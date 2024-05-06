@@ -27,7 +27,6 @@ const DeleteEventsModal = ({ isOpen, onClose, events, confirmDelete }) => {
           fontWeight="800"
           fontSize="32px"
           lineHeight="33.71px"
-          fontFamily="Avenir, sans-serif"
           style={{ display: 'block' }} // Ensure text alignment applies correctly
         >
           Are you sure you want to delete: {formattedEventNames} {eventLabel}?

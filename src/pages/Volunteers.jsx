@@ -19,6 +19,7 @@ import Fuse from 'fuse.js';
 import { TrophyIcon } from '../components/Icons/TrophyIcon';
 import NavbarContext from '../utils/NavbarContext';
 import { MdPeopleAlt } from 'react-icons/md';
+import { CSVLink } from 'react-csv';
 
 const Volunteers = () => {
   const [registered, setRegistered] = useState('');
@@ -27,7 +28,18 @@ const Volunteers = () => {
   const [volunteers, setVolunteers] = useState([]);
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
   const [input, setInput] = useState('');
+  const [volunteerData, setVolunteerData] = useState([]);
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
+
+  const header = [
+    { key: 'name', label: 'NAME' },
+    { key: 'email', label: 'EMAIL' },
+    { key: 'phone_number', label: 'PHONE_NUMBER' },
+    { key: 'organization', label: 'ORGANIZATION' },
+    { key: 'about_me', label: 'ABOUT_ME' },
+    { key: 'total_trash', label: 'TOTAL_TRASH' },
+    { key: 'events_attended', label: 'EVENTS_ATTENDED' },
+  ];
 
   const setData = async () => {
     try {
@@ -68,6 +80,19 @@ const Volunteers = () => {
       setDisplayedVolunteers(reduceResult);
     }
   }, [input, volunteers]);
+
+  useEffect(() => {
+    const getVolunteerData = async () => {
+      try {
+        const volunteerData = await Backend.get(`/stats/export/volunteers`);
+        setVolunteerData(volunteerData.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
+    getVolunteerData();
+  }, []);
 
   return (
     <>
@@ -236,13 +261,19 @@ const Volunteers = () => {
                   style={{
                     whiteSpace: 'normal',
                     wordWrap: 'break-word',
+                    color: 'white',
+                    my: "3"
                   }}
                   height={'fit-content'}
                 >
                   <ExternalLinkIcon marginRight="2" boxSize="6" color={'white'} />{' '}
-                  <Text color={'white'} my="3">
+                  <CSVLink
+                    data={volunteerData.length ? volunteerData : []}
+                    filename="./data.csv"
+                    headers={header}
+                  >
                     Export All Volunteer Data
-                  </Text>
+                  </CSVLink>
                 </Button>
               </Box>
             </Flex>

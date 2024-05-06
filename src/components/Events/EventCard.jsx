@@ -147,7 +147,6 @@ const EventCard = ({
               {name}
             </Text>
             <Text
-              fontFamily="Avenir"
               fontSize={sideBySideCard ? { base: '12px', md: '15px' } : '16px'}
               fontWeight={{ base: 500, md: 300 }}
               mt={1}
