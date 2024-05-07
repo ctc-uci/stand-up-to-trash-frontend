@@ -128,13 +128,17 @@ const VolunteerEventPage = () => {
           setShowOpenDrawerButton={setShowOpenDrawerButton}
         />
       ) : (
-        isOpen && (
-          <VolunteerSideView
-            eventId={currentEventId}
-            onClose={onClose}
-            setShowOpenDrawerButton={setShowOpenDrawerButton}
-          />
-        )
+        <Box w={isOpen ? '480px' : 0} flexShrink={0}>
+          <Box pos={'fixed'} right={'0'} top={'0'} h={'100%'} overflowY={'auto'} paddingBottom={10}>
+            {isOpen && (
+              <VolunteerSideView
+                eventId={currentEventId}
+                onClose={onClose}
+                setShowOpenDrawerButton={setShowOpenDrawerButton}
+              />
+            )}
+          </Box>
+        </Box>
       )}
     </Flex>
   );
