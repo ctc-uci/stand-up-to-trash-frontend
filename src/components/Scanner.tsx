@@ -17,24 +17,28 @@ interface QRCodeData {
   id: number;
 }
 
+interface VolunteerCodeData {
+  first_name: string;
+  last_name: string;
+  id: number;
+}
+
 interface ScannerProps {
   event_id: string | undefined;
   isOpen: boolean;
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
-  handleSuccess: (volunteer: any, eventId: any) => Promise<void>;
+  handleSuccess: (volunteer: any) => Promise<void>;
 }
 
 const Scanner = ({ event_id, isOpen, onClose, handleSuccess }: ScannerProps) => {
   const [data, setData] = useState<QRCodeData>();
   const [error, setError] = useState(false);
+  const [volunteerData, setVolunteerData] = useState<VolunteerCodeData>();
 
   const checkinVolunteer = async (volunteer_id: number) => {
     const volunteer = await Backend.get(`/profiles/${volunteer_id}`); // get Volunteer object
 
-    handleSuccess(
-      { ...volunteer.data, number_in_party: 1, event_data_id: Number(event_id) },
-      Number(event_id),
-    );
+    handleSuccess({ ...volunteer.data, number_in_party: 1, event_data_id: Number(event_id) });
     handleClose();
   };
 
@@ -56,12 +60,18 @@ const Scanner = ({ event_id, isOpen, onClose, handleSuccess }: ScannerProps) => 
 
           <QrReader
             scanDelay={1000}
-            onResult={result => {
+            onResult={async result => {
               if (result) {
                 let data;
 
                 try {
                   data = JSON.parse(result.getText());
+                  console.log('Before backend call');
+                  console.log(data);
+                  const volunteerDataResp = await Backend.get(`/profiles/${result}`);
+                  // console.log("Look here");
+                  // console.log(volunteerData);
+                  setVolunteerData(volunteerDataResp.data);
                 } catch (e) {
                   console.error('Failed parsing QR Code:', e);
                   setError(true);
@@ -85,9 +95,9 @@ const Scanner = ({ event_id, isOpen, onClose, handleSuccess }: ScannerProps) => 
           {!error && data && (
             <>
               <Text display={'flex'} justifyContent={'center'} paddingY={4}>
-                Volunteer: {data?.first_name} {data?.last_name}
+                Volunteer: {volunteerData?.first_name} {volunteerData?.last_name}
               </Text>
-              <Button onClick={() => checkinVolunteer(data?.id)} disabled={!data?.id}>
+              <Button onClick={() => checkinVolunteer(volunteerData?.id)} disabled={!data?.id}>
                 Sign In
               </Button>
             </>

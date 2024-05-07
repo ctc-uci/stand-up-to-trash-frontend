@@ -49,6 +49,7 @@ const CheckinPage = () => {
   const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
   const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+  const [usingScanner, setUsingScanner] = useState(false);
 
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
@@ -107,10 +108,11 @@ const CheckinPage = () => {
     }
   }, [input, joinedData, eventId]);
 
-  const handleScannerSuccess = async (volunteer, eventId) => {
+  const handleScannerSuccess = async (volunteer) => {
     setSelectedVolunteer(volunteer);
     setIsCheckinModalOpen(true);
-    await Backend.patch(`/data/checkin/${eventId}/${volunteer.id}`); // update backend with user
+    setUsingScanner(true);
+    // await Backend.patch(`/data/checkin/${eventId}/${volunteer.id}`); // update backend with user
   };
 
   /*
@@ -120,12 +122,23 @@ const CheckinPage = () => {
     try {
       const event_data_id = volunteer.event_data_id;
       console.log(event_data_id, numberOfParticipants);
+      console.log(volunteer);
 
-      const response = await Backend.put(`/data/checkin/${event_data_id}/${volunteer.id}`, {
-        number_in_party: numberOfParticipants,
-      });
+      let response;
+
+      if (!usingScanner) {
+        response = await Backend.put(`/data/checkin/${volunteer.event_data_id}`, {
+          number_in_party: numberOfParticipants,
+        });
+      } else {
+        response = await Backend.patch(`/data/checkin/${volunteer.event_data_id}/${volunteer.id}`, {
+          number_in_party: numberOfParticipants,
+        });
+      }
+
       console.log('Response from server:', response);
 
+      setUsingScanner(false);
       await setData(); // Refresh data
     } catch (err) {
       console.error('Error in changeIsCheckedIn:', err);
