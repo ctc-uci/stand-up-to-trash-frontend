@@ -11,7 +11,10 @@ import VolunteerSideViewDrawer from '../components/VolunteerSideViewDrawer.jsx';
 // import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
 
 const VolunteerEventPage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => setIsOpen(!isOpen);
+
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
   const [currentEventId, setCurrentEventId] = useState(null); // Initial state is null to indicate no event selected
   const breakpoint = useBreakpoint();
@@ -20,12 +23,12 @@ const VolunteerEventPage = () => {
   const openEventDrawer = eventId => {
     setCurrentEventId(eventId); // Set the current event ID, which triggers the side view to display
     setShowOpenDrawerButton(false);
-    onOpen();
+    onDrawerOpen();
   };
 
-  const handleClose = () => {
-    onClose();
-  };
+  // const handleClose = () => {
+  //   onDrawerClose();
+  // };
   console.log('test' + currentEventId);
   // const {
   //   isOpen: isRegistrationFlowOpen,
@@ -45,7 +48,7 @@ const VolunteerEventPage = () => {
         />
       )} */}
       {/* <RegistrationModal /> */}
-      <Box bg="#E6EAEF" flexGrow={1} minW="1px">
+      <Box bg="#E6EAEF" flexGrow={1} minW="1px" minH={'100vh'}>
         <Flex
           flexDir={'row'}
           alignItems={'center'}
@@ -82,7 +85,7 @@ const VolunteerEventPage = () => {
             flex-shrink="0"
             borderRadius={'xl'}
             flexDir={'column'}
-            display={showOpenDrawerButton && !isOpen ? { base: 'flex', xl: 'none' } : 'none'}
+            display={showOpenDrawerButton && !isDrawerOpen ? { base: 'flex', xl: 'none' } : 'none'}
           >
             <IconButton
               borderRadius="md"
@@ -94,21 +97,24 @@ const VolunteerEventPage = () => {
               w="64px"
               icon={<RxCaretLeft size={40} />}
               onClick={() => {
-                onOpen();
+                onDrawerOpen();
               }}
             ></IconButton>
           </Flex>
         </Flex>
         <FeaturedDashboard
           width={{ base: '90%' }}
-          onOpen={onOpen}
+          onOpen={onDrawerOpen}
+          setCurrentEventId={setCurrentEventId}
+          setIsOpen={setIsOpen}
+          setShowOpenDrawerButton={setShowOpenDrawerButton}
           showOpenDrawerButton={showOpenDrawerButton}
-          isOpen={isOpen}
+          isOpen={isDrawerOpen}
         />
         <EventFilteredGrid
           width={{ base: '90%' }}
           setCurrentEventId={openEventDrawer} // Adjusted to call `openEventDrawer`
-          // setIsOpen={setIsOpen}
+          setIsOpen={setIsOpen}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
           isOpen={isOpen}
         />
@@ -117,18 +123,22 @@ const VolunteerEventPage = () => {
       {breakpoint == 'base' ? (
         <VolunteerSideViewDrawer
           eventId={currentEventId}
-          isOpen={isOpen}
-          onClose={handleClose}
+          isOpen={isDrawerOpen}
+          onClose={onDrawerClose}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
         />
       ) : (
-        isOpen && (
-          <VolunteerSideView
-            eventId={currentEventId}
-            onClose={handleClose}
-            setShowOpenDrawerButton={setShowOpenDrawerButton}
-          />
-        )
+        <Box w={isOpen ? '480px' : 0} flexShrink={0}>
+          <Box pos={'fixed'} right={'0'} top={'0'} h={'100%'} overflowY={'auto'} paddingBottom={10}>
+            {isOpen && (
+              <VolunteerSideView
+                eventId={currentEventId}
+                onClose={onClose}
+                setShowOpenDrawerButton={setShowOpenDrawerButton}
+              />
+            )}
+          </Box>
+        </Box>
       )}
     </Flex>
   );

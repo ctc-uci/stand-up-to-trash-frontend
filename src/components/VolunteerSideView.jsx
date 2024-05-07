@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Icon } from '@chakra-ui/react';
 import { getEventById } from '../utils/eventsUtils';
 import { EditIcon, CalendarIcon } from '@chakra-ui/icons';
@@ -21,12 +21,19 @@ import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+import UserContext from '../utils/UserContext.jsx';
+import { getEventDataVolunteerId } from '../utils/eventsUtils';
 
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
   const [isReadMore, setIsReadMore] = useState(false);
   const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
+  const [eventDataVolunteer, setEventDataVolunteer] = useState([]);
+  const { user } = useContext(UserContext);
+  console.log('users', user);
+  console.log('eventid', eventDataVolunteer[0]);
+
   // const [dateObj, setDateObj] = useState(new Date());
   const dateObj = new Date(Date.parse(eventData.date));
   // console.log(eventData);
@@ -39,18 +46,13 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
 
   useEffect(() => {
     getEventById(eventId).then(data => setEventData(data));
+    getEventDataVolunteerId(user.id, eventId).then(data => setEventDataVolunteer(data));
     // setDateObj(new Date(Date.parse(eventData.date)))
   }, [eventId]);
-
-  // const handleClose = () => {
-  //   onClose(); // Ensure onClose is always called to close the view
-  //   setShowOpenDrawerButton(true);
-  // };
 
   // console.log('e', eventData);
   // console.log('d', dateObj)
   // console.log(eventId)
-
   function formatDate(dateString) {
     const months = [
       'Jan',
@@ -144,7 +146,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             gap={'0.3em'}
           >
             <IoPeopleSharp color="purple" />
-            <Text>Group</Text>
+            <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}</Text>
           </Flex>
         </Flex>
         <Flex justify={'space-between'} alignItems={'center'}>
@@ -160,12 +162,12 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             gap={'0.3em'}
           >
             <CalendarIcon color="purple" />
-            <Text>Registered</Text>
+            <Text>{eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}</Text>
           </Flex>
         </Flex>
         <Flex justify={'space-between'} alignItems={'center'}>
           <Text>Party size</Text>
-          <Text fontWeight={'bold'}>12 people</Text>
+          <Text fontWeight={'bold'}>{eventDataVolunteer[0]?.number_in_party}</Text>
         </Flex>
       </Box>
 

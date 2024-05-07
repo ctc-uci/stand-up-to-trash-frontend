@@ -5,9 +5,10 @@ import {
   DrawerContent,
   DrawerCloseButton,
   DrawerBody,
+  useDisclosure,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Icon } from '@chakra-ui/react';
 import { getEventById } from '../utils/eventsUtils';
 import { EditIcon, CalendarIcon } from '@chakra-ui/icons';
@@ -17,23 +18,35 @@ import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from './HappeningInChip/HappeningInChip';
+import { getEventDataVolunteerId } from '../utils/eventsUtils';
+import UserContext from '../utils/UserContext.jsx';
+import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
 
-const VolunteerSideView = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }) => {
+const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
   const [isReadMore, setIsReadMore] = useState(false);
   const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
+  const [eventDataVolunteer, setEventDataVolunteer] = useState([]);
+  const { user } = useContext(UserContext);
+  console.log('users', user);
+  console.log('eventid', eventDataVolunteer[0]);
+
   // const [dateObj, setDateObj] = useState(new Date());
   const dateObj = new Date(Date.parse(eventData.date));
   // console.log(eventData);
 
+  const {
+    isOpen: isRegistrationFlowOpen,
+    onOpen: onRegistrationFlowOpen,
+    onClose: onRegistrationFlowClose,
+  } = useDisclosure();
+
   useEffect(() => {
     getEventById(eventId).then(data => setEventData(data));
+    getEventDataVolunteerId(user.id, eventId).then(data => setEventDataVolunteer(data));
     // setDateObj(new Date(Date.parse(eventData.date)))
   }, [eventId]);
-
-  // console.log('e', eventData);
-  // console.log('d', dateObj)
 
   function formatDate(dateString) {
     const months = [
@@ -83,13 +96,15 @@ const VolunteerSideView = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }
                 borderColor="#EFEFEF"
                 bg="white"
                 variant={'outline'}
-                borderWidth={'2px'}
+                borderWidth={'0.2em'}
+                h="40px"
+                w="40px"
                 icon={<RxCaretRight size={22} />}
                 onClick={() => {
                   onClose();
                   setShowOpenDrawerButton(true);
                 }}
-              />
+              ></IconButton>
               <Flex
                 bg="#EFEFEF"
                 borderRadius="md"
@@ -116,12 +131,12 @@ const VolunteerSideView = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }
               p={'0.8em'}
               borderWidth={'0.2em'}
               borderRadius="lg"
-              my={'0.8em'}
+              marginY={'0.8em'}
               borderColor={'#EFEFEF'}
             >
               <Flex justify={'space-between'} alignItems={'center'}>
                 <Text fontWeight={'bold'}>Your event status</Text>
-                <Box px={'0.4em'} borderRadius={'md'} bg="gray.200">
+                <Box px={'0.4em'} borderRadius={'md'} bg="gray.200" mb={'0.3em'}>
                   <EditIcon />
                 </Box>
               </Flex>
@@ -132,12 +147,13 @@ const VolunteerSideView = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }
                   px={'0.4em'}
                   borderRadius={'md'}
                   bg="gray.200"
+                  mb={'0.3em'}
                   justifyContent={'center'}
                   alignItems={'center'}
                   gap={'0.3em'}
                 >
                   <IoPeopleSharp color="purple" />
-                  <Text>Group</Text>
+                  <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}</Text>
                 </Flex>
               </Flex>
               <Flex justify={'space-between'} alignItems={'center'}>
@@ -147,56 +163,59 @@ const VolunteerSideView = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }
                   px={'0.4em'}
                   borderRadius={'md'}
                   borderWidth={'0.15em'}
+                  mb={'0.3em'}
                   justifyContent={'center'}
                   alignItems={'center'}
                   gap={'0.3em'}
                 >
                   <CalendarIcon color="purple" />
-                  <Text>Registered</Text>
+                  <Text>{eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}</Text>
                 </Flex>
               </Flex>
               <Flex justify={'space-between'} alignItems={'center'}>
                 <Text>Party size</Text>
-                <Text fontWeight={'bold'}>12 people</Text>
+                <Text fontWeight={'bold'}>{eventDataVolunteer[0]?.number_in_party}</Text>
               </Flex>
             </Box>
 
-            <VStack spacing={4} mb={'0.5em'}>
-              <Image
-                h={{ base: '200px', md: '400px' }}
-                w="100%"
-                fit={'cover'}
-                borderRadius="md"
-                src={eventData.image_url}
-              />
-              <Text
-                fontWeight={'bold'}
-                fontSize={{ base: '24px', md: '28px' }}
-                textAlign={'start'}
-                w={'100%'}
-              >
+            <VStack mb={'0.5em'} gap={'0.6em'}>
+              <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={'100%'}>
+                <Image
+                  h="400px"
+                  w="100%"
+                  fit={'cover'}
+                  borderRadius="md"
+                  src={eventData.image_url}
+                ></Image>
+              </Flex>
+              <Text fontWeight={'bold'} fontSize={28} textAlign={'start'} width={'full'}>
                 {eventData.name}
               </Text>
               <Text
                 fontWeight={'medium'}
-                color={'gray.500'}
-                fontSize={{ base: '14px', md: '15px' }}
+                color={'gray'}
+                fontSize={15}
                 textAlign={'start'}
-                w={'100%'}
+                width={'full'}
               >
-                {formatDate(eventData.date)}
+                {formatDate(dateObj)}
               </Text>
-              <Text noOfLines={isReadMore ? null : 3} w={'100%'}>
-                {eventData.description}
-              </Text>
-              <Button
-                size="sm"
-                variant="link"
-                colorScheme="blue"
-                onClick={() => setIsReadMore(!isReadMore)}
-              >
-                {isReadMore ? 'Read less...' : 'Read more...'}
-              </Button>
+              <Text noOfLines={isReadMore ? null : 3}>{eventData.description}</Text>
+              <Flex w={'100%'}>
+                {!isReadMore && (
+                  <Text
+                    color={'#0075FF'}
+                    fontWeight={600}
+                    textAlign={'start'}
+                    _hover={{
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => setIsReadMore(true)}
+                  >
+                    Read more...
+                  </Text>
+                )}
+              </Flex>
             </VStack>
 
             <Flex
@@ -252,15 +271,16 @@ const VolunteerSideView = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }
               </HStack>
             </Flex>
 
-            <Button
-              w="full"
-              backgroundColor={'#0075FF'}
-              color={'white'}
-              _hover={{ bg: 'blue.500' }}
-              size="lg"
-            >
-              Check-In
+            <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
+              Register
             </Button>
+            {isRegistrationFlowOpen && (
+              <RegistrationFlowController
+                isOpen={isRegistrationFlowOpen}
+                onClose={onRegistrationFlowClose}
+                eventId={eventId}
+              />
+            )}
           </Flex>
         </DrawerBody>
       </DrawerContent>
@@ -268,11 +288,11 @@ const VolunteerSideView = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }
   );
 };
 
-VolunteerSideView.propTypes = {
+VolunteerSideViewDrawer.propTypes = {
   eventId: PropTypes.string.isRequired,
   isOpen: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
 };
 
-export default VolunteerSideView;
+export default VolunteerSideViewDrawer;

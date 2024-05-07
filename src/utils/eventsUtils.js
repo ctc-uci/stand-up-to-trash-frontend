@@ -20,4 +20,9 @@ const putEvent = async eventData => {
   return response.data;
 };
 
-export { getEvents, getEventById, postEvent, putEvent };
+const getEventDataVolunteerId = async (volunteerId, eventId) => {
+  const response = await Backend.get(`/data/volunteer/${volunteerId}/event/${eventId}`);
+  return response.data;
+};
+
+export { getEvents, getEventById, postEvent, putEvent, getEventDataVolunteerId };
