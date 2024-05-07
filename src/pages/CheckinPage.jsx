@@ -11,6 +11,7 @@ import CheckinInputPageToggle from '../components/Checkin/CheckinInputPageToggle
 import { ArrowBackIcon, HamburgerIcon } from '@chakra-ui/icons';
 import CheckinModal from '../components/Checkin/CheckinModal';
 import NavbarContext from '../utils/NavbarContext';
+import Scanner from '../components/Scanner';
 
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +30,7 @@ import {
 
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import RegisterGuestModal from '../components/RegisterGuestModal/RegisterGuestModal';
+import { FaCamera } from 'react-icons/fa';
 
 const CheckinPage = () => {
   const [joinedData, setJoinedData] = useState([]);
@@ -45,7 +47,9 @@ const CheckinPage = () => {
 
   const navigate = useNavigate();
   const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
+  const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+  const [usingScanner, setUsingScanner] = useState(false);
 
   useEffect(() => {
     // 0 is all, 1 is checked-in, 2 is not checked-in, 3 are guests
@@ -104,19 +108,37 @@ const CheckinPage = () => {
     }
   }, [input, joinedData, eventId]);
 
+  const handleScannerSuccess = async (volunteer) => {
+    setSelectedVolunteer(volunteer);
+    setIsCheckinModalOpen(true);
+    setUsingScanner(true);
+    // await Backend.patch(`/data/checkin/${eventId}/${volunteer.id}`); // update backend with user
+  };
+
   /*
     updates check in status for a volunteer on the backend, dynamically rerenders it on the frontend
   */
   const changeIsCheckedIn = async (volunteer, numberOfParticipants) => {
     try {
       const event_data_id = volunteer.event_data_id;
-      console.log('Number of participants:', numberOfParticipants);
+      console.log(event_data_id, numberOfParticipants);
+      console.log(volunteer);
 
-      const response = await Backend.put(`/data/checkin/${event_data_id}`, {
-        number_in_party: numberOfParticipants,
-      });
+      let response;
+
+      if (!usingScanner) {
+        response = await Backend.put(`/data/checkin/${volunteer.event_data_id}`, {
+          number_in_party: numberOfParticipants,
+        });
+      } else {
+        response = await Backend.patch(`/data/checkin/${volunteer.event_data_id}/${volunteer.id}`, {
+          number_in_party: numberOfParticipants,
+        });
+      }
+
       console.log('Response from server:', response);
 
+      setUsingScanner(false);
       await setData(); // Refresh data
     } catch (err) {
       console.error('Error in changeIsCheckedIn:', err);
@@ -124,7 +146,6 @@ const CheckinPage = () => {
   };
 
   const handleCheckinButtonClick = volunteer => {
-    console.log(volunteer);
     setSelectedVolunteer(volunteer); // `volunteer` is the volunteer object from the list
     setIsCheckinModalOpen(true);
   };
@@ -137,7 +158,6 @@ const CheckinPage = () => {
   const getRegistered = async event_id => {
     try {
       // send new checkin status to backend, set new data by retrieving the new backend data
-      //console.log(event_id);
       const response = await Backend.get(`/stats/register/${event_id}`).then(data => {
         setRegistered(parseInt(data.data));
       });
@@ -247,7 +267,31 @@ const CheckinPage = () => {
             </Box>
           </Alert>
         )}
+
+        <Button
+          position={'fixed'}
+          bottom={'3%'}
+          right={'3%'}
+          bg={'#0075FF'}
+          color={'white'}
+          display={'flex'}
+          gap={'.5rem'}
+          fontSize={'xl'}
+          _hover={{ bgColor: '#0075FFCC' }}
+          onClick={() => setIsScannerModalOpen(true)}
+          py={6}
+        >
+          <FaCamera /> Scan
+        </Button>
       </Container>
+
+      <Scanner
+        event_id={eventId}
+        isOpen={isScannerModalOpen}
+        onClose={setIsScannerModalOpen}
+        handleSuccess={handleScannerSuccess}
+      />
+
       <CheckinModal
         isOpen={isCheckinModalOpen}
         onClose={closeCheckinModal}

@@ -32,7 +32,6 @@ const SelectEvent = () => {
   const getEvents = async () => {
     try {
       const events = await Backend.get('/events');
-      console.log(events.data);
       setEventsData(events.data);
     } catch (err) {
       console.log(`Error getting events: `, err.message);
@@ -58,7 +57,6 @@ const SelectEvent = () => {
           placeholder="Select event"
           {...register('event_id')}
           onChange={event => {
-            console.log(event.target.value);
             setCurrEvent(event.target.value);
           }}
         >

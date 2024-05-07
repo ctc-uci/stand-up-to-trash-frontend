@@ -69,8 +69,6 @@ export default function AddUserModal({ isOpen, onClose, setAdminData }) {
   const isSubmittable =
     userData.first_name === '' || userData.last_name === '' || !emailRegex.test(userData.email);
 
-  console.log('userData:', userData);
-
   return (
     <Flex>
       <Modal isOpen={isOpen} onClose={onClose}>

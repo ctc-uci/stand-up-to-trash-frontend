@@ -21,7 +21,7 @@ import { useState, useEffect } from 'react';
 import Dropzone from '../Dropzone.tsx';
 import { theme } from '../Icons/EventsModalIcons.jsx';
 // import { postEvent } from '../../utils/eventsUtils.js';
-import { putEvent } from '../../utils/eventsUtils.js';
+// import { putEvent } from '../../utils/eventsUtils.js';
 import PropTypes from 'prop-types';
 
 import React from 'react';
@@ -58,9 +58,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
         isClosable: true,
       });
       // TODO: API request is comment out for now due to form change
-      const response = await putEvent(eventData);
-      console.log(response);
-      console.log(eventData);
+      // const response = await putEvent(eventData);
       toast.close(toastIdRef.current);
       toast({
         title: 'Event Edited.',
@@ -121,7 +119,6 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
     // Format hour and minute with leading zeros
     const formattedHour = (hour < 10 ? '0' : '') + hour;
     const formattedMinute = (minute < 10 ? '0' : '') + minute;
-    console.log(formattedHour + ':' + formattedMinute);
     setEventStartTime(formattedHour + ':' + formattedMinute);
   };
 
@@ -136,7 +133,6 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
     // Format hour and minute with leading zeros
     const formattedHour = (hour < 10 ? '0' : '') + hour;
     const formattedMinute = (minute < 10 ? '0' : '') + minute;
-    console.log(formattedHour + ':' + formattedMinute);
     setEventEndTime(formattedHour + ':' + formattedMinute);
   };
 

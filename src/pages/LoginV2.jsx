@@ -33,7 +33,6 @@ const LoginV2 = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
-      console.log('inside useeffect');
       try {
         if (
           user &&
@@ -41,8 +40,7 @@ const LoginV2 = () => {
             user.providerData[0].providerId == 'facebook.com')
         ) {
           // Keep in mind that if the user logs in with the plain email/password, they'll have no displayName attribute
-          console.log(user);
-          console.log('firebase inside');
+
           const userName = user.displayName.split(' ');
           const firstName = userName[0];
           const lastName = userName.length > 1 ? userName[1] : '';
@@ -56,8 +54,6 @@ const LoginV2 = () => {
           };
 
           await setRole('volunteer');
-          console.log(profile);
-          console.log('success');
 
           if (!(await getProfileByFirebaseUid(profile.firebase_uid))) {
             postProfile(profile);
@@ -156,7 +152,6 @@ const LoginForm = () => {
                 maxW={'20rem'}
                 marginTop={30}
                 borderRadius={8}
-                fontFamily={'Avenir'}
                 placeholder="Email"
                 boxShadow={'0 4px 2px -2px gray'}
                 type="email"
@@ -174,7 +169,6 @@ const LoginForm = () => {
                 maxW={'20rem'}
                 marginTop={30}
                 borderRadius={8}
-                fontFamily={'Avenir'}
                 placeholder="Password"
                 type="password"
                 boxShadow={'0 4px 2px -2px gray'}
@@ -204,7 +198,6 @@ const LoginForm = () => {
                 marginTop={2}
                 fontWeight="bold"
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '20px',
                   fontWeight: '500',
                 }}
@@ -240,7 +233,6 @@ const LoginForm = () => {
 
               <Box
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '18px',
                   fontWeight: '800',
                   textAlign: 'center',
@@ -250,7 +242,6 @@ const LoginForm = () => {
                   style={{
                     background: 'none',
                     height: '24px',
-                    fontFamily: 'Avenir',
                     fontSize: '18px',
                     fontWeight: '800',
                     textAlign: 'center',
@@ -271,7 +262,6 @@ const LoginForm = () => {
                         background: 'none',
                         height: '24px',
                         color: '#478CB6',
-                        fontFamily: 'Avenir',
                         fontSize: '18px',
                         fontWeight: '800',
                         textAlign: 'center',

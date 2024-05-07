@@ -15,6 +15,7 @@ import { SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 import EventCard from '../components/Events/EventCard';
 import VolunteerImpactSummary from '../components/Events/VolunteerImpactSummary';
+import UserContext from '../utils/UserContext';
 import Backend from '../utils/utils';
 import Fuse from 'fuse.js';
 import NavbarContext from '../utils/NavbarContext';
@@ -29,9 +30,14 @@ const VolunteerHomePage = () => {
 
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
+  const { user, updateUser } = useContext(UserContext);
+
   const getEvents = async () => {
     try {
-      const eventsData = await Backend.get('/events');
+      let userId = user?.id;
+
+      const eventsData = await Backend.get(`data/registered/${userId}`);
+      console.log(eventsData);
       setEvents(eventsData.data);
       const options = { keys: ['name', 'date', 'location'], includeScore: true };
       setFuse(new Fuse(eventsData.data, options));
@@ -47,6 +53,7 @@ const VolunteerHomePage = () => {
   ));
 
   useEffect(() => {
+    updateUser();
     getEvents();
   }, []);
 
@@ -96,7 +103,6 @@ const VolunteerHomePage = () => {
             fontSize={{ base: '20px', md: '36px' }}
             fontWeight={{ base: 500, md: 800 }}
             w={'full'}
-            fontFamily={'Avenir'}
           >
             Impact Summary
           </Heading>
@@ -118,7 +124,6 @@ const VolunteerHomePage = () => {
               fontSize={{ base: '20px', md: '36px' }}
               fontWeight={{ base: 500, md: 800 }}
               w={'full'}
-              fontFamily={'Avenir'}
             >
               Upcoming Events
             </Heading>
@@ -167,18 +172,16 @@ const VolunteerHomePage = () => {
             </Box>
           </Flex>
           <Spacer />
-          <Box display="flex" flex-direction="space-between" justifyContent={'center'}>
-            <Box marginTop="3vh">
-              <Grid
-                templateColumns={{
-                  base: 'repeat(1, 85vw)',
-                  md: 'repeat(4, 1fr)',
-                }}
-                gap={6}
-              >
-                {eventCards}
-              </Grid>
-            </Box>
+          <Box marginTop="3vh">
+            <Grid
+              templateColumns={{
+                base: 'repeat(1, 85vw)',
+                md: 'repeat(3, 1fr)',
+              }}
+              gap={6}
+            >
+              {eventCards}
+            </Grid>
           </Box>
         </Box>
       </Flex>

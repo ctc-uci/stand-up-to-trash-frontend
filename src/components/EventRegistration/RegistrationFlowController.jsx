@@ -12,7 +12,6 @@ import UserContext from '../../utils/UserContext';
 const RegistrationFlowController = ({ isOpen, onClose, eventId }) => {
   // Handles state of registration flow (which step, party info, etc.)
   const { user } = useContext(UserContext);
-  console.log('event', eventId)
   const [step, setStep] = useState(0);
   const [isIndividual, setIsIndividual] = useState(true);
   const [partySize, setPartySize] = useState(1);

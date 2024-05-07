@@ -19,6 +19,7 @@ import Fuse from 'fuse.js';
 import { TrophyIcon } from '../components/Icons/TrophyIcon';
 import NavbarContext from '../utils/NavbarContext';
 import { MdPeopleAlt } from 'react-icons/md';
+import { CSVLink } from 'react-csv';
 
 const Volunteers = () => {
   const [registered, setRegistered] = useState('');
@@ -27,7 +28,18 @@ const Volunteers = () => {
   const [volunteers, setVolunteers] = useState([]);
   const [displayedVolunteers, setDisplayedVolunteers] = useState([]);
   const [input, setInput] = useState('');
+  const [volunteerData, setVolunteerData] = useState([]);
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
+
+  const header = [
+    { key: 'name', label: 'NAME' },
+    { key: 'email', label: 'EMAIL' },
+    { key: 'phone_number', label: 'PHONE_NUMBER' },
+    { key: 'organization', label: 'ORGANIZATION' },
+    { key: 'about_me', label: 'ABOUT_ME' },
+    { key: 'total_trash', label: 'TOTAL_TRASH' },
+    { key: 'events_attended', label: 'EVENTS_ATTENDED' },
+  ];
 
   const setData = async () => {
     try {
@@ -54,10 +66,6 @@ const Volunteers = () => {
   }, []);
 
   useEffect(() => {
-    console.log('>', volunteers);
-  }, [volunteers]);
-
-  useEffect(() => {
     // If input is empty, display all volunteers, else conduct the search
     if (input.trim() === '') {
       setDisplayedVolunteers(volunteers);
@@ -72,6 +80,19 @@ const Volunteers = () => {
       setDisplayedVolunteers(reduceResult);
     }
   }, [input, volunteers]);
+
+  useEffect(() => {
+    const getVolunteerData = async () => {
+      try {
+        const volunteerData = await Backend.get(`/stats/export/volunteers`);
+        setVolunteerData(volunteerData.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
+    getVolunteerData();
+  }, []);
 
   return (
     <>
@@ -166,44 +187,65 @@ const Volunteers = () => {
                   bg="#D4E4F9"
                   padding="3"
                   fontSize="lg"
-                  display="flex"
-                  justifyContent="space-between"
+                  justify="space-between"
                   alignItems="center"
                   w="100%"
                   borderRadius={'4.541px'}
+                  maxWidth={{ base: '300px', md: '300px', lg: '300px', xl: '300px' }}
                 >
-                  <Flex alignItems="center">
-                    <TrophyIcon marginRight="5" boxSize={'1.25em'} />
-                    <Box
-                      overflow="hidden"
-                      whiteSpace="nowrap"
-                      textOverflow="ellipsis"
-                      maxWidth="10vw" // Adjust the width based on your design
-                    >
+                  <TrophyIcon boxSize={'1.25em'} />
+                  <Flex maxWidth={{ base: '600px', md: '100px', xl: '100px' }}>
+                    <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
                       {topThree[0] && topThree[0].volunteer_first_name}{' '}
                       {topThree[0] && topThree[0].volunteer_last_name}{' '}
-                    </Box>
+                    </Text>
                   </Flex>
+
                   {/* <Spacer /> */}
                   <Flex>{topThree[0] && truncate(topThree[0].total_weight, 2)} lbs</Flex>
                 </Flex>
-                <Flex display="flex" pl={'2em'} gap={'1em'} w="100%" align={'center'}>
+                <Flex
+                  display="flex"
+                  pl="2em"
+                  pr="2em"
+                  gap={'1em'}
+                  w="100%"
+                  maxWidth={{ base: '300px', md: '300px', lg: '300px', xl: '300px' }}
+                  justify={'space-between'}
+                >
                   <Text color="#0075FF" fontWeight="bold" fontSize={'1.1em'}>
                     2
                   </Text>
-                  <Flex>
-                    {topThree[1] && topThree[1].volunteer_first_name}{' '}
-                    {topThree[1] && topThree[1].volunteer_last_name}{' '}
+                  <Flex maxWidth={{ base: '600px', md: '100px', xl: '100px' }}>
+                    <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
+                      {topThree[1] && topThree[1].volunteer_first_name}{' '}
+                      {topThree[1] && topThree[1].volunteer_last_name}{' '}
+                    </Text>
                   </Flex>
                   <Flex>{topThree[1] && truncate(topThree[1].total_weight, 2)} lbs</Flex>
                 </Flex>
-                <Flex display="flex" pl={'2em'} gap={'1em'} w="100%" align={'center'}>
+                <Flex
+                  display="flex"
+                  pl="2em"
+                  pr="2em"
+                  gap={'1em'}
+                  w="100%"
+                  maxWidth={{ base: '300px', md: '300px', lg: '300px', xl: '300px' }}
+                  justify={'space-between'}
+                >
                   <Text color="#0075FF" fontWeight="bold" fontSize={'1.1em'}>
                     3{' '}
                   </Text>{' '}
-                  <Flex>
-                    {topThree[2] && topThree[2].volunteer_first_name}{' '}
-                    {topThree[2] && topThree[2].volunteer_last_name}{' '}
+                  <Flex
+                    overflow="hidden"
+                    whiteSpace="nowrap"
+                    textOverflow="ellipsis"
+                    maxWidth={{ base: '100px', md: '600px', xl: '100px' }}
+                  >
+                    <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
+                      {topThree[2] && topThree[2].volunteer_first_name}{' '}
+                      {topThree[2] && topThree[2].volunteer_last_name}{' '}
+                    </Text>
                   </Flex>
                   <Flex>{topThree[2] && truncate(topThree[2].total_weight, 2)} lbs</Flex>
                 </Flex>
@@ -219,13 +261,19 @@ const Volunteers = () => {
                   style={{
                     whiteSpace: 'normal',
                     wordWrap: 'break-word',
+                    color: 'white',
+                    my: "3"
                   }}
                   height={'fit-content'}
                 >
                   <ExternalLinkIcon marginRight="2" boxSize="6" color={'white'} />{' '}
-                  <Text color={'white'} my="3">
+                  <CSVLink
+                    data={volunteerData.length ? volunteerData : []}
+                    filename="./data.csv"
+                    headers={header}
+                  >
                     Export All Volunteer Data
-                  </Text>
+                  </CSVLink>
                 </Button>
               </Box>
             </Flex>

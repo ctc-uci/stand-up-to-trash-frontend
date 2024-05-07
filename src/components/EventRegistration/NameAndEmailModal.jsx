@@ -7,7 +7,6 @@ import UserContext from '../../utils/UserContext';
 
 const NameAndEmailModal = ({ ...props }) => {
   const { user } = useContext(UserContext);
-  console.log(user);
   return (
     <RegistrationModal title="What is your name and Email?" {...props}>
       <Flex
@@ -120,7 +119,7 @@ const NameAndEmailModal = ({ ...props }) => {
             borderWidth={'4px'}
             h={'2.5em'}
             _disabled={{ color: '#3B3B3B', fontWeight: 500 }}
-            _hover={{ borderColor: '#EFEFEF' }} 
+            _hover={{ borderColor: '#EFEFEF' }}
             disabled
           />
         </Flex>

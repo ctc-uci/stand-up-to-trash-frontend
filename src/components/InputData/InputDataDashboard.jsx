@@ -24,7 +24,6 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
     }
     return dateString;
   };
-  console.log(event);
 
   const getTimeString = () => {
     if (!event || !event.time) {

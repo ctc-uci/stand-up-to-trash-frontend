@@ -296,7 +296,6 @@ const getVolunteerStats = async dataId => {
 
 const getEvents = async () => {
   const resp = await Backend.get('/events');
-  console.log(resp.data);
   return resp.data;
 };
 
@@ -307,19 +306,16 @@ const getProfiles = async () => {
 
 const weeklyTrashData = async () => {
   const resp = await Backend.get('/stats/week');
-  // console.log(resp);
   return resp.data;
 };
 
 const monthlyTrashData = async () => {
   const resp = await Backend.get('/stats/month');
-  // console.log(resp);
   return resp.data;
 };
 
 const yearlyTrashData = async () => {
   const resp = await Backend.get('/stats/year');
-  // console.log(resp);
   return resp.data;
 };
 
@@ -330,13 +326,11 @@ const weeklyParticipantsData = async () => {
 
 const monthlyParticipantsData = async () => {
   const resp = await Backend.get('/stats/participants/week');
-  // console.log(resp);
   return resp.data;
 };
 
 const yearlyParticipantsData = async () => {
   const resp = await Backend.get('/stats/participants/year');
-  // console.log(resp);
   return resp.data;
 };
 

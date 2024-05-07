@@ -53,10 +53,6 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
     waiver: false,
   });
 
-  useEffect(() => {
-    console.log(volunteerData);
-  }, [volunteerData]);
-
   const {
     isOpen: isAgreementOpen,
     // onOpen: onAgreementOpen,

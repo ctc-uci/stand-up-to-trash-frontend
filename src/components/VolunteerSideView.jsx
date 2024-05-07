@@ -108,6 +108,14 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     link.click();
     document.body.removeChild(link);
   };
+  // const handleClose = () => {
+  //   onClose(); // Ensure onClose is always called to close the view
+  //   setShowOpenDrawerButton(true);
+  // };
+
+  // console.log('e', eventData);
+  // console.log('d', dateObj)
+  // console.log(eventId)
 
   function formatDate(dateString) {
     const months = [
@@ -124,7 +132,6 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
       'Nov',
       'Dec',
     ];
-    console.log('dateString', dateString);
     const date = new Date(dateString);
     const month = months[date.getUTCMonth()];
     const day = date.getUTCDate();

@@ -56,9 +56,6 @@ const CreateAccount = () => {
 
     try {
       const newUser = await createUserInFirebase(email, password, '/successful-login', navigate);
-      console.log('new user ');
-      console.log(newUser);
-
       await createVolunteerRow({
         firstName,
         lastName,
@@ -214,7 +211,6 @@ const createVolunteerRow = async ({ firstName, lastName, role, email, firebase_u
     email: email,
     firebase_uid: firebase_uid,
   });
-  // console.log(response);
   return response;
 };
 

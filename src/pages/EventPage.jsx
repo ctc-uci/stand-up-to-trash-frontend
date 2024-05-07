@@ -47,7 +47,6 @@ const Events = () => {
     try {
       const eventsData = await Backend.get('/events/currentEvents');
       setEvents(eventsData.data);
-      console.log(eventsData.data);
       // setDates();
       setLocations(getLocation(eventsData.data));
       setDates(getDate(eventsData.data));
@@ -94,7 +93,6 @@ const Events = () => {
     }
 
     setSelectedEvents(newCheckedItems);
-    console.log(selectedEvents);
   };
 
   const getLocation = data => {
@@ -102,7 +100,6 @@ const Events = () => {
     for (let i in data) {
       location.push(data[i].location);
     }
-    console.log(location.length);
     return location;
   };
 
@@ -111,7 +108,6 @@ const Events = () => {
     for (let i in data) {
       date.push(data[i].date.substring(0, 10));
     }
-    console.log(date.length);
     return date;
   };
 
@@ -129,19 +125,16 @@ const Events = () => {
 
   useEffect(() => {
     getEvents();
-    console.log(locations);
     // getEventId(eventId);
   }, []);
 
   const handleLocationChange = event => {
     const selectedLocation = event.target.value;
-    console.log(selectedLocation);
     setLocation(selectedLocation);
   };
 
   const handleDateChange = event => {
     const selectedDate = event.target.value;
-    console.log(selectedDate);
     setDate(selectedDate);
   };
 
@@ -243,7 +236,6 @@ const Events = () => {
     if (!fuse) {
       return;
     }
-    console.log(name);
     let ands = [];
     if (name) ands.push({ name: name });
     if (location) ands.push({ location: location });
@@ -252,12 +244,10 @@ const Events = () => {
     let result;
     if (ands.length > 0) {
       const fuseResult = fuse.search({ $and: ands });
-      console.log(fuseResult);
       // If we want to filter by score:
       // result = fuseResult.filter(item => item.score <= 0.5).map(item => item.item);
       result = fuseResult.map(item => item.item);
     } else result = events;
-    console.log(result);
     setDisplayEvents(result);
   }, [name, location, date, fuse]);
 
@@ -395,15 +385,11 @@ const Events = () => {
           events={events.filter(event => selectedEvents.includes(event.id))}
         />
 
-        <Box display="flex" justifyContent={'center'} px={10}>
-          <Box display="flex" flexDirection="space-between" justifyContent={'center'}>
-            <Box marginTop="3vh">
-              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-                <AddEventsModal getEvents={getEvents} />
-                {eventCards}
-              </Grid>
-            </Box>
-          </Box>
+        <Box marginTop="3vh">
+          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+            <AddEventsModal getEvents={getEvents} />
+            {eventCards}
+          </Grid>
         </Box>
       </Flex>
     </Flex>
