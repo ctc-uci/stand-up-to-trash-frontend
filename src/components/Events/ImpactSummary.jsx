@@ -100,6 +100,7 @@ const ImpactSummary = () => {
       backgroundColor={'#F8F8F8'}
       borderRadius={'lg'}
       py={10}
+      p={3}
     >
       <DataCard
         amount={registered}
@@ -130,7 +131,7 @@ const ImpactSummary = () => {
       />
       <VStack gap={gapBreakpoint}>
         <Box></Box>
-        <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport />} size="md" mr={3}>
+        <Button colorScheme={'messenger'} leftIcon={<AiOutlineExport />} size="md">
           <CSVLink
             data={eventIdData.length ? eventIdData : []}
             filename="./data.csv"

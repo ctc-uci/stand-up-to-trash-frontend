@@ -10,6 +10,7 @@ const FeaturedDashboard = ({
   setIsOpen,
   setShowOpenDrawerButton,
   onOpen,
+  isOpen,
   showOpenDrawerButton,
 }) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
@@ -55,7 +56,6 @@ const FeaturedDashboard = ({
             lineHeight="normal"
             fontStyle="normal"
             fontSize={{ base: '18px', xl: '32px' }}
-            fontFamily={'Avenir'}
             color={'rgba(0, 0, 0, 0.75)'}
           >
             Featured Events
@@ -72,7 +72,7 @@ const FeaturedDashboard = ({
             w="40px"
             icon={<RxCaretLeft size={22} />}
             onClick={onOpen}
-            display={showOpenDrawerButton ? { base: 'none', xl: 'flex' } : 'none'}
+            display={showOpenDrawerButton && !isOpen ? { base: 'none', xl: 'flex' } : 'none'}
           ></IconButton>
         </Flex>
       </Flex>
@@ -116,6 +116,7 @@ const FeaturedDashboard = ({
 };
 
 FeaturedDashboard.propTypes = {
+  isOpen: PropTypes.bool,
   onOpen: PropTypes.func,
   showOpenDrawerButton: PropTypes.bool,
   setCurrentEventId: PropTypes.func.isRequired,

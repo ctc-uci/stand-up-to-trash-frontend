@@ -125,7 +125,8 @@ const EventCard = ({
 
           <Box
             width={sideBySideCard ? undefined : '100%'}
-            maxW={'88%'}
+            maxW={{ base: '100px', md: '150px', lg: '275px' }}
+            // maxW={sideBySideCard ? '100%' : '86%'}
             alignSelf={'center'}
             justifySelf={'center'}
             gap={'18px'}
@@ -133,32 +134,19 @@ const EventCard = ({
             mb={sideBySideCard ? 0 : 5}
           >
             <HappeningInChip date={dateObj} mb={5} />
-
-            {name.length > 30 ? (
-              <Text
-                fontWeight="800"
-                fontSize="24px"
-                lineHeight="30px"
-                fontFamily="Avenir"
-                mt={2}
-                overflowWrap={'break-word'}
-              >
-                {name.substring(0, 30)}...
-              </Text>
-            ) : (
-              <Text
-                fontWeight="800"
-                fontSize={{ base: '20px', md: '24px' }}
-                lineHeight="30px"
-                fontFamily="Avenir"
-                mt={2}
-                overflowWrap={'break-word'}
-              >
-                {name}
-              </Text>
-            )}
             <Text
-              fontFamily="Avenir"
+              fontWeight="800"
+              fontSize={{ base: '20px', md: '24px' }}
+              lineHeight="30px"
+              mt={2}
+              overflowWrap={'break-word'}
+              overflow="hidden"
+              textOverflow="ellipsis"
+              whiteSpace="nowrap"
+            >
+              {name}
+            </Text>
+            <Text
               fontSize={sideBySideCard ? { base: '12px', md: '15px' } : '16px'}
               fontWeight={{ base: 500, md: 300 }}
               mt={1}

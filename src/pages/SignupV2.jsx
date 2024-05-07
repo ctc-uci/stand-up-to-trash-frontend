@@ -131,7 +131,6 @@ const CreateAccount = () => {
                   width={'100%'}
                   marginTop={30}
                   marginRight={'70%'}
-                  fontFamily={'Avenir'}
                   size={'lg'}
                   borderRadius={8}
                   boxShadow={'0 4px 2px -2px gray'}
@@ -148,7 +147,6 @@ const CreateAccount = () => {
                   marginTop={30}
                   size={'lg'}
                   borderRadius={8}
-                  fontFamily={'Avenir'}
                   boxShadow={'0 4px 2px -2px gray'}
                   placeholder="Last name"
                   type="text"
@@ -163,7 +161,6 @@ const CreateAccount = () => {
                   marginTop={30}
                   size={'lg'}
                   borderRadius={8}
-                  fontFamily={'Avenir'}
                   boxShadow={'0 4px 2px -2px gray'}
                   placeholder={'Email'}
                   type="email"
@@ -182,7 +179,6 @@ const CreateAccount = () => {
                   marginTop={30}
                   size={'lg'}
                   borderRadius={8}
-                  fontFamily={'Avenir'}
                   boxShadow={'0 4px 2px -2px gray'}
                   placeholder={'Password'}
                   type="password"
@@ -201,7 +197,6 @@ const CreateAccount = () => {
                   marginTop={30}
                   size={'lg'}
                   borderRadius={8}
-                  fontFamily={'Avenir'}
                   boxShadow={'0 4px 2px -2px gray'}
                   placeholder={'Confirm Password'}
                   type="password"

@@ -146,7 +146,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             gap={'0.3em'}
           >
             <IoPeopleSharp color="purple" />
-            <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? "Group" : "Individual"}</Text>
+            <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}</Text>
           </Flex>
         </Flex>
         <Flex justify={'space-between'} alignItems={'center'}>
@@ -162,7 +162,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             gap={'0.3em'}
           >
             <CalendarIcon color="purple" />
-            <Text>{eventDataVolunteer[0]?.is_checked_in ? "Checked-in" : "Registered"}</Text>
+            <Text>{eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}</Text>
           </Flex>
         </Flex>
         <Flex justify={'space-between'} alignItems={'center'}>

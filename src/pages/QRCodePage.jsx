@@ -46,7 +46,13 @@ function QRCodePage() {
           />
         </Box>
 
-        <Box>
+        <Box
+          textAlign="center"
+          maxWidth={{ base: '350px', md: '375px' }}
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
+          overflow="hidden"
+        >
           <Text fontSize="4xl" as="b" color={'3B3B3B'}>
             {volunteerFirstName} {volunteerLastName}
           </Text>

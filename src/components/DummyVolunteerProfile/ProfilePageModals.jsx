@@ -92,7 +92,6 @@ const EditFirstNameModal = ({ isOpen, onClose, user }) => {
                 // Push over by the size of the button
                 width={'100%'}
                 fontWeight={'800'}
-                fontFamily={'Avenir'}
                 letterSpacing={'0em'}
               >
                 Edit First Name
@@ -123,7 +122,6 @@ const EditFirstNameModal = ({ isOpen, onClose, user }) => {
                 fontWeight={'500'}
                 fontSize={'16px'}
                 marginLeft={'13px'}
-                fontFamily={'Avenir'}
                 lineHeight={'15px'}
                 letterSpacing={'0em'}
                 justify={'left'}
@@ -132,7 +130,6 @@ const EditFirstNameModal = ({ isOpen, onClose, user }) => {
                 First Name
               </FormLabel>
               <Input
-                fontFamily={'Inter, Arial, Helvetica, sans-serif'}
                 fontSize={'16px'}
                 fontWeight={'500'}
                 letterSpacing={'0em'}
@@ -159,7 +156,6 @@ const EditFirstNameModal = ({ isOpen, onClose, user }) => {
               color={'#0075FF'}
               gap={'6px'}
               padding={'12 11.321188926696777 12 11.321188926696777'}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'red',
@@ -179,7 +175,6 @@ const EditFirstNameModal = ({ isOpen, onClose, user }) => {
               color={'#FFFFFF'}
               onClick={handleSubmit}
               isDisabled={isSubmittable}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'green',
@@ -267,7 +262,6 @@ const EditLastNameModal = ({ isOpen, onClose, user }) => {
                 // Push over by the size of the button
                 width={'100%'}
                 fontWeight={'800'}
-                fontFamily={'Avenir'}
                 letterSpacing={'0em'}
               >
                 Edit Last Name
@@ -298,7 +292,6 @@ const EditLastNameModal = ({ isOpen, onClose, user }) => {
                 fontWeight={'500'}
                 fontSize={'16px'}
                 marginLeft={'13px'}
-                fontFamily={'Avenir'}
                 lineHeight={'15px'}
                 letterSpacing={'0em'}
                 justify={'left'}
@@ -307,7 +300,6 @@ const EditLastNameModal = ({ isOpen, onClose, user }) => {
                 Last Name
               </FormLabel>
               <Input
-                fontFamily={'Inter, Arial, Helvetica, sans-serif'}
                 fontSize={'16px'}
                 fontWeight={'500'}
                 letterSpacing={'0em'}
@@ -334,7 +326,6 @@ const EditLastNameModal = ({ isOpen, onClose, user }) => {
               color={'#0075FF'}
               gap={'6px'}
               padding={'12 11.321188926696777 12 11.321188926696777'}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'red',
@@ -354,7 +345,6 @@ const EditLastNameModal = ({ isOpen, onClose, user }) => {
               color={'#FFFFFF'}
               onClick={handleSubmit}
               isDisabled={isSubmittable}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'green',
@@ -442,7 +432,6 @@ const EditEmailModal = ({ isOpen, onClose, user }) => {
                 // Push over by the size of the button
                 width={'100%'}
                 fontWeight={'800'}
-                fontFamily={'Avenir'}
                 letterSpacing={'0em'}
               >
                 Edit Email
@@ -473,7 +462,6 @@ const EditEmailModal = ({ isOpen, onClose, user }) => {
                 fontWeight={'500'}
                 fontSize={'16px'}
                 marginLeft={'13px'}
-                fontFamily={'Avenir'}
                 lineHeight={'15px'}
                 letterSpacing={'0em'}
                 justify={'left'}
@@ -482,7 +470,6 @@ const EditEmailModal = ({ isOpen, onClose, user }) => {
                 Email
               </FormLabel>
               <Input
-                fontFamily={'Inter, Arial, Helvetica, sans-serif'}
                 fontSize={'16px'}
                 fontWeight={'500'}
                 letterSpacing={'0em'}
@@ -509,7 +496,6 @@ const EditEmailModal = ({ isOpen, onClose, user }) => {
               color={'#0075FF'}
               gap={'6px'}
               padding={'12 11.321188926696777 12 11.321188926696777'}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'red',
@@ -529,7 +515,6 @@ const EditEmailModal = ({ isOpen, onClose, user }) => {
               color={'#FFFFFF'}
               onClick={handleSubmit}
               isDisabled={isSubmittable}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'green',
@@ -617,7 +602,6 @@ const EditOrganizationModal = ({ isOpen, onClose, user }) => {
                 // Push over by the size of the button
                 width={'100%'}
                 fontWeight={'800'}
-                fontFamily={'Avenir'}
                 letterSpacing={'0em'}
               >
                 Edit Organization
@@ -648,7 +632,6 @@ const EditOrganizationModal = ({ isOpen, onClose, user }) => {
                 fontWeight={'500'}
                 fontSize={'16px'}
                 marginLeft={'13px'}
-                fontFamily={'Avenir'}
                 lineHeight={'15px'}
                 letterSpacing={'0em'}
                 justify={'left'}
@@ -657,7 +640,6 @@ const EditOrganizationModal = ({ isOpen, onClose, user }) => {
                 Organization
               </FormLabel>
               <Input
-                fontFamily={'Inter, Arial, Helvetica, sans-serif'}
                 fontSize={'16px'}
                 fontWeight={'500'}
                 letterSpacing={'0em'}
@@ -684,7 +666,6 @@ const EditOrganizationModal = ({ isOpen, onClose, user }) => {
               color={'#0075FF'}
               gap={'6px'}
               padding={'12 11.321188926696777 12 11.321188926696777'}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'red',
@@ -704,7 +685,6 @@ const EditOrganizationModal = ({ isOpen, onClose, user }) => {
               color={'#FFFFFF'}
               onClick={handleSubmit}
               isDisabled={isSubmittable}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'green',
@@ -792,7 +772,6 @@ const EditPhoneNumberModal = ({ isOpen, onClose, user }) => {
                 // Push over by the size of the button
                 width={'100%'}
                 fontWeight={'800'}
-                fontFamily={'Avenir'}
                 letterSpacing={'0em'}
               >
                 Edit Phone Number
@@ -823,7 +802,6 @@ const EditPhoneNumberModal = ({ isOpen, onClose, user }) => {
                 fontWeight={'500'}
                 fontSize={'16px'}
                 marginLeft={'13px'}
-                fontFamily={'Avenir'}
                 lineHeight={'15px'}
                 letterSpacing={'0em'}
                 justify={'left'}
@@ -832,7 +810,6 @@ const EditPhoneNumberModal = ({ isOpen, onClose, user }) => {
                 Phone Number
               </FormLabel>
               <Input
-                fontFamily={'Inter, Arial, Helvetica, sans-serif'}
                 fontSize={'16px'}
                 fontWeight={'500'}
                 letterSpacing={'0em'}
@@ -859,7 +836,6 @@ const EditPhoneNumberModal = ({ isOpen, onClose, user }) => {
               color={'#0075FF'}
               gap={'6px'}
               padding={'12 11.321188926696777 12 11.321188926696777'}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'red',
@@ -879,7 +855,6 @@ const EditPhoneNumberModal = ({ isOpen, onClose, user }) => {
               color={'#FFFFFF'}
               onClick={handleSubmit}
               isDisabled={isSubmittable}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'green',
@@ -967,7 +942,6 @@ const EditAboutMeModal = ({ isOpen, onClose, user }) => {
                 // Push over by the size of the button
                 width={'100%'}
                 fontWeight={'800'}
-                fontFamily={'Avenir'}
                 letterSpacing={'0em'}
               >
                 Edit About Me Section
@@ -998,7 +972,6 @@ const EditAboutMeModal = ({ isOpen, onClose, user }) => {
                 fontWeight={'500'}
                 fontSize={'16px'}
                 marginLeft={'13px'}
-                fontFamily={'Avenir'}
                 lineHeight={'15px'}
                 letterSpacing={'0em'}
                 justify={'left'}
@@ -1007,7 +980,6 @@ const EditAboutMeModal = ({ isOpen, onClose, user }) => {
                 About Me
               </FormLabel>
               <Input
-                fontFamily={'Inter, Arial, Helvetica, sans-serif'}
                 fontSize={'16px'}
                 fontWeight={'500'}
                 letterSpacing={'0em'}
@@ -1034,7 +1006,6 @@ const EditAboutMeModal = ({ isOpen, onClose, user }) => {
               color={'#0075FF'}
               gap={'6px'}
               padding={'12 11.321188926696777 12 11.321188926696777'}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'red',
@@ -1054,7 +1025,6 @@ const EditAboutMeModal = ({ isOpen, onClose, user }) => {
               color={'#FFFFFF'}
               onClick={handleSubmit}
               isDisabled={isSubmittable}
-              fontFamily={'Avenir'}
               fontSize={'14px'}
               _hover={{
                 bg: 'green',
