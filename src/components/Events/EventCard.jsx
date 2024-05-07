@@ -126,6 +126,7 @@ const EventCard = ({
           <Box
             width={sideBySideCard ? undefined : '100%'}
             maxW={{ base: '100px', md: '150px', lg: '275px' }}
+            // maxW={sideBySideCard ? '100%' : '86%'}
             alignSelf={'center'}
             justifySelf={'center'}
             gap={'18px'}
