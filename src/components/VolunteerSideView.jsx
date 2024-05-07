@@ -21,14 +21,23 @@ import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+import ical, { ICalCalendarMethod } from 'ical-generator';
 import UserContext from '../utils/UserContext.jsx';
 import { getEventDataVolunteerId } from '../utils/eventsUtils';
 
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
-  const [eventData, setEventData] = useState([]);
+  const [eventData, setEventData] = useState();
   const [isReadMore, setIsReadMore] = useState(false);
-  const [calendarSelected, setCalendarSelected] = useState(false);
+  // const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
+  const [dateObj, setDateObj] = useState(new Date());
+
+  // only parse the date if eventData has been retrieved
+  useEffect(() => {
+    if (eventData) {
+      setDateObj(new Date(Date.parse(eventData.date)));
+    }
+  }, [eventData]);
   const [eventDataVolunteer, setEventDataVolunteer] = useState([]);
   const { user } = useContext(UserContext);
   console.log('users', user);
@@ -44,7 +53,76 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     onClose: onRegistrationFlowClose,
   } = useDisclosure();
 
+  // At the top of your component
+
   useEffect(() => {
+    if (eventId) {
+      getEventById(eventId)
+        .then(data => {
+          setEventData(data); // Make sure data is an object with the properties you expect
+        })
+        .catch(error => {
+          console.error('Failed to fetch event data:', error);
+        });
+    }
+  }, [eventId]);
+
+  // console.log('this is the event id:', eventId);
+  console.log('this is the', eventData);
+  // console.log('d', dateObj)
+  //* download ics file by calling backend
+  // Assuming `eventData` is part of the state as shown previously
+  const calendar = ical({ name: 'my first iCal' });
+  calendar.method(ICalCalendarMethod.REQUEST);
+
+  const handleDownloadICS = async () => {
+    // const baseURL = window.location.origin;
+    // const eventURL = `${baseURL}/events/${eventId}`;
+    // TODO: using eventData.date, eventData.start_time, eventData.end_time
+    // format a start time that looks like eventData.date
+    // extract the date from the eventData
+    const datePart = eventData.date.split('T')[0];
+    // TODO: I'm not sure if the time zone in the data is aligned to the pst timezone so I will leave it as is for now.
+    const formatted_start_time = `${datePart}T${eventData.start_time.substring(0, 8)}`;
+
+    const formatted_end_time = `${datePart}T${eventData.end_time.substring(0, 8)}`;
+
+    // test the dates are correct
+    console.log('the is date', eventData.date, 'but the part we want is', datePart);
+    console.log('ICS start time:', formatted_start_time, 'ICS End time:', formatted_end_time);
+    console.log('real start time:', eventData.start_time, 'real end time:', eventData.end_time);
+    // const calendarFile = new File([calendar.toString()], 'event.ics', { type: 'text/calendar' });
+    // const url = URL.createObjectURL(calendarFile);
+    // setICSURL(url);
+    // TODO: please check that the url is correct
+
+    calendar.createEvent({
+      start: formatted_start_time,
+      end: formatted_end_time,
+      summary: eventData.name,
+      description: eventData.description,
+      location: eventData.location,
+      url: window.location.href,
+    });
+
+    const calendarData = calendar.toString();
+    console.log(eventData.description, eventData.name, eventData.location, window.location.href);
+    const blob = new Blob([calendarData], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    // Create and trigger a download link
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'event.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  // const handleClose = () => {
+  //   onClose(); // Ensure onClose is always called to close the view
+  //   setShowOpenDrawerButton(true);
+  // };
+
     getEventById(eventId).then(data => setEventData(data));
     getEventDataVolunteerId(user.id, eventId).then(data => setEventDataVolunteer(data));
     // setDateObj(new Date(Date.parse(eventData.date)))
@@ -81,7 +159,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
 
     return `${month} ${day}, ${year} @ ${time}`;
   }
-  return (
+  return eventData ? (
     <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={'20px'}>
       <HStack justify={'center'} align={'center'}>
         <IconButton
@@ -224,8 +302,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             borderRadius={'0.5em'}
             justify={'space-between'}
             align={'center'}
-            onClick={() => setCalendarSelected(prev => !prev)}
-            borderColor={calendarSelected ? 'blue.200' : '#EFEFEF'}
+            onClick={handleDownloadICS} // Directly attach the event handler here
             borderWidth={2}
           >
             <Flex justify={'center'} align={'center'}>
@@ -237,10 +314,11 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
                 as={IoMdLink}
                 h={'1.3em'}
                 w={'1.3em'}
-                backgroundColor={calendarSelected ? 'blue.200' : '#EFEFEF'}
+                backgroundColor={'#EFEFEF'} // Adjust based on state if necessary
               />
             </Flex>
           </Flex>
+
           <Flex
             backgroundColor={'#EFEFEF'}
             w={'12.5em'}
@@ -285,6 +363,8 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         />
       )}
     </Flex>
+  ) : (
+    <Text>Loading Event...</Text>
   );
 };
 
@@ -293,5 +373,4 @@ VolunteerSideView.propTypes = {
   onClose: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
 };
-
 export default VolunteerSideView;
