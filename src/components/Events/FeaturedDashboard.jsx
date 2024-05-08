@@ -10,7 +10,6 @@ const FeaturedDashboard = ({
   setIsOpen,
   setShowOpenDrawerButton,
   onOpen,
-  isOpen,
   showOpenDrawerButton,
 }) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
@@ -72,9 +71,15 @@ const FeaturedDashboard = ({
             h="40px"
             w="40px"
             icon={<RxCaretLeft size={22} />}
-            onClick={onOpen}
-            display={showOpenDrawerButton && !isOpen ? { base: 'none', xl: 'flex' } : 'none'}
-          ></IconButton>
+            onClick={() => {
+              // onDrawerOpen();
+              // Conditionally call here???
+              onOpen();
+              setIsOpen(true);
+              setShowOpenDrawerButton(false);
+            }}
+            display={showOpenDrawerButton ? 'flex' : 'none'}
+          />
         </Flex>
       </Flex>
       <Flex

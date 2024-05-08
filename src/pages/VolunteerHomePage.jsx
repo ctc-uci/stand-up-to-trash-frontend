@@ -135,18 +135,18 @@ const VolunteerHomePage = () => {
             >
               Impact Summary
             </Heading>
-            <IconButton
-              borderRadius="md"
-              borderColor="#EFEFEF"
-              bg="white"
-              variant={'outline'}
-              borderWidth={'0.2em'}
-              h="64px"
-              w="64px"
-              icon={<RxCaretLeft size={40} />}
-              onClick={onOpen}
-              display={showOpenDrawerButton ? 'flex' : 'none'}
-            ></IconButton>
+              <IconButton
+                borderRadius="md"
+                borderColor="#EFEFEF"
+                bg="white"
+                variant={'outline'}
+                borderWidth={'0.2em'}
+                h="64px"
+                w="64px"
+                icon={<RxCaretLeft size={40} />}
+                onClick={onOpen}
+                display={showOpenDrawerButton ? 'flex' : 'none'}
+              ></IconButton>
           </Flex>
 
           <VolunteerImpactSummary showLargestItemCollected={!isOpen} />

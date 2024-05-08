@@ -1,11 +1,10 @@
 import EventFilteredGrid from '../components/Events/EventFilteredGrid';
 import FeaturedDashboard from '../components/Events/FeaturedDashboard';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { Box, Flex, IconButton, Spacer } from '@chakra-ui/react';
+import { Box, Flex, Spacer } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
-import { RxCaretLeft } from 'react-icons/rx';
 import { useBreakpoint, useDisclosure } from '@chakra-ui/react';
 import VolunteerSideViewDrawer from '../components/VolunteerSideViewDrawer.jsx';
 // import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
@@ -88,22 +87,7 @@ const VolunteerEventPage = () => {
             flex-shrink="0"
             borderRadius={'xl'}
             flexDir={'column'}
-          >
-            <IconButton
-              borderRadius="md"
-              borderColor="#EFEFEF"
-              bg="white"
-              variant={'outline'}
-              borderWidth={'0.2em'}
-              h="64px"
-              w="64px"
-              icon={<RxCaretLeft size={40} />}
-              onClick={() => {
-                onDrawerOpen();
-              }}
-              display={showOpenDrawerButton ? 'flex' : 'none'}
-            ></IconButton>
-          </Flex>
+          ></Flex>
         </Flex>
         <FeaturedDashboard
           width={{ base: '90%' }}

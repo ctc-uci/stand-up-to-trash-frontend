@@ -164,7 +164,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   }
   return eventData ? (
     // Flag: Need responsive
-    <Flex flexDir={'column'} w={{base: '100vw', xl: '23vw'}} mt={'1em'} mx={'20px'}>
+    <Flex flexDir={'column'} w={{ base: '100vw', xl: '23vw' }} mt={'1em'} mx={'20px'}>
       <HStack justify={'center'} align={'center'}>
         <IconButton
           borderRadius="md"
