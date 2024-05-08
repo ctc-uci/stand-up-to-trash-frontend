@@ -50,7 +50,7 @@ const Layout = () => {
       ) : (
         <NavbarDrawer isOpen={isNavbarDrawerOpen} onClose={onNavbarDrawerClose} />
       )}
-      <Box as="main" ml={isLargerThan1200px ? 'var(--size-of-navbar)' : 10}>
+      <Box as="main" ml={isLargerThan1200px ? 'var(--size-of-navbar)' : 0}>
         <Outlet />
       </Box>
     </NavbarContext.Provider>

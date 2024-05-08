@@ -44,7 +44,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   console.log('eventid', eventDataVolunteer[0]);
 
   // const [dateObj, setDateObj] = useState(new Date());
-  const dateObj = new Date(Date.parse(eventData.date));
+  // const dateObj = new Date(Date.parse(eventData.date));
   // console.log(eventData);
 
   const {
@@ -64,8 +64,13 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         .catch(error => {
           console.error('Failed to fetch event data:', error);
         });
+      if (user.id && eventId) {
+        getEventDataVolunteerId(user.id, eventId)
+          .then(data => setEventDataVolunteer(data))
+          .catch(error => console.error('Failed to fetch event volunteer data:', error));
+      }
     }
-  }, [eventId]);
+  }, [eventId, user.id]);
 
   // console.log('this is the event id:', eventId);
   console.log('this is the', eventData);
@@ -123,10 +128,8 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   //   setShowOpenDrawerButton(true);
   // };
 
-    getEventById(eventId).then(data => setEventData(data));
-    getEventDataVolunteerId(user.id, eventId).then(data => setEventDataVolunteer(data));
-    // setDateObj(new Date(Date.parse(eventData.date)))
-  }, [eventId]);
+  // setDateObj(new Date(Date.parse(eventData.date)))
+  // }, [eventId]);
 
   // console.log('e', eventData);
   // console.log('d', dateObj)
@@ -160,7 +163,8 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     return `${month} ${day}, ${year} @ ${time}`;
   }
   return eventData ? (
-    <Flex flexDir={'column'} w={'26em'} mt={'1em'} mx={'20px'}>
+    // Flag: Need responsive
+    <Flex flexDir={'column'} w={{base: '100vw', xl: '23vw'}} mt={'1em'} mx={'20px'}>
       <HStack justify={'center'} align={'center'}>
         <IconButton
           borderRadius="md"

@@ -41,7 +41,7 @@ const EventCard = ({
   hasBorder = false,
   isFeatured = false,
 }) => {
-  const { onOpen } = useDisclosure();
+  const { onOpen, onClose } = useDisclosure();
 
   // Placeholder for testing a high-res image
   // image_url =
@@ -58,6 +58,12 @@ const EventCard = ({
   let ref = useRef();
   const breakpoint = 400;
   const [containerWidth, setContainerWidth] = useState(0);
+
+  const selectEventForSidebar = () => {
+    console.log("Hit");
+    onClose();
+    onOpen();
+  }
 
   const {
     isOpen: isRegistrationFlowOpen,
@@ -83,7 +89,7 @@ const EventCard = ({
         flexDir="column"
         cursor={'pointer'}
         justifyContent={sideBySideCard ? 'center' : 'start'}
-        onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
+        onClick={() => (showSelect ? handleCheckboxChange(id) : selectEventForSidebar())}
         border={hasBorder ? '2px solid var(--Secondary-Button-Color, #EFEFEF)' : ''}
         borderRadius="18px"
         width={'Fill (674px)'}
@@ -125,8 +131,7 @@ const EventCard = ({
 
           <Box
             width={sideBySideCard ? undefined : '100%'}
-            maxW={{ base: '100px', md: '150px', lg: '275px' }}
-            // maxW={sideBySideCard ? '100%' : '86%'}
+            maxW={'88%'}
             alignSelf={'center'}
             justifySelf={'center'}
             gap={'18px'}
@@ -134,18 +139,28 @@ const EventCard = ({
             mb={sideBySideCard ? 0 : 5}
           >
             <HappeningInChip date={dateObj} mb={5} />
-            <Text
-              fontWeight="800"
-              fontSize={{ base: '20px', md: '24px' }}
-              lineHeight="30px"
-              mt={2}
-              overflowWrap={'break-word'}
-              overflow="hidden"
-              textOverflow="ellipsis"
-              whiteSpace="nowrap"
-            >
-              {name}
-            </Text>
+
+            {name.length > 30 ? (
+              <Text
+                fontWeight="800"
+                fontSize="24px"
+                lineHeight="30px"
+                mt={2}
+                overflowWrap={'break-word'}
+              >
+                {name.substring(0, 30)}...
+              </Text>
+            ) : (
+              <Text
+                fontWeight="800"
+                fontSize={{ base: '20px', md: '24px' }}
+                lineHeight="30px"
+                mt={2}
+                overflowWrap={'break-word'}
+              >
+                {name}
+              </Text>
+            )}
             <Text
               fontSize={sideBySideCard ? { base: '12px', md: '15px' } : '16px'}
               fontWeight={{ base: 500, md: 300 }}

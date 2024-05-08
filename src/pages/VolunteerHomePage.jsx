@@ -10,6 +10,8 @@ import {
   Heading,
   Flex,
   IconButton,
+  useBreakpoint,
+  useDisclosure
 } from '@chakra-ui/react';
 import { useEffect, useState, useContext } from 'react';
 import { SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
@@ -22,14 +24,19 @@ import Fuse from 'fuse.js';
 import NavbarContext from '../utils/NavbarContext';
 import { RxCaretLeft } from 'react-icons/rx';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
+import VolunteerSideViewDrawer from '../components/VolunteerSideViewDrawer.jsx';
 
 const VolunteerHomePage = () => {
   const [events, setEvents] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const { isOpen: isDrawerOpen, onClose: onDrawerClose } = useDisclosure();
   const [displayEvents, setDisplayEvents] = useState([]);
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [fuse, setFuse] = useState();
+
+  const breakpoint = useBreakpoint();
 
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
@@ -125,7 +132,6 @@ const VolunteerHomePage = () => {
               fontSize={{ base: '20px', md: '36px' }}
               fontWeight={{ base: 500, md: 800 }}
               w={'full'}
-              fontFamily={'Avenir'}
             >
               Impact Summary
             </Heading>
@@ -159,7 +165,6 @@ const VolunteerHomePage = () => {
                 fontSize={{ base: '20px', md: '36px' }}
                 fontWeight={{ base: 500, md: 800 }}
                 w={'full'}
-                fontFamily={'Avenir'}
               >
                 Upcoming Events
               </Heading>
@@ -225,7 +230,23 @@ const VolunteerHomePage = () => {
           </Box>
         </Flex>
       </Flex>
-      <Box w={isOpen ? '480px' : 0} flexShrink={0}>
+      {breakpoint == 'base' ? (
+        <VolunteerSideViewDrawer
+          eventId={currentEventId}
+          isOpen={isOpen}
+          onClose={onClose}
+          setShowOpenDrawerButton={setShowOpenDrawerButton}
+        />
+      ) : (
+      <Box
+        w={{
+          base: isOpen ? '100%' : '0',
+          md: isOpen ? '480px' : '0',
+          lg: isOpen ? '480px' : '0',
+          xl: isOpen ? '28%' : '0',
+        }}
+        flexShrink={0}
+      >
         <Box pos={'fixed'} right={'0'} top={'0'} h={'100%'} overflowY={'auto'} paddingBottom={10}>
           {isOpen && (
             <VolunteerSideView
@@ -235,7 +256,7 @@ const VolunteerHomePage = () => {
             />
           )}
         </Box>
-      </Box>
+      </Box>)}
     </Flex>
   );
 };

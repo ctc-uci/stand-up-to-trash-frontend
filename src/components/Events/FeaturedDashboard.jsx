@@ -30,6 +30,7 @@ const FeaturedDashboard = ({
   }, [numEvents]);
 
   return (
+    // Flag: Navbar responsive (Use 15%)
     <Flex
       flexDir={'column'}
       alignItems={'center'}

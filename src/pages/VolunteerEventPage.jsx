@@ -57,7 +57,7 @@ const VolunteerEventPage = () => {
           pt={6}
           px={6}
           justifyContent={'space-between'}
-          display={{ base: 'flex', xl: 'none' }}
+          // display={{ base: 'flex', xl: 'none' }}
         >
           <Flex
             width="95%"
@@ -72,6 +72,9 @@ const VolunteerEventPage = () => {
               color={'#717171'}
               boxSize={{ base: 10, md: 16 }}
               onClick={onNavbarDrawerOpen}
+              display={
+                showOpenDrawerButton && !isDrawerOpen ? { base: 'flex', xl: 'none' } : 'none'
+              }
             />
           </Flex>
           <Flex>
@@ -85,7 +88,6 @@ const VolunteerEventPage = () => {
             flex-shrink="0"
             borderRadius={'xl'}
             flexDir={'column'}
-            display={showOpenDrawerButton && !isDrawerOpen ? { base: 'flex', xl: 'none' } : 'none'}
           >
             <IconButton
               borderRadius="md"
@@ -99,6 +101,7 @@ const VolunteerEventPage = () => {
               onClick={() => {
                 onDrawerOpen();
               }}
+              display={showOpenDrawerButton ? 'flex' : 'none'}
             ></IconButton>
           </Flex>
         </Flex>
@@ -110,6 +113,7 @@ const VolunteerEventPage = () => {
           setShowOpenDrawerButton={setShowOpenDrawerButton}
           showOpenDrawerButton={showOpenDrawerButton}
           isOpen={isDrawerOpen}
+          isSideBarOpen={isOpen}
         />
         <EventFilteredGrid
           width={{ base: '90%' }}
@@ -128,7 +132,16 @@ const VolunteerEventPage = () => {
           setShowOpenDrawerButton={setShowOpenDrawerButton}
         />
       ) : (
-        <Box w={isOpen ? '480px' : 0} flexShrink={0}>
+        // Flag: Need responsive
+        <Box
+          w={{
+            base: isOpen ? '100%' : '0',
+            md: isOpen ? '480px' : '0',
+            lg: isOpen ? '480px' : '0',
+            xl: isOpen ? '28%' : '0',
+          }}
+          flexShrink={0}
+        >
           <Box pos={'fixed'} right={'0'} top={'0'} h={'100%'} overflowY={'auto'} paddingBottom={10}>
             {isOpen && (
               <VolunteerSideView

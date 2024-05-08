@@ -54,6 +54,7 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       )}
       <Text
         style={{
+          // Flag: Navbar responsive (Use 1.25 vw and 1vw)
           fontSize: location.pathname === path ? '18px' : '16px',
           fontWeight: '500',
           lineHeight: '25px',
@@ -102,6 +103,7 @@ const Navbar = () => {
   return (
     <>
       {/* Box for entire navbar */}
+      {/* Flag: Navbar responsive (Use 15%) */}
       <Box position="fixed" top="0" w={{ base: 'full', xl: '15rem' }} float="left">
         {/* Box for entire nabar with coloring */}
         <Box
