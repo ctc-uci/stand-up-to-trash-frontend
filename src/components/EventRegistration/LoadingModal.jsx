@@ -8,14 +8,13 @@ const LoadingModal = ({ ...props }) => {
         <Spinner color="blue.500" size={'xl'} speed="0.8s" thickness="6px" />
       </Flex>
       <Box>
-        <Text fontFamily={'Avenir'} fontSize={'30px'} align={'center'} fontWeight={800}>
+        <Text fontSize={'30px'} align={'center'} fontWeight={800}>
           {`Registering...`}
         </Text>
         <Text
           color={'#717171'}
           fontSize={'22px'}
           align={'center'}
-          fontFamily={'Avenir'}
           fontWeight={800}
         >
           {`Hang tight, and you'll registered soon!`}

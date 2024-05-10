@@ -139,7 +139,6 @@ const EventCard = ({
                 fontWeight="800"
                 fontSize="24px"
                 lineHeight="30px"
-                fontFamily="Avenir"
                 mt={2}
                 overflowWrap={'break-word'}
               >
@@ -150,7 +149,6 @@ const EventCard = ({
                 fontWeight="800"
                 fontSize={{ base: '20px', md: '24px' }}
                 lineHeight="30px"
-                fontFamily="Avenir"
                 mt={2}
                 overflowWrap={'break-word'}
               >
@@ -158,7 +156,6 @@ const EventCard = ({
               </Text>
             )}
             <Text
-              fontFamily="Avenir"
               fontSize={sideBySideCard ? { base: '12px', md: '15px' } : '16px'}
               fontWeight={{ base: 500, md: 300 }}
               mt={1}
