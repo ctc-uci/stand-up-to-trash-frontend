@@ -71,9 +71,7 @@ const VolunteerEventPage = () => {
               color={'#717171'}
               boxSize={{ base: 10, md: 16 }}
               onClick={onNavbarDrawerOpen}
-              display={
-                showOpenDrawerButton && !isDrawerOpen ? { base: 'flex', xl: 'none' } : 'none'
-              }
+              display={{ base: 'flex', xl: 'none' }}
             />
           </Flex>
           <Flex>

@@ -9,7 +9,7 @@ import { CalendarIcon, TimeIcon } from '@chakra-ui/icons';
 import HappeningInChip from '../HappeningInChip/HappeningInChip';
 import EditEventModal from '../EventsModal/EditEventModal';
 
-const CheckinStatsDashboard = ({ event, registered, checkin }) => {
+const CheckinStatsDashboard = ({ event, registered, checkin, isPastEvent = false }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // formats dbms date into Month Day, Year
@@ -55,6 +55,7 @@ const CheckinStatsDashboard = ({ event, registered, checkin }) => {
               ml="3"
               variant="outline"
               colorScheme="blue"
+              isDisabled={isPastEvent}
             >
               Edit
             </Button>
