@@ -56,16 +56,16 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isVie
   return (
     <Tr key={id} bg="#FFFFFF" fontWeight={'medium'}>
       <Td>
-        <Flex>
+        <Flex maxWidth={{ base: '200px', md: '200px', lg: '300px', xl: '300px' }}>
           <Image src={image_url} boxSize="4rem" borderRadius="full" />
-          <Flex direction="column" ml={3} mt={4} g={1}>
-            <Text color={'#2D3748'}>
+          <Flex direction="column" ml={3} mt={4} g={1} maxW="75%">
+            <Text color={'#2D3748'} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
               {first_name} {last_name}
             </Text>
           </Flex>
         </Flex>
       </Td>
-      <Td>
+      <Td display={{ base: 'none', lg: 'table-cell' }}>
         <Flex>
           <Box backgroundColor="#8589dc" boxSize="2rem" borderRadius="full" mr={5}>
             <Center mt={2}>
@@ -93,7 +93,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isVie
         </Flex>
       </Td>
       <Td>
-        <Flex alignItems={'start'} justifyContent={'start'}>
+        <Flex alignItems={'start'} justifyContent={'start'} >
           <Text fontSize="md">{number_in_party}</Text>
         </Flex>
       </Td>
@@ -207,7 +207,7 @@ const VolunteerEventsTable = ({
                 </Text>
               </Flex>
             </Th>
-            <Th>
+            <Th display={{ base: 'none', lg: 'flex' }}>
               <Flex gap={2}>
                 <Text color="#2D3748" fontWeight="650">
                   Type

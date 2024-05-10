@@ -41,7 +41,7 @@ const EventCard = ({
   hasBorder = false,
   isFeatured = false,
 }) => {
-  const { onOpen } = useDisclosure();
+  const { onOpen, onClose } = useDisclosure();
 
   // Placeholder for testing a high-res image
   // image_url =
@@ -58,6 +58,12 @@ const EventCard = ({
   let ref = useRef();
   const breakpoint = 400;
   const [containerWidth, setContainerWidth] = useState(0);
+
+  const selectEventForSidebar = () => {
+    console.log("Hit");
+    onClose();
+    onOpen();
+  }
 
   const {
     isOpen: isRegistrationFlowOpen,
@@ -83,7 +89,7 @@ const EventCard = ({
         flexDir="column"
         cursor={'pointer'}
         justifyContent={sideBySideCard ? 'center' : 'start'}
-        onClick={() => (showSelect ? handleCheckboxChange(id) : onOpen())}
+        onClick={() => (showSelect ? handleCheckboxChange(id) : selectEventForSidebar())}
         border={hasBorder ? '2px solid var(--Secondary-Button-Color, #EFEFEF)' : ''}
         borderRadius="18px"
         width={'Fill (674px)'}

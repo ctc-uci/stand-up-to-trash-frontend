@@ -197,7 +197,16 @@ export const DummyProfilePage = () => {
               padding={'2%'}
             >
               <Stack spacing="1">
-                <Heading size="sm" mt={2} mb={1} maxW={'150px'} margin={3}>
+                <Heading
+                  size="sm"
+                  mt={2}
+                  mb={1}
+                  maxW={{ base: '150px', md: '200px', xl: '225px' }}
+                  textOverflow="ellipsis"
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  margin={3}
+                >
                   {`${user.first_name} ${user.last_name}`}
                 </Heading>
                 <Center>
@@ -260,7 +269,15 @@ export const DummyProfilePage = () => {
             </Center>
             <Center bg={'#efefef'} borderBottomRadius={10}>
               <Stack spacing="1">
-                <Heading size="md" mt={2} mb={1}>
+                <Heading
+                  size="md"
+                  mt={2}
+                  mb={1}
+                  maxW={{ base: '150px', md: '200px', xl: '225px' }}
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  textOverflow="ellipsis"
+                >
                   {`${user.first_name} ${user.last_name}`}
                 </Heading>
                 <Center>

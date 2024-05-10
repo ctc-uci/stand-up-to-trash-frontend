@@ -19,12 +19,6 @@ const SignWaiverModal = ({ registrationFlowState, ...props }) => {
       continueText={'Register'}
       {...props}
     >
-      {/* color: var(--Primary-Text, #3B3B3B);
-font-family: Avenir;
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;    */}
       <Box>
         <Text color={'#717171'} fontSize={'16px'} fontWeight={'400'} pb="1">
           Read terms and conditions
@@ -48,7 +42,7 @@ line-height: normal;    */}
         pt="4"
         style={{ '--chakra-colors-blue-500': '#0075FF', '--chakra-radii-sm': '5px' }}
       >
-        <Text color={'#717171'}  fontSize={'16px'} fontWeight={'400'}>
+        <Text color={'#717171'} fontSize={'16px'} fontWeight={'400'}>
           I agree to the terms and conditions
         </Text>
       </Checkbox>

@@ -89,7 +89,14 @@ const LeaderboardCard = ({ event_id }) => {
                   2
                 </Text>
               </Flex>
-              <Text fontWeight="medium" fontSize={{ base: '16px', xl: '16px' }} textAlign="center">
+              <Text
+                fontWeight="medium"
+                fontSize={{ base: '16px', xl: '16px' }}
+                textAlign="center"
+                whiteSpace="nowrap"
+                maxWidth={{ base: '100px', xl: '150px' }}
+                overflow="hidden"
+              >
                 {LeaderboardArray[1] && LeaderboardArray[1].volunteer_first_name}{' '}
                 {LeaderboardArray[1] && LeaderboardArray[1].volunteer_last_name}
               </Text>
@@ -118,6 +125,9 @@ const LeaderboardCard = ({ event_id }) => {
                 fontWeight="semibold"
                 fontSize={{ base: '16px', xl: '16px' }}
                 textAlign="center"
+                whiteSpace="nowrap"
+                maxWidth={{ base: '100px', xl: '150px' }}
+                overflow="hidden"
               >
                 {LeaderboardArray[2] && LeaderboardArray[2].volunteer_first_name}{' '}
                 {LeaderboardArray[2] && LeaderboardArray[2].volunteer_last_name}

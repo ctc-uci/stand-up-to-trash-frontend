@@ -53,7 +53,6 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
     waiver: false,
   });
 
-
   const {
     isOpen: isAgreementOpen,
     // onOpen: onAgreementOpen,
