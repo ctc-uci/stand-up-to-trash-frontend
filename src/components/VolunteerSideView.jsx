@@ -301,32 +301,29 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         <Flex gap={'1em'}>
           <Flex
             backgroundColor={'#EFEFEF'}
-            w={'12.5em'}
-            padding={'0.8em'}
+            w={'20vw'}
+            padding={'1vh'}
+            align={'center'}
             borderRadius={'0.5em'}
             justify={'space-between'}
-            align={'center'}
-            onClick={handleDownloadICS} // Directly attach the event handler here
+            onClick={handleDownloadICS}
             borderWidth={2}
           >
             <Flex justify={'center'} align={'center'}>
-              <Image src={logos_google_calendar} h={'1.3em'} w={'1.3em'} mr={'9%'} />
-              <Text fontWeight={600}>Calendar</Text>
+              <Image src={logos_google_calendar} h={'1.5vw'} w={'1.5vw'} mr={'1vw'} />
+              <Text fontWeight={600} mr={'1vw'}>
+                Calendar
+              </Text>
             </Flex>
             <Flex justify={'center'} align={'center'}>
-              <IconButton
-                as={IoMdLink}
-                h={'1.3em'}
-                w={'1.3em'}
-                backgroundColor={'#EFEFEF'} // Adjust based on state if necessary
-              />
+              <IconButton as={IoMdLink} h={'1.5vw'} w={'1.5vw'} backgroundColor={'#EFEFEF'} />
             </Flex>
           </Flex>
 
           <Flex
             backgroundColor={'#EFEFEF'}
-            w={'12.5em'}
-            padding={'0.8em'}
+            w={'20vw'}
+            padding={'1vh'}
             align={'center'}
             borderRadius={'0.5em'}
             justify={'space-between'}
@@ -339,16 +336,16 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             borderWidth={2}
           >
             <Flex justify={'center'} align={'center'}>
-              <Image src={logos_google_maps} h={'1.3em'} w={'1.3em'} mr={'9%'} />
-              <Text fontWeight={600} w={'8em'}>
+              <Image src={logos_google_maps} h={'1.5vw'} w={'1.5vw'} mr={'0.5vw'} />
+              <Text fontWeight={600} mr={'0.5vw'}>
                 Google Map
               </Text>
             </Flex>
-            <Flex justify={'center'} align={'center'} h={'1.3em'} w={'1.3em'}>
+            <Flex justify={'center'} align={'center'}>
               <IconButton
                 as={IoMdLink}
-                h={'1.3em'}
-                w={'1.3em'}
+                h={'1.5vw'}
+                w={'1.5vw'}
                 backgroundColor={mapSelected ? 'blue.200' : '#EFEFEF'}
               />
             </Flex>
