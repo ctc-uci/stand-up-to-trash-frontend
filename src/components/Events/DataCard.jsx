@@ -7,12 +7,7 @@ const DataCard = ({ icon, text, amount }) => {
       <Text textAlign={'center'} fontWeight={500} fontSize={18}>
         {text}
       </Text>
-      <Text
-        textAlign={'center'}
-        fontSize={56}
-        fontWeight={800}
-        color={'rgba(0, 0, 0, 0.75)'}
-      >
+      <Text textAlign={'center'} fontSize={56} fontWeight={800} color={'rgba(0, 0, 0, 0.75)'}>
         {amount}
       </Text>
     </VStack>

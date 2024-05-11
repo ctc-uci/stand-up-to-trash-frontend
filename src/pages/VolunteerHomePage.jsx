@@ -11,7 +11,7 @@ import {
   Flex,
   IconButton,
   useBreakpoint,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState, useContext } from 'react';
 import { SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
@@ -135,18 +135,18 @@ const VolunteerHomePage = () => {
             >
               Impact Summary
             </Heading>
-              <IconButton
-                borderRadius="md"
-                borderColor="#EFEFEF"
-                bg="white"
-                variant={'outline'}
-                borderWidth={'0.2em'}
-                h="64px"
-                w="64px"
-                icon={<RxCaretLeft size={40} />}
-                onClick={onOpen}
-                display={showOpenDrawerButton ? 'flex' : 'none'}
-              ></IconButton>
+            <IconButton
+              borderRadius="md"
+              borderColor="#EFEFEF"
+              bg="white"
+              variant={'outline'}
+              borderWidth={'0.2em'}
+              h="64px"
+              w="64px"
+              icon={<RxCaretLeft size={40} />}
+              onClick={onOpen}
+              display={showOpenDrawerButton ? 'flex' : 'none'}
+            ></IconButton>
           </Flex>
 
           <VolunteerImpactSummary showLargestItemCollected={!isOpen} />
@@ -238,25 +238,26 @@ const VolunteerHomePage = () => {
           setShowOpenDrawerButton={setShowOpenDrawerButton}
         />
       ) : (
-      <Box
-        w={{
-          base: isOpen ? '100%' : '0',
-          md: isOpen ? '480px' : '0',
-          lg: isOpen ? '480px' : '0',
-          xl: isOpen ? '28%' : '0',
-        }}
-        flexShrink={0}
-      >
-        <Box pos={'fixed'} right={'0'} top={'0'} h={'100%'} overflowY={'auto'} paddingBottom={10}>
-          {isOpen && (
-            <VolunteerSideView
-              eventId={currentEventId}
-              onClose={onClose}
-              setShowOpenDrawerButton={setShowOpenDrawerButton}
-            />
-          )}
+        <Box
+          w={{
+            base: isOpen ? '100%' : '0',
+            md: isOpen ? '480px' : '0',
+            lg: isOpen ? '480px' : '0',
+            xl: isOpen ? '28%' : '0',
+          }}
+          flexShrink={0}
+        >
+          <Box pos={'fixed'} right={'0'} top={'0'} h={'100%'} overflowY={'auto'} paddingBottom={10}>
+            {isOpen && (
+              <VolunteerSideView
+                eventId={currentEventId}
+                onClose={onClose}
+                setShowOpenDrawerButton={setShowOpenDrawerButton}
+              />
+            )}
+          </Box>
         </Box>
-      </Box>)}
+      )}
     </Flex>
   );
 };

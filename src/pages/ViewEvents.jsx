@@ -210,7 +210,12 @@ const ViewEvents = () => {
         </Button>
       </Flex>
 
-      <CheckinStatsDashboard event={event} registered={registered} checkin={checkin} />
+      <CheckinStatsDashboard
+        isPastEvent={true}
+        event={event}
+        registered={registered}
+        checkin={checkin}
+      />
 
       <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
         <Heading w={'full'} ml="3" mt="7">
