@@ -169,16 +169,18 @@ const InputDataPage = () => {
         </Flex>
         <CheckinInputPageToggle eventId={eventId} isCheckinPage={false} />
       </Flex>
+
       <InputDataDashboard
         event={event}
         registered={registered}
         checkin={checkin}
         trashCollected={trashCollected}
       />
-      <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
+
+      <Container borderRadius={'xl'} mt={18} bg={'#F8F8F8'} minW="95%">
         {/* SEARCH BAR---- */}
         <Flex gap={3} mt={5} mb={5}>
-          <InputGroup mt={10}>
+          <InputGroup>
             <InputLeftElement pointerEvents="none" top={'6px'} left={'5px'}>
               <GreyCustomSearchIcon w={'24px'} h={'18px'} />
             </InputLeftElement>

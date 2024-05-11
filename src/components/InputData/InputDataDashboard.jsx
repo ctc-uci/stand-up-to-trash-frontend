@@ -155,18 +155,14 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             </Flex>
             <Flex>
               <Center>
-                <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '22px' }}>
+                <Text fontWeight={'medium'} fontSize={18}>
                   Trash Collected
                 </Text>
               </Center>
             </Flex>
 
             <Center>
-              <Text
-                fontSize={{ base: '40px', xl: '50px' }}
-                fontWeight={'bold'}
-                color={'rgba(0, 0, 0, 0.75)'}
-              >
+              <Text fontSize={32} fontWeight={'bold'} color={'rgba(0, 0, 0, 0.75)'}>
                 {trashCollected} lb
               </Text>
             </Center>
