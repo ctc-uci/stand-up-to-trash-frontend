@@ -4,11 +4,7 @@ import PropTypes from 'prop-types';
 
 const AuthPage = ({ children }) => {
   return (
-    <Flex
-      minH={'100vh'}
-      // justifyContent={{ base: 'center', md: '' }}
-      // alignItems={{ base: 'center', md: '' }}
-    >
+    <Flex minH={'100vh'} justifyContent={{ base: 'center', md: 'normal' }} alignItems="center">
       <Box
         backgroundColor="#2D558A"
         position="relative"
@@ -17,6 +13,7 @@ const AuthPage = ({ children }) => {
         justifyContent={'center'}
         alignItems={'center'}
         width="50%"
+        minH={'100vh'}
         display={{ base: 'none', md: 'flex' }}
       >
         <Image
@@ -59,13 +56,23 @@ const AuthPage = ({ children }) => {
         </Box>
       </Box>
       <Box
-        width="50%"
+        width={{ base: '70%', md: '50%' }}
         display={'flex'}
         h="100%"
         justifyContent={'center'}
         alignContent={'center'}
         mx={4}
+        my={{ base: 7, md: 0 }}
+        flexDir={'column'}
       >
+        <Image
+          src={S2T_Logo}
+          alt="Logo"
+          H={'7rem'}
+          w={'7rem'}
+          m={'auto'}
+          display={{ base: 'flex', md: 'none' }}
+        />
         {children}
       </Box>
     </Flex>

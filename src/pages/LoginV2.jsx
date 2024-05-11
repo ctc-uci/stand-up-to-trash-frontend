@@ -143,14 +143,14 @@ const LoginForm = () => {
       <Box style={{ width: '100%' }} height={'fit-content'} mt={'auto'} mb="auto">
         <form onSubmit={handleSubmit(handleLogin)}>
           <Center>
-            <Heading marginTop={10}>Log In</Heading>
+            <Heading marginTop={{ base: 5, md: 10 }}>Log In</Heading>
           </Center>
           <FormControl isInvalid={errors.email} w={'100%'} d="block">
             {/* <FormLabel>Email address</FormLabel> */}
             <Center>
               <Input
                 maxW={'20rem'}
-                marginTop={30}
+                marginTop={{ base: 7, md: 30 }}
                 borderRadius={8}
                 placeholder="Email"
                 boxShadow={'0 4px 2px -2px gray'}
