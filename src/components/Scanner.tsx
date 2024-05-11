@@ -56,7 +56,7 @@ const Scanner = ({ event_id, isOpen, onClose, handleSuccess }: ScannerProps) => 
         <ModalContent padding={5}>
           <ModalCloseButton backgroundColor={'#EFEFEF'} borderRadius={'100px'} />
 
-          <Button onClick={() => checkinVolunteer(227)}>Success</Button>
+          {/* <Button onClick={() => checkinVolunteer(227)}>Success</Button> */}
 
           <QrReader
             scanDelay={1000}

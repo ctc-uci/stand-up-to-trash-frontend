@@ -272,7 +272,7 @@ const Volunteers = () => {
                     filename="./data.csv"
                     headers={header}
                   >
-                    Export All Volunteer Data
+                    Export All
                   </CSVLink>
                 </Button>
               </Box>
