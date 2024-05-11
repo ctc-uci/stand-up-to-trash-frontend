@@ -236,7 +236,7 @@ const VolunteerEventsTable = ({
                 </Text>
               </Flex>
             </Th>
-            <Th display={{ base: 'none', xl: 'block' }}>
+            <Th>
               <Flex>
                 <Text color="#2D3748" fontWeight="650">
                   Party Size
