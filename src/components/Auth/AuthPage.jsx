@@ -1,17 +1,23 @@
-import { Box, SimpleGrid, Image, Heading } from '@chakra-ui/react';
+import { Box, Image, Flex, Heading } from '@chakra-ui/react';
 import S2T_Logo from '../../Assets/S2T_Logo.png';
 import PropTypes from 'prop-types';
 
 const AuthPage = ({ children }) => {
   return (
-    <SimpleGrid columns={2} spacing={0} minH={'100vh'}>
+    <Flex
+      minH={'100vh'}
+      // justifyContent={{ base: 'center', md: '' }}
+      // alignItems={{ base: 'center', md: '' }}
+    >
       <Box
         backgroundColor="#2D558A"
         position="relative"
-        display={'flex'}
+        // display={'flex'}
         flexDir={'column'}
         justifyContent={'center'}
         alignItems={'center'}
+        width="50%"
+        display={{ base: 'none', md: 'flex' }}
       >
         <Image
           borderRadius="full"
@@ -52,10 +58,17 @@ const AuthPage = ({ children }) => {
           </Heading>
         </Box>
       </Box>
-      <Box display={'flex'} h="100%" justifyContent={'center'} alignContent={'center'} mx={4}>
+      <Box
+        width="50%"
+        display={'flex'}
+        h="100%"
+        justifyContent={'center'}
+        alignContent={'center'}
+        mx={4}
+      >
         {children}
       </Box>
-    </SimpleGrid>
+    </Flex>
   );
 };
 
