@@ -40,13 +40,13 @@ const VolunteerHomePage = () => {
 
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
 
-  const { user, updateUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const getEvents = async () => {
     try {
-      let userId = user?.id;
-
-      const eventsData = await Backend.get(`data/registered/${userId}`);
+      console.log
+      console.log(user)
+      const eventsData = await Backend.get(`data/registered/${user.id}`);
       console.log(eventsData);
       setEvents(eventsData.data);
       const options = { keys: ['name', 'date', 'location'], includeScore: true };
@@ -70,9 +70,10 @@ const VolunteerHomePage = () => {
   ));
 
   useEffect(() => {
-    updateUser();
-    getEvents();
-  }, []);
+    if (user) {
+      getEvents();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!fuse) {

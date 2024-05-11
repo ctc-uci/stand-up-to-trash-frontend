@@ -44,7 +44,7 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
 
   useEffect(() => {
     getEventById(eventId).then(data => setEventData(data));
-    getEventDataVolunteerId(user.id, eventId).then(data => setEventDataVolunteer(data));
+    getEventDataVolunteerId(user?.id, eventId).then(data => setEventDataVolunteer(data));
     // setDateObj(new Date(Date.parse(eventData.date)))
   }, [eventId]);
 

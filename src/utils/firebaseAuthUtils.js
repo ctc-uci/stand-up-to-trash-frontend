@@ -49,11 +49,11 @@ export const createUserInFirebase = async (email, password, redirect, navigate) 
 export const logInWithEmailAndPassWord = async (email, password, redirect, navigate) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
+    navigate(redirect);
   } catch (error) {
     console.log(`${error.code}: ${error.message}`);
     throw error;
   }
-  navigate(redirect);
 };
 
 /**
