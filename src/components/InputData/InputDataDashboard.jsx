@@ -71,8 +71,7 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
               overflow={'hidden'}
               wordBreak={true}
             >
-              Christmas Beach Cleanup
-              {/* {event?.name} */}
+              {event?.name}
             </Text>
 
             <Button
