@@ -105,8 +105,9 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
         </Flex>
 
         <Flex
-          gap={{ base: '3', xl: '10' }}
+          gap={{ base: '3', xl: '5' }}
           w={{ base: '100%', xl: '75%' }}
+          h={{ xl: '100%' }}
           // h={{ base: '10vh', xl: '100%' }}
           marginTop={{ base: '5vh', xl: '0' }}
           justifyContent={'center'}
@@ -117,8 +118,8 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             p={30}
             borderRadius="md"
             align="center"
-            w={{ base: '238px', xl: '70%' }}
-            h={{ base: '211px', xl: '80%' }}
+            w={{ base: '238px', xl: '100%' }}
+            h={{ base: '211px', xl: '100%' }}
             flexDir={'column'}
             gap={3}
             justifyContent={'center'}
@@ -139,12 +140,12 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             </Text>
           </Flex>
           <Flex
-            bg="white"
+            bg="red"
             p={30}
             borderRadius="md"
             align="center"
-            w={{ base: '238px', xl: '70%' }}
-            h={{ base: '211px', xl: '80%' }}
+            w={{ base: '238px', xl: '100%' }}
+            h={{ base: '211px', xl: '100%' }}
             flexDir={'column'}
             gap={3}
             justifyContent={'center'}
@@ -168,7 +169,9 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             </Center>
           </Flex>
 
-          <Leaderboard event_id={event.id} />
+          <Flex h={{ base: '211px', xl: '100%' }} bg="white">
+            <Leaderboard event_id={event.id} />
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
