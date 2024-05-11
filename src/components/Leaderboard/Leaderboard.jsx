@@ -1,4 +1,4 @@
-import { Card, Text, Flex, Image } from '@chakra-ui/react';
+import { Text, Flex, Image } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Backend from '../../utils/utils.js';
@@ -31,15 +31,20 @@ const LeaderboardCard = ({ event_id }) => {
       <>
         <Flex
           mx="5px"
-          my="19px"
+          // my="19px"
           display="flex"
           flexDir="column"
           alignContent="center"
           justifyContent="center"
           gap={{ base: '2px', xl: '5px' }}
-          h="80%"
+          h={{ base: '211px', xl: '100%' }}
         >
-          <Text fontSize={{ base: '22px', xl: '22px' }} fontWeight="sm" textAlign="center">
+          <Text
+            fontSize={{ base: '22px', xl: '22px' }}
+            fontWeight="sm"
+            textAlign="center"
+            marginTop={{ xl: '0' }}
+          >
             Leaderboard
           </Text>
 
@@ -153,15 +158,16 @@ const LeaderboardCard = ({ event_id }) => {
 
   return (
     <>
-      <Card
+      {/* <Card
         borderRadius="lg"
         p={3}
         shadow={'none'}
         w={{ base: '288px', xl: '100%' }}
         h={{ base: '212px', xl: '80%' }}
       >
-        <ActualLeaderboard LeaderboardArray={topThree} />
-      </Card>
+        
+      </Card> */}
+      <ActualLeaderboard LeaderboardArray={topThree} />
     </>
   );
 };
