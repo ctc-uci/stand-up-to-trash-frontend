@@ -121,13 +121,7 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
           </Flex>
         </Flex>
 
-        <Flex
-          gap={{ base: '3', xl: '5' }}
-          h={{ xl: '100%' }}
-          justifyContent={'center'}
-          alignItems={'center'}
-          maxH={200}
-        >
+        <Flex gap={3} justifyContent={'center'} alignItems={'center'} h={200}>
           <Flex
             bg="white"
             p={30}
@@ -138,6 +132,7 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             justifyContent={'center'}
             alignItems={'center'}
             width={200}
+            aspectRatio={1}
           >
             <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
               <IoMdPeople w={{ base: '42.782px', xl: '42.782px' }} color="white" />
@@ -167,6 +162,7 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             justifyContent={'center'}
             alignItems={'center'}
             width={200}
+            aspectRatio={1}
           >
             <Flex background={'#FF84B0'} p={2.5} borderRadius={'lg'}>
               <FaScaleBalanced w={{ base: '42.782px', xl: '42.782px' }} color="white" />
@@ -186,7 +182,7 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
             </Center>
           </Flex>
 
-          <Flex bg="white">
+          <Flex bg="white" borderRadius="md">
             <Leaderboard event_id={event.id} />
           </Flex>
         </Flex>
