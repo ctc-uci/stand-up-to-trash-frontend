@@ -93,7 +93,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isVie
         </Flex>
       </Td>
       <Td>
-        <Flex alignItems={'start'} justifyContent={'start'} >
+        <Flex alignItems={'start'} justifyContent={'start'}>
           <Text fontSize="md">{number_in_party}</Text>
         </Flex>
       </Td>
@@ -120,7 +120,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isVie
                     isOpen={isOpen}
                     onClose={onClose}
                     id={event_data_id}
-                    profileImage={image_url}
+                    image_url={image_url}
                     firstName={first_name}
                     lastName={last_name}
                     volunteerId={volunteer_id}

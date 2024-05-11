@@ -119,7 +119,7 @@ const Home = () => {
       <Flex justifyContent={'center'} flexDir={'column'} w={'95%'}>
         <Box justifyContent="space-between">
           <Flex flexDir={'column'} backgroundColor={'#F8F8F8'} p={8} borderRadius={'lg'} gap={8}>
-            <Heading w={'full'}>Upcoming Events</Heading>
+            <Heading w={'full'}>All Events</Heading>
             <Box display="flex" flex-direction="row" justifyContent="space-between">
               <HStack>
                 <InputGroup w="50%">
