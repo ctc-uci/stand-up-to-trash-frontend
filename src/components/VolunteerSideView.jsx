@@ -13,14 +13,15 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useContext } from 'react';
 import { Icon } from '@chakra-ui/react';
 import { getEventById } from '../utils/eventsUtils';
-import { EditIcon, CalendarIcon } from '@chakra-ui/icons';
+import { EditIcon, CalendarIcon, DeleteIcon } from '@chakra-ui/icons';
 import logos_google_calendar from '../assets/logos_google-calendar.svg';
 import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
-import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+// import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+import CancelFlowController from '../components/CancelFlowController';
 import ical, { ICalCalendarMethod } from 'ical-generator';
 import UserContext from '../utils/UserContext.jsx';
 import { getEventDataVolunteerId } from '../utils/eventsUtils';
@@ -31,6 +32,8 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   // const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
   const [dateObj, setDateObj] = useState(new Date());
+
+
 
   // only parse the date if eventData has been retrieved
   useEffect(() => {
@@ -51,6 +54,12 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     isOpen: isRegistrationFlowOpen,
     onOpen: onRegistrationFlowOpen,
     onClose: onRegistrationFlowClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isCancelFlowOpen,
+    onOpen: onCancelFlowOpen,
+    onClose: onCancelFlowClose,
   } = useDisclosure();
 
   // At the top of your component
@@ -356,16 +365,25 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         </Flex>
       </Flex>
 
-      <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
+      {/* <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
         Register
+      </Button> */}
+      <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
+        <DeleteIcon mr="3%"/>
+        <Text>Cancel Registration</Text>
       </Button>
-      {isRegistrationFlowOpen && (
+      {/* {isRegistrationFlowOpen && (
         <RegistrationFlowController
           isOpen={isRegistrationFlowOpen}
           onClose={onRegistrationFlowClose}
           eventId={eventId}
         />
-      )}
+      )} */}
+      {
+        isCancelFlowOpen && (
+          <CancelFlowController id={eventDataVolunteer[0]['id']} isOpen={isCancelFlowOpen} onClose={onCancelFlowClose}/>
+        )
+      }
     </Flex>
   ) : (
     <Text>Loading Event...</Text>

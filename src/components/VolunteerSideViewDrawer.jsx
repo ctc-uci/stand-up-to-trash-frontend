@@ -271,8 +271,11 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
               </HStack>
             </Flex>
 
-            <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
+            {/* <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
               Register
+            </Button> */}
+            <Button backgroundColor={'#0075FF'} color={'white'} >
+              Cancel
             </Button>
             {isRegistrationFlowOpen && (
               <RegistrationFlowController
