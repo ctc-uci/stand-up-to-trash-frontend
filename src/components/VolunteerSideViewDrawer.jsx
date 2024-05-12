@@ -20,8 +20,8 @@ import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from './HappeningInChip/HappeningInChip';
 import { getEventDataVolunteerId } from '../utils/eventsUtils';
 import UserContext from '../utils/UserContext.jsx';
-// import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
-import CancelFlowController from '../components/CancelFlowController';
+import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+import CancelFlowController from './EventRegistration/CancelFlowController.jsx';
 
 const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
@@ -35,13 +35,12 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
 
   // const [dateObj, setDateObj] = useState(new Date());
   const dateObj = new Date(Date.parse(eventData.date));
-  // console.log(eventData);
 
-  // const {
-  //   isOpen: isRegistrationFlowOpen,
-  //   onOpen: onRegistrationFlowOpen,
-  //   onClose: onRegistrationFlowClose,
-  // } = useDisclosure();
+  const {
+    isOpen: isRegistrationFlowOpen,
+    onOpen: onRegistrationFlowOpen,
+    onClose: onRegistrationFlowClose,
+  } = useDisclosure();
 
   const {
     isOpen: isCancelFlowOpen,
@@ -134,56 +133,58 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
               </Flex>
             </HStack>
 
-            <Box
-              p={'0.8em'}
-              borderWidth={'0.2em'}
-              borderRadius="lg"
-              marginY={'0.8em'}
-              borderColor={'#EFEFEF'}
-            >
-              <Flex justify={'space-between'} alignItems={'center'}>
-                <Text fontWeight={'bold'}>Your event status</Text>
-                <Box px={'0.4em'} borderRadius={'md'} bg="gray.200" mb={'0.3em'}>
-                  <EditIcon />
-                </Box>
-              </Flex>
-              <Flex justify={'space-between'} alignItems={'center'}>
-                <Text>Type</Text>
-                <Flex
-                  flexDir={'row'}
-                  px={'0.4em'}
-                  borderRadius={'md'}
-                  bg="gray.200"
-                  mb={'0.3em'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  gap={'0.3em'}
-                >
-                  <IoPeopleSharp color="purple" />
-                  <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}</Text>
+            {(eventDataVolunteer.length >= 1) && (
+              <Box
+                p={'0.8em'}
+                borderWidth={'0.2em'}
+                borderRadius="lg"
+                marginY={'0.8em'}
+                borderColor={'#EFEFEF'}
+              >
+                <Flex justify={'space-between'} alignItems={'center'}>
+                  <Text fontWeight={'bold'}>Your event status</Text>
+                  <Box px={'0.4em'} borderRadius={'md'} bg="gray.200" mb={'0.3em'}>
+                    <EditIcon />
+                  </Box>
                 </Flex>
-              </Flex>
-              <Flex justify={'space-between'} alignItems={'center'}>
-                <Text>Registration</Text>
-                <Flex
-                  flexDir={'row'}
-                  px={'0.4em'}
-                  borderRadius={'md'}
-                  borderWidth={'0.15em'}
-                  mb={'0.3em'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  gap={'0.3em'}
-                >
-                  <CalendarIcon color="purple" />
-                  <Text>{eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}</Text>
+                <Flex justify={'space-between'} alignItems={'center'}>
+                  <Text>Type</Text>
+                  <Flex
+                    flexDir={'row'}
+                    px={'0.4em'}
+                    borderRadius={'md'}
+                    bg="gray.200"
+                    mb={'0.3em'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    gap={'0.3em'}
+                  >
+                    <IoPeopleSharp color="purple" />
+                    <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}</Text>
+                  </Flex>
                 </Flex>
-              </Flex>
-              <Flex justify={'space-between'} alignItems={'center'}>
-                <Text>Party size</Text>
-                <Text fontWeight={'bold'}>{eventDataVolunteer[0]?.number_in_party}</Text>
-              </Flex>
-            </Box>
+                <Flex justify={'space-between'} alignItems={'center'}>
+                  <Text>Registration</Text>
+                  <Flex
+                    flexDir={'row'}
+                    px={'0.4em'}
+                    borderRadius={'md'}
+                    borderWidth={'0.15em'}
+                    mb={'0.3em'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    gap={'0.3em'}
+                  >
+                    <CalendarIcon color="purple" />
+                    <Text>{eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}</Text>
+                  </Flex>
+                </Flex>
+                <Flex justify={'space-between'} alignItems={'center'}>
+                  <Text>Party size</Text>
+                  <Text fontWeight={'bold'}>{eventDataVolunteer[0]?.number_in_party}</Text>
+                </Flex>
+              </Box>
+            )}
 
             <VStack mb={'0.5em'} gap={'0.6em'}>
               <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={'100%'}>
@@ -278,20 +279,24 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
               </HStack>
             </Flex>
 
-            {/* <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
-              Register
-            </Button> */}
-            <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
-              <DeleteIcon mr="3%"/>
-              <Text>Cancel Registration</Text>
-            </Button>
-            {/* {isRegistrationFlowOpen && (
+            {(eventDataVolunteer.length >= 1) ? (
+              <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
+                <DeleteIcon mr="3%"/>
+                <Text>Cancel Registration</Text>
+              </Button>
+            ) : (
+              <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
+                Register
+              </Button>
+            )}
+
+            {isRegistrationFlowOpen && (
               <RegistrationFlowController
                 isOpen={isRegistrationFlowOpen}
                 onClose={onRegistrationFlowClose}
                 eventId={eventId}
               />
-            )} */}
+            )}
             {
               isCancelFlowOpen && (
               <CancelFlowController id={eventDataVolunteer[0]['id']} isOpen={isCancelFlowOpen} onClose={onCancelFlowClose}/>

@@ -8,8 +8,8 @@ import {
   ModalOverlay,
   ModalCloseButton,
 } from '@chakra-ui/react';
-import Backend from '../utils/utils';
-
+import Backend from '../../utils/utils';
+import PropTypes from 'prop-types';
 
 const CancelFlowController = ({id, isOpen, onClose}) => {
   const unregisterFromEvent = async (id) => {
@@ -22,6 +22,8 @@ const CancelFlowController = ({id, isOpen, onClose}) => {
     } catch (e) {
       console.log('Error deleting event data entry', e);
     }
+    // Added this to update the page / no longer show unregistered events
+    window.location.reload(false);
   };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -38,5 +40,11 @@ const CancelFlowController = ({id, isOpen, onClose}) => {
     </Modal>
   );
 }
+
+CancelFlowController.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  id: PropTypes.number,
+};
 
 export default CancelFlowController;

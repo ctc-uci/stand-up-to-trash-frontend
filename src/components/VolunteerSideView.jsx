@@ -20,8 +20,8 @@ import { IoPeopleSharp } from 'react-icons/io5';
 import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
-// import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
-import CancelFlowController from '../components/CancelFlowController';
+import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+import CancelFlowController from './EventRegistration/CancelFlowController.jsx';
 import ical, { ICalCalendarMethod } from 'ical-generator';
 import UserContext from '../utils/UserContext.jsx';
 import { getEventDataVolunteerId } from '../utils/eventsUtils';
@@ -50,11 +50,11 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   // const dateObj = new Date(Date.parse(eventData.date));
   // console.log(eventData);
 
-  // const {
-  //   isOpen: isRegistrationFlowOpen,
-  //   onOpen: onRegistrationFlowOpen,
-  //   onClose: onRegistrationFlowClose,
-  // } = useDisclosure();
+  const {
+    isOpen: isRegistrationFlowOpen,
+    onOpen: onRegistrationFlowOpen,
+    onClose: onRegistrationFlowClose,
+  } = useDisclosure();
 
   const {
     isOpen: isCancelFlowOpen,
@@ -371,20 +371,24 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         </Flex>
       </Flex>
 
-      {/* <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
-        Register
-      </Button> */}
-      <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
-        <DeleteIcon mr="3%"/>
-        <Text>Cancel Registration</Text>
-      </Button>
-      {/* {isRegistrationFlowOpen && (
+      {(eventDataVolunteer.length >= 1) ? (
+        <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
+          <DeleteIcon mr="3%"/>
+          <Text>Cancel Registration</Text>
+        </Button>
+      ) : (
+        <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
+          Register
+        </Button>
+      )}
+
+      {isRegistrationFlowOpen && (
         <RegistrationFlowController
           isOpen={isRegistrationFlowOpen}
           onClose={onRegistrationFlowClose}
           eventId={eventId}
         />
-      )} */}
+      )}
       {
         isCancelFlowOpen && (
           <CancelFlowController id={eventDataVolunteer[0]['id']} isOpen={isCancelFlowOpen} onClose={onCancelFlowClose}/>

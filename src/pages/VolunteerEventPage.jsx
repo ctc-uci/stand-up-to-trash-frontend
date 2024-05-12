@@ -103,6 +103,7 @@ const VolunteerEventPage = () => {
           setIsOpen={setIsOpen}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
           isOpen={isOpen}
+          onlyUnregistered={true}
         />
       </Box>
       {/* Drawer Component */}

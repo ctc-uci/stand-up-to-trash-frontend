@@ -39,10 +39,10 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
       let eventsData;
       if (onlyRegistered) {
         // Will show only registered events
-        eventsData = await Backend.get(`data/unregistered/${user.id}`);
+        eventsData = await Backend.get('/events/currentEvents');
       } else {
         // Will show all events, default / previous behavior
-        eventsData = await Backend.get('/events/currentEvents');
+        eventsData = await Backend.get(`data/unregistered/${user.id}`);
       }
       setEvents(eventsData.data);
       // setDates();
