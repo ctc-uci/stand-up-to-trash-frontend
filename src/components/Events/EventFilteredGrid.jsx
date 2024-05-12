@@ -10,7 +10,7 @@ import {
   Heading,
   HStack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import PropTypes from 'prop-types';
 
@@ -18,7 +18,9 @@ import EventCard from '../../components/Events/EventCard';
 import Backend from '../../utils/utils';
 import Fuse from 'fuse.js';
 
-const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton, isOpen }) => {
+import UserContext from '../../utils/UserContext';
+
+const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton, isOpen, onlyRegistered=false }) => {
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
 
@@ -30,9 +32,18 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
   const [date, setDate] = useState('');
   const [fuse, setFuse] = useState();
 
+  const { user } = useContext(UserContext);
+
   const getEvents = async () => {
     try {
-      const eventsData = await Backend.get('/events/currentEvents');
+      let eventsData;
+      if (onlyRegistered) {
+        // Will show only registered events
+        eventsData = await Backend.get(`data/unregistered/${user.id}`);
+      } else {
+        // Will show all events, default / previous behavior
+        eventsData = await Backend.get('/events/currentEvents');
+      }
       setEvents(eventsData.data);
       // setDates();
       setLocations(getLocation(eventsData.data));
@@ -257,6 +268,7 @@ EventFilteredGrid.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
+  onlyRegistered: PropTypes.bool
 };
 
 export default EventFilteredGrid;
