@@ -29,7 +29,6 @@ import { getEventDataVolunteerId } from '../utils/eventsUtils';
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState();
   const [isReadMore, setIsReadMore] = useState(false);
-  // const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
   const [dateObj, setDateObj] = useState(new Date());
 
@@ -43,12 +42,6 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   }, [eventData]);
   const [eventDataVolunteer, setEventDataVolunteer] = useState([]);
   const { user } = useContext(UserContext);
-  // console.log('users', user);
-  // console.log('eventid', eventDataVolunteer[0]);
-
-  // const [dateObj, setDateObj] = useState(new Date());
-  // const dateObj = new Date(Date.parse(eventData.date));
-  // console.log(eventData);
 
   const {
     isOpen: isRegistrationFlowOpen,

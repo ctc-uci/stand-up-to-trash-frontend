@@ -20,7 +20,7 @@ import Fuse from 'fuse.js';
 
 import UserContext from '../../utils/UserContext';
 
-const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton, isOpen, onlyRegistered=false }) => {
+const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton, isOpen, onlyUnregistered=false }) => {
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
 
@@ -37,15 +37,14 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
   const getEvents = async () => {
     try {
       let eventsData;
-      if (onlyRegistered) {
+      if (onlyUnregistered) {
         // Will show only registered events
-        eventsData = await Backend.get('/events/currentEvents');
+        eventsData = await Backend.get(`data/unregistered/${user.id}`);
       } else {
         // Will show all events, default / previous behavior
-        eventsData = await Backend.get(`data/unregistered/${user.id}`);
+        eventsData = await Backend.get('/events/currentEvents');
       }
       setEvents(eventsData.data);
-      // setDates();
       setLocations(getLocation(eventsData.data));
       setDates(getDate(eventsData.data));
       const options = { keys: ['name', 'date', 'location'], includeScore: true }; //use date and locaiton selected
@@ -130,7 +129,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
       // result = fuseResult.filter(item => item.score <= 0.5).map(item => item.item);
       result = fuseResult.map(item => item.item);
     } else result = events;
-    // result.map((e) -> e.)
     setDisplayEvents(result);
   }, [name, location, date, fuse]);
 
@@ -208,7 +206,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
                     </Select>
                     <Select
                       bg={'white'}
-                      //   icon={<Icon as={CalendarIcon}/>}
                       onChange={handleDateChange}
                       placeholder="Select Date"
                       border={'2px solid var(--Secondary-Button-Color, #EFEFEF)'}
@@ -248,7 +245,6 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
                   <EventCard
                     {...element}
                     isSelected={selectedEvents.includes(element.id)}
-                    // showSelect={showSelect}
                     handleCheckboxChange={handleCheckboxChange}
                     getEvents={getEvents}
                     hasBorder={true}
@@ -268,7 +264,7 @@ EventFilteredGrid.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  onlyRegistered: PropTypes.bool
+  onlyUnregistered: PropTypes.bool
 };
 
 export default EventFilteredGrid;
