@@ -18,6 +18,7 @@ const CancelFlowController = ({id, isOpen, onClose}) => {
     try {
       const route = '/data/' + id
       await Backend.delete(route);
+      onClose();
     } catch (e) {
       console.log('Error deleting event data entry', e);
     }

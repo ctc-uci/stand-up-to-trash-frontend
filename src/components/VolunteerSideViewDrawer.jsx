@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useContext } from 'react';
 import { Icon } from '@chakra-ui/react';
 import { getEventById } from '../utils/eventsUtils';
-import { EditIcon, CalendarIcon } from '@chakra-ui/icons';
+import { EditIcon, CalendarIcon, DeleteIcon } from '@chakra-ui/icons';
 import logos_google_calendar from '../assets/logos_google-calendar.svg';
 import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
@@ -20,7 +20,8 @@ import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from './HappeningInChip/HappeningInChip';
 import { getEventDataVolunteerId } from '../utils/eventsUtils';
 import UserContext from '../utils/UserContext.jsx';
-import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+// import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+import CancelFlowController from '../components/CancelFlowController';
 
 const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
@@ -36,10 +37,16 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
   const dateObj = new Date(Date.parse(eventData.date));
   // console.log(eventData);
 
+  // const {
+  //   isOpen: isRegistrationFlowOpen,
+  //   onOpen: onRegistrationFlowOpen,
+  //   onClose: onRegistrationFlowClose,
+  // } = useDisclosure();
+
   const {
-    isOpen: isRegistrationFlowOpen,
-    onOpen: onRegistrationFlowOpen,
-    onClose: onRegistrationFlowClose,
+    isOpen: isCancelFlowOpen,
+    onOpen: onCancelFlowOpen,
+    onClose: onCancelFlowClose,
   } = useDisclosure();
 
   useEffect(() => {
@@ -274,16 +281,22 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
             {/* <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
               Register
             </Button> */}
-            <Button backgroundColor={'#0075FF'} color={'white'} >
-              Cancel
+            <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
+              <DeleteIcon mr="3%"/>
+              <Text>Cancel Registration</Text>
             </Button>
-            {isRegistrationFlowOpen && (
+            {/* {isRegistrationFlowOpen && (
               <RegistrationFlowController
                 isOpen={isRegistrationFlowOpen}
                 onClose={onRegistrationFlowClose}
                 eventId={eventId}
               />
-            )}
+            )} */}
+            {
+              isCancelFlowOpen && (
+              <CancelFlowController id={eventDataVolunteer[0]['id']} isOpen={isCancelFlowOpen} onClose={onCancelFlowClose}/>
+            )
+      }
           </Flex>
         </DrawerBody>
       </DrawerContent>

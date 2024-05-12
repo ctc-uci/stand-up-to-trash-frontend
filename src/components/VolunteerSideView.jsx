@@ -43,24 +43,28 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   }, [eventData]);
   const [eventDataVolunteer, setEventDataVolunteer] = useState([]);
   const { user } = useContext(UserContext);
-  console.log('users', user);
-  console.log('eventid', eventDataVolunteer[0]);
+  // console.log('users', user);
+  // console.log('eventid', eventDataVolunteer[0]);
 
   // const [dateObj, setDateObj] = useState(new Date());
   // const dateObj = new Date(Date.parse(eventData.date));
   // console.log(eventData);
 
-  const {
-    isOpen: isRegistrationFlowOpen,
-    onOpen: onRegistrationFlowOpen,
-    onClose: onRegistrationFlowClose,
-  } = useDisclosure();
+  // const {
+  //   isOpen: isRegistrationFlowOpen,
+  //   onOpen: onRegistrationFlowOpen,
+  //   onClose: onRegistrationFlowClose,
+  // } = useDisclosure();
 
   const {
     isOpen: isCancelFlowOpen,
     onOpen: onCancelFlowOpen,
     onClose: onCancelFlowClose,
   } = useDisclosure();
+
+  useEffect(() => {
+    console.log('?', eventDataVolunteer);
+  }, [eventDataVolunteer]);
 
   // At the top of your component
 
@@ -82,7 +86,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   }, [eventId, user.id]);
 
   // console.log('this is the event id:', eventId);
-  console.log('this is the', eventData);
+  // console.log('this is the', eventData);
   // console.log('d', dateObj)
   //* download ics file by calling backend
   // Assuming `eventData` is part of the state as shown previously
@@ -211,6 +215,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         </Flex>
       </HStack>
 
+      {(eventDataVolunteer.length >= 1) &&
       <Box
         p={'0.8em'}
         borderWidth={'0.2em'}
@@ -261,6 +266,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
           <Text fontWeight={'bold'}>{eventDataVolunteer[0]?.number_in_party}</Text>
         </Flex>
       </Box>
+      }
 
       <VStack mb={'0.5em'} gap={'0.6em'}>
         <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={'100%'}>
