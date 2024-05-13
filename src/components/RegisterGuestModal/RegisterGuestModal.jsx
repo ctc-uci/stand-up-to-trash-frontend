@@ -83,6 +83,7 @@ const RegisterGuestModal = ({ isOpen, onClose, eventId }) => {
       };
       const res = await Backend.post('/profiles/guest', volunteer);
       onClose();
+      window.location.reload();
       return res.data;
     } catch (error) {
       console.error('Error registering new volunteer:', error.message);

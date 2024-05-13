@@ -18,12 +18,14 @@ const VolunteerImpactSummary = ({ showLargestItemCollected }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const totalItems = 3;
 
-  const { user, updateUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    updateUser();
-    getData();
-  }, []);
+    if (user) {
+      getData();
+    }
+    
+  }, [user]);
 
   const getData = async () => {
     try {
