@@ -118,8 +118,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
 
     // Format hour and minute with leading zeros
     const formattedHour = (hour < 10 ? '0' : '') + hour;
-    const formattedMinute = (minute < 10 ? '0' : '') + minute;
-    setEventStartTime(formattedHour + ':' + formattedMinute);
+    setEventStartTime(formattedHour + ':' + minute);
   };
 
   const manipulateEndTime = () => {
@@ -132,8 +131,9 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
 
     // Format hour and minute with leading zeros
     const formattedHour = (hour < 10 ? '0' : '') + hour;
-    const formattedMinute = (minute < 10 ? '0' : '') + minute;
-    setEventEndTime(formattedHour + ':' + formattedMinute);
+    setEventEndTime(formattedHour + ':' + minute);
+    // setEventData({ ...eventData, endTime: formattedHour + ':' + minute});
+    // return formattedHour + ':' + minute;
   };
 
   useEffect(() => {
@@ -258,8 +258,9 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                           borderRadius="8px"
                           value={eventStartTime}
                           onChange={e => {
-                            setEventData({ ...eventData, startTime: e.target.value });
-                            setEventStartTime(e.target.value);
+                            manipulateStartTime((e.target.value)); //has seteventstarttime but does not update value
+                            // setEventData({ ...eventData, startTime: e.target.value });
+
                           }}
                         />
                       </Box>
@@ -274,8 +275,9 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                           borderRadius="8px"
                           value={eventEndTime}
                           onChange={e => {
-                            setEventData({ ...eventData, end_time: e.target.value });
-                            setEventEndTime(e.target.value);
+                            manipulateEndTime((e.target.value));
+                            // setEventEndTime(e.target.value);
+                            // setEventData({ ...eventData, end_time: e.target.value });
                           }}
                         />
                       </Box>
