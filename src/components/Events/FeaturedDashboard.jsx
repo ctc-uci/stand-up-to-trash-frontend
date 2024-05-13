@@ -21,7 +21,6 @@ const FeaturedDashboard = ({
 
   const getEvents = async () => {
     try {
-      // const eventsData = await Backend.get('/events');
       const eventsData = await Backend.get(`/data/unregistered/${user.id}`);
       setFeaturedEvents(eventsData.data.slice(0, numEvents));
     } catch (err) {
