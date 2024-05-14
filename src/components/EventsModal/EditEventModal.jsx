@@ -20,8 +20,7 @@ import {
 import { useState, useEffect } from 'react';
 import Dropzone from '../Dropzone.tsx';
 import { theme } from '../Icons/EventsModalIcons.jsx';
-// import { postEvent } from '../../utils/eventsUtils.js';
-// import { putEvent } from '../../utils/eventsUtils.js';
+import { putEvent } from '../../utils/eventsUtils.js';
 import PropTypes from 'prop-types';
 
 import React from 'react';
@@ -40,7 +39,9 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
   //     'Stand Up To Trash BEACH CLEANUP WAIVER OF LIABILITY AND EXPRESS ASSUMPTION OF RISK (PLEASE READ CAREFULLY) I agree as follows: 1. I am volunteering my services for the Stand Up To Trash Beach Cleanup; 2. I will perform assigned tasks that are within my physical capability, and I will not undertake tasks that are beyond my ability; 3. I will not participate if under the influence of alcohol or any drug that could impair my physical or mental abilities; 4. I have received appropriate instruction regarding this Event, including appropriate safety and emergency procedures, I fully understand those instructions, and I agree, after proper inspection, to use only the supplies, tools and equipment provided by Event organizers; 5. I will perform only those tasks assigned, observe all safety rules, and use care in the performance of my assignments; 6. Stand Up To Trash will not be held liable or responsible in any way for any injury, death or other damages to me or my family, heirs, or assigns that may occur as a result of my participation in the Event, or as a result of product liability or the negligence, whether passive or active, of any party, including Released Parties, in connection with the Event. I understand that cleaning up beaches or inland water areas involves certain inherent risks, including but not limited to, the risks of possible injury, infection or loss of life as a result of contact with needles, condoms, metal objects, burning embers or other hazardous materials, wild animals, poisonous plants, snakes, or from over-exertion or environmental conditions, including but not limited to flooding, rockslides, sun exposure, or dangerous terrain. No known physical or health limitation prevents me from safely participating in this Event. In Consideration for being allowed to participate, I personally assume all risks, whether foreseen or unforeseen, in connection with the Event of any harm, injury or damage that may befall me as a participant. If I am injured during the Event, I authorize any physician licensed in California to perform such emergency treatment as he or she believes, in his or her sole judgment, may be necessary. I am over the age of eighteen and legally competent to sign this liability release, or I have acquired the written consent of my parent or guardian. I understand that the terms herein are contractual and not a mere recital, this instrument is legally binding, and I have signed this document of my own free act. I agree to allow my image to be used in published materials and web sites that promote the programs of Stand Up To Trash. By including my email address below, I understand that Stand Up To Trash may contact me about future Stand Up To Trash events and other Public Education programs. I HEREBY RELEASE AND HOLD HARMLESS Stand Up To Trash FROM ANY CLAIM OR LAWSUIT FOR PERSONAL INJURY, PROPERTY DAMAGE, OR WRONGFUL DEATH, BY ME, MY FAMILY, ESTATE, HEIRS, OR ASSIGNS, ARISING OUT OF PARTICIPATION IN THE EVENT, INCLUDING BOTH CLAIMS ARISING DURING THE ACTIVITY AND AFTER I COMPLETE THE ACTIVITY, AND INCLUDING CLAIMS BASED ON NEGLIGENCE OF OTHER PARTICIPANTS OR THE RELEASED PARTIES, WHETHER PASSIVE OR ACTIVE. I HAVE FULLY INFORMED MYSELF OF THE CONTENTS OF THIS LIABILITY RELEASE AND ASSUMPTION OF RISK. Signature of Participant City, State, Zip E-mail IF PARTICIPANT IS UNDER 18, THE PARENT (OR GUARDIAN, IF ANY) MUST SIGN. I am the parent or legal guardian of the above participant and he/she has my permission to participate in the Stand Up To Trash Beach Cleanup. I have read and agree to the provisions stated above for myself and the participant. Further, I understand and agree that the sponsors and organizers of the Event are not responsible for supervision of minor participants and that if I allow the above minor to participate without my supervision, I assume all the risks from such participation.',
   // });
 
-  const [eventData, setEventData] = useState();
+  // const [eventData, setEventData] = useState();
+  const [eventData, setEventData] = useState(event);
+  console.log(eventData);
   const [isLoading, setIsLoading] = useState(false);
   const [eventDate, setEventDate] = useState('');
   const [eventStartTime, setEventStartTime] = useState('');
@@ -58,7 +59,12 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
         isClosable: true,
       });
       // TODO: API request is comment out for now due to form change
-      // const response = await putEvent(eventData);
+      // console.log(`EVENTDATA: ${eventData}`);
+      // console.log(eventData);
+
+
+      const response = await putEvent(eventData);
+      console.log(response);
       toast.close(toastIdRef.current);
       toast({
         title: 'Event Edited.',
@@ -69,7 +75,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
         isClosable: true,
       });
       onClose();
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       console.log(err);
       toast({
@@ -85,17 +91,17 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
 
   const handleCancel = () => {
     onClose();
-    setEventData({
-      id: '',
-      name: '',
-      description: '',
-      imageUrl: '',
-      date: '',
-      startTime: '',
-      endTime: '',
-      waiver:
-        'Stand Up To Trash BEACH CLEANUP WAIVER OF LIABILITY AND EXPRESS ASSUMPTION OF RISK (PLEASE READ CAREFULLY) I agree as follows: 1. I am volunteering my services for the Stand Up To Trash Beach Cleanup; 2. I will perform assigned tasks that are within my physical capability, and I will not undertake tasks that are beyond my ability; 3. I will not participate if under the influence of alcohol or any drug that could impair my physical or mental abilities; 4. I have received appropriate instruction regarding this Event, including appropriate safety and emergency procedures, I fully understand those instructions, and I agree, after proper inspection, to use only the supplies, tools and equipment provided by Event organizers; 5. I will perform only those tasks assigned, observe all safety rules, and use care in the performance of my assignments; 6. Stand Up To Trash will not be held liable or responsible in any way for any injury, death or other damages to me or my family, heirs, or assigns that may occur as a result of my participation in the Event, or as a result of product liability or the negligence, whether passive or active, of any party, including Released Parties, in connection with the Event. I understand that cleaning up beaches or inland water areas involves certain inherent risks, including but not limited to, the risks of possible injury, infection or loss of life as a result of contact with needles, condoms, metal objects, burning embers or other hazardous materials, wild animals, poisonous plants, snakes, or from over-exertion or environmental conditions, including but not limited to flooding, rockslides, sun exposure, or dangerous terrain. No known physical or health limitation prevents me from safely participating in this Event. In Consideration for being allowed to participate, I personally assume all risks, whether foreseen or unforeseen, in connection with the Event of any harm, injury or damage that may befall me as a participant. If I am injured during the Event, I authorize any physician licensed in California to perform such emergency treatment as he or she believes, in his or her sole judgment, may be necessary. I am over the age of eighteen and legally competent to sign this liability release, or I have acquired the written consent of my parent or guardian. I understand that the terms herein are contractual and not a mere recital, this instrument is legally binding, and I have signed this document of my own free act. I agree to allow my image to be used in published materials and web sites that promote the programs of Stand Up To Trash. By including my email address below, I understand that Stand Up To Trash may contact me about future Stand Up To Trash events and other Public Education programs. I HEREBY RELEASE AND HOLD HARMLESS Stand Up To Trash FROM ANY CLAIM OR LAWSUIT FOR PERSONAL INJURY, PROPERTY DAMAGE, OR WRONGFUL DEATH, BY ME, MY FAMILY, ESTATE, HEIRS, OR ASSIGNS, ARISING OUT OF PARTICIPATION IN THE EVENT, INCLUDING BOTH CLAIMS ARISING DURING THE ACTIVITY AND AFTER I COMPLETE THE ACTIVITY, AND INCLUDING CLAIMS BASED ON NEGLIGENCE OF OTHER PARTICIPANTS OR THE RELEASED PARTIES, WHETHER PASSIVE OR ACTIVE. I HAVE FULLY INFORMED MYSELF OF THE CONTENTS OF THIS LIABILITY RELEASE AND ASSUMPTION OF RISK. Signature of Participant City, State, Zip E-mail IF PARTICIPANT IS UNDER 18, THE PARENT (OR GUARDIAN, IF ANY) MUST SIGN. I am the parent or legal guardian of the above participant and he/she has my permission to participate in the Stand Up To Trash Beach Cleanup. I have read and agree to the provisions stated above for myself and the participant. Further, I understand and agree that the sponsors and organizers of the Event are not responsible for supervision of minor participants and that if I allow the above minor to participate without my supervision, I assume all the risks from such participation.',
-    });
+    // setEventData({
+    //   id: event.id,
+    //   name: event.name,
+    //   description: event.description,
+    //   imageUrl: event.imageUrl,
+    //   date: event.date,
+    //   startTime: event.startTime,
+    //   endTime: event,
+    //   waiver:
+    //     'Stand Up To Trash BEACH CLEANUP WAIVER OF LIABILITY AND EXPRESS ASSUMPTION OF RISK (PLEASE READ CAREFULLY) I agree as follows: 1. I am volunteering my services for the Stand Up To Trash Beach Cleanup; 2. I will perform assigned tasks that are within my physical capability, and I will not undertake tasks that are beyond my ability; 3. I will not participate if under the influence of alcohol or any drug that could impair my physical or mental abilities; 4. I have received appropriate instruction regarding this Event, including appropriate safety and emergency procedures, I fully understand those instructions, and I agree, after proper inspection, to use only the supplies, tools and equipment provided by Event organizers; 5. I will perform only those tasks assigned, observe all safety rules, and use care in the performance of my assignments; 6. Stand Up To Trash will not be held liable or responsible in any way for any injury, death or other damages to me or my family, heirs, or assigns that may occur as a result of my participation in the Event, or as a result of product liability or the negligence, whether passive or active, of any party, including Released Parties, in connection with the Event. I understand that cleaning up beaches or inland water areas involves certain inherent risks, including but not limited to, the risks of possible injury, infection or loss of life as a result of contact with needles, condoms, metal objects, burning embers or other hazardous materials, wild animals, poisonous plants, snakes, or from over-exertion or environmental conditions, including but not limited to flooding, rockslides, sun exposure, or dangerous terrain. No known physical or health limitation prevents me from safely participating in this Event. In Consideration for being allowed to participate, I personally assume all risks, whether foreseen or unforeseen, in connection with the Event of any harm, injury or damage that may befall me as a participant. If I am injured during the Event, I authorize any physician licensed in California to perform such emergency treatment as he or she believes, in his or her sole judgment, may be necessary. I am over the age of eighteen and legally competent to sign this liability release, or I have acquired the written consent of my parent or guardian. I understand that the terms herein are contractual and not a mere recital, this instrument is legally binding, and I have signed this document of my own free act. I agree to allow my image to be used in published materials and web sites that promote the programs of Stand Up To Trash. By including my email address below, I understand that Stand Up To Trash may contact me about future Stand Up To Trash events and other Public Education programs. I HEREBY RELEASE AND HOLD HARMLESS Stand Up To Trash FROM ANY CLAIM OR LAWSUIT FOR PERSONAL INJURY, PROPERTY DAMAGE, OR WRONGFUL DEATH, BY ME, MY FAMILY, ESTATE, HEIRS, OR ASSIGNS, ARISING OUT OF PARTICIPATION IN THE EVENT, INCLUDING BOTH CLAIMS ARISING DURING THE ACTIVITY AND AFTER I COMPLETE THE ACTIVITY, AND INCLUDING CLAIMS BASED ON NEGLIGENCE OF OTHER PARTICIPANTS OR THE RELEASED PARTIES, WHETHER PASSIVE OR ACTIVE. I HAVE FULLY INFORMED MYSELF OF THE CONTENTS OF THIS LIABILITY RELEASE AND ASSUMPTION OF RISK. Signature of Participant City, State, Zip E-mail IF PARTICIPANT IS UNDER 18, THE PARENT (OR GUARDIAN, IF ANY) MUST SIGN. I am the parent or legal guardian of the above participant and he/she has my permission to participate in the Stand Up To Trash Beach Cleanup. I have read and agree to the provisions stated above for myself and the participant. Further, I understand and agree that the sponsors and organizers of the Event are not responsible for supervision of minor participants and that if I allow the above minor to participate without my supervision, I assume all the risks from such participation.',
+    // });
   };
 
   const manipulateDate = () => {
@@ -108,48 +114,67 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
     setEventDate(formattedDate);
   };
 
-  const manipulateStartTime = () => {
-    if (!eventData || !eventData.start_time) {
+  const manipulateTime = (userTime) => {
+    if(userTime == ''){
       return '';
     }
-    const time = eventData.start_time.substring(0, 5);
-    const hour = parseInt(time.substring(0, 2));
-    const minute = time.substring(3);
 
-    // Format hour and minute with leading zeros
-    const formattedHour = (hour < 10 ? '0' : '') + hour;
-    setEventStartTime(formattedHour + ':' + minute);
+    // const time = userTime.substring(0, 5);
+    // const hour = parseInt(userTime.substring(0, 2));
+    // const minute = userTime.substring(3); 
+
+    // const formattedHour = (hour < 10 ? '0' : '') + hour;
+    // return `${formattedHour}:${minute}`; 
+    return `${userTime}:00+00`;
   };
 
-  const manipulateEndTime = () => {
-    if (!eventData || !eventData.end_time) {
-      return '';
-    }
-    const time = eventData.end_time.substring(0, 5);
-    const hour = parseInt(time.substring(0, 2));
-    const minute = time.substring(3);
+  // const handleStartTimeChange = (e) => {
+  //   const startTime = e.target.value;
+  //   setEventStartTime(startTime); 
+  
+  //   const manipulatedStartTime = manipulateTime(startTime); 
+  //   setEventData(prevData => ({ ...prevData, start_time: manipulatedStartTime })); 
+  // };
+  
+  // // For manipulating the end time
+  // const handleEndTimeChange = (e) => {
+  //   const endTime = e.target.value;
+  //   setEventEndTime(endTime); 
+  
+  //   const manipulatedEndTime = manipulateTime(endTime); 
+  //   setEventData(prevData => ({ ...prevData, end_time: manipulatedEndTime })); 
+  // };
 
-    // Format hour and minute with leading zeros
-    const formattedHour = (hour < 10 ? '0' : '') + hour;
-    setEventEndTime(formattedHour + ':' + minute);
-    // setEventData({ ...eventData, endTime: formattedHour + ':' + minute});
-    // return formattedHour + ':' + minute;
+  const handleStartTimeChange = (e) => {
+    const startTime = e.target.value;
+    setEventStartTime(startTime); 
+    
+    
+    const manipulatedStartTime = manipulateTime(startTime); 
+    setEventData(prevData => ({ ...prevData, start_time: manipulatedStartTime })); 
   };
+  
+  // For manipulating the end time
+  const handleEndTimeChange = (e) => {
+    const endTime = e.target.value;
+    setEventEndTime(endTime); 
+    
+    // console.log(endTime); 
+    const manipulatedEndTime = manipulateTime(endTime); 
+    setEventData(prevData => ({ ...prevData, end_time: manipulatedEndTime })); 
+  };
+
 
   useEffect(() => {
-    //  setEventDate(date);
-    //  setEventStartTime(startTime);
-    //  setEventEndTime(endTime);
-    setEventData(event);
+    // console.log(eventData);
     manipulateDate();
+    // setEventStartTime(event?.start_time?.substring(0, 5) || '');
+    // setEventEndTime(event?.end_time?.substring(0, 5) || '');
   }, [isOpen]);
 
   useEffect(() => {
-    if (eventData) {
-      manipulateStartTime();
-      manipulateEndTime();
-    }
-  }, [eventData]);
+      setEventData(event);
+  }, [event]); 
 
   return (
     <ChakraProvider theme={extendTheme(theme)}>
@@ -219,7 +244,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                 placeholder="Beach Cleanup"
                 value={eventData?.name}
                 onChange={e => {
-                  setEventData({ ...eventData, name: e.target.value });
+                  setEventData({...eventData, name: e.target.value} );
                 }}
               />
               <FormControl mt={4}>
@@ -239,7 +264,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                         borderRadius="8px"
                         value={eventDate}
                         onChange={e => {
-                          setEventData({ ...eventData, date: e.target.value });
+                          setEventData({...eventData, date: e.target.value} );
                           setEventDate(e.target.value);
                         }}
                       />
@@ -257,11 +282,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                           size="lg"
                           borderRadius="8px"
                           value={eventStartTime}
-                          onChange={e => {
-                            manipulateStartTime((e.target.value)); //has seteventstarttime but does not update value
-                            // setEventData({ ...eventData, startTime: e.target.value });
-
-                          }}
+                          onChange={handleStartTimeChange}
                         />
                       </Box>
                       <Box flex="1">
@@ -274,11 +295,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                           size="lg"
                           borderRadius="8px"
                           value={eventEndTime}
-                          onChange={e => {
-                            manipulateEndTime((e.target.value));
-                            // setEventEndTime(e.target.value);
-                            // setEventData({ ...eventData, end_time: e.target.value });
-                          }}
+                          onChange={handleEndTimeChange}
                         />
                       </Box>
                     </Flex>
@@ -295,7 +312,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                 height={'109px'}
                 value={eventData?.description}
                 onChange={e => {
-                  setEventData({ ...eventData, description: e.target.value });
+                  setEventData({...eventData, description: e.target.value} );
                 }}
               />
               <FormLabel paddingTop={'10px'} fontWeight={'700'} fontSize={'12px'}>
@@ -307,7 +324,7 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                 height={'109px'}
                 value={eventData?.waiver}
                 onChange={e => {
-                  setEventData({ ...eventData, description: e.target.value });
+                  setEventData({...eventData, waiver: e.target.value} );
                 }}
               />
             </FormControl>
