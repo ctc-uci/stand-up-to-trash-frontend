@@ -163,6 +163,21 @@ const EditEventsModal = ({ event, isOpen, onClose }) => {
                 value={eventData?.name || ''}
                 onChange={e => handleInputChange('name', e.target.value)}
               />
+              <FormLabel
+                paddingTop={'10px'}
+                fontWeight={'700'}
+                fontSize={'12px'}
+                mt={1}
+                color={'gray'}
+              >
+                Location
+              </FormLabel>
+              <Input
+                type="text"
+                placeholder="34199 Selva Rd. Irvine, CA 92629"
+                value={eventData?.location || ''}
+                onChange={e => handleInputChange('location', e.target.value)}
+              />
               <FormControl mt={4}>
                 <Box border="1px solid" borderColor="gray.200" p={4} borderRadius="lg">
                   <FormLabel fontWeight={'700'} fontSize={'18px'} mb={2}>

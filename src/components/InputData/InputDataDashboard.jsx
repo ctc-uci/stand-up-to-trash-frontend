@@ -15,13 +15,14 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
   // formats dbms date into Month Day, Year
   const getDateString = () => {
     const dateObject = new Date(Date.parse(event['date']));
-    const dateString = `${[
-      dateObject.getMonth(),
-    ]}/${dateObject.getDate()}/${dateObject.getFullYear()}`;
+
     if (isNaN(dateObject)) {
       // on page load, prevents displaying "Undefined" as date
       return '';
     }
+
+    const dateString = `${dateObject.getMonth() + 1}/${dateObject.getDate()}/${dateObject.getFullYear()}`;
+
     return dateString;
   };
 
