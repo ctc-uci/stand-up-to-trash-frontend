@@ -101,7 +101,7 @@ const RenderVolunteerRow = ({ volunteer, changeIsCheckedIn, isCheckinPage, isVie
             justifyContent={'center'}
           >
             <Image src={status === 'Checked-in' ? checked_in : registered} />
-            <Text fontSize="md" textOverflow={'ellipsis'} maxW={48} overflow={'hidden'}>
+            <Text fontSize={status === 'Checked-in' ? "xs" : "md"} mr={status === 'Checked-in' ? 2 : 0}>
               {status}
             </Text>
           </Flex>
