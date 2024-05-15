@@ -97,7 +97,7 @@ const Volunteers = () => {
   return (
     <>
       {/* Registered + Checked-In */}
-      <Flex direction="column" ml={{ base: '0', xl: '15rem' }} bg="#E8EDF3" p="10" gap="10">
+      <Flex direction="column" ml={{ base: '0', xl: '15%' }} bg="#E8EDF3" p="10" gap="10">
         <Box bg="#F8F8F8" p="1rem" borderRadius="md">
           <Flex minW="95%" bg={'#F8F8F8'} borderRadius="lg" flexDir={'column'}>
             <HamburgerIcon
@@ -262,7 +262,7 @@ const Volunteers = () => {
                     whiteSpace: 'normal',
                     wordWrap: 'break-word',
                     color: 'white',
-                    my: "3"
+                    my: '3',
                   }}
                   height={'fit-content'}
                 >

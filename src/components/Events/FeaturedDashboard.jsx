@@ -34,7 +34,7 @@ const FeaturedDashboard = ({
       flexDir={'column'}
       alignItems={'center'}
       bg="#E6EAEF"
-      ml={{ base: '3vw', xl: '15rem' }}
+      ml={{ base: '3vw', xl: '15%' }}
       mr={{ base: '3vw' }}
       pt={4}
     >

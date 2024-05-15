@@ -102,7 +102,7 @@ const Navbar = () => {
     <>
       {/* Box for entire navbar */}
       {/* Flag: Navbar responsive (Use 15%) */}
-      <Box position="fixed" top="0" w={{ base: 'full', xl: '15rem' }} float="left">
+      <Box position="fixed" top="0" w={{ base: 'full', xl: '15%' }} float="left">
         {/* Box for entire nabar with coloring */}
         <Box
           h="100vh"
@@ -246,10 +246,10 @@ const Navbar = () => {
                 alignItems: 'center',
                 gap: '10px',
                 padding: '12px',
-                marginLeft: '14px',
-                marginRight: '13px',
-                marginBottom: '18px',
-                borderRadius: '12px',
+                // marginLeft: '14px',
+                // marginRight: '13px',
+                // marginBottom: '18px',
+                // borderRadius: '12px',
                 backgroundColor: '#FFF',
                 border: '1px',
               }}
@@ -261,29 +261,30 @@ const Navbar = () => {
               href="#"
             >
               {/* User image */}
-              <Box style={{ borderRadius: '50%' }}>
+              {/* <Box style={{ borderRadius: '50%' }}> */}
                 <Image
                   src={user?.image_url}
-                  width="45px"
-                  height="45px"
+                  width="2.75vw"
+                  height="2.75vw"
                   borderRadius="full"
                   objectFit="cover"
                 />
-              </Box>
+              {/* </Box> */}
               <Box
                 style={{
                   flexDirection: 'column',
                   alignItems: 'center',
                 }}
+                maxWidth={{ base: '219px', md: '150px', xl: '50%' }}
               >
                 {/* User name */}
                 <Text
-                  maxWidth={{ base: '219px', md: '150px', xl: '100px' }}
+                  // maxWidth={{ base: '219px', md: '150px', xl: '100px' }}
                   overflow="hidden"
                   textOverflow="ellipsis"
                   fontWeight='800'
                   color='#000000'
-                  fontSize='14px'
+                  fontSize='1vw'
                   lineHeight='25px'
                   textAlign='left'
                   marginTop='-1px'
@@ -294,7 +295,7 @@ const Navbar = () => {
 
                 <Tag
                   style={{
-                    fontSize: '12px',
+                    fontSize: '0.75vw',
                     fontWeight: '500',
                     lineHeight: '16px',
                     color: '#717171',

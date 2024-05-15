@@ -18,7 +18,7 @@ import SettingsField from '../components/DummyVolunteerProfile/SettingsField';
 
 export const DummyVolunteerProfilePage = () => {
   return (
-    <Box bg={'#e6eaee'} minHeight="100vh" paddingLeft={'15rem'}>
+    <Box bg={'#e6eaee'} minHeight="100vh" paddingLeft={'15%'}>
       {/* Profile Card and Account Information */}
       <Grid templateColumns="repeat(3, 1fr)" gap={4}>
         <GridItem colSpan={1}>

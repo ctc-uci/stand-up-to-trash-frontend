@@ -44,8 +44,8 @@ const VolunteerHomePage = () => {
 
   const getEvents = async () => {
     try {
-      console.log
-      console.log(user)
+      console.log;
+      console.log(user);
       const eventsData = await Backend.get(`data/registered/${user.id}`);
       console.log(eventsData);
       setEvents(eventsData.data);
@@ -113,7 +113,7 @@ const VolunteerHomePage = () => {
         bg="#E6EAEF"
         minH="100vh"
         width={'100%'}
-        ml={{ base: '0', xl: '15rem' }}
+        ml={{ base: '0', xl: '15%' }}
         py={10}
       >
         <Flex w={{ base: '85%', md: '95%' }} flexDir={'column'}>

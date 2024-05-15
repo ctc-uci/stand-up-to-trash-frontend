@@ -125,12 +125,12 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
 
   return (
     <>
-    {/* Flag: Navbar responsive (Use 15%) */}
+      {/* Flag: Navbar responsive (Use 15%) */}
       <Flex
         flexDir={'column'}
         alignItems={'center'}
         bg="#E6EAEF"
-        ml={{ base: '2vw', xl: '15rem' }}
+        ml={{ base: '2vw', xl: '15%' }}
         mr={{ base: '2vw' }}
         pt={4}
         mb="32px"
