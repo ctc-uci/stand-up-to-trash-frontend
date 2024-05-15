@@ -143,16 +143,15 @@ const LoginForm = () => {
       <Box style={{ width: '100%' }} height={'fit-content'} mt={'auto'} mb="auto">
         <form onSubmit={handleSubmit(handleLogin)}>
           <Center>
-            <Heading marginTop={10}>Log In</Heading>
+            <Heading marginTop={{ base: 5, md: 10 }}>Log In</Heading>
           </Center>
           <FormControl isInvalid={errors.email} w={'100%'} d="block">
             {/* <FormLabel>Email address</FormLabel> */}
             <Center>
               <Input
                 maxW={'20rem'}
-                marginTop={30}
+                marginTop={{ base: 7, md: 30 }}
                 borderRadius={8}
-                fontFamily={'Avenir'}
                 placeholder="Email"
                 boxShadow={'0 4px 2px -2px gray'}
                 type="email"
@@ -170,7 +169,6 @@ const LoginForm = () => {
                 maxW={'20rem'}
                 marginTop={30}
                 borderRadius={8}
-                fontFamily={'Avenir'}
                 placeholder="Password"
                 type="password"
                 boxShadow={'0 4px 2px -2px gray'}
@@ -200,7 +198,6 @@ const LoginForm = () => {
                 marginTop={2}
                 fontWeight="bold"
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '20px',
                   fontWeight: '500',
                 }}
@@ -236,7 +233,6 @@ const LoginForm = () => {
 
               <Box
                 style={{
-                  fontFamily: 'Avenir',
                   fontSize: '18px',
                   fontWeight: '800',
                   textAlign: 'center',
@@ -246,7 +242,6 @@ const LoginForm = () => {
                   style={{
                     background: 'none',
                     height: '24px',
-                    fontFamily: 'Avenir',
                     fontSize: '18px',
                     fontWeight: '800',
                     textAlign: 'center',
@@ -267,7 +262,6 @@ const LoginForm = () => {
                         background: 'none',
                         height: '24px',
                         color: '#478CB6',
-                        fontFamily: 'Avenir',
                         fontSize: '18px',
                         fontWeight: '800',
                         textAlign: 'center',

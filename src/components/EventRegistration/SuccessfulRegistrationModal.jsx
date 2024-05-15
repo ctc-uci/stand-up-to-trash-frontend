@@ -39,14 +39,13 @@ const SuccessfulRegistrationModal = ({ ...props }) => {
         </svg>
       </Flex>
       <Box>
-        <Text fontFamily={'Avenir'} fontSize={'42px'} align={'center'} fontWeight={800}>
+        <Text fontSize={'42px'} align={'center'} fontWeight={800}>
           {`You're all set!`}
         </Text>
         <Text
           color={'#717171'}
           fontSize={'22px'}
           align={'center'}
-          fontFamily={'Avenir'}
           fontWeight={800}
         >
           {`We're excited to see you at the event!`}

@@ -40,41 +40,57 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
 
   return (
     <Flex
-      minW="95%"
       bg={'#F8F8F8'}
       borderRadius="lg"
       alignItems="center"
-      p={10}
-      w={{ base: '0em', xl: '15em' }}
-      h={{ base: '30em', xl: '25em' }}
+      p={18}
+      w={'100%'}
+      justifyContent={'space-between'}
     >
-      <Flex direction={{ base: 'column', xl: 'row' }} w={'full'} alignItems="center" h={'full'}>
+      <Flex
+        direction={{ base: 'column', xl: 'row' }}
+        w={'full'}
+        h={'full'}
+        justifyContent={'space-between'}
+        alignItems="center"
+        gap={7}
+      >
         <Flex flexDir={'column'} w={{ base: '100%', xl: '45%' }}>
           <Box>{event && <HappeningInChip date={new Date(Date.parse(event['date']))} />}</Box>
-          <HStack>
+
+          <HStack justify={'space-between'} gap={4}>
             <Text
               fontSize={{ base: '36px', xl: '30px' }}
               fontWeight="bold"
               color={'rgba(0, 0, 0, 0.75)'}
-              w={{ base: '50%' }}
+              style={{
+                display: '-webkit-box',
+                lineClamp: 1,
+                WebkitLineClamp: 1,
+                WebkitBoxOrient: 'vertical',
+              }}
+              overflow={'hidden'}
+              wordBreak={true}
             >
               {event?.name}
             </Text>
+
             <Button
               leftIcon={<FaPen />}
               onClick={onOpen}
               size="sm"
-              ml="3"
               variant="outline"
               colorScheme="blue"
+              minW={70}
             >
               Edit
             </Button>
+
             <EditEventModal event={event} isOpen={isOpen} onClose={onClose} />
           </HStack>
 
           <Flex mt={3} w="70%" justify={'space-between'}>
-            <Flex flexDir={{ base: 'row', xl: 'column' }} gap={3}>
+            <Flex flexDir={{ base: 'row', xl: 'column' }} gap={2}>
               <Flex alignItems={'center'} gap={2}>
                 <Flex bg={'#7B7C7D'} p={2} borderRadius={'lg'}>
                   <CalendarIcon color={'white'} />
@@ -105,75 +121,70 @@ const InputDataDashboard = ({ event, checkin, trashCollected }) => {
           </Flex>
         </Flex>
 
-        <Flex
-          gap={{ base: '3', xl: '10' }}
-          w={{ base: '100%', xl: '75%' }}
-          // h={{ base: '10vh', xl: '100%' }}
-          marginTop={{ base: '5vh', xl: '0' }}
-          justifyContent={'center'}
-          alignItems={'center'}
-        >
+        <Flex gap={3} justifyContent={'center'} alignItems={'center'} h={200}>
           <Flex
             bg="white"
             p={30}
             borderRadius="md"
             align="center"
-            w={{ base: '238px', xl: '70%' }}
-            h={{ base: '211px', xl: '80%' }}
             flexDir={'column'}
             gap={3}
             justifyContent={'center'}
             alignItems={'center'}
+            width={200}
+            aspectRatio={1}
           >
             <Flex background={'#915EFF'} p={2.5} borderRadius={'lg'}>
               <IoMdPeople w={{ base: '42.782px', xl: '42.782px' }} color="white" />
             </Flex>
-            <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '22px' }}>
-              Checked-In
-            </Text>
-            <Text
-              fontSize={{ base: '40px', xl: '50px' }}
-              fontWeight={'bold'}
-              color={'rgba(0, 0, 0, 0.75)'}
-            >
-              {checkin}
-            </Text>
+            <Flex>
+              <Center>
+                <Text fontWeight={'medium'} fontSize={18}>
+                  Checked-In
+                </Text>
+              </Center>
+            </Flex>
+
+            <Center>
+              <Text fontSize={32} fontWeight={'bold'} color={'rgba(0, 0, 0, 0.75)'}>
+                {checkin}
+              </Text>
+            </Center>
           </Flex>
+
           <Flex
             bg="white"
             p={30}
             borderRadius="md"
             align="center"
-            w={{ base: '238px', xl: '70%' }}
-            h={{ base: '211px', xl: '80%' }}
             flexDir={'column'}
             gap={3}
             justifyContent={'center'}
             alignItems={'center'}
+            width={200}
+            aspectRatio={1}
           >
             <Flex background={'#FF84B0'} p={2.5} borderRadius={'lg'}>
               <FaScaleBalanced w={{ base: '42.782px', xl: '42.782px' }} color="white" />
             </Flex>
             <Flex>
               <Center>
-                <Text fontWeight={'medium'} fontSize={{ base: '18px', xl: '22px' }}>
+                <Text fontWeight={'medium'} fontSize={18}>
                   Trash Collected
                 </Text>
               </Center>
             </Flex>
 
             <Center>
-              <Text
-                fontSize={{ base: '40px', xl: '50px' }}
-                fontWeight={'bold'}
-                color={'rgba(0, 0, 0, 0.75)'}
-              >
+              <Text fontSize={32} fontWeight={'bold'} color={'rgba(0, 0, 0, 0.75)'}>
                 {trashCollected} lb
               </Text>
             </Center>
           </Flex>
 
-          <Leaderboard event_id={event.id} />
+          <Flex bg="white" borderRadius="md">
+            <Leaderboard event_id={event.id} />
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

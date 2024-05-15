@@ -4,7 +4,7 @@ import './App.css';
 import EventPage from './pages/EventPage';
 import HomePage from './pages/HomePage';
 import DummyProfiles from './pages/DummyProfiles';
-import DummyProfilePage from './pages/DummyProfilePage';
+import ProfilePage from './pages/ProfilePage';
 import DummySearchVolunteerEvents from './pages/DummySearchVolunteerEvents';
 import DummySuccessfulLogin from './pages/DummySuccessfulLogin';
 import DummyStatsPage from './pages/DummyStatsPage';
@@ -103,7 +103,7 @@ const App = () => {
                       path="/past-events"
                       element={
                         <ProtectedRoute pageType="admin">
-                          <PastEvents />{' '}
+                          <PastEvents />
                         </ProtectedRoute>
                       }
                     />
@@ -111,7 +111,7 @@ const App = () => {
                       path="/past-events/:eventId"
                       element={
                         <ProtectedRoute pageType="admin">
-                          <ViewEvents />{' '}
+                          <ViewEvents />
                         </ProtectedRoute>
                       }
                     />
@@ -236,7 +236,7 @@ const App = () => {
                       path="/profile"
                       element={
                         <ProtectedRoute pageType="settings">
-                          <DummyProfilePage />
+                          <ProfilePage />
                         </ProtectedRoute>
                       }
                     />

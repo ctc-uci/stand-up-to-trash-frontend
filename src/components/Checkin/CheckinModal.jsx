@@ -22,8 +22,8 @@ import { FaUserAlt } from 'react-icons/fa'; // Icon for when there is no picture
 import GroupIcon from '../../Assets/groupIcon.svg';
 
 const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
-  const [numberOfParticipants, setNumberOfParticipants] = useState('');
-  const [submittable, setSubmittable] = useState(false);
+  const [numberOfParticipants, setNumberOfParticipants] = useState(1);
+  const [submittable, setSubmittable] = useState(true);
 
   const handleInput = e => {
     setNumberOfParticipants(e.target.value);
@@ -33,7 +33,7 @@ const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
   };
 
   const handleCheckIn = async () => {
-    if (volunteer && typeof volunteer === 'object' && volunteer.id) {
+    if (volunteer && typeof volunteer === 'object' && volunteer.id && volunteer.event_data_id) {
       await onCheckInConfirm(volunteer, numberOfParticipants); // Pass the entire volunteer object
       onClose();
     } else {
@@ -76,7 +76,9 @@ const CheckinModal = ({ isOpen, onClose, volunteer, onCheckInConfirm }) => {
                 >
                   <FaUserAlt color="#49B164" />
                   <Text fontSize="xs" ml={1} fontWeight="bold">
-                    {volunteer.number_in_party === 1 ? 'Individual' : 'Group'}
+                    {!volunteer.number_in_party || volunteer.number_in_party == 1
+                      ? 'Individual'
+                      : 'Group'}
                   </Text>
                 </Flex>
               </Flex>
@@ -128,6 +130,7 @@ CheckinModal.propTypes = {
     email: PropTypes.string,
     image_url: PropTypes.string,
     number_in_party: PropTypes.number,
+    event_data_id: PropTypes.number,
   }),
 };
 

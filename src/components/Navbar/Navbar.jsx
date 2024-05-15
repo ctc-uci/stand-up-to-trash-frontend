@@ -16,7 +16,6 @@ import {
   VolunteersIconBlue,
   VolunteersIconGrey,
   SupportIconGrey,
-  SettingsIconGrey,
   LogOutIcon,
   QRCodeIconGrey,
   QRCodeIconBlue,
@@ -54,6 +53,7 @@ const NavbarButton = ({ buttonText, path, navigate, UnfocusedIcon, FocusedIcon }
       )}
       <Text
         style={{
+          // Flag: Navbar responsive (Use 1.25 vw and 1vw)
           fontSize: location.pathname === path ? '18px' : '16px',
           fontWeight: '500',
           lineHeight: '25px',
@@ -86,7 +86,6 @@ const Navbar = () => {
 
   // For the support and settings button at the bottom above the user
   const supportPath = '/playground';
-  const settingsPath = '/playground';
 
   // For logout in case it changes from /logoutv2
   const logoutPath = '/loginv2';
@@ -102,6 +101,7 @@ const Navbar = () => {
   return (
     <>
       {/* Box for entire navbar */}
+      {/* Flag: Navbar responsive (Use 15%) */}
       <Box position="fixed" top="0" w={{ base: 'full', xl: '15rem' }} float="left">
         {/* Box for entire nabar with coloring */}
         <Box
@@ -216,7 +216,7 @@ const Navbar = () => {
               paddingLeft="10px"
               marginLeft="14px"
               marginRight="14px"
-              marginBottom="-13px"
+              marginBottom="2px"
               borderRadius="4px"
               cursor="pointer" // Add this to change cursor to pointer
               onClick={e => {
@@ -234,37 +234,6 @@ const Navbar = () => {
                 }}
               >
                 Support
-              </Text>
-            </Box>
-
-            {/* Settings button */}
-            <Box
-              height="49px"
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              gap="10px"
-              paddingLeft="10px"
-              marginLeft="14px"
-              marginRight="14px"
-              marginBottom="2px"
-              borderRadius="4px"
-              cursor="pointer"
-              onClick={e => {
-                e.preventDefault();
-                navigate(settingsPath);
-              }}
-            >
-              <SettingsIconGrey />
-              <Text
-                style={{
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  lineHeight: '25px',
-                  textAlign: 'center',
-                }}
-              >
-                Settings
               </Text>
             </Box>
 
@@ -309,15 +278,16 @@ const Navbar = () => {
               >
                 {/* User name */}
                 <Text
-                  style={{
-                    fontWeight: '800',
-                    color: '#000000',
-                    fontSize: '14px',
-                    lineHeight: '25px',
-                    textAlign: 'left',
-                    overflowY: 'auto',
-                    marginTop: '-1px',
-                  }}
+                  maxWidth={{ base: '219px', md: '150px', xl: '100px' }}
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  fontWeight='800'
+                  color='#000000'
+                  fontSize='14px'
+                  lineHeight='25px'
+                  textAlign='left'
+                  marginTop='-1px'
+                  whiteSpace='nowrap'
                 >
                   {user?.first_name} {user?.last_name}
                 </Text>

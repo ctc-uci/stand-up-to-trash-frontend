@@ -24,7 +24,13 @@ const RenderEventRow = ({ event }) => {
           <Flex>
             <Image src={image_url} boxSize="4rem" borderRadius="full" />
             <Flex direction="column" ml={3} mt={4} g={1} overflow="hidden">
-              <Text color={'#2D3748'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+              <Text
+                color={'#2D3748'}
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                maxWidth={{ base: '100px', xl: '300px' }}
+              >
                 {name}
               </Text>
             </Flex>

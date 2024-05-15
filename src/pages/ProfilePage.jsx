@@ -21,6 +21,7 @@ import {
   Checkbox,
   Flex,
 } from '@chakra-ui/react';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import { BsPersonFill } from 'react-icons/bs';
 import { RiErrorWarningFill } from 'react-icons/ri';
 import SettingsCard from '../components/DummyVolunteerProfile/SettingsCard';
@@ -29,6 +30,8 @@ import EditProfilePictureModal from '../components/EditProfilePictureModal';
 import { useContext, useEffect, useRef, useState } from 'react';
 import RoleContext from '../utils/RoleContext';
 import UserContext from '../utils/UserContext';
+import NavbarContext from '../utils/NavbarContext';
+
 import {
   EditFirstNameModal,
   EditLastNameModal,
@@ -51,9 +54,11 @@ function usePrevious(value) {
   return ref.current;
 }
 
-export const DummyProfilePage = () => {
+export const ProfilePage = () => {
   const { user, updateUser } = useContext(UserContext);
   const { role, setRole } = useContext(RoleContext);
+  const { onNavbarDrawerOpen } = useContext(NavbarContext);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure();
   const [confirmed, setConfirmed] = useState(false);
@@ -137,6 +142,15 @@ export const DummyProfilePage = () => {
       justifyContent={{ base: 'center', md: 'flex-start', lg: 'flex-start' }}
       alignItems={{ base: 'center', md: 'flex-start', lg: 'flex-start' }}
     >
+      <Flex display={{ base: 'flex', xl: 'none' }} w={'full'} pt={5} pl={5}>
+        <HamburgerIcon
+          color={'#717171'}
+          boxSize={50}
+          display={{ base: 'flex', xl: 'none' }}
+          onClick={onNavbarDrawerOpen}
+        />
+      </Flex>
+
       {/* Profile Card and Account Information */}
       <Grid
         templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(5, 3fr)', lg: 'repeat(3, 1fr)' }}
@@ -147,7 +161,7 @@ export const DummyProfilePage = () => {
           <Card
             bg="white"
             borderRadius={10}
-            mt={20}
+            mt={{ base: '10', sm: '20' }}
             ml="auto"
             mr="2rem"
             w="full"
@@ -197,7 +211,16 @@ export const DummyProfilePage = () => {
               padding={'2%'}
             >
               <Stack spacing="1">
-                <Heading size="sm" mt={2} mb={1} maxW={'150px'} margin={3}>
+                <Heading
+                  size="sm"
+                  mt={2}
+                  mb={1}
+                  maxW={{ base: '150px', md: '200px', xl: '225px' }}
+                  textOverflow="ellipsis"
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  margin={3}
+                >
                   {`${user.first_name} ${user.last_name}`}
                 </Heading>
                 <Center>
@@ -260,7 +283,15 @@ export const DummyProfilePage = () => {
             </Center>
             <Center bg={'#efefef'} borderBottomRadius={10}>
               <Stack spacing="1">
-                <Heading size="md" mt={2} mb={1}>
+                <Heading
+                  size="md"
+                  mt={2}
+                  mb={1}
+                  maxW={{ base: '150px', md: '200px', xl: '225px' }}
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  textOverflow="ellipsis"
+                >
                   {`${user.first_name} ${user.last_name}`}
                 </Heading>
                 <Center>
@@ -498,4 +529,4 @@ export const DummyProfilePage = () => {
   );
 };
 
-export default DummyProfilePage;
+export default ProfilePage;

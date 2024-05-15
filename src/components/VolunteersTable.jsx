@@ -54,9 +54,9 @@ const RenderVolunteerRow = ({ volunteer }) => {
     <>
       <Tr key={id} bg="#FFFFFF" fontWeight={'medium'}>
         <Td>
-          <Flex>
+          <Flex maxWidth={{ base: '200px', md: '300px', lg: '300px', xl: '300px' }}>
             <Image src={image_url} boxSize="4rem" borderRadius="full" objectFit={'cover'} />
-            <Flex direction="column" ml={3} mt={4} g={1} overflow="hidden">
+            <Flex direction="column" ml={3} mt={4} g={1} maxW="75%">
               <Text color={'#2D3748'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
                 {first_name} {last_name}
               </Text>

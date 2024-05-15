@@ -44,10 +44,6 @@ const EventCard = ({
   hasBorder = false,
   isFeatured = false,
 }) => {
-  // const { onOpen } = useDisclosure();
-
-  
-
   // Placeholder for testing a high-res image
   // image_url =
   //   'https://s3-alpha-sig.figma.com/img/4683/1e77/df1444c9bf86d4882d7252f8c2939d3f?Expires=1713139200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=o5biccW0iouIqgojcte5OMBpWeqQBhdUheAzCF5dUsHGLEYO8lWMb9df75l8NeItiYS93QbY-ZMSRTotplxK2OkExz9nI1Iwy8~HBEZp3cVR9j16wsLAXgB8Vb7GwMCK9d4eFILp6yydgRfr8~Dhd7SwwjCYSgGx94czHpMdLTC231Ss1WmOJiy5PsvfnytNOE3FxumVN95mZ5s-tB5ywvh3h8zqj6-d8FBI2NZG5vd0KqJeiahVxBJQtHxoxmJk1MXrBaQiXuG8aNlUwjGl~wdsqzQ7Aq2~A0x6BfrZUNbVsmmFowD4cdmTPuRTyex4Gc1IjR7AtrAdp2P48iSBTQ__';
@@ -91,10 +87,13 @@ const EventCard = ({
     const eventEndHour = end_time.split(':')[0];
     const eventEndMin = end_time.split(':')[1];
 
-
-
-    return todayDate.getHours() >=  eventStartHour && todayDate.getHours() <= eventEndHour && todayDate.getMinutes() >= eventStartMin && todayDate.getMinutes() <= eventEndMin
-}
+    return (
+      todayDate.getHours() >= eventStartHour &&
+      todayDate.getHours() <= eventEndHour &&
+      todayDate.getMinutes() >= eventStartMin &&
+      todayDate.getMinutes() <= eventEndMin
+    );
+  };
 
   return (
     <>
@@ -104,8 +103,7 @@ const EventCard = ({
         flexDir="column"
         cursor={'pointer'}
         justifyContent={sideBySideCard ? 'center' : 'start'}
-        // onClick={() => (showSelect ? handleCheckboxChange(id): onOpen())} we don't know why onOpen is here, we remove!
-        onClick={() => (handleCheckboxChange(id))}
+        onClick={() => (showSelect ? handleCheckboxChange(id) : handleCheckboxChange(id))}
         border={hasBorder ? '2px solid var(--Secondary-Button-Color, #EFEFEF)' : ''}
         borderRadius="18px"
         width={'Fill (674px)'}
@@ -154,14 +152,13 @@ const EventCard = ({
             mt={sideBySideCard ? 0 : 5}
             mb={sideBySideCard ? 0 : 5}
           >
-            {checkDate() ? <HappeningNowChip mb={5} /> : <HappeningInChip date={dateObj} mb={5} /> }
-          
+            {checkDate() ? <HappeningNowChip mb={5} /> : <HappeningInChip date={dateObj} mb={5} />}
+
             {name.length > 30 ? (
               <Text
                 fontWeight="800"
                 fontSize="24px"
                 lineHeight="30px"
-                fontFamily="Avenir"
                 mt={2}
                 overflowWrap={'break-word'}
               >
@@ -172,7 +169,6 @@ const EventCard = ({
                 fontWeight="800"
                 fontSize={{ base: '20px', md: '24px' }}
                 lineHeight="30px"
-                fontFamily="Avenir"
                 mt={2}
                 overflowWrap={'break-word'}
               >
@@ -180,7 +176,6 @@ const EventCard = ({
               </Text>
             )}
             <Text
-              fontFamily="Avenir"
               fontSize={sideBySideCard ? { base: '12px', md: '15px' } : '16px'}
               fontWeight={{ base: 500, md: 300 }}
               mt={1}
@@ -306,7 +301,7 @@ EventCard.propTypes = {
   hasBorder: PropTypes.bool,
   isFeatured: PropTypes.bool,
   start_time: PropTypes.string,
-  end_time: PropTypes.string
+  end_time: PropTypes.string,
 };
 
 export default EventCard;
