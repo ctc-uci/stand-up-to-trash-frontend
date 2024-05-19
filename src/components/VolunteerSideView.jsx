@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useContext } from 'react';
 import { Icon } from '@chakra-ui/react';
 import { getEventById } from '../utils/eventsUtils';
-import { EditIcon, CalendarIcon } from '@chakra-ui/icons';
+import { EditIcon, CalendarIcon, DeleteIcon } from '@chakra-ui/icons';
 import logos_google_calendar from '../assets/logos_google-calendar.svg';
 import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
@@ -21,6 +21,7 @@ import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
+import CancelFlowController from './EventRegistration/CancelFlowController.jsx';
 import ical, { ICalCalendarMethod } from 'ical-generator';
 import UserContext from '../utils/UserContext.jsx';
 import { getEventDataVolunteerId } from '../utils/eventsUtils';
@@ -28,9 +29,10 @@ import { getEventDataVolunteerId } from '../utils/eventsUtils';
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState();
   const [isReadMore, setIsReadMore] = useState(false);
-  // const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
   const [dateObj, setDateObj] = useState(new Date());
+
+
 
   // only parse the date if eventData has been retrieved
   useEffect(() => {
@@ -40,18 +42,22 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   }, [eventData]);
   const [eventDataVolunteer, setEventDataVolunteer] = useState([]);
   const { user } = useContext(UserContext);
-  console.log('users', user);
-  console.log('eventid', eventDataVolunteer[0]);
-
-  // const [dateObj, setDateObj] = useState(new Date());
-  // const dateObj = new Date(Date.parse(eventData.date));
-  // console.log(eventData);
 
   const {
     isOpen: isRegistrationFlowOpen,
     onOpen: onRegistrationFlowOpen,
     onClose: onRegistrationFlowClose,
   } = useDisclosure();
+
+  const {
+    isOpen: isCancelFlowOpen,
+    onOpen: onCancelFlowOpen,
+    onClose: onCancelFlowClose,
+  } = useDisclosure();
+
+  useEffect(() => {
+    console.log('?', eventDataVolunteer);
+  }, [eventDataVolunteer]);
 
   // At the top of your component
 
@@ -73,7 +79,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   }, [eventId, user.id]);
 
   // console.log('this is the event id:', eventId);
-  console.log('this is the', eventData);
+  // console.log('this is the', eventData);
   // console.log('d', dateObj)
   //* download ics file by calling backend
   // Assuming `eventData` is part of the state as shown previously
@@ -202,6 +208,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         </Flex>
       </HStack>
 
+      {(eventDataVolunteer.length >= 1) &&
       <Box
         p={'0.8em'}
         borderWidth={'0.2em'}
@@ -252,6 +259,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
           <Text fontWeight={'bold'}>{eventDataVolunteer[0]?.number_in_party}</Text>
         </Flex>
       </Box>
+      }
 
       <VStack mb={'0.5em'} gap={'0.6em'}>
         <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={'100%'}>
@@ -356,9 +364,17 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         </Flex>
       </Flex>
 
-      <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
-        Register
-      </Button>
+      {(eventDataVolunteer.length >= 1) ? (
+        <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
+          <DeleteIcon mr="3%"/>
+          <Text>Cancel Registration</Text>
+        </Button>
+      ) : (
+        <Button backgroundColor={'#0075FF'} color={'white'} onClick={onRegistrationFlowOpen}>
+          Register
+        </Button>
+      )}
+
       {isRegistrationFlowOpen && (
         <RegistrationFlowController
           isOpen={isRegistrationFlowOpen}
@@ -366,6 +382,11 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
           eventId={eventId}
         />
       )}
+      {
+        isCancelFlowOpen && (
+          <CancelFlowController id={eventDataVolunteer[0]['id']} isOpen={isCancelFlowOpen} onClose={onCancelFlowClose}/>
+        )
+      }
     </Flex>
   ) : (
     <Text>Loading Event...</Text>

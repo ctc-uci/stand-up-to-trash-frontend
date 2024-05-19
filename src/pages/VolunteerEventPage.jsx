@@ -7,7 +7,6 @@ import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
 import { useBreakpoint, useDisclosure } from '@chakra-ui/react';
 import VolunteerSideViewDrawer from '../components/VolunteerSideViewDrawer.jsx';
-// import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
 
 const VolunteerEventPage = () => {
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
@@ -25,27 +24,11 @@ const VolunteerEventPage = () => {
     onDrawerOpen();
   };
 
-  // const handleClose = () => {
-  //   onDrawerClose();
-  // };
+
   console.log('test' + currentEventId);
-  // const {
-  //   isOpen: isRegistrationFlowOpen,
-  //   onOpen: onRegistrationFlowOpen,
-  //   onClose: onRegistrationFlowClose,
-  // } = useDisclosure({ defaultIsOpen: false });
 
   return (
     <Flex dir="column">
-      {/* controller */}
-      {/* <Button onClick={onRegistrationFlowOpen}>Open!</Button>
-      {isRegistrationFlowOpen && (
-        <RegistrationFlowController
-          isOpen={isRegistrationFlowOpen}
-          onClose={onRegistrationFlowClose}
-          eventId={currentEventId}
-        />
-      )} */}
       {/* <RegistrationModal /> */}
       <Box bg="#E6EAEF" flexGrow={1} minW="1px" minH={'100vh'}>
         <Flex
@@ -103,6 +86,7 @@ const VolunteerEventPage = () => {
           setIsOpen={setIsOpen}
           setShowOpenDrawerButton={setShowOpenDrawerButton}
           isOpen={isOpen}
+          onlyUnregistered={true}
         />
       </Box>
       {/* Drawer Component */}

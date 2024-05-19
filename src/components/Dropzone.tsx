@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import axios from 'axios';
 import React, { useMemo } from 'react';
 import Backend from '../utils/utils';

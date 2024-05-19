@@ -54,7 +54,8 @@ const AddEventsModal = () => {
         isClosable: true,
       });
       // TODO: API request is comment out for now due to form change
-      await postEvent(eventData);
+      const res = await postEvent(eventData);
+      console.log(res);
       toast.close(toastIdRef.current);
       toast({
         title: 'Event Created.',
@@ -65,7 +66,7 @@ const AddEventsModal = () => {
         isClosable: true,
       });
       onClose();
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       console.log(err);
       toast({
@@ -215,6 +216,7 @@ const AddEventsModal = () => {
                         size="lg"
                         borderRadius="8px"
                         onChange={e => {
+                          console.log(`date: ${e.target.value}`);
                           setEventData({ ...eventData, date: e.target.value });
                         }}
                       />
