@@ -44,10 +44,7 @@ const VolunteerHomePage = () => {
 
   const getEvents = async () => {
     try {
-      console.log
-      console.log(user)
       const eventsData = await Backend.get(`data/registered/${user.id}`);
-      console.log(eventsData);
       setEvents(eventsData.data);
       const options = { keys: ['name', 'date', 'location'], includeScore: true };
       setFuse(new Fuse(eventsData.data, options));
@@ -92,6 +89,7 @@ const VolunteerHomePage = () => {
       result = fuseResult.map(item => item.item);
     } else result = events;
     setDisplayEvents(result);
+    console.log(result);
   }, [name, events, location, date, fuse]);
 
   const [currentEventId, setCurrentEventId] = useState(-1);
