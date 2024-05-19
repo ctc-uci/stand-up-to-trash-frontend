@@ -76,7 +76,7 @@ const Navbar = () => {
 
   useEffect(() => {
     updateUser();
-  }, []);
+  }, [updateUser]);
 
   // Change the paths for each button since these might change
   const homePath = '/';
@@ -252,6 +252,7 @@ const Navbar = () => {
                 // borderRadius: '12px',
                 backgroundColor: '#FFF',
                 border: '1px',
+                width: 'full'
               }}
               onClick={e => {
                 e.preventDefault();
@@ -264,8 +265,8 @@ const Navbar = () => {
               {/* <Box style={{ borderRadius: '50%' }}> */}
                 <Image
                   src={user?.image_url}
-                  width="2.75vw"
-                  height="2.75vw"
+                  width="20%"
+                  aspectRatio={1}
                   borderRadius="full"
                   objectFit="cover"
                 />
@@ -284,7 +285,7 @@ const Navbar = () => {
                   textOverflow="ellipsis"
                   fontWeight='800'
                   color='#000000'
-                  fontSize='1vw'
+                  fontSize='75%'
                   lineHeight='25px'
                   textAlign='left'
                   marginTop='-1px'
@@ -295,7 +296,7 @@ const Navbar = () => {
 
                 <Tag
                   style={{
-                    fontSize: '0.75vw',
+                    fontSize: '56.25%',
                     fontWeight: '500',
                     lineHeight: '16px',
                     color: '#717171',

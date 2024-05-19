@@ -13,7 +13,8 @@ import { IoDocumentText } from 'react-icons/io5';
 import VolunteersTable from '../components/VolunteersTable';
 import { useState, useEffect, useContext } from 'react';
 import Backend from '../utils/utils';
-import { ExternalLinkIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { HamburgerIcon } from '@chakra-ui/icons';
+import { AiOutlineExport } from 'react-icons/ai';
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import Fuse from 'fuse.js';
 import { TrophyIcon } from '../components/Icons/TrophyIcon';
@@ -255,7 +256,7 @@ const Volunteers = () => {
                 justifyContent={{ base: 'center', lg: 'start' }}
                 alignItems={'end'}
               >
-                <Button
+                {/* <Button
                   backgroundColor={'#0075FF'}
                   fontSize="lg"
                   style={{
@@ -266,13 +267,26 @@ const Volunteers = () => {
                   }}
                   height={'fit-content'}
                 >
-                  <ExternalLinkIcon marginRight="2" boxSize="6" color={'white'} />{' '}
+                  <ExternalLinkIcon marginRight="2" boxSize="1vw" color={'white'} />{' '}
                   <CSVLink
                     data={volunteerData.length ? volunteerData : []}
                     filename="./data.csv"
                     headers={header}
                   >
-                    Export All
+                    Export
+                  </CSVLink>
+                </Button> */}
+                <Button
+                  colorScheme={'messenger'}
+                  leftIcon={<AiOutlineExport></AiOutlineExport>}
+                  size="md"
+                >
+                  <CSVLink
+                    data={volunteerData.length ? volunteerData : []}
+                    filename="./data.csv"
+                    headers={header}
+                  >
+                    Export Volunteer Data
                   </CSVLink>
                 </Button>
               </Box>

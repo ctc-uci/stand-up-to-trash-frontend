@@ -10,7 +10,7 @@ import {
   Heading,
   HStack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import PropTypes from 'prop-types';
 
@@ -30,7 +30,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
   const [date, setDate] = useState('');
   const [fuse, setFuse] = useState();
 
-  const getEvents = async () => {
+  const getEvents = useCallback(async () => {
     try {
       const eventsData = await Backend.get('/events/currentEvents');
       setEvents(eventsData.data);
@@ -42,7 +42,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     } catch (err) {
       console.log(`Error getting events: `, err.message);
     }
-  };
+  }, []);
 
   const getLocation = data => {
     let location = [];
@@ -75,7 +75,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
 
   useEffect(() => {
     getEvents();
-  }, []);
+  }, [getEvents]);
 
   const handleLocationChange = event => {
     const selectedLocation = event.target.value;
@@ -121,7 +121,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     } else result = events;
     // result.map((e) -> e.)
     setDisplayEvents(result);
-  }, [name, location, date, fuse]);
+  }, [name, location, date, fuse, events]);
 
   return (
     <>
@@ -130,7 +130,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
         flexDir={'column'}
         alignItems={'center'}
         bg="#E6EAEF"
-        ml={{ base: '2vw', xl: '15%' }}
+        ml={{ base: '2vw', xl: isOpen ? '22%' : '15%' }}
         mr={{ base: '2vw' }}
         pt={4}
         mb="32px"

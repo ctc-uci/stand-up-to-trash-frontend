@@ -13,7 +13,7 @@ import {
   useBreakpoint,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useCallback } from 'react';
 import { SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 import EventCard from '../components/Events/EventCard';
@@ -42,7 +42,7 @@ const VolunteerHomePage = () => {
 
   const { user } = useContext(UserContext);
 
-  const getEvents = async () => {
+  const getEvents = useCallback(async () => {
     try {
       console.log;
       console.log(user);
@@ -54,7 +54,7 @@ const VolunteerHomePage = () => {
     } catch (err) {
       console.log(`Error getting events: `, err.message);
     }
-  };
+  }, [user]);
 
   const eventCards = displayEvents.map(element => (
     <GridItem
@@ -73,7 +73,7 @@ const VolunteerHomePage = () => {
     if (user) {
       getEvents();
     }
-  }, [user]);
+  }, [getEvents, user]);
 
   useEffect(() => {
     if (!fuse) {
@@ -231,7 +231,7 @@ const VolunteerHomePage = () => {
           </Box>
         </Flex>
       </Flex>
-      {breakpoint == 'base' ? (
+      {breakpoint != 'xl' ? (
         <VolunteerSideViewDrawer
           eventId={currentEventId}
           isOpen={isOpen}

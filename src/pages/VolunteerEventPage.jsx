@@ -106,7 +106,7 @@ const VolunteerEventPage = () => {
         />
       </Box>
       {/* Drawer Component */}
-      {breakpoint == 'base' ? (
+      {breakpoint != 'xl' ? (
         <VolunteerSideViewDrawer
           eventId={currentEventId}
           isOpen={isDrawerOpen}

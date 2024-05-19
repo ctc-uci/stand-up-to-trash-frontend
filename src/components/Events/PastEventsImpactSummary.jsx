@@ -124,7 +124,7 @@ const PastEventsImpactSummary = () => {
             filename="./data.csv"
             headers={header}
           >
-            Export Data
+            Export Past Events Data
           </CSVLink>
         </Button>
       </VStack>
