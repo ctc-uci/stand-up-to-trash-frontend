@@ -147,8 +147,9 @@ const InputDataPage = () => {
       bg="#E6EAEF"
       minH="100vh"
       ml={{ base: '0', xl: '15rem' }}
+      px={5}
     >
-      <Flex minW="95%" justifyContent={'space-between'} mt={10} mb={5}>
+      <Flex width={'100%'} justifyContent={'space-between'} mt={10} mb={5}>
         <Flex alignItems={'center'} gap={3}>
           <HamburgerIcon
             color={'#717171'}
@@ -169,16 +170,18 @@ const InputDataPage = () => {
         </Flex>
         <CheckinInputPageToggle eventId={eventId} isCheckinPage={false} />
       </Flex>
+
       <InputDataDashboard
         event={event}
         registered={registered}
         checkin={checkin}
         trashCollected={trashCollected}
       />
-      <Container borderRadius={'xl'} mt={10} bg={'#F8F8F8'} minW="95%">
+
+      <Container borderRadius={'xl'} my={18} p={18} bg={'#F8F8F8'} minW={'100%'}>
         {/* SEARCH BAR---- */}
-        <Flex gap={3} mt={5} mb={5}>
-          <InputGroup mt={10}>
+        <Flex gap={3} mb={5}>
+          <InputGroup>
             <InputLeftElement pointerEvents="none" top={'6px'} left={'5px'}>
               <GreyCustomSearchIcon w={'24px'} h={'18px'} />
             </InputLeftElement>
