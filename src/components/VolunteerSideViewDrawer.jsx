@@ -1,11 +1,5 @@
 import { Flex, Button, Image, Text, HStack, Box, VStack, IconButton } from '@chakra-ui/react';
-import {
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerBody,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Drawer, DrawerOverlay, DrawerContent, DrawerBody, useDisclosure } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { useState, useEffect, useContext } from 'react';
 import { Icon } from '@chakra-ui/react';
@@ -25,6 +19,10 @@ import CancelFlowController from './EventRegistration/CancelFlowController.jsx';
 const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerButton }) => {
   const [eventData, setEventData] = useState([]);
   const [isReadMore, setIsReadMore] = useState(false);
+  const [showReadMore, setShowReadMore] = useState(false);
+  const slicedDescription = !isReadMore
+    ? eventData?.description?.slice(0, 200)
+    : eventData?.description;
   const [calendarSelected, setCalendarSelected] = useState(false);
   const [mapSelected, setMapSelected] = useState(false);
   const [eventDataVolunteer, setEventDataVolunteer] = useState([]);
@@ -48,10 +46,14 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
   } = useDisclosure();
 
   useEffect(() => {
+    if (eventData.description) {
+      setShowReadMore(eventData.description.length > 200);
+    }
+    
     getEventById(eventId).then(data => setEventData(data));
     getEventDataVolunteerId(user?.id, eventId).then(data => setEventDataVolunteer(data));
     // setDateObj(new Date(Date.parse(eventData.date)))
-  }, [eventId, user?.id]);
+  }, [eventData.description, eventId, user?.id]);
 
   function formatDate(dateString) {
     const months = [
@@ -131,7 +133,7 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
               </Flex>
             </HStack>
 
-            {(eventDataVolunteer.length >= 1) && (
+            {eventDataVolunteer.length >= 1 && (
               <Box
                 p={'0.8em'}
                 borderWidth={'0.2em'}
@@ -158,7 +160,9 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
                     gap={'0.3em'}
                   >
                     <IoPeopleSharp color="purple" />
-                    <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}</Text>
+                    <Text>
+                      {eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}
+                    </Text>
                   </Flex>
                 </Flex>
                 <Flex justify={'space-between'} alignItems={'center'}>
@@ -174,7 +178,9 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
                     gap={'0.3em'}
                   >
                     <CalendarIcon color="purple" />
-                    <Text>{eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}</Text>
+                    <Text>
+                      {eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}
+                    </Text>
                   </Flex>
                 </Flex>
                 <Flex justify={'space-between'} alignItems={'center'}>
@@ -206,9 +212,9 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
               >
                 {formatDate(dateObj)}
               </Text>
-              <Text noOfLines={isReadMore ? null : 3}>{eventData.description}</Text>
+              <Text>{slicedDescription}</Text>
               <Flex w={'100%'}>
-                {!isReadMore && (
+                {!isReadMore && showReadMore && (
                   <Text
                     color={'#0075FF'}
                     fontWeight={600}
@@ -216,7 +222,7 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
                     _hover={{
                       cursor: 'pointer',
                     }}
-                    onClick={() => setIsReadMore(true)}
+                    onClick={() => setIsReadMore(!isReadMore)}
                   >
                     Read more...
                   </Text>
@@ -277,9 +283,9 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
               </HStack>
             </Flex>
 
-            {(eventDataVolunteer.length >= 1) ? (
-              <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
-                <DeleteIcon mr="3%"/>
+            {eventDataVolunteer.length >= 1 ? (
+              <Button colorScheme="gray" color={'#919191'} onClick={onCancelFlowOpen}>
+                <DeleteIcon mr="3%" />
                 <Text>Cancel Registration</Text>
               </Button>
             ) : (
@@ -295,11 +301,13 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
                 eventId={eventId}
               />
             )}
-            {
-              isCancelFlowOpen && (
-              <CancelFlowController id={eventDataVolunteer[0]['id']} isOpen={isCancelFlowOpen} onClose={onCancelFlowClose}/>
-            )
-      }
+            {isCancelFlowOpen && (
+              <CancelFlowController
+                id={eventDataVolunteer[0]['id']}
+                isOpen={isCancelFlowOpen}
+                onClose={onCancelFlowClose}
+              />
+            )}
           </Flex>
         </DrawerBody>
       </DrawerContent>

@@ -17,7 +17,7 @@ import { EditIcon, CalendarIcon, DeleteIcon } from '@chakra-ui/icons';
 import logos_google_calendar from '../assets/logos_google-calendar.svg';
 import logos_google_maps from '../assets/logos_google-maps.svg';
 import { IoPeopleSharp } from 'react-icons/io5';
-import { IoMdLink } from 'react-icons/io';
+// import { IoMdLink } from 'react-icons/io';
 import { RxCaretRight } from 'react-icons/rx';
 import HappeningInChip from '../components/HappeningInChip/HappeningInChip';
 import RegistrationFlowController from '../components/EventRegistration/RegistrationFlowController.jsx';
@@ -27,12 +27,14 @@ import UserContext from '../utils/UserContext.jsx';
 import { getEventDataVolunteerId } from '../utils/eventsUtils';
 
 const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
-  const [eventData, setEventData] = useState();
+  const [eventData, setEventData] = useState([]);
   const [isReadMore, setIsReadMore] = useState(false);
+  const [showReadMore, setShowReadMore] = useState(false);
+  const slicedDescription = !isReadMore
+    ? eventData?.description?.slice(0, 200)
+    : eventData?.description;
   const [mapSelected, setMapSelected] = useState(false);
   const [dateObj, setDateObj] = useState(new Date());
-
-
 
   // only parse the date if eventData has been retrieved
   useEffect(() => {
@@ -62,6 +64,10 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
   // At the top of your component
 
   useEffect(() => {
+    if (eventData.description) {
+      setShowReadMore(eventData.description.length > 200);
+    }
+
     if (eventId) {
       getEventById(eventId)
         .then(data => {
@@ -76,7 +82,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
           .catch(error => console.error('Failed to fetch event volunteer data:', error));
       }
     }
-  }, [eventId, user.id]);
+  }, [eventData.description, eventId, user.id]);
 
   // console.log('this is the event id:', eventId);
   // console.log('this is the', eventData);
@@ -208,58 +214,58 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         </Flex>
       </HStack>
 
-      {(eventDataVolunteer.length >= 1) &&
-      <Box
-        p={'0.8em'}
-        borderWidth={'0.2em'}
-        borderRadius="lg"
-        marginY={'0.8em'}
-        borderColor={'#EFEFEF'}
-      >
-        <Flex justify={'space-between'} alignItems={'center'}>
-          <Text fontWeight={'bold'}>Your event status</Text>
-          <Box px={'0.4em'} borderRadius={'md'} bg="gray.200" mb={'0.3em'}>
-            <EditIcon />
-          </Box>
-        </Flex>
-        <Flex justify={'space-between'} alignItems={'center'}>
-          <Text>Type</Text>
-          <Flex
-            flexDir={'row'}
-            px={'0.4em'}
-            borderRadius={'md'}
-            bg="gray.200"
-            mb={'0.3em'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            gap={'0.3em'}
-          >
-            <IoPeopleSharp color="purple" />
-            <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}</Text>
+      {eventDataVolunteer.length >= 1 && (
+        <Box
+          p={'0.8em'}
+          borderWidth={'0.2em'}
+          borderRadius="lg"
+          marginY={'0.8em'}
+          borderColor={'#EFEFEF'}
+        >
+          <Flex justify={'space-between'} alignItems={'center'}>
+            <Text fontWeight={'bold'}>Your event status</Text>
+            <Box px={'0.4em'} borderRadius={'md'} bg="gray.200" mb={'0.3em'}>
+              <EditIcon />
+            </Box>
           </Flex>
-        </Flex>
-        <Flex justify={'space-between'} alignItems={'center'}>
-          <Text>Registration</Text>
-          <Flex
-            flexDir={'row'}
-            px={'0.4em'}
-            borderRadius={'md'}
-            borderWidth={'0.15em'}
-            mb={'0.3em'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            gap={'0.3em'}
-          >
-            <CalendarIcon color="purple" />
-            <Text>{eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}</Text>
+          <Flex justify={'space-between'} alignItems={'center'}>
+            <Text>Type</Text>
+            <Flex
+              flexDir={'row'}
+              px={'0.4em'}
+              borderRadius={'md'}
+              bg="gray.200"
+              mb={'0.3em'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              gap={'0.3em'}
+            >
+              <IoPeopleSharp color="purple" />
+              <Text>{eventDataVolunteer[0]?.number_in_party > 1 ? 'Group' : 'Individual'}</Text>
+            </Flex>
           </Flex>
-        </Flex>
-        <Flex justify={'space-between'} alignItems={'center'}>
-          <Text>Party size</Text>
-          <Text fontWeight={'bold'}>{eventDataVolunteer[0]?.number_in_party}</Text>
-        </Flex>
-      </Box>
-      }
+          <Flex justify={'space-between'} alignItems={'center'}>
+            <Text>Registration</Text>
+            <Flex
+              flexDir={'row'}
+              px={'0.4em'}
+              borderRadius={'md'}
+              borderWidth={'0.15em'}
+              mb={'0.3em'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              gap={'0.3em'}
+            >
+              <CalendarIcon color="purple" />
+              <Text>{eventDataVolunteer[0]?.is_checked_in ? 'Checked-in' : 'Registered'}</Text>
+            </Flex>
+          </Flex>
+          <Flex justify={'space-between'} alignItems={'center'}>
+            <Text>Party size</Text>
+            <Text fontWeight={'bold'}>{eventDataVolunteer[0]?.number_in_party}</Text>
+          </Flex>
+        </Box>
+      )}
 
       <VStack mb={'0.5em'} gap={'0.6em'}>
         <Flex justifyContent={'center'} alignItems={'center'} borderRadius={'md'} w={'100%'}>
@@ -277,9 +283,9 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         <Text fontWeight={'medium'} color={'gray'} fontSize={15} textAlign={'start'} width={'full'}>
           {formatDate(dateObj)}
         </Text>
-        <Text noOfLines={isReadMore ? null : 3}>{eventData.description}</Text>
+        <Text>{slicedDescription}</Text>
         <Flex w={'100%'}>
-          {!isReadMore && (
+          {!isReadMore && showReadMore && (
             <Text
               color={'#0075FF'}
               fontWeight={600}
@@ -287,7 +293,7 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
               _hover={{
                 cursor: 'pointer',
               }}
-              onClick={() => setIsReadMore(true)}
+              onClick={() => setIsReadMore(!isReadMore)}
             >
               Read more...
             </Text>
@@ -309,35 +315,41 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
         <Flex gap={'1em'}>
           <Flex
             backgroundColor={'#EFEFEF'}
+            // bgColor="red"
             w={'12.5em'}
-            padding={'0.8em'}
+            h={'3em'}
+            // padding={'1'}
             borderRadius={'0.5em'}
-            justify={'space-between'}
+            justifyContent={'center'}
             align={'center'}
             onClick={handleDownloadICS} // Directly attach the event handler here
             borderWidth={2}
           >
             <Flex justify={'center'} align={'center'}>
-              <Image src={logos_google_calendar} h={'1.3em'} w={'1.3em'} mr={'9%'} />
-              <Text fontWeight={600}>Calendar</Text>
+              <Image src={logos_google_calendar} mr={1.5} w="20%" />
+              <Text fontSize="100%" fontWeight={600}>
+                Calendar
+              </Text>
             </Flex>
-            <Flex justify={'center'} align={'center'}>
-              <IconButton
-                as={IoMdLink}
-                h={'1.3em'}
-                w={'1.3em'}
-                backgroundColor={'#EFEFEF'} // Adjust based on state if necessary
-              />
-            </Flex>
+
+            {/* <IconButton
+              as={IoMdLink}
+              h={'1.3em'}
+              w={'1.3em'}
+              backgroundColor={'#EFEFEF'} // Adjust based on state if necessary
+            /> */}
           </Flex>
 
           <Flex
             backgroundColor={'#EFEFEF'}
+            // bgColor="yellow"
             w={'12.5em'}
-            padding={'0.8em'}
+            h={'3em'}
+            // padding={'1'}
             align={'center'}
             borderRadius={'0.5em'}
-            justify={'space-between'}
+            // justify={'space-between'}
+            justifyContent="center"
             onClick={async () => {
               setMapSelected(prev => !prev);
               const { location } = await getEventById(eventId);
@@ -347,26 +359,26 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
             borderWidth={2}
           >
             <Flex justify={'center'} align={'center'}>
-              <Image src={logos_google_maps} h={'1.3em'} w={'1.3em'} mr={'9%'} />
-              <Text fontWeight={600} w={'8em'}>
+              <Image src={logos_google_maps} w="10%" mr={1.5} />
+              <Text fontWeight={600} fontSize="100%">
                 Google Map
               </Text>
             </Flex>
-            <Flex justify={'center'} align={'center'} h={'1.3em'} w={'1.3em'}>
+            {/* <Flex justify={'center'} align={'center'} h={'1.3em'} w={'1.3em'}>
               <IconButton
                 as={IoMdLink}
                 h={'1.3em'}
                 w={'1.3em'}
                 backgroundColor={mapSelected ? 'blue.200' : '#EFEFEF'}
               />
-            </Flex>
+            </Flex> */}
           </Flex>
         </Flex>
       </Flex>
 
-      {(eventDataVolunteer.length >= 1) ? (
-        <Button colorScheme="gray" color={"#919191"} onClick={onCancelFlowOpen}>
-          <DeleteIcon mr="3%"/>
+      {eventDataVolunteer.length >= 1 ? (
+        <Button colorScheme="gray" color={'#919191'} onClick={onCancelFlowOpen}>
+          <DeleteIcon mr="3%" />
           <Text>Cancel Registration</Text>
         </Button>
       ) : (
@@ -382,11 +394,13 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
           eventId={eventId}
         />
       )}
-      {
-        isCancelFlowOpen && (
-          <CancelFlowController id={eventDataVolunteer[0]['id']} isOpen={isCancelFlowOpen} onClose={onCancelFlowClose}/>
-        )
-      }
+      {isCancelFlowOpen && (
+        <CancelFlowController
+          id={eventDataVolunteer[0]['id']}
+          isOpen={isCancelFlowOpen}
+          onClose={onCancelFlowClose}
+        />
+      )}
     </Flex>
   ) : (
     <Text>Loading Event...</Text>
