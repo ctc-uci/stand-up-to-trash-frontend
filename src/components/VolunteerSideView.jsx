@@ -99,9 +99,6 @@ const VolunteerSideView = ({ eventId, onClose, setShowOpenDrawerButton }) => {
     const formatted_end_time = `${datePart}T${eventData.end_time.substring(0, 8)}`;
 
     // test the dates are correct
-    console.log('the is date', eventData.date, 'but the part we want is', datePart);
-    console.log('ICS start time:', formatted_start_time, 'ICS End time:', formatted_end_time);
-    console.log('real start time:', eventData.start_time, 'real end time:', eventData.end_time);
     // const calendarFile = new File([calendar.toString()], 'event.ics', { type: 'text/calendar' });
     // const url = URL.createObjectURL(calendarFile);
     // setICSURL(url);

@@ -228,6 +228,11 @@ const VolunteerHomePage = () => {
             </Flex>
           </Box>
         </Flex>
+        {events.length === 0 && (
+          <Heading color={'gray'} my={20}>
+            No Events Found
+          </Heading>
+        )}
       </Flex>
       {breakpoint == 'base' ? (
         <VolunteerSideViewDrawer
