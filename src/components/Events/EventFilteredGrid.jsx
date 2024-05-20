@@ -10,7 +10,7 @@ import {
   Heading,
   HStack,
 } from '@chakra-ui/react';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useCallback } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import PropTypes from 'prop-types';
 
@@ -32,9 +32,11 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
   const [date, setDate] = useState('');
   const [fuse, setFuse] = useState();
 
-  const { user } = useContext(UserContext);
 
-  const getEvents = async () => {
+  const { user } = useContext(UserContext);
+  
+  const getEvents = useCallback(async () => {
+
     try {
       let eventsData;
       if (onlyUnregistered) {
@@ -52,7 +54,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
     } catch (err) {
       console.log(`Error getting events: `, err.message);
     }
-  };
+  }, []);
 
   const getLocation = data => {
     let location = [];
@@ -85,7 +87,7 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
 
   useEffect(() => {
     getEvents();
-  }, []);
+  }, [getEvents]);
 
   const handleLocationChange = event => {
     const selectedLocation = event.target.value;
@@ -130,16 +132,16 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
       result = fuseResult.map(item => item.item);
     } else result = events;
     setDisplayEvents(result);
-  }, [name, location, date, fuse]);
+  }, [name, location, date, fuse, events]);
 
   return (
     <>
-    {/* Flag: Navbar responsive (Use 15%) */}
+      {/* Flag: Navbar responsive (Use 15%) */}
       <Flex
         flexDir={'column'}
         alignItems={'center'}
         bg="#E6EAEF"
-        ml={{ base: '2vw', xl: '15rem' }}
+        ml={{ base: '2vw', xl: isOpen ? '22%' : '15%' }}
         mr={{ base: '2vw' }}
         pt={4}
         mb="32px"

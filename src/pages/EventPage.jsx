@@ -257,7 +257,7 @@ const Events = () => {
       alignItems={'center'}
       bg="#E6EAEF"
       minH="100vh"
-      ml={{ base: '0', xl: '15rem' }}
+      ml={{ base: '0', xl: '15%' }}
       py={10}
     >
       <Flex

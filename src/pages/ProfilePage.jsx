@@ -135,7 +135,7 @@ export const ProfilePage = () => {
     <Box
       bg={{ base: 'white', md: '#E8EDF3', lg: '#E8EDF3' }}
       minHeight="100vh"
-      ml={{ base: '0', xl: '15rem' }}
+      ml={{ base: '0', xl: '15%' }}
       w={{ base: '100vw', md: 'auto', lg: 'auto' }}
       display={{ base: 'flex', md: 'block', lg: 'block' }}
       flexDirection={{ base: 'column', md: 'row', lg: 'row' }}

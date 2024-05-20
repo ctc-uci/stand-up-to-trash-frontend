@@ -80,7 +80,7 @@ const ArchivedEvents = () => {
   }, []);
 
   return (
-    <Box ml="15rem" style={{ display: 'grid', gap: '22px' }} backgroundColor={'#c8e6fe'}>
+    <Box ml="15%" style={{ display: 'grid', gap: '22px' }} backgroundColor={'#c8e6fe'}>
       {/* Overall Imapct Card */}
       <Heading marginLeft={10} marginTop={5}>
         Overall Impact

@@ -94,7 +94,7 @@ export default function AdminPage() {
   ));
 
   return (
-    <Flex ml="15rem" flexDir={'column'} padding={'2%'} gap={'1em'} backgroundColor={'#C8E6FF'}>
+    <Flex ml="15%" flexDir={'column'} padding={'2%'} gap={'1em'} backgroundColor={'#C8E6FF'}>
       <Flex justify={'space-between'}>
         <Text fontSize={'2.3rem'} fontWeight={500}>
           Administrators

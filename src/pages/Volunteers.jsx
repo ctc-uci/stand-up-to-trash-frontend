@@ -13,7 +13,8 @@ import { IoDocumentText } from 'react-icons/io5';
 import VolunteersTable from '../components/VolunteersTable';
 import { useState, useEffect, useContext } from 'react';
 import Backend from '../utils/utils';
-import { ExternalLinkIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { HamburgerIcon } from '@chakra-ui/icons';
+import { AiOutlineExport } from 'react-icons/ai';
 import { GreyCustomSearchIcon } from '../components/Icons/CustomSearchIcon';
 import Fuse from 'fuse.js';
 import { TrophyIcon } from '../components/Icons/TrophyIcon';
@@ -97,7 +98,7 @@ const Volunteers = () => {
   return (
     <>
       {/* Registered + Checked-In */}
-      <Flex direction="column" ml={{ base: '0', xl: '15rem' }} bg="#E8EDF3" p="10" gap="10">
+      <Flex direction="column" ml={{ base: '0', xl: '15%' }} bg="#E8EDF3" p="10" gap="10">
         <Box bg="#F8F8F8" p="1rem" borderRadius="md">
           <Flex minW="95%" bg={'#F8F8F8'} borderRadius="lg" flexDir={'column'}>
             <HamburgerIcon
@@ -255,24 +256,37 @@ const Volunteers = () => {
                 justifyContent={{ base: 'center', lg: 'start' }}
                 alignItems={'end'}
               >
-                <Button
+                {/* <Button
                   backgroundColor={'#0075FF'}
                   fontSize="lg"
                   style={{
                     whiteSpace: 'normal',
                     wordWrap: 'break-word',
                     color: 'white',
-                    my: "3"
+                    my: '3',
                   }}
                   height={'fit-content'}
                 >
-                  <ExternalLinkIcon marginRight="2" boxSize="6" color={'white'} />{' '}
+                  <ExternalLinkIcon marginRight="2" boxSize="1vw" color={'white'} />{' '}
                   <CSVLink
                     data={volunteerData.length ? volunteerData : []}
                     filename="./data.csv"
                     headers={header}
                   >
-                    Export All
+                    Export
+                  </CSVLink>
+                </Button> */}
+                <Button
+                  colorScheme={'messenger'}
+                  leftIcon={<AiOutlineExport></AiOutlineExport>}
+                  size="md"
+                >
+                  <CSVLink
+                    data={volunteerData.length ? volunteerData : []}
+                    filename="./data.csv"
+                    headers={header}
+                  >
+                    Export Volunteer Data
                   </CSVLink>
                 </Button>
               </Box>
