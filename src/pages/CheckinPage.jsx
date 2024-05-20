@@ -185,7 +185,7 @@ const CheckinPage = () => {
       alignItems={'center'}
       bg="#E6EAEF"
       minH="100vh"
-      ml={{ base: '0', xl: '15rem' }}
+      ml={{ base: '0', xl: '15%' }}
     >
       <Flex minW="95%" justifyContent={'space-between'} mt={10} mb={5}>
         <Flex alignItems={'center'} gap={3}>

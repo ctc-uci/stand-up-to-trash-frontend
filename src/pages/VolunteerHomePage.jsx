@@ -13,7 +13,7 @@ import {
   useBreakpoint,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useCallback } from 'react';
 import { SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 import EventCard from '../components/Events/EventCard';
@@ -42,7 +42,7 @@ const VolunteerHomePage = () => {
 
   const { user } = useContext(UserContext);
 
-  const getEvents = async () => {
+  const getEvents = useCallback(async () => {
     try {
       const eventsData = await Backend.get(`data/registered/${user.id}`);
       setEvents(eventsData.data);
@@ -51,7 +51,7 @@ const VolunteerHomePage = () => {
     } catch (err) {
       console.log(`Error getting events: `, err.message);
     }
-  };
+  }, [user]);
 
   const eventCards = displayEvents.map(element => (
     <GridItem
@@ -70,7 +70,7 @@ const VolunteerHomePage = () => {
     if (user) {
       getEvents();
     }
-  }, [user]);
+  }, [getEvents, user]);
 
   useEffect(() => {
     if (!fuse) {
@@ -111,7 +111,7 @@ const VolunteerHomePage = () => {
         bg="#E6EAEF"
         minH="100vh"
         width={'100%'}
-        ml={{ base: '0', xl: '15rem' }}
+        ml={{ base: '0', xl: '15%' }}
         py={10}
       >
         <Flex w={{ base: '85%', md: '95%' }} flexDir={'column'}>
@@ -229,7 +229,7 @@ const VolunteerHomePage = () => {
           </Box>
         </Flex>
       </Flex>
-      {breakpoint == 'base' ? (
+      {breakpoint != 'xl' ? (
         <VolunteerSideViewDrawer
           eventId={currentEventId}
           isOpen={isOpen}

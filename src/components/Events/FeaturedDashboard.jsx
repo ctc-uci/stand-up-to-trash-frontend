@@ -12,6 +12,7 @@ const FeaturedDashboard = ({
   setIsOpen,
   setShowOpenDrawerButton,
   onOpen,
+  isSideBarOpen,
   showOpenDrawerButton,
 }) => {
   const [featuredEvents, setFeaturedEvents] = useState([]);
@@ -29,6 +30,15 @@ const FeaturedDashboard = ({
   };
 
   useEffect(() => {
+    const getEvents = async () => {
+      try {
+        const eventsData = await Backend.get('/events');
+        setFeaturedEvents(eventsData.data.slice(0, numEvents));
+      } catch (err) {
+        console.log(`Error getting events: `, err.message);
+      }
+    };
+    
     getEvents();
   }, [numEvents]);
 
@@ -38,7 +48,7 @@ const FeaturedDashboard = ({
       flexDir={'column'}
       alignItems={'center'}
       bg="#E6EAEF"
-      ml={{ base: '3vw', xl: '15rem' }}
+      ml={{ base: '3vw', xl: isSideBarOpen ? '22%' : '15%' }}
       mr={{ base: '3vw' }}
       pt={4}
     >
@@ -132,6 +142,7 @@ FeaturedDashboard.propTypes = {
   setCurrentEventId: PropTypes.func.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
+  isSideBarOpen: PropTypes.bool
 };
 
 export default FeaturedDashboard;

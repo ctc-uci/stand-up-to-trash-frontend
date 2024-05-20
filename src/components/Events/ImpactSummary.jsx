@@ -137,7 +137,7 @@ const ImpactSummary = () => {
             filename="./data.csv"
             headers={header}
           >
-            Export Data
+            Export All Data
           </CSVLink>
           {/* {eventIdData.map((eventData) => <CSVLink
             data={eventData ? [eventData] : ''}

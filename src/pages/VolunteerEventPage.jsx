@@ -35,7 +35,7 @@ const VolunteerEventPage = () => {
           flexDir={'row'}
           alignItems={'center'}
           bg="#E6EAEF"
-          ml={{ base: '0', xl: '15rem' }}
+          ml={{ base: '0', xl: '15%' }}
           pt={6}
           px={6}
           justifyContent={'space-between'}
@@ -90,7 +90,7 @@ const VolunteerEventPage = () => {
         />
       </Box>
       {/* Drawer Component */}
-      {breakpoint == 'base' ? (
+      {breakpoint != 'xl' ? (
         <VolunteerSideViewDrawer
           eventId={currentEventId}
           isOpen={isDrawerOpen}

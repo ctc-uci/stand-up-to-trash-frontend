@@ -3,7 +3,6 @@ import {
   Drawer,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
   DrawerBody,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -52,7 +51,7 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
     getEventById(eventId).then(data => setEventData(data));
     getEventDataVolunteerId(user?.id, eventId).then(data => setEventDataVolunteer(data));
     // setDateObj(new Date(Date.parse(eventData.date)))
-  }, [eventId]);
+  }, [eventId, user?.id]);
 
   function formatDate(dateString) {
     const months = [
@@ -87,12 +86,11 @@ const VolunteerSideViewDrawer = ({ eventId, isOpen, onClose, setShowOpenDrawerBu
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton />
         <DrawerBody>
           <Flex
             flexDir={'column'}
             w={'100%'}
-            maxW={'26em'}
+            maxW={'100vw'}
             mt={'1em'}
             px={{ base: '10px', md: '20px' }}
           >
