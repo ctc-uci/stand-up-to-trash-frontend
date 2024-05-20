@@ -1,9 +1,11 @@
 import { Heading, Flex, Grid, GridItem, IconButton, useBreakpointValue } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Backend from '../../utils/utils';
 import EventCard from './EventCard';
 import { RxCaretLeft } from 'react-icons/rx';
 import PropTypes from 'prop-types';
+
+import UserContext from '../../utils/UserContext';
 
 const FeaturedDashboard = ({
   setCurrentEventId,
@@ -16,6 +18,16 @@ const FeaturedDashboard = ({
   const [featuredEvents, setFeaturedEvents] = useState([]);
   const numEvents = useBreakpointValue({ base: 1, md: 2, xl: 2 });
 
+  const { user } = useContext(UserContext);
+
+  const getEvents = async () => {
+    try {
+      const eventsData = await Backend.get(`/data/unregistered/${user.id}`);
+      setFeaturedEvents(eventsData.data.slice(0, numEvents));
+    } catch (err) {
+      console.log(`Error getting events: `, err.message);
+    }
+  };
 
   useEffect(() => {
     const getEvents = async () => {
