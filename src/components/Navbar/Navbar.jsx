@@ -285,7 +285,7 @@ const Navbar = () => {
                   textOverflow="ellipsis"
                   fontWeight='800'
                   color='#000000'
-                  fontSize='75%'
+                  fontSize={{base: '100%', md: '100%', lg: '100%', xl: '75%'}}
                   lineHeight='25px'
                   textAlign='left'
                   marginTop='-1px'
@@ -295,8 +295,8 @@ const Navbar = () => {
                 </Text>
 
                 <Tag
+                  fontSize={{base: '100%', md: '100%', lg: '100%', xl: '56.25%'}}
                   style={{
-                    fontSize: '56.25%',
                     fontWeight: '500',
                     lineHeight: '16px',
                     color: '#717171',
