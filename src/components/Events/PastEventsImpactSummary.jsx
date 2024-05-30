@@ -67,7 +67,7 @@ const PastEventsImpactSummary = () => {
   useEffect(() => {
     const getEventId = async () => {
       try {
-        const eventIdData = await Backend.get(`/stats/export/data`);
+        const eventIdData = await Backend.get(`/stats/export/data/past`);
         setEventIdData(eventIdData.data);
       } catch (err) {
         console.log(err.message);

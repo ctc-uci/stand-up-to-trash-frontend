@@ -20,7 +20,13 @@ import Fuse from 'fuse.js';
 
 import UserContext from '../../utils/UserContext';
 
-const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButton, isOpen, onlyUnregistered=false }) => {
+const EventFilteredGrid = ({
+  setCurrentEventId,
+  setIsOpen,
+  setShowOpenDrawerButton,
+  isOpen,
+  onlyUnregistered = false,
+}) => {
   const [events, setEvents] = useState([]);
   const [displayEvents, setDisplayEvents] = useState([]);
 
@@ -88,6 +94,8 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
   useEffect(() => {
     getEvents();
   }, [getEvents]);
+
+  console.log(events.length);
 
   const handleLocationChange = event => {
     const selectedLocation = event.target.value;
@@ -256,6 +264,11 @@ const EventFilteredGrid = ({ setCurrentEventId, setIsOpen, setShowOpenDrawerButt
             </Grid>
           </Box>
         </Flex>
+        {events.length === 0 && (
+          <Heading color={'gray'} my={20}>
+            No Events Found
+          </Heading>
+        )}
       </Flex>
     </>
   );
@@ -266,7 +279,7 @@ EventFilteredGrid.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
   setShowOpenDrawerButton: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  onlyUnregistered: PropTypes.bool
+  onlyUnregistered: PropTypes.bool,
 };
 
 export default EventFilteredGrid;
