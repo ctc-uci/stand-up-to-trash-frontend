@@ -244,6 +244,7 @@ const Navbar = () => {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '10px',
                 padding: '12px',
                 // marginLeft: '14px',
@@ -252,7 +253,7 @@ const Navbar = () => {
                 // borderRadius: '12px',
                 backgroundColor: '#FFF',
                 border: '1px',
-                width: 'full'
+                width: 'full',
               }}
               onClick={e => {
                 e.preventDefault();
@@ -263,39 +264,41 @@ const Navbar = () => {
             >
               {/* User image */}
               {/* <Box style={{ borderRadius: '50%' }}> */}
-                <Image
-                  src={user?.image_url}
-                  width="20%"
-                  aspectRatio={1}
-                  borderRadius="full"
-                  objectFit="cover"
-                />
+              <Image
+                src={user?.image_url}
+                width="20%"
+                aspectRatio={1}
+                borderRadius="full"
+                objectFit="cover"
+              />
               {/* </Box> */}
               <Box
                 style={{
                   flexDirection: 'column',
-                  alignItems: 'center',
+                  alignItems: 'space-between',
+                  bgColor: 'red',
                 }}
-                maxWidth={{ base: '219px', md: '150px', xl: '50%' }}
+                // maxWidth={{ base: '219px', md: '150px', xl: '50%' }}
+                w={'full'}
               >
                 {/* User name */}
                 <Text
                   // maxWidth={{ base: '219px', md: '150px', xl: '100px' }}
                   overflow="hidden"
                   textOverflow="ellipsis"
-                  fontWeight='800'
-                  color='#000000'
-                  fontSize={{base: '100%', md: '100%', lg: '100%', xl: '75%'}}
-                  lineHeight='25px'
-                  textAlign='left'
-                  marginTop='-1px'
-                  whiteSpace='nowrap'
+                  fontWeight="800"
+                  color="#000000"
+                  fontSize={{ base: '100%', md: '100%', lg: '100%', xl: '75%' }}
+                  lineHeight="25px"
+                  textAlign="left"
+                  marginTop="-1px"
+                  whiteSpace="nowrap"
                 >
                   {user?.first_name} {user?.last_name}
                 </Text>
 
                 <Tag
-                  fontSize={{base: '100%', md: '100%', lg: '100%', xl: '56.25%'}}
+                  fontSize={{ base: '100%', md: '100%', lg: '100%', xl: '56.25%' }}
                   style={{
                     fontWeight: '500',
                     lineHeight: '16px',
