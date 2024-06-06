@@ -93,6 +93,7 @@ const VolunteerHomePage = () => {
   }, [name, events, location, date, fuse]);
 
   const [currentEventId, setCurrentEventId] = useState(-1);
+  const [isMobileView, setIsMobileView] = useState(false);
 
   const [showOpenDrawerButton, setShowOpenDrawerButton] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -101,6 +102,16 @@ const VolunteerHomePage = () => {
     setShowOpenDrawerButton(false);
   };
   const onClose = () => setIsOpen(!isOpen);
+  console.log('breakpoint: ', breakpoint);
+
+  useEffect(() => {
+    if (breakpoint === '2xl' || breakpoint === 'xl') {
+      setIsMobileView(false);
+    } else {
+      setIsMobileView(true);
+    }
+    console.log(isMobileView);
+  }, [breakpoint]);
 
   return (
     <Flex dir="column">
@@ -229,7 +240,8 @@ const VolunteerHomePage = () => {
           </Box>
         </Flex>
       </Flex>
-      {breakpoint != 'xl' ? (
+
+      {isMobileView ? (
         <VolunteerSideViewDrawer
           eventId={currentEventId}
           isOpen={isOpen}
