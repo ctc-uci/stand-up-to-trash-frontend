@@ -2,7 +2,7 @@ import EventFilteredGrid from '../components/Events/EventFilteredGrid';
 import FeaturedDashboard from '../components/Events/FeaturedDashboard';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Box, Flex, Spacer } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import NavbarContext from '../utils/NavbarContext';
 import VolunteerSideView from '../components/VolunteerSideView.jsx';
 import { useBreakpoint, useDisclosure } from '@chakra-ui/react';
@@ -11,6 +11,8 @@ import VolunteerSideViewDrawer from '../components/VolunteerSideViewDrawer.jsx';
 const VolunteerEventPage = () => {
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+
   const onClose = () => setIsOpen(!isOpen);
 
   const { onNavbarDrawerOpen } = useContext(NavbarContext);
@@ -24,8 +26,14 @@ const VolunteerEventPage = () => {
     onDrawerOpen();
   };
 
-
-  console.log('test' + currentEventId);
+  useEffect(() => {
+    if (breakpoint === '2xl' || breakpoint === 'xl') {
+      setIsMobileView(false);
+    } else {
+      setIsMobileView(true);
+    }
+    console.log(isMobileView);
+  }, [breakpoint]);
 
   return (
     <Flex dir="column">
@@ -90,7 +98,7 @@ const VolunteerEventPage = () => {
         />
       </Box>
       {/* Drawer Component */}
-      {breakpoint != 'xl' ? (
+      {isMobileView ? (
         <VolunteerSideViewDrawer
           eventId={currentEventId}
           isOpen={isDrawerOpen}
